@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Saira } from 'next/font/google';
+import { Toaster } from '@/components/ui/toaster';
 
 import './globals.css';
 
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           disableTransitionOnChange
         >
           <div className="flex flex-col min-h-screen">{children}</div>
+          <Toaster />
         </NextThemesProvider>
       </body>
     </html>
