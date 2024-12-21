@@ -7,12 +7,14 @@ import './globals.css';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import appinfo from '@/utils/appinfo';
 
-const saira = Saira({
+const sairaInit = Saira({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-saira',
+  weight: '400',
 });
-const fonts = [saira.variable].join(' ');
+
+const sairaVariable = 'font-saira';
+const saira = sairaInit.className + ' ' + sairaVariable;
 
 export const metadata: Metadata = {
   title: appinfo.title,
@@ -22,7 +24,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={fonts + ' antialiased'}>
+      <body className={saira + ' antialiased'}>
         <NextThemesProvider
           attribute="class"
           defaultTheme="system"
