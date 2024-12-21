@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
     port: `${process.env.PORT ?? '3000'}`,
     author: 'Gaël Jacquin',
     linktree: 'https://linktr.ee/gaeljacquin',
+    profilePic: '/gael-himself.webp',
   },
   images: {
     remotePatterns: [
