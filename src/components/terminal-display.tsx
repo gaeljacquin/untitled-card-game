@@ -8,11 +8,15 @@ interface TerminalDisplayProps {
   className?: string;
 }
 
-export function TerminalDisplay({ value, noBueno = false, className }: TerminalDisplayProps) {
+export function TerminalDisplay({
+  value,
+  noBueno = false,
+  className = 'inline-flex min-w-[80px]',
+}: TerminalDisplayProps) {
   return (
     <span
       className={cn(
-        'px-2 py-1 rounded-sm inline-flex items-center justify-center min-w-[80px]',
+        'px-2 py-1 rounded-sm items-center justify-center',
         'border shadow-[0_0_2px]',
         noBueno
           ? 'bg-black text-red-500 border-red-600/50 shadow-red-500/50 terminal-shadow-red'

@@ -9,7 +9,8 @@ import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui
 import { Separator } from '@/components/ui/separator';
 
 export function GameSidebar() {
-  const points = -20;
+  const totalScore = -20;
+  const currentScore = 15;
   const validWords = 8;
   const invalidWords = 1;
   const discards = 0;
@@ -59,21 +60,47 @@ export function GameSidebar() {
           <div className="space-y-4">
             <div className="space-y-2">
               <h3 className="text-lg font-semibold">Stats</h3>
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2">Points</span>
-                <TerminalDisplay value={points} noBueno={points < 0} />
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex flex-col items-center justify-center w-full">
+                  <span className="text-sm">Current Score</span>
+                  <TerminalDisplay
+                    value={currentScore}
+                    noBueno={currentScore < 0}
+                    className="flex w-full"
+                  />
+                </div>
+                <div className="flex flex-col items-center justify-center w-full">
+                  <span className="text-sm">Discards</span>
+                  <TerminalDisplay
+                    value={discards}
+                    noBueno={discards > 0}
+                    className="flex w-full"
+                  />
+                </div>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2">Valid words</span>
-                <TerminalDisplay value={validWords} />
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex flex-col items-center justify-center w-full">
+                  <span className="text-sm">Valid Words</span>
+                  <TerminalDisplay value={validWords} className="flex w-full" />
+                </div>
+                <div className="flex flex-col items-center justify-center w-full">
+                  <span className="text-sm">Invalid Words</span>
+                  <TerminalDisplay
+                    value={invalidWords}
+                    noBueno={invalidWords > 0}
+                    className="flex w-full"
+                  />
+                </div>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2">Invalid words</span>
-                <TerminalDisplay value={invalidWords} noBueno={invalidWords > 0} />
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2">Discards</span>
-                <TerminalDisplay value={discards} noBueno={discards > 0} />
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex flex-col items-center justify-center w-full">
+                  <span className="text-sm">Total Score</span>
+                  <TerminalDisplay
+                    value={totalScore}
+                    noBueno={totalScore < 0}
+                    className="flex w-full"
+                  />
+                </div>
               </div>
             </div>
           </div>
