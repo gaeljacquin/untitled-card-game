@@ -1,6 +1,8 @@
 'use client';
 
-import { CheckCircle, X } from 'lucide-react';
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { CheckCircle, ChevronsDown, ChevronsUp, X } from 'lucide-react';
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
 import { SectionCard } from '@/components/section-card';
 import { TerminalDisplay } from '@/components/terminal-display';
@@ -9,11 +11,15 @@ import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui
 import { Separator } from '@/components/ui/separator';
 
 export function GameSidebar() {
+  const [collapsibleOpen, setCollapsibleOpen] = useState(false);
   const totalScore = -20;
   const currentScore = 15;
   const validWords = 8;
   const invalidWords = 1;
   const discards = 0;
+  const currentStreak = 3;
+  const maxStreak = 4;
+  const highScore = 250;
   const playedWords = [
     { word: 'one', valid: true },
     { word: 'two', valid: true },
@@ -37,10 +43,9 @@ export function GameSidebar() {
 
         <div className="space-y-6 text-white">
           <div className="space-y-2">
-            <h3 className="text-lg font-semibold">Main Objectives</h3>
+            <h3 className="text-lg font-semibold">Objective</h3>
             <ul>
-              <li className="text-sm">Placeholder objective 1</li>
-              <li className="text-sm">Placeholder objective 2</li>
+              <li className="text-sm">Placeholder objective</li>
             </ul>
           </div>
 
@@ -102,13 +107,67 @@ export function GameSidebar() {
                   />
                 </div>
               </div>
+              <>
+                <motion.header initial={false} onClick={() => setCollapsibleOpen(!collapsibleOpen)}>
+                  <div className="flex items-center justify-center space-x-4 mt-4">
+                    <div
+                      className="flex items-center justify-center space-x-2 border border-gray-200 rounded-lg px-2 w-full"
+                      role="button"
+                    >
+                      <p className="text-sm font-light w-full">
+                        {collapsibleOpen ? 'Hide' : 'Show More'}
+                      </p>
+                      <Button variant="ghost" size="sm" className="w-9 p-0">
+                        {collapsibleOpen ? (
+                          <ChevronsUp className="h-4 w-4" />
+                        ) : (
+                          <ChevronsDown className="h-4 w-4" />
+                        )}
+                        <span className="sr-only">Toggle</span>
+                      </Button>
+                    </div>
+                  </div>
+                </motion.header>
+                <AnimatePresence initial={false}>
+                  {collapsibleOpen && (
+                    <motion.section
+                      key="content"
+                      initial="collapsed"
+                      animate="open"
+                      exit="collapsed"
+                      variants={{
+                        open: { opacity: 1, height: 'auto' },
+                        collapsed: { opacity: 0, height: 0 },
+                      }}
+                      transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+                    >
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="flex flex-col items-center justify-center w-full">
+                          <span className="text-sm">Max Streak</span>
+                          <TerminalDisplay value={maxStreak} className="flex w-full" />
+                        </div>
+                        <div className="flex flex-col items-center justify-center w-full">
+                          <span className="text-sm">Current Streak</span>
+                          <TerminalDisplay value={currentStreak} className="flex w-full" />
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="flex flex-col items-center justify-center w-full">
+                          <span className="text-sm">High Score</span>
+                          <TerminalDisplay value={highScore} className="flex w-full" />
+                        </div>
+                      </div>
+                    </motion.section>
+                  )}
+                </AnimatePresence>
+              </>
             </div>
           </div>
 
           <Separator />
 
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Played Words</h3>
+            <h3 className="text-lg font-semibold">Words Found</h3>
             <Command className="bg-black/50 border-white/20">
               <CommandList className="w-full mt-2 h-36">
                 <CommandGroup>
