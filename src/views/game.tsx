@@ -1,6 +1,6 @@
 import { GameSidebar } from '@/components/game-sidebar';
 
-export default function Play() {
+export default function Game() {
   return (
     <>
       <GameSidebar />

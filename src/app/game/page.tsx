@@ -1,6 +1,6 @@
 import ReturnMainMenu from '@/components/return-main-menu';
 import { PageTransition } from '@/components/ui/page-transition';
-import Play from '@/views/play';
+import Game from '@/views/game';
 
 export default function Page() {
   return (
@@ -8,7 +8,7 @@ export default function Page() {
       <div className="min-h-screen bg-gradient-to-br from-cyan-900 via-cyan-700 to-emerald-800 text-white">
         <div className="relative mx-auto px-4 py-16">
           <ReturnMainMenu />
-          <Play />
+          <Game />
         </div>
       </div>
     </PageTransition>

@@ -12,7 +12,7 @@ export default function Home() {
   const menuItems = [
     {
       label: 'New Game',
-      route: '/play',
+      route: '/game',
       gradient: 'bg-gradient-to-r from-cyan-600 to-emerald-900',
     },
     {
