@@ -1,33 +1,38 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { Loader2 } from 'lucide-react';
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
+import { Button } from '@/components/ui/button';
 import InteractiveHoverButton from '@/components/ui/interactive-hover-button';
 import { PageTransition } from '@/components/ui/page-transition';
+import { cn } from '@/lib/utils';
 import appinfo from '@/utils/appinfo';
 
 export default function Home() {
+  const [newGameClicked, setNewGameClicked] = useState(false);
   const menuItems = [
     {
       label: 'New Game',
-      route: '/game',
+      slug: 'game',
       gradient: 'bg-gradient-to-r from-cyan-600 to-emerald-900',
     },
     {
       label: 'How to Play',
-      route: '/how-to-play',
+      slug: 'how-to-play',
       gradient: 'bg-gradient-to-r from-yellow-700 to-rose-700',
     },
     {
       label: 'Settings',
-      route: '/settings',
+      slug: 'settings',
       gradient: 'bg-gradient-to-r from-purple-700 to-pink-700',
     },
     {
       label: 'About',
-      route: '/about',
+      slug: 'about',
       gradient: 'bg-gradient-to-r from-blue-700 to-fuchsia-700',
     },
   ];
@@ -61,13 +66,28 @@ export default function Home() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Link href={item.route}>
-                  <InteractiveHoverButton
-                    text={item.label}
-                    className="w-full h-16 text-lg border-0"
-                    gradient={item.gradient}
-                  />
-                </Link>
+                {newGameClicked ? (
+                  <Button
+                    className={cn(
+                      'w-full h-16 text-lg border-0 rounded-full font-semibold',
+                      item.slug === 'game' && item.gradient,
+                      item.slug === 'game' && 'pointer-events-none'
+                    )}
+                    disabled={item.slug !== 'game'}
+                  >
+                    {item.label}{' '}
+                    {item.slug === 'game' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  </Button>
+                ) : (
+                  <Link href={'/' + item.slug}>
+                    <InteractiveHoverButton
+                      text={item.label}
+                      className="w-full h-16 text-lg border-0"
+                      gradient={item.gradient}
+                      onClick={item.slug === 'game' ? () => setNewGameClicked(true) : undefined}
+                    />
+                  </Link>
+                )}
               </motion.div>
             ))}
           </div>

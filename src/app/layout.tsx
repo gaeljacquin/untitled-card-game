@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { cn } from '@/lib/utils';
 import appinfo from '@/utils/appinfo';
 
 const sairaInit = Saira({
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={saira + ' antialiased'}>
+      <body className={cn(saira, 'antialiased')}>
         <NextThemesProvider
           attribute="class"
           defaultTheme="system"
