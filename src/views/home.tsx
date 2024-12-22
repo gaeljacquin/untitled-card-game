@@ -33,7 +33,7 @@ export default function Home() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-gradient-to-b from-background to-accent flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-r from-slate-800 via-slate-600 to-slate-700">
         <motion.div
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -43,7 +43,7 @@ export default function Home() {
           <div className="w-32 h-32 bg-primary rounded-2xl mb-4 mx-auto flex items-center justify-center mb-7">
             <AnimatedLogoDynamic logo={'game'} loop={false} />
           </div>
-          <h3 className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
+          <h3 className="text-xl font-semibold bg-clip-text text-transparent bg-green-200">
             {appinfo.description}
           </h3>
         </motion.div>
