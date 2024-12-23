@@ -198,7 +198,7 @@ export default function GameSidebar() {
 
         <div className="space-y-2">
           <span className={cn('w-[32rem] h-8', 'bg-transparent')}>
-            <AnimatedLogoDynamic logo={'game'} loop={false} />
+            <AnimatedLogoDynamic logo={'game'} loop={false} autoplay={false} />
           </span>
         </div>
       </div>

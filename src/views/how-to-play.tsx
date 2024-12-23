@@ -20,7 +20,7 @@ export default function HowToPlay() {
         <OtherRules />
         <div className="flex flex-col items-center justify-center gap-3 text-center">
           <span className={cn('w-[32rem]', 'bg-transparent')}>
-            <AnimatedLogoDynamic logo={'game'} loop={false} />
+            <AnimatedLogoDynamic logo={'game'} loop={false} autoplay={false} />
           </span>
         </div>
       </div>

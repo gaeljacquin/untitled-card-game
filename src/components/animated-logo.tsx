@@ -8,7 +8,7 @@ import myLogo from '@/assets/my-logo.json';
 import { AnimatedLogoProps } from '@/types/animated-logo';
 
 export default function AnimatedLogo(props: AnimatedLogoProps) {
-  const { loop, logo } = props;
+  const { logo, loop, autoplay } = props;
   const logoRef = useRef<LottieRefCurrentProps>(null);
   let animationData;
 
@@ -24,5 +24,7 @@ export default function AnimatedLogo(props: AnimatedLogoProps) {
       break;
   }
 
-  return <Lottie lottieRef={logoRef} animationData={animationData} loop={loop} />;
+  return (
+    <Lottie lottieRef={logoRef} animationData={animationData} loop={loop} autoplay={autoplay} />
+  );
 }

@@ -51,7 +51,7 @@ export default function About() {
 
       <div className="flex flex-col items-center justify-center">
         <span className={cn('w-[32rem] h-44', 'bg-transparent')}>
-          <AnimatedLogoDynamic logo={'game'} loop={false} />
+          <AnimatedLogoDynamic logo={'game'} loop={false} autoplay={false} />
         </span>
       </div>
     </div>

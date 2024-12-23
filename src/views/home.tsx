@@ -57,7 +57,7 @@ export default function Home() {
                 'bg-transparent'
               )}
             >
-              <AnimatedLogoDynamic logo={'game'} loop={false} />
+              <AnimatedLogoDynamic logo={'game'} loop autoplay />
             </div>
             <h3 className="text-xl font-semibold bg-clip-text text-transparent bg-green-200">
               {appinfo.description}
