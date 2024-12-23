@@ -28,12 +28,12 @@ export default function Home() {
     {
       label: 'Settings',
       slug: 'settings',
-      gradient: 'bg-gradient-to-r from-purple-700 to-pink-700',
+      gradient: 'bg-gradient-to-r from-purple-800 to-pink-700',
     },
     {
       label: 'About',
       slug: 'about',
-      gradient: 'bg-gradient-to-r from-blue-700 to-fuchsia-700',
+      gradient: 'bg-gradient-to-r from-fuchsia-800 to-sky-700',
     },
   ];
 
