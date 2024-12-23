@@ -1,14 +1,5 @@
 {
-  "name": "annabelle",
-  "title": "Annabelle",
-  "author": {
-    "name": "Gaël Jacquin",
-    "website": "https://gaeljacquin.com"
-  },
-  "version": "0.1.0",
-  "license": "MIT",
-  "website": "",
-  "private": true,
+  "name": "@annabelle/client",
   "scripts": {
     "dev": "npx env-cmd -f \".env.local\" next dev",
     "build": "next build",
@@ -23,6 +14,7 @@
     "prettier:write": "prettier --write \"**/*.{ts,tsx}\""
   },
   "dependencies": {
+    "@annabelle/shared": "workspace:*",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-avatar": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.4",
@@ -50,10 +42,10 @@
     "next-themes": "^0.4.4",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
-    "react-hook-form": "^7.54.1",
+    "react-hook-form": "^7.54.2",
     "sonner": "^1.7.1",
     "superjson": "^2.2.2",
-    "tailwind-merge": "^2.5.5",
+    "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.24.1",
     "zustand": "^5.0.2"
@@ -68,10 +60,10 @@
     "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.17.10",
-    "@types/react": "^18.3.17",
+    "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
-    "@typescript-eslint/eslint-plugin": "^8.18.1",
-    "@typescript-eslint/parser": "^8.18.1",
+    "@typescript-eslint/eslint-plugin": "^8.18.2",
+    "@typescript-eslint/parser": "^8.18.2",
     "babel-loader": "^9.2.1",
     "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
