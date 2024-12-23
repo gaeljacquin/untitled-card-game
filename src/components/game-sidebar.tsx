@@ -9,6 +9,7 @@ import { TerminalDisplay } from '@/components/terminal-display';
 import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
 import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 
 export function GameSidebar() {
   const [collapsibleOpen, setCollapsibleOpen] = useState(false);
@@ -35,14 +36,8 @@ export function GameSidebar() {
   return (
     <>
       <SectionCard title="" className="w-80 h-full mt-7 rounded-3xl">
-        <div className="flex flex-col items-center justify-center -mt-24 -mb-12">
-          <span className="w-48 h-48">
-            <AnimatedLogoDynamic logo={'game'} loop={false} />
-          </span>
-        </div>
-
         <div className="space-y-6 text-white">
-          <div className="space-y-2">
+          <div className="space-y-2 -mt-6">
             <h3 className="text-lg font-semibold">Objective</h3>
             <ul>
               <li className="text-sm">Placeholder objective</li>
@@ -198,6 +193,14 @@ export function GameSidebar() {
                 </CommandGroup>
               </CommandList>
             </Command>
+          </div>
+
+          <Separator />
+
+          <div className="space-y-2">
+            <span className={cn('w-[32rem] h-8', 'bg-transparent')}>
+              <AnimatedLogoDynamic logo={'game'} loop={false} />
+            </span>
           </div>
         </div>
       </SectionCard>

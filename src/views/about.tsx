@@ -4,6 +4,7 @@ import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
 import { SectionCard } from '@/components/section-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { FlipWords } from '@/components/ui/flip-words';
+import { cn } from '@/lib/utils';
 
 export default function About() {
   const myTitles = ['Developer', 'Designer'];
@@ -11,11 +12,6 @@ export default function About() {
   return (
     <div className="max-w-4xl mx-auto space-y-8 mt-16">
       <SectionCard title="About" className="text-center text-white p-4">
-        <div className="flex flex-col items-center justify-center -mt-12 -mb-10">
-          <span className="w-64 h-64">
-            <AnimatedLogoDynamic logo={'game'} loop={false} />
-          </span>
-        </div>
         <p className="text-lg mb-8 leading-relaxed">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus doloribus dignissimos
           nemo nihil accusantium tenetur aliquam adipisci praesentium velit exercitationem assumenda
@@ -52,6 +48,12 @@ export default function About() {
           </div>
         </div>
       </SectionCard>
+
+      <div className="flex flex-col items-center justify-center">
+        <span className={cn('w-[32rem] h-44', 'bg-transparent')}>
+          <AnimatedLogoDynamic logo={'game'} loop={false} />
+        </span>
+      </div>
     </div>
   );
 }

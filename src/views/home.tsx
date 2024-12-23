@@ -50,7 +50,13 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="text-center mb-8"
           >
-            <div className="w-32 h-32 bg-primary rounded-2xl mb-4 mx-auto flex items-center justify-center mb-7">
+            <div
+              className={cn(
+                'rounded-2xl mb-4 mx-auto flex items-center justify-center mb-7',
+                'w-[56rem] h-32',
+                'bg-transparent'
+              )}
+            >
               <AnimatedLogoDynamic logo={'game'} loop={false} />
             </div>
             <h3 className="text-xl font-semibold bg-clip-text text-transparent bg-green-200">
