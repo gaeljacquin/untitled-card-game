@@ -1,0 +1,8 @@
+{
+  "name": "@annabelle/shared",
+  "main": "dist/index.js",
+  "types": "src/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  }
+}
