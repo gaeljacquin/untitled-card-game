@@ -81,14 +81,14 @@ export default function Home() {
                     )}
                     disabled={item.slug !== 'game'}
                   >
-                    {item.label}{' '}
+                    {item.slug === 'game' ? <span>Loading</span> : item.label}{' '}
                     {item.slug === 'game' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   </Button>
                 ) : (
                   <Link href={'/' + item.slug}>
                     <InteractiveHoverButton
                       text={item.label}
-                      className="w-full h-16 text-lg border-0"
+                      className="w-full h-16 text-lg border-0 opacity-75 hover:opacity-100"
                       gradient={item.gradient}
                       onClick={item.slug === 'game' ? () => setNewGameClicked(true) : undefined}
                     />
