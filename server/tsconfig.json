@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "types": ["node", "jest", "@annabelle/shared"],
+    "module": "commonJS",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -11,7 +16,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@annabelle/shared": ["./node_modules/@annabelle/shared"],
+      "@annabelle/shared/*": ["../shared/*"],
       "@/*": ["./src/*"]
     },
     "incremental": true,
