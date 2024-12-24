@@ -1,0 +1,131 @@
+const SIDEQUESTS = [
+  {
+    id: "two-pairs",
+    label: "Two Pairs (x%s)",
+    type: "poker",
+    options: [1, 2, 3, 4],
+  },
+  {
+    id: "three-pairs",
+    label: "Three Pairs (x%s)",
+    type: "poker",
+    options: [1, 2, 3, 4],
+  },
+  {
+    id: "three-of-a-kind",
+    label: "Three of a Kind (x%s)",
+    type: "poker",
+    options: [1, 2, 3, 4],
+  },
+  {
+    id: "four-pairs",
+    label: "Four Pairs (x%s)",
+    type: "poker",
+    options: [1, 2, 3, 4],
+  },
+  {
+    id: "straight",
+    label: "Straight (x%s)",
+    type: "poker",
+    options: [1, 2, 3, 4],
+  },
+  { id: "flush", label: "Flush (x%s)", type: "poker", options: [1, 2, 3, 4] },
+  {
+    id: "full-house",
+    label: "Full House (x%s)",
+    type: "poker",
+    options: [1, 2, 3, 4],
+  },
+  {
+    id: "four-of-a-kind",
+    label: "Four of a Kind (x%s)",
+    type: "poker",
+    options: [1, 2, 3, 4],
+  },
+  {
+    id: "straight-flush",
+    label: "Straight Flush (x%s)",
+    type: "poker",
+    options: [1, 2, 3, 4],
+  },
+  {
+    id: "royal-flush",
+    label: "Royal Flush (x%s)",
+    type: "poker",
+    options: [1, 2, 3, 4],
+  },
+  {
+    id: "collect-any-suit",
+    label: "Collect any complete suit (x%s)",
+    type: "card",
+    options: [2, 3],
+  },
+  {
+    id: "collect-distinct-suits",
+    label: "Collect distinct complete suits (x%s)",
+    type: "card",
+    options: [2, 3],
+  },
+  {
+    id: "collect-whole-suit",
+    label: "Collect the whole %s suit (x1)",
+    type: "card",
+    options: ["Hearts", "Spades", "Diamonds", "Clubs"],
+  },
+  {
+    id: "collect-one-from-each-suit",
+    label: "Collect one %s from each suit (x1)",
+    type: "card",
+    options: ["ace", "king", "queen", "jack"],
+  },
+  {
+    id: "collect-ace-and-face",
+    label: "Collect the ace and all face cards from each suit (x1)",
+    type: "card",
+    options: null,
+  },
+  {
+    id: "claim-palindrome",
+    label: "Claim a palindrome (x%s)",
+    type: "word",
+    options: [1, 2, 3, 4],
+  },
+  {
+    id: "claim-word-with-k",
+    label: "Claim a word with a K (x%s)",
+    type: "word",
+    options: [1, 2, 3, 4],
+  },
+  {
+    id: "claim-word-with-q",
+    label: "Claim a word with a Q (x%s)",
+    type: "word",
+    options: [1, 2, 3, 4],
+  },
+  {
+    id: "claim-word-with-w",
+    label: "Claim a word with a W (x%s)",
+    type: "word",
+    options: [1, 2, 3, 4],
+  },
+  {
+    id: "claim-word-with-x",
+    label: "Claim a word with an X (x%s)",
+    type: "word",
+    options: [1, 2, 3, 4],
+  },
+  {
+    id: "claim-word-with-y",
+    label: "Claim a word with a Y (x%s)",
+    type: "word",
+    options: [1, 2, 3, 4],
+  },
+  {
+    id: "claim-word-with-z",
+    label: "Claim a word with a Z (x%s)",
+    type: "word",
+    options: [1, 2, 3, 4],
+  },
+];
+
+export default SIDEQUESTS;
