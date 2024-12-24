@@ -2,25 +2,25 @@ const HEARTS = {
   sign: "♥",
   label: "Hearts",
   id: "hearts",
-  className: "text-red-600",
+  isRed: true,
 };
 const SPADES = {
   sign: "♠",
   label: "Spades",
   id: "spades",
-  className: "text-black",
+  isRed: false,
 };
 const DIAMONDS = {
   sign: "♦",
   label: "Diamonds",
   id: "diamonds",
-  className: "text-red-600",
+  isRed: true,
 };
 const CLUBS = {
   sign: "♣",
   label: "Clubs",
   id: "clubs",
-  className: "text-black",
+  isRed: false,
 };
 
 export type Suit =

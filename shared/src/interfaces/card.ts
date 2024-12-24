@@ -6,5 +6,6 @@ export interface Card {
   rank: Rank;
   suit: Suit;
   letter: Letter;
-  className?: string;
+  discard?: boolean;
+  starting?: boolean;
 }
