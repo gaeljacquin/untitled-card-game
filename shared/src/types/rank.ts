@@ -1,14 +1,3 @@
-export type Rank =
-  | "A"
-  | "2"
-  | "3"
-  | "4"
-  | "5"
-  | "6"
-  | "7"
-  | "8"
-  | "9"
-  | "10"
-  | "J"
-  | "Q"
-  | "K";
+import { ranks } from "../constants/card";
+
+export type Rank = (typeof ranks)[keyof typeof ranks];

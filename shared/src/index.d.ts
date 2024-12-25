@@ -6,5 +6,6 @@ export * from "./interfaces/card";
 
 export * from "./constants/objective";
 export * from "./constants/side-quest";
+export * from "./constants/card";
 
 export * from "./functions/shuffle";

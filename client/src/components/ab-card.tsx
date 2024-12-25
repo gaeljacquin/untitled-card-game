@@ -27,8 +27,9 @@ export function ABCard({ rank, suit, letter }: Card) {
 }
 
 export function ABCardFace({ rank, suit, letter }: Card) {
-  const textColor = suit.isRed ? 'text-red-500' : 'text-black';
-  const fillColor = suit.isRed ? 'fill-red-500' : 'fill-black';
+  const cardColor = suit.isRed
+    ? { text: 'text-red-500', fill: 'fill-red-500' }
+    : { text: 'text-black', fill: 'fill-black' };
   const SuitIcon = suitMap[suit.id as keyof typeof suitMap];
 
   return (
@@ -38,24 +39,26 @@ export function ABCardFace({ rank, suit, letter }: Card) {
         'backface-hidden no-select'
       )}
     >
-      <div className={cn('absolute top-2 left-2 text-base sm:text-xl font-bold', textColor)}>
-        <div>{rank}</div>
+      <div className={cn('absolute top-2 left-2 text-base sm:text-xl font-bold', cardColor.text)}>
+        <div>{rank.label}</div>
         <div>{suit.sign}</div>
       </div>
 
       <div
         className={cn(
           'absolute bottom-2 right-2 text-base sm:text-xl font-bold rotate-180',
-          textColor
+          cardColor.text
         )}
       >
-        <div>{rank}</div>
+        <div>{rank.label}</div>
         <div>{suit.sign}</div>
       </div>
 
       <div className="relative flex items-center justify-center h-full w-full">
-        {SuitIcon && <SuitIcon className={cn('w-32 h-auto absolute', textColor, fillColor)} />}
-        <span className={cn('text-4xl sm:text-6xl font-bold text-white', 'absolute')}>
+        {SuitIcon && (
+          <SuitIcon className={cn('w-32 h-auto absolute', cardColor.text, cardColor.fill)} />
+        )}
+        <span className={cn('text-4xl sm:text-6xl font-bold text-white uppercase', 'absolute')}>
           {letter}
         </span>
       </div>
