@@ -8,6 +8,11 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import cors from '@/utils/cors';
+import { ABGame } from '@annabelle/shared/dist/core/game';
+import ABCard from '@annabelle/shared/dist/core/card';
+import { dealCards } from '@annabelle/shared/dist/functions/card';
+import { maxDeal } from '@annabelle/shared/dist/constants/card';
+import { Timer } from '@annabelle/shared/dist/core/timer';
 
 @WebSocketGateway({ cors })
 export class GameGateway
@@ -16,6 +21,8 @@ export class GameGateway
   constructor() {}
 
   @WebSocketServer() server: Server;
+
+  private abGameMap = new Map<string, ABGame>();
 
   async afterInit() {
     console.info('WebSocket server initialized');
@@ -28,6 +35,7 @@ export class GameGateway
 
   handleDisconnect(client: Socket) {
     console.info(`Client disconnected: ${client.id}`);
+    this.abGameMap.delete(client.id);
   }
 
   @SubscribeMessage('hello-ws')
@@ -37,4 +45,25 @@ export class GameGateway
       message: `Hello back to you, ${payload.name}`,
     });
   }
+
+  @SubscribeMessage('game-init')
+  async gameInit(client: Socket, payload: any): Promise<void> {
+    console.info(`Message received from client ${client.id}: ${payload}`);
+    const timer: Timer = payload.timer;
+    const game = new ABGame(timer);
+    const startingCard = new ABCard(true);
+    const playerCards = dealCards(maxDeal);
+    const emit = {
+      game,
+      startingCard,
+      playerCards,
+    };
+    this.abGameMap.set(client.id, game);
+
+    client.emit('game-init-res', {
+      ...emit,
+    });
+  }
+
+  async nameless() {}
 }

@@ -1,22 +1,23 @@
-import { mainQuestList } from "../constants/main-quest";
-import { MainQuest, SideQuest } from "./quest";
-import { ABWord } from "./word";
-import shuffler from "../functions/shuffler";
-import { numSideQuests, sideQuestList } from "../constants/side-quest";
+import { mainQuestList } from '../constants/main-quest';
+import { numSideQuests, sideQuestList } from '../constants/side-quest';
+import shuffler from '../functions/shuffler';
+import { MainQuest, SideQuest } from './quest';
+import { Timer } from './timer';
+import { ABWord } from './word';
 
 interface Game {
-  timer: number;
+  timer: Timer;
   createdAt: Date;
 }
 
 export class ABGame implements Game {
-  timer: number;
+  timer: Timer;
   createdAt: Date;
   abWords: ABWord[];
   mainQuest: MainQuest;
   sideQuests: SideQuest[];
 
-  constructor(timer: number) {
+  constructor(timer: Timer) {
     this.timer = timer;
     this.abWords = [];
     this.createdAt = new Date();
@@ -33,8 +34,7 @@ export class ABGame implements Game {
   }
 
   setSideQuests() {
-    const shuffled = shuffler(sideQuestList).slice(0, numSideQuests);
-
+    const shuffled = shuffler(sideQuestList).slice(0, numSideQuests) as SideQuest[];
     const sideQuests = shuffled.map((item: SideQuest) => {
       return new SideQuest(item);
     });

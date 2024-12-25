@@ -1,15 +1,9 @@
-import { minCardsinHand, maxCardsinHand } from "../constants/card";
-import ABCard from "../core/card";
+import { maxDeal, minDeal } from '../constants/card';
+import ABCard from '../core/card';
 
-export function getStartingCard() {
-  const startingCard = new ABCard(true);
-
-  return startingCard;
-}
-
-export function getNewCards(amount: number) {
-  if (amount < minCardsinHand || amount > maxCardsinHand) {
-    throw new Error("Invalid amount");
+export function dealCards(amount: number) {
+  if (amount < minDeal || amount > maxDeal) {
+    throw new Error('Invalid amount');
   }
 
   const newCards = Array(amount)

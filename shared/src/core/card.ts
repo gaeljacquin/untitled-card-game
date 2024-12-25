@@ -1,7 +1,7 @@
-import { Letter } from "./letter";
-import { Rank } from "./rank";
-import { Suit } from "./suit";
-import { alphabet, ranks, suits } from "../constants/card";
+import { alphabet, ranks, suits } from '../constants/card';
+import { Letter } from './letter';
+import { Rank } from './rank';
+import { Suit } from './suit';
 
 export interface Card {
   rank: Rank;
@@ -44,13 +44,11 @@ export class ABCard implements Card {
   }
 
   getRandomLetter() {
-    const nonStarters = ["x", "y", "z"];
+    const nonStarters = ['q', 'x', 'y', 'z'];
     let filteredAlphabet = alphabet;
 
     if (this.starting) {
-      filteredAlphabet = alphabet.filter(
-        (letter) => !nonStarters.includes(letter)
-      );
+      filteredAlphabet = alphabet.filter((letter) => !nonStarters.includes(letter));
     }
 
     const randomIndex = Math.floor(Math.random() * filteredAlphabet.length);
@@ -61,11 +59,11 @@ export class ABCard implements Card {
 
   isVowel() {
     return (
-      this.letter.toLowerCase() === "a" ||
-      this.letter.toLowerCase() === "e" ||
-      this.letter.toLowerCase() === "i" ||
-      this.letter.toLowerCase() === "o" ||
-      this.letter.toLowerCase() === "u"
+      this.letter.toLowerCase() === 'a' ||
+      this.letter.toLowerCase() === 'e' ||
+      this.letter.toLowerCase() === 'i' ||
+      this.letter.toLowerCase() === 'o' ||
+      this.letter.toLowerCase() === 'u'
     );
   }
 }
