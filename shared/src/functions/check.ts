@@ -1,4 +1,4 @@
-import { ABWord } from "@/types/word";
+import { ABWord } from "@/core/word";
 
 export function checkABWord(items: ABWord) {
   return items;

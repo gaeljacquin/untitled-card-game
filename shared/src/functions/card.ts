@@ -1,9 +1,8 @@
 import { minCardsinHand, maxCardsinHand } from "../constants/card";
-import ABCard from "../classes/card";
+import ABCard from "../core/card";
 
 export function getStartingCard() {
-  const startingCard = new ABCard();
-  startingCard.setStarting();
+  const startingCard = new ABCard(true);
 
   return startingCard;
 }

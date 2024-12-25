@@ -1,6 +1,6 @@
 'use client';
 
-import { Card } from '@annabelle/shared/src/interfaces/card';
+import { Card } from '@annabelle/shared/src/core/card';
 import { Club, Diamond, Heart, Spade } from 'lucide-react';
 import { cn } from '@/lib/utils';
 

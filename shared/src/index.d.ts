@@ -1,11 +1,9 @@
-export * from "./types/letter";
-export * from "./types/rank";
-export * from "./types/suit";
+export * from "./core/letter";
+export * from "./core/rank";
+export * from "./core/suit";
 
-export * from "./interfaces/card";
-
-export * from "./constants/objective";
+export * from "./constants/main-quest";
 export * from "./constants/side-quest";
 export * from "./constants/card";
 
-export * from "./functions/shuffle";
+export * from "./functions/shuffler";

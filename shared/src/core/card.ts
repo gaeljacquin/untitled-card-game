@@ -1,0 +1,73 @@
+import { Letter } from "./letter";
+import { Rank } from "./rank";
+import { Suit } from "./suit";
+import { alphabet, ranks, suits } from "../constants/card";
+
+export interface Card {
+  rank: Rank;
+  suit: Suit;
+  letter: Letter;
+  played?: boolean;
+  discard?: boolean;
+  starting?: boolean;
+}
+
+export class ABCard implements Card {
+  rank: Rank;
+  suit: Suit;
+  letter: Letter;
+  played: boolean = false;
+  discard: boolean = false;
+  starting: boolean;
+  // joker: boolean = false;
+
+  constructor(starting: boolean = false) {
+    this.starting = starting;
+    this.rank = this.getRandomRankOrSuit(ranks);
+    this.suit = this.getRandomRankOrSuit(suits);
+    this.letter = this.getRandomLetter();
+  }
+
+  setPlayed() {
+    this.played = true;
+  }
+
+  setDiscard() {
+    this.discard = true;
+  }
+
+  getRandomRankOrSuit<T>(records: Record<string, T>): T {
+    const keys = Object.keys(records);
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+
+    return records[randomKey];
+  }
+
+  getRandomLetter() {
+    const nonStarters = ["x", "y", "z"];
+    let filteredAlphabet = alphabet;
+
+    if (this.starting) {
+      filteredAlphabet = alphabet.filter(
+        (letter) => !nonStarters.includes(letter)
+      );
+    }
+
+    const randomIndex = Math.floor(Math.random() * filteredAlphabet.length);
+    const randomLetter = alphabet[randomIndex];
+
+    return randomLetter;
+  }
+
+  isVowel() {
+    return (
+      this.letter.toLowerCase() === "a" ||
+      this.letter.toLowerCase() === "e" ||
+      this.letter.toLowerCase() === "i" ||
+      this.letter.toLowerCase() === "o" ||
+      this.letter.toLowerCase() === "u"
+    );
+  }
+}
+
+export default ABCard;
