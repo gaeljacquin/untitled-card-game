@@ -1,3 +1,5 @@
+import ABCard from '../core/card';
+
 export const vowels = [...'aeiou'];
 export const consonants = [...'bcdfghjklmnpqrstvwxyz'];
 export const alphabet = vowels.concat(consonants);
@@ -64,6 +66,8 @@ export const clubs = {
 //   isRed: false,
 // };
 export const suits = { hearts, spades, diamonds, clubs /*, jokerSuit*/ };
+
+export const previewCard = new ABCard(false, ranks.aceRank, suits.hearts, 'B');
 
 export const minDeal = 1;
 

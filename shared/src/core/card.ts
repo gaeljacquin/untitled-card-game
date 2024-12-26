@@ -22,11 +22,11 @@ export class ABCard implements Card {
   starting: boolean;
   // joker: boolean = false;
 
-  constructor(starting: boolean = false) {
+  constructor(starting: boolean = false, rank?: Rank, suit?: Suit, letter?: Letter) {
     this.starting = starting;
-    this.rank = this.getRandomRankOrSuit(ranks);
-    this.suit = this.getRandomRankOrSuit(suits);
-    this.letter = this.getRandomLetter();
+    this.rank = rank ?? this.getRandomRankOrSuit(ranks);
+    this.suit = suit ?? this.getRandomRankOrSuit(suits);
+    this.letter = letter ?? this.getRandomLetter();
   }
 
   setPlayed() {
@@ -66,6 +66,10 @@ export class ABCard implements Card {
       this.letter.toLowerCase() === 'o' ||
       this.letter.toLowerCase() === 'u'
     );
+  }
+
+  generatePreviewCard(suit) {
+    return new ABCard(false, ranks.aceRank, suit, 'B');
   }
 }
 

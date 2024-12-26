@@ -2,30 +2,72 @@
 
 import Image from 'next/image';
 import { Card } from '@annabelle/shared/src/core/card';
-import { Club, Diamond, Heart, Spade } from 'lucide-react';
+import { Circle, Club, Diamond, Heart, Spade, Square } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
 import allConstants from '@/utils/constants';
 
-const suitMap = {
+type Props = Card & {
+  previewIndex?: number | null;
+  isSelectedPreview?: boolean;
+};
+
+const shapeMap = {
   spades: Spade,
   hearts: Heart,
   diamonds: Diamond,
   clubs: Club,
+  rectangle: Square,
+  circle: Circle,
 };
 
-export function ABCardFaceUp({ rank, suit, letter }: Card) {
+export function ABCardFaceUp({
+  rank,
+  suit,
+  letter,
+  previewIndex = null,
+  isSelectedPreview = false,
+}: Props) {
+  let cardFrontIndex;
+
+  if (!previewIndex) {
+    const { cardFront } = settingsStore();
+    cardFrontIndex = cardFront;
+  } else {
+    cardFrontIndex = previewIndex;
+  }
+
+  const { cardFronts } = allConstants;
+  const cardFront = cardFronts[cardFrontIndex];
   const cardColor = suit.isRed
-    ? { text: 'text-red-500', fill: 'fill-red-500' }
-    : { text: 'text-black', fill: 'fill-black' };
-  const SuitIcon = suitMap[suit.id as keyof typeof suitMap];
+    ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500' }
+    : { text: 'text-black', letter: 'text-black', fill: 'fill-black' };
+  let ShapeIcon = null;
+
+  switch (cardFront.id) {
+    case 'rectangle':
+    case 'circle':
+      ShapeIcon = shapeMap[cardFront.id as keyof typeof shapeMap];
+      cardColor.letter = 'text-white';
+      break;
+    case 'suit':
+      ShapeIcon = shapeMap[suit.id as keyof typeof shapeMap];
+      cardColor.letter = 'text-white';
+      break;
+    default:
+      break;
+  }
 
   return (
     <div
       className={cn(
-        'relative w-32 h-48 cursor-pointer preserve-3d',
-        'transition-transform duration-500 hover:scale-105'
+        'relative cursor-pointer preserve-3d',
+        'transition-transform duration-500',
+        previewIndex !== undefined && previewIndex !== null
+          ? 'w-48 h-72  scale-90 hover:scale-100'
+          : 'w-32 h-48 hover:scale-105',
+        isSelectedPreview && 'ring-4 ring-white/50 scale-100 rotate-3 rounded-2xl'
       )}
     >
       <div className="absolute inset-0 w-full h-full rounded-xl shadow-lg border-2 border-border preserve-3d">
@@ -53,10 +95,16 @@ export function ABCardFaceUp({ rank, suit, letter }: Card) {
           </div>
 
           <div className="relative flex items-center justify-center h-full w-full">
-            {SuitIcon && (
-              <SuitIcon className={cn('w-24 h-auto absolute', cardColor.text, cardColor.fill)} />
+            {ShapeIcon && (
+              <ShapeIcon className={cn('w-24 h-auto absolute', cardColor.letter, cardColor.fill)} />
             )}
-            <span className={cn('text-4xl sm:text-6xl font-bold text-white uppercase', 'absolute')}>
+            <span
+              className={cn(
+                'text-4xl sm:text-6xl font-bold uppercase',
+                'absolute',
+                cardColor.letter
+              )}
+            >
               {letter}
             </span>
           </div>

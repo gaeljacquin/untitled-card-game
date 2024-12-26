@@ -1,18 +1,14 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { SettingsStore } from '@/types/settings';
+import allConstants from '@/utils/constants';
 
-const initialState = {
-  cardBack: 0,
-  music: 50,
-  soundfx: 50,
-  timer: 3,
-};
+const { defaultSettings } = allConstants;
 
 const settingsStore = create(
   persist(
     devtools<SettingsStore>((set, get) => ({
-      ...initialState,
+      ...defaultSettings,
       _hasHydrated: false,
       setHasHydrated: (_hasHydrated) => {
         set({ _hasHydrated });
@@ -21,7 +17,7 @@ const settingsStore = create(
         set({ ...settings, _hasHydrated: true });
       },
       resetSettings: () => {
-        set({ ...initialState, _hasHydrated: true });
+        set({ ...defaultSettings, _hasHydrated: true });
       },
       getSettings: () => get(),
     })),
