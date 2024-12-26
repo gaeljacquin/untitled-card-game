@@ -7,4 +7,4 @@ export * from './constants/main-quest';
 export * from './constants/side-quest';
 export * from './constants/card';
 
-export * from './functions/shuffler';
+export * from './functions/shufflers';

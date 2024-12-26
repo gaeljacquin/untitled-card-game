@@ -1,7 +1,7 @@
 'use client';
 
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
-import { SectionCard } from '@/components/section-card';
+import SectionCard from '@/components/section-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { FlipWords } from '@/components/ui/flip-words';
 import { cn } from '@/lib/utils';

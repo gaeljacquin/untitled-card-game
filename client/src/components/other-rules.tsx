@@ -1,5 +1,5 @@
 import { Coins } from 'lucide-react';
-import { SectionCard } from '@/components/section-card';
+import SectionCard from '@/components/section-card';
 import appinfo from '@/utils/appinfo';
 
 export function OtherRules() {

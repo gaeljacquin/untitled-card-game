@@ -7,7 +7,7 @@ export default function Page() {
     <PageTransition>
       <div className="min-h-screen bg-gradient-to-br from-cyan-900 via-cyan-700 to-emerald-800 text-white">
         <div className="relative container mx-auto px-4 py-16">
-          <ReturnMainMenu />
+          <ReturnMainMenu className="absolute top-4 left-4" />
           <Game />
         </div>
       </div>

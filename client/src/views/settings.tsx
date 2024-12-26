@@ -1,7 +1,7 @@
 'use client';
 
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
-import { SectionCard } from '@/components/section-card';
+import SectionCard from '@/components/section-card';
 import SettingsForm from '@/forms/settings';
 import { cn } from '@/lib/utils';
 

@@ -2,7 +2,7 @@
 
 import ABCard from '@annabelle/shared/src/core/card';
 import { ABCardFaceDown, ABCardFaceUp } from '@/components/ab-card';
-import { SectionCard } from '@/components/section-card';
+import SectionCard from '@/components/section-card';
 import { Button } from '@/components/ui/button';
 
 type Props = {

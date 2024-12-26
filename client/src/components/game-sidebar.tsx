@@ -6,7 +6,7 @@ import { SideQuest } from '@annabelle/shared/src/core/quest';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle, ChevronsDown, ChevronsUp, CircleX } from 'lucide-react';
 import Placeholder from '@/components/placeholder';
-import { SectionCard } from '@/components/section-card';
+import SectionCard from '@/components/section-card';
 import { TerminalDisplay } from '@/components/terminal-display';
 import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';

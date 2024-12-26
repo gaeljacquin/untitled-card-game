@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { SectionCard } from '@/components/section-card';
+import SectionCard from '@/components/section-card';
 import appinfo from '@/utils/appinfo';
 
 export function BasicRules() {

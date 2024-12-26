@@ -9,15 +9,16 @@ type Props = {
   description?: string;
   children: ReactNode;
   className?: string;
+  classNameTitle?: string;
 };
 
-export function SectionCard(props: Props) {
-  const { title, description, children, className } = props;
+export default function SectionCard(props: Props) {
+  const { title, description, children, className, classNameTitle } = props;
 
   return (
     <Card className={cn('backdrop-blur-sm bg-white/10 border-white/20', className)}>
       <CardHeader className="text-white">
-        <CardTitle className="text-2xl">{title}</CardTitle>
+        <CardTitle className={cn('text-2xl', classNameTitle)}>{title}</CardTitle>
         {description && (
           <CardDescription className="text-white/80 text-md">{description}</CardDescription>
         )}

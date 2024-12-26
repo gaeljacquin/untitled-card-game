@@ -1,4 +1,5 @@
 import { alphabet, ranks, suits } from '../constants/card';
+import { getRandomIndex } from '../functions/shufflers';
 import { Letter } from './letter';
 import { Rank } from './rank';
 import { Suit } from './suit';
@@ -51,7 +52,7 @@ export class ABCard implements Card {
       filteredAlphabet = alphabet.filter((letter) => !nonStarters.includes(letter));
     }
 
-    const randomIndex = Math.floor(Math.random() * filteredAlphabet.length);
+    const randomIndex = getRandomIndex(filteredAlphabet);
     const randomLetter = alphabet[randomIndex];
 
     return randomLetter;

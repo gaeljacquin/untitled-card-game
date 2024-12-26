@@ -1,6 +1,6 @@
 import { mainQuestList } from '../constants/main-quest';
 import { numSideQuests, sideQuestList } from '../constants/side-quest';
-import shuffler from '../functions/shuffler';
+import { shuffler } from '../functions/shufflers';
 import { MainQuest, SideQuest } from './quest';
 import { Timer } from './timer';
 import { ABWord } from './word';
