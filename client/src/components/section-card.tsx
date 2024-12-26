@@ -1,16 +1,19 @@
 'use client';
 
+import { ReactNode } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
-interface SectionCardProps {
+type Props = {
   title: string;
   description?: string;
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
-}
+};
 
-export function SectionCard({ title, description, children, className }: SectionCardProps) {
+export function SectionCard(props: Props) {
+  const { title, description, children, className } = props;
+
   return (
     <Card className={cn('backdrop-blur-sm bg-white/10 border-white/20', className)}>
       <CardHeader className="text-white">

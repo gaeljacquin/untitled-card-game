@@ -7,16 +7,22 @@ import { cn } from '@/lib/utils';
 
 export default function Settings() {
   return (
-    <div className="max-w-4xl mx-auto space-y-8 mt-16">
-      <SectionCard title="Settings" className="text-center text-white p-4">
-        <SettingsForm />
-      </SectionCard>
-
-      <div className="flex flex-col items-center justify-center">
-        <span className={cn('w-[32rem] h-44', 'bg-transparent')}>
+    <>
+      <div className="fixed inset-0 bg-center opacity-50 flex items-center justify-center pointer-events-none">
+        <span
+          className={cn(
+            'flex items-center justify-center w-[56rem] h-auto',
+            'bg-transparent grayscale'
+          )}
+        >
           <AnimatedLogoDynamic logo={'game'} loop={false} autoplay={false} />
         </span>
       </div>
-    </div>
+      <div className="max-w-4xl mx-auto space-y-8 mt-16">
+        <SectionCard title="Settings" className="text-center text-white p-4">
+          <SettingsForm />
+        </SectionCard>
+      </div>
+    </>
   );
 }

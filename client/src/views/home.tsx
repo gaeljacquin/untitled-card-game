@@ -64,7 +64,7 @@ export default function Home() {
             </h3>
           </motion.div>
 
-          <div className="hidden sm:grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-xl">
+          <div className="sm:grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-xl">
             {menuItems.map((item, index) => (
               <motion.div
                 key={item.label}
@@ -96,25 +96,6 @@ export default function Home() {
                 )}
               </motion.div>
             ))}
-          </div>
-          <div className="flex items-center justify-center mt-4 sm:hidden">
-            <motion.div
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="text-center mb-12"
-            >
-              <h3 className="text-md font-semibold text-center">
-                <p>
-                  A larger display area is required to play{' '}
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
-                    {appinfo.title}
-                  </span>
-                  .
-                </p>
-                <p>Please expand your browser window or try another device.</p>
-              </h3>
-            </motion.div>
           </div>
         </div>
       </PageTransition>
