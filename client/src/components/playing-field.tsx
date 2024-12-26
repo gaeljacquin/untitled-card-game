@@ -1,50 +1,42 @@
 'use client';
 
-import { useEffect } from 'react';
-import { io } from 'socket.io-client';
-// import { ABCard as ABCardComp } from '@/components/ab-card';
+import ABCard from '@annabelle/shared/src/core/card';
+import { ABCardFaceDown, ABCardFaceUp } from '@/components/ab-card';
 import { SectionCard } from '@/components/section-card';
 import { Button } from '@/components/ui/button';
-import settingsStore from '@/stores/settings';
 
-export default function PlayingField() {
-  const socket = io(`${process.env.serverUrl}`);
-  const { timer } = settingsStore();
+type Props = {
+  startingCard: ABCard;
+  playerCards: ABCard[];
+};
 
-  const wsConnect = () => {
-    socket.on('connect', () => {
-      console.info('Connected to WebSocket server');
-    });
-
-    socket.on('game-init-res', (data) => {
-      console.log(data);
-    });
-
-    return () => {
-      socket.off('connect');
-      socket.off(`game-init-res`);
-    };
-  };
-
-  useEffect(() => {
-    wsConnect();
-  }, []);
-
+export default function PlayingField({ startingCard, playerCards }: Props) {
   return (
-    <SectionCard title="" className="w-fit h-full mt-7 rounded-3xl">
-      <Button onClick={() => socket.emit('game-init', { timer })} className="w-fit">
-        Say hello
-      </Button>
-      <div className="p-4 sm:p-8 flex flex-wrap gap-4 sm:gap-8 items-center justify-center">
-        <p>Starting Card</p>
-        {/* <ABCardComp {...startingCard} /> */}
-      </div>
-      <div className="p-4 sm:p-8 flex flex-wrap gap-4 sm:gap-8 items-center justify-center">
-        <p>Cards in Hand</p>
-        {/* {newCards.map((newCard) => (
-          <ABCardComp key={crypto.randomUUID()} {...newCard} />
-        ))} */}
-      </div>
-    </SectionCard>
+    <div className="flex flex-col w-full justify-between">
+      <SectionCard title="" className="mt-7 rounded-3xl h-full">
+        <>
+          <div className="p-4 sm:p-8 flex flex-wrap gap-2 sm:gap-4 items-center justify-start">
+            <ABCardFaceDown />
+            <ABCardFaceUp {...startingCard} />
+          </div>
+          <hr />
+          <div className="p-4 sm:p-8 flex flex-wrap gap-2 sm:gap-4 items-center justify-center">
+            {playerCards.map((item) => (
+              <ABCardFaceUp key={crypto.randomUUID()} {...item} />
+            ))}
+          </div>
+        </>
+        <div className="space-y-2 mt-4">
+          <div className="flex flex-row items-center justify-center w-full gap-4">
+            <Button variant="destructive" className="w-full">
+              Discard
+            </Button>
+            <Button variant="default" className="w-full">
+              Confirm
+            </Button>
+          </div>
+        </div>
+      </SectionCard>
+    </div>
   );
 }

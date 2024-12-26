@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import { Hydrate } from '@/types/hydrate';
 import allConstants from '@/utils/constants';
 
 const { cardBacks, timerMinutes } = allConstants;
@@ -12,10 +13,9 @@ export const settingsSchema = z.object({
 
 export type FormData = z.infer<typeof settingsSchema>;
 
-export type SettingsStore = FormData & {
-  updateSettings: (arg0: Partial<FormData>) => void;
-  resetSettings: () => void;
-  getSettings: () => FormData;
-  _hasHydrated: boolean;
-  setHasHydrated: (arg0: boolean) => void;
-};
+export type SettingsStore = FormData &
+  Hydrate & {
+    updateSettings: (arg0: Partial<FormData>) => void;
+    resetSettings: () => void;
+    getSettings: () => FormData;
+  };

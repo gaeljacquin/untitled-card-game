@@ -5,24 +5,37 @@ import { MainQuest, SideQuest } from './quest';
 import { Timer } from './timer';
 import { ABWord } from './word';
 
+export type PlayedWordPlain = {
+  word: string;
+  valid: boolean;
+};
+
 interface Game {
   timer: Timer;
   createdAt: Date;
+  played: boolean;
+  won: boolean;
 }
 
 export class ABGame implements Game {
   timer: Timer;
   createdAt: Date;
+  played: boolean;
+  won: boolean;
   abWords: ABWord[];
   mainQuest: MainQuest;
   sideQuests: SideQuest[];
+  score: number;
 
   constructor(timer: Timer) {
     this.timer = timer;
     this.abWords = [];
+    this.played = false;
+    this.won = false;
     this.createdAt = new Date();
     this.mainQuest = this.setMainQuest();
     this.sideQuests = this.setSideQuests();
+    this.score = 0;
   }
 
   setMainQuest() {
@@ -44,5 +57,22 @@ export class ABGame implements Game {
 
   addABWord(word: ABWord) {
     this.abWords.push(word);
+  }
+
+  getValidWords() {
+    return this.abWords.filter((word) => word.valid);
+  }
+
+  getInvalidWords() {
+    return this.abWords.filter((word) => !word.valid);
+  }
+
+  getPlayedWordsPlain(): PlayedWordPlain[] {
+    return this.abWords.map((word) => {
+      return {
+        word: word.join(''),
+        valid: word.valid,
+      };
+    });
   }
 }

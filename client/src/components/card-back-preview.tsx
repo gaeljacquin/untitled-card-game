@@ -9,6 +9,7 @@ type Props = {
 
 export default function CardBackPreview(props: Props) {
   const { cardBack, index, isSelected } = props;
+
   return (
     <div
       className={cn(

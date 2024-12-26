@@ -6,7 +6,7 @@ const initialState = {
   cardBack: 0,
   music: 50,
   soundfx: 50,
-  timer: 0,
+  timer: 3,
 };
 
 const settingsStore = create(

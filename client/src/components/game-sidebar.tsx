@@ -1,45 +1,54 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { ABGame, PlayedWordPlain } from '@annabelle/shared';
+import { SideQuest } from '@annabelle/shared/src/core/quest';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle, ChevronsDown, ChevronsUp, CircleX } from 'lucide-react';
-import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
+import Placeholder from '@/components/placeholder';
 import { SectionCard } from '@/components/section-card';
 import { TerminalDisplay } from '@/components/terminal-display';
 import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
+import statsStore from '@/stores/stats';
 
-export default function GameSidebar() {
+export default function GameSidebar({ game }: { game: ABGame }) {
+  const { mainQuest, sideQuests } = game;
+  const {
+    currentStreak,
+    bestStreak,
+    highScore,
+    _hasHydrated,
+    /* updateBestStreak,
+     updateHighScore,*/
+  } = statsStore();
   const [collapsibleOpen, setCollapsibleOpen] = useState(false);
-  const totalScore = -20;
-  const currentScore = 15;
-  const validWords = 8;
-  const invalidWords = 1;
-  const discards = 0;
-  const currentStreak = 3;
-  const maxStreak = 4;
-  const highScore = 250;
-  const playedWords = [
-    { word: 'one', valid: true },
-    { word: 'two', valid: true },
-    { word: 'three', valid: true },
-    { word: 'four', valid: true },
-    { word: 'five', valid: true },
-    { word: 'six', valid: true },
-    { word: 'seven', valid: true },
-    { word: 'eight', valid: true },
-    { word: 'nein', valid: false },
-  ];
+  const [gameState, setGameState] = useState({
+    score: 0,
+    validWords: 0,
+    invalidWords: 0,
+    collected: 0,
+    discards: 0,
+    playedWords: [],
+  });
+  void setGameState;
+
+  useEffect(() => {
+    console.log('there');
+  }, []);
+
+  if (!_hasHydrated) {
+    return <Placeholder />;
+  }
 
   return (
-    <SectionCard title="" className="w-96 h-full mt-7 rounded-3xl">
+    <SectionCard title="" className="w-1/2 mt-7 rounded-3xl">
       <div className="space-y-6 text-white">
         <div className="space-y-2 -mt-6">
-          <h3 className="text-lg font-semibold">Objective</h3>
+          <h3 className="text-lg font-semibold">Main Quest</h3>
           <ul>
-            <li className="text-sm">Placeholder objective</li>
+            <li className="text-sm">{mainQuest.label ?? ''}</li>
           </ul>
         </div>
 
@@ -48,64 +57,52 @@ export default function GameSidebar() {
         <div className="space-y-2">
           <h3 className="text-lg font-semibold">Side Quests</h3>
           <ul>
-            <li className="text-sm">Placeholder side quest 1</li>
-            <li className="text-sm">Placeholder side quest 2</li>
-            <li className="text-sm">Placeholder side quest 3</li>
+            {sideQuests.length > 0 &&
+              sideQuests.map((item: SideQuest) => (
+                <li className="text-sm" key={item.id}>
+                  {item.label}
+                </li>
+              ))}
           </ul>
         </div>
 
         <Separator />
 
         <div className="space-y-2">
-          <h3 className="text-lg font-semibold">Actions</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <Button variant="default">Claim</Button>
-            <Button variant="default">Deal</Button>
-            <Button variant="destructive">Discard</Button>
-            <Button variant="outline" className="text-black">
-              Button 2
-            </Button>
-          </div>
-        </div>
-
-        <Separator />
-
-        <div className="space-y-2">
-          <h3 className="text-lg font-semibold">Stats</h3>
           <div className="flex items-center justify-between gap-4">
             <div className="flex flex-col items-center justify-center w-full">
-              <span className="text-sm">Current Score</span>
-              <TerminalDisplay
-                value={currentScore}
-                noBueno={currentScore < 0}
-                className="flex w-full"
-              />
+              <span className="text-sm">Collected</span>
+              <TerminalDisplay value={gameState.collected} className="flex w-full" />
             </div>
             <div className="flex flex-col items-center justify-center w-full">
               <span className="text-sm">Discards</span>
-              <TerminalDisplay value={discards} noBueno={discards > 0} className="flex w-full" />
+              <TerminalDisplay
+                value={gameState.discards}
+                noBueno={gameState.discards > 0}
+                className="flex w-full"
+              />
             </div>
           </div>
           <div className="flex items-center justify-between gap-4">
             <div className="flex flex-col items-center justify-center w-full">
               <span className="text-sm">Valid Words</span>
-              <TerminalDisplay value={validWords} className="flex w-full" />
+              <TerminalDisplay value={gameState.validWords} className="flex w-full" />
             </div>
             <div className="flex flex-col items-center justify-center w-full">
               <span className="text-sm">Invalid Words</span>
               <TerminalDisplay
-                value={invalidWords}
-                noBueno={invalidWords > 0}
+                value={gameState.invalidWords}
+                noBueno={gameState.invalidWords > 0}
                 className="flex w-full"
               />
             </div>
           </div>
           <div className="flex items-center justify-between gap-4">
             <div className="flex flex-col items-center justify-center w-full">
-              <span className="text-sm">Total Score</span>
+              <span className="text-sm">Score</span>
               <TerminalDisplay
-                value={totalScore}
-                noBueno={totalScore < 0}
+                value={gameState.score}
+                noBueno={gameState.score < 0}
                 className="flex w-full"
               />
             </div>
@@ -147,11 +144,11 @@ export default function GameSidebar() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between gap-4">
                       <div className="flex flex-col items-center justify-center w-full">
-                        <span className="text-sm">Max Streak</span>
-                        <TerminalDisplay value={maxStreak} className="flex w-full" />
+                        <span className="text-sm">Best Streak</span>
+                        <TerminalDisplay value={bestStreak} className="flex w-full" />
                       </div>
                       <div className="flex flex-col items-center justify-center w-full">
-                        <span className="text-sm">Current Streak</span>
+                        <span className="text-sm">Streak</span>
                         <TerminalDisplay value={currentStreak} className="flex w-full" />
                       </div>
                     </div>
@@ -171,35 +168,28 @@ export default function GameSidebar() {
         <Separator />
 
         <div className="space-y-2">
-          <h3 className="text-lg font-semibold">Words Found</h3>
+          <h3 className="text-lg font-semibold">Words Played</h3>
           <Command className="bg-black/50 border-white/20">
             <CommandList className="w-full mt-2 h-36">
               <CommandGroup>
-                {playedWords.map((item, index) => {
-                  return (
-                    <CommandItem
-                      className="flex items-center justify-between text-white aria-selected:text-black text-md"
-                      key={item.word + '-' + index}
-                      value={item.word}
-                    >
-                      <span>{item.word.toLocaleUpperCase()}</span>
-                      <span>
-                        {item.valid ? <CheckCircle /> : <CircleX className="text-red-500" />}
-                      </span>
-                    </CommandItem>
-                  );
-                })}
+                {gameState.playedWords.length > 0 &&
+                  gameState.playedWords.map((item: PlayedWordPlain, index) => {
+                    return (
+                      <CommandItem
+                        className="flex items-center justify-between text-white aria-selected:text-black text-md"
+                        key={item.word + '-' + index}
+                        value={item.word}
+                      >
+                        <span>{item.word.toLocaleUpperCase()}</span>
+                        <span>
+                          {item.valid ? <CheckCircle /> : <CircleX className="text-red-500" />}
+                        </span>
+                      </CommandItem>
+                    );
+                  })}
               </CommandGroup>
             </CommandList>
           </Command>
-        </div>
-
-        <Separator />
-
-        <div className="space-y-2">
-          <span className={cn('w-[32rem] h-8', 'bg-transparent')}>
-            <AnimatedLogoDynamic logo={'game'} loop={false} autoplay={false} />
-          </span>
         </div>
       </div>
     </SectionCard>

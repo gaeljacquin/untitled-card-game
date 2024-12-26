@@ -12,7 +12,6 @@ import { ABGame } from '@annabelle/shared/dist/core/game';
 import ABCard from '@annabelle/shared/dist/core/card';
 import { dealCards } from '@annabelle/shared/dist/functions/card';
 import { maxDeal } from '@annabelle/shared/dist/constants/card';
-import { Timer } from '@annabelle/shared/dist/core/timer';
 
 @WebSocketGateway({ cors })
 export class GameGateway
@@ -49,16 +48,14 @@ export class GameGateway
   @SubscribeMessage('game-init')
   async gameInit(client: Socket, payload: any): Promise<void> {
     console.info(`Message received from client ${client.id}: ${payload}`);
-    const timer: Timer = payload.timer;
-    const game = new ABGame(timer);
+    const game = payload.game;
     const startingCard = new ABCard(true);
     const playerCards = dealCards(maxDeal);
     const emit = {
-      game,
       startingCard,
       playerCards,
     };
-    this.abGameMap.set(client.id, game);
+    this.abGameMap.set(client.id, { game, ...emit });
 
     client.emit('game-init-res', {
       ...emit,

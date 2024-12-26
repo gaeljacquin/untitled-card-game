@@ -5,6 +5,7 @@ import { PopoverClose } from '@radix-ui/react-popover';
 import { AudioLines, Image, Music4, RotateCcw, Save, Timer } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import CardBackPreview from '@/components/card-back-preview';
+import Placeholder from '@/components/placeholder';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -16,7 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Slider } from '@/components/ui/slider';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
@@ -66,15 +66,7 @@ export default function Settings() {
   }
 
   if (!_hasHydrated) {
-    return (
-      <div className="flex flex-col space-y-3 items-center justify-center">
-        <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-4 w-[200px]" />
-        </div>
-      </div>
-    );
+    return <Placeholder />;
   }
 
   return (
