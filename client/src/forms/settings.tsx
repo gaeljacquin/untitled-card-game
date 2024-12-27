@@ -1,8 +1,9 @@
 'use client';
 
 import { useRef } from 'react';
-import { ranks, suits } from '@annabelle/shared/src/constants/card';
 import { ABCardPreview } from '@annabelle/shared/src/core/card';
+import { Rank, RankId } from '@annabelle/shared/src/core/rank';
+import { Suit, SuitId } from '@annabelle/shared/src/core/suit';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PopoverClose } from '@radix-ui/react-popover';
 import { Check } from 'lucide-react';
@@ -54,11 +55,12 @@ export default function Settings() {
     },
   });
 
-  const previewCard = new ABCardPreview(
-    ranks[settings.previewCard.rank as keyof typeof ranks],
-    suits[settings.previewCard.suit as keyof typeof suits],
-    settings.previewCard.letter
-  );
+  const previewRank = Rank.getRankById(settings.previewCard.rank as RankId);
+  const previewSuit = Suit.getSuitById(settings.previewCard.suit as SuitId);
+  const previewCard = new ABCardPreview();
+  previewCard.setRank(previewRank);
+  previewCard.setSuit(previewSuit);
+  previewCard.setLetter(settings.previewCard.letter);
 
   const currentLetter = form.watch('previewCard.letter');
   const lastValidValueRef = useRef(settings.previewCard.letter);
@@ -85,7 +87,7 @@ export default function Settings() {
     });
   }
 
-  if (!_hasHydrated) {
+  if (!(_hasHydrated && previewCard)) {
     return <Placeholder />;
   }
 
@@ -215,7 +217,7 @@ export default function Settings() {
                     <Command className="bg-black/50 border-white/20">
                       <CommandList className="w-full mt-2">
                         <CommandGroup>
-                          {Object.values(ranks)
+                          {Object.values(Rank.getAllRanks())
                             .filter(
                               (item) =>
                                 item.id === 'ace' ||
@@ -267,7 +269,7 @@ export default function Settings() {
                     <Command className="bg-black/50 border-white/20">
                       <CommandList className="w-full mt-2 h-auto">
                         <CommandGroup>
-                          {Object.values(suits).map((item, index) => {
+                          {Object.values(Suit.getAllSuits()).map((item, index) => {
                             return (
                               <CommandItem
                                 className="flex items-center justify-between text-white aria-selected:text-black text-md"

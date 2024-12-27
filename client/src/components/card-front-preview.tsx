@@ -1,9 +1,9 @@
-import { Card } from '@annabelle/shared/src/core/card';
+import { ABCard } from '@annabelle/shared/src/core/card';
 import { cn } from '@/lib/utils';
 import { ABCardFaceUp } from './ab-card';
 
 type Props = {
-  card: Card;
+  card: ABCard;
   className?: string;
   valueNotLabel?: boolean;
 };
@@ -19,7 +19,7 @@ export default function CardFrontPreview(props: Props) {
         className
       )}
     >
-      <ABCardFaceUp {...card} valueNotLabel={valueNotLabel} preview={true} />
+      <ABCardFaceUp card={card} valueNotLabel={valueNotLabel} preview={true} />
     </div>
   );
 }

@@ -1,24 +1,23 @@
 'use client';
 
 import Image from 'next/image';
-import { Card } from '@annabelle/shared/src/core/card';
+import { ABCard } from '@annabelle/shared/src/core/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
 import allConstants from '@/utils/constants';
 
-type Props = Card & {
+type Props = {
+  card: ABCard;
   preview?: boolean;
   valueNotLabel?: boolean;
 };
 
-export function ABCardFaceUp({
-  rank,
-  suit,
-  letter,
-  preview = false,
-  valueNotLabel = false,
-}: Props) {
+export function ABCardFaceUp(props: Props) {
+  const { card, preview, valueNotLabel } = props;
+  const rank = card.getRank();
+  const suit = card.getSuit();
+  const letter = card.getLetter();
   const { cardFront: cardFrontIndex } = settingsStore();
   const { cardFronts } = allConstants;
   const cardFront = cardFronts[cardFrontIndex];
@@ -67,7 +66,14 @@ export function ABCardFaceUp({
 
           <div className="relative flex items-center justify-center h-full w-full">
             {ShapeIcon && (
-              <ShapeIcon className={cn('w-48 h-auto absolute', cardColor.letter, cardColor.fill)} />
+              <ShapeIcon
+                className={cn(
+                  'h-auto absolute',
+                  preview ? 'w-48' : 'w-32',
+                  cardColor.letter,
+                  cardColor.fill
+                )}
+              />
             )}
             <span
               className={cn(

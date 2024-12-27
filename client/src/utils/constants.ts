@@ -1,4 +1,3 @@
-import { ranks, suits } from '@annabelle/shared/src/constants/card';
 import {
   Badge,
   Circle,
@@ -13,6 +12,7 @@ import {
 
 const TIMER_MIN = 3;
 const TIMER_MAX = 5;
+
 const NUM_CARDS_IN_HAND_DEFAULT = 5;
 const NUM_CARDS_IN_HAND_MIN = 4;
 const NUM_CARDS_IN_HAND_MAX = 7;
@@ -43,7 +43,9 @@ const cardFronts = [
 ];
 cardFronts.sort((a, b) => {
   if (a.id === 'default') return -1;
+
   if (b.id === 'default') return 1;
+
   return a.label.localeCompare(b.label);
 });
 
@@ -55,8 +57,8 @@ const defaultSettings = {
   timer: TIMER_MIN,
   playerCards: NUM_CARDS_IN_HAND_DEFAULT,
   previewCard: {
-    suit: suits.hearts.id,
-    rank: ranks.ace.id,
+    suit: 'hearts',
+    rank: 'ace',
     letter: 'B',
   },
   labelNotValue: true,
@@ -66,13 +68,13 @@ const topRightToaster =
   'top-0 right-0 flex fixed md:backdrop-opacity-5 md:backdrop-invert md:bg-white/10 md:text-white md:max-w-[400px] md:top-4 md:right-4';
 
 const allConstants = {
-  defaultSettings,
-  cardBacks,
-  cardFronts,
   TIMER_MIN,
   TIMER_MAX,
   NUM_CARDS_IN_HAND_MIN,
   NUM_CARDS_IN_HAND_MAX,
+  cardBacks,
+  cardFronts,
+  defaultSettings,
   topRightToaster,
 };
 

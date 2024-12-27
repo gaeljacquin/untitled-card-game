@@ -1,4 +1,4 @@
-import { maxDeal, minDeal } from '../constants/card';
+import { maxDeal, minDeal } from '../constants/other';
 import { ABCard } from '../core/card';
 
 export function dealCards(amount: number) {
@@ -8,7 +8,7 @@ export function dealCards(amount: number) {
 
   const newCards = Array(amount)
     .fill(null)
-    .map(() => new ABCard());
+    .map(() => new ABCard(false));
 
   return newCards;
 }

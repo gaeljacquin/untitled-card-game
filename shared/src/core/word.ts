@@ -1,3 +1,3 @@
-import { Card } from './card';
+import { ABCard } from './card';
 
-export type ABWord = Card[] & { valid: boolean };
+export type ABWord = ABCard[] & { valid: boolean };

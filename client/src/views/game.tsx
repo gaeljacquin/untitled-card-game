@@ -15,7 +15,7 @@ import settingsStore from '@/stores/settings';
 export default function Game() {
   const socket = io(`${process.env.serverUrl}`);
   const { timer } = settingsStore();
-  const [startingCard, setStartingCard] = useState<ABCard>();
+  const [startingCard, setStartingCard] = useState<ABCard | null>(null);
   const [playerCards, setPlayerCards] = useState<ABCard[]>([]);
   const game = new ABGame(timer as Timer);
 
@@ -41,7 +41,7 @@ export default function Game() {
     wsConnect();
   }, []);
 
-  if (!startingCard || !playerCards.length) {
+  if (!(startingCard && playerCards.length > 0)) {
     return <Placeholder />;
   }
 
