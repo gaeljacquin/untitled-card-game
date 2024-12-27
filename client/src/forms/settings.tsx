@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef } from 'react';
 import { ranks, suits } from '@annabelle/shared/src/constants/card';
 import { ABCardPreview } from '@annabelle/shared/src/core/card';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -36,9 +37,9 @@ export default function Settings() {
     TIMER_MAX,
     NUM_CARDS_IN_HAND_MIN,
     NUM_CARDS_IN_HAND_MAX,
+    topRightToaster,
   } = allConstants;
-  const toasterClass =
-    'top-0 right-0 flex fixed md:backdrop-opacity-5 md:backdrop-invert md:bg-white/10 md:text-white md:max-w-[400px] md:top-4 md:right-4';
+
   const form = useForm<FormData>({
     resolver: zodResolver(settingsSchema),
     defaultValues: {
@@ -59,6 +60,9 @@ export default function Settings() {
     settings.previewCard.letter
   );
 
+  const currentLetter = form.watch('previewCard.letter');
+  const lastValidValueRef = useRef(settings.previewCard.letter);
+
   function onSubmit(data: FormData) {
     updateSettings(data);
     toast({
@@ -66,7 +70,7 @@ export default function Settings() {
       title: 'Settings saved',
       duration: 3000,
       action: <ToastAction altText="Clear">Clear</ToastAction>,
-      className: cn(toasterClass),
+      className: cn(topRightToaster),
     });
   }
 
@@ -77,7 +81,7 @@ export default function Settings() {
       title: 'Settings reset to default',
       duration: 3000,
       action: <ToastAction altText="Clear">Clear</ToastAction>,
-      className: cn(toasterClass),
+      className: cn(topRightToaster),
     });
   }
 
@@ -202,7 +206,7 @@ export default function Settings() {
               </div>
             </div>
 
-            <div className="grid grid-row-1 gap-8">
+            <div className="grid grid-row-1 gap-4">
               <FormField
                 control={form.control}
                 name="previewCard.rank"
@@ -213,7 +217,11 @@ export default function Settings() {
                         <CommandGroup>
                           {Object.values(ranks)
                             .filter(
-                              (item) => item.id === 'ace' || item.id === 'ten' || item.id === 'two'
+                              (item) =>
+                                item.id === 'ace' ||
+                                item.id === 'queen' ||
+                                item.id === 'ten' ||
+                                item.id === 'two'
                             )
                             .map((item, index) => {
                               return (
@@ -304,17 +312,39 @@ export default function Settings() {
                       <Input
                         {...field}
                         maxLength={1}
+                        type="text"
                         className="text-center bg-black/50 border-white/20 uppercase"
                         onChange={(e) => {
-                          const value = (e as React.ChangeEvent<HTMLInputElement>).target.value;
-                          form.setValue('previewCard.letter', value);
-                          updateSettings({
-                            ...settings,
-                            previewCard: {
-                              ...settings.previewCard,
-                              letter: value,
-                            },
-                          });
+                          const value = e.target.value.toUpperCase();
+                          if (/^[A-Z]$/.test(value) || value === '') {
+                            form.setValue('previewCard.letter', value);
+
+                            if (value === '') {
+                              lastValidValueRef.current = lastValidValueRef.current;
+                            } else {
+                              lastValidValueRef.current = value;
+
+                              updateSettings({
+                                ...settings,
+                                previewCard: {
+                                  ...settings.previewCard,
+                                  letter: value,
+                                },
+                              });
+                            }
+                          }
+                        }}
+                        onBlur={() => {
+                          if (currentLetter === '') {
+                            form.setValue('previewCard.letter', lastValidValueRef.current);
+                            updateSettings({
+                              ...settings,
+                              previewCard: {
+                                ...settings.previewCard,
+                                letter: lastValidValueRef.current,
+                              },
+                            });
+                          }
                         }}
                       />
                     </FormControl>
@@ -324,7 +354,7 @@ export default function Settings() {
             </div>
 
             <div className="grid grid-row-1 bg-black/40 border-white/20 rounded-xl">
-              <SectionCard title="Preview" classNameTitle="text-lg">
+              <SectionCard title="" classNameTitle="text-lg">
                 <div className="flex justify-center">
                   <CardFrontPreview card={previewCard} valueNotLabel={!settings.labelNotValue} />
                 </div>

@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { Card } from '@annabelle/shared/src/core/card';
-import { Circle, Club, Diamond, Heart, Spade, Square } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
@@ -11,15 +10,6 @@ import allConstants from '@/utils/constants';
 type Props = Card & {
   preview?: boolean;
   valueNotLabel?: boolean;
-};
-
-const shapeMap = {
-  spades: Spade,
-  hearts: Heart,
-  diamonds: Diamond,
-  clubs: Club,
-  rectangle: Square,
-  circle: Circle,
 };
 
 export function ABCardFaceUp({
@@ -37,18 +27,9 @@ export function ABCardFaceUp({
     : { text: 'text-black', letter: 'text-black', fill: 'fill-black' };
   let ShapeIcon = null;
 
-  switch (cardFront.id) {
-    case 'rectangle':
-    case 'circle':
-      ShapeIcon = shapeMap[cardFront.id as keyof typeof shapeMap];
-      cardColor.letter = 'text-white';
-      break;
-    case 'suit':
-      ShapeIcon = shapeMap[suit.id as keyof typeof shapeMap];
-      cardColor.letter = 'text-white';
-      break;
-    default:
-      break;
+  if (cardFront.id !== 'default') {
+    ShapeIcon = cardFront.component;
+    cardColor.letter = 'text-white';
   }
 
   return (
@@ -86,7 +67,7 @@ export function ABCardFaceUp({
 
           <div className="relative flex items-center justify-center h-full w-full">
             {ShapeIcon && (
-              <ShapeIcon className={cn('w-24 h-auto absolute', cardColor.letter, cardColor.fill)} />
+              <ShapeIcon className={cn('w-48 h-auto absolute', cardColor.letter, cardColor.fill)} />
             )}
             <span
               className={cn(
