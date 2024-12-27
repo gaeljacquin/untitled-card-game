@@ -15,13 +15,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
@@ -34,7 +27,14 @@ export default function Settings() {
   const { getSettings, _hasHydrated, updateSettings, resetSettings } = settingsStore();
   const settings = getSettings();
   const { toast } = useToast();
-  const { cardBacks, cardFronts, timerOptions, playerCardsOptions } = allConstants;
+  const {
+    cardBacks,
+    cardFronts,
+    TIMER_MIN,
+    TIMER_MAX,
+    NUM_CARDS_IN_HAND_MIN,
+    NUM_CARDS_IN_HAND_MAX,
+  } = allConstants;
   const toasterClass =
     'top-0 right-0 flex fixed md:backdrop-opacity-5 md:backdrop-invert md:bg-white/10 md:text-white md:max-w-[400px] md:top-4 md:right-4';
   const form = useForm<FormData>({
@@ -121,7 +121,6 @@ export default function Settings() {
           />
         </div>
 
-        {/* Card Front */}
         <div className="mb-12">
           <div className="flex items-center gap-2 mb-7">
             <FormLabel>Card Front</FormLabel>
@@ -179,7 +178,9 @@ export default function Settings() {
                       <CommandList className="w-full mt-2">
                         <CommandGroup>
                           {Object.values(ranks)
-                            .filter((x) => x.id === 'ace' || x.id === 'ten' || x.id === 'two')
+                            .filter(
+                              (item) => item.id === 'ace' || item.id === 'ten' || item.id === 'two'
+                            )
                             .map((item, index) => {
                               return (
                                 <CommandItem
@@ -326,29 +327,17 @@ export default function Settings() {
             render={({ field }) => (
               <FormItem className="space-y-4 mb-6">
                 <div className="flex items-center gap-2">
-                  <FormLabel>Timer</FormLabel>
+                  <FormLabel>Timer (minutes)</FormLabel>
                 </div>
-                <Select
-                  onValueChange={(value) => field.onChange(parseInt(value))}
-                  defaultValue={field.value.toString()}
-                >
-                  <FormControl>
-                    <SelectTrigger className="bg-white/10 border-white/20">
-                      <SelectValue placeholder="Select game duration" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="bg-transparent backdrop-blur-sm">
-                    {timerOptions.map((item, index) => (
-                      <SelectItem
-                        key={item + '-minutes-' + index}
-                        value={index.toString()}
-                        className="text-white"
-                      >
-                        {item} minutes
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <FormControl>
+                  <Input
+                    type="number"
+                    {...field}
+                    min={TIMER_MIN}
+                    max={TIMER_MAX}
+                    className="text-center bg-black/50 border-white/20"
+                  />
+                </FormControl>
               </FormItem>
             )}
           />
@@ -361,27 +350,15 @@ export default function Settings() {
                 <div className="flex items-center gap-2">
                   <FormLabel>Player Cards</FormLabel>
                 </div>
-                <Select
-                  onValueChange={(value) => field.onChange(parseInt(value))}
-                  defaultValue={field.value.toString()}
-                >
-                  <FormControl>
-                    <SelectTrigger className="bg-white/10 border-white/20">
-                      <SelectValue placeholder="Player cards" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="bg-transparent backdrop-blur-sm">
-                    {playerCardsOptions.map((item, index) => (
-                      <SelectItem
-                        key={item + '-cih-' + index}
-                        value={index.toString()}
-                        className="text-white"
-                      >
-                        {item}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <FormControl>
+                  <Input
+                    type="number"
+                    {...field}
+                    min={NUM_CARDS_IN_HAND_MIN}
+                    max={NUM_CARDS_IN_HAND_MAX}
+                    className="text-center bg-black/50 border-white/20"
+                  />
+                </FormControl>
               </FormItem>
             )}
           />

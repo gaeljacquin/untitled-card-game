@@ -1,17 +1,10 @@
 import { ranks, suits } from '@annabelle/shared/src/constants/card';
 
 const TIMER_MIN = 3;
-const NUM_TIMER_OPTIONS = 3;
+const TIMER_MAX = 5;
 const NUM_CARDS_IN_HAND_DEFAULT = 5;
-const NUM_CARDS_IN_HAND_OPTIONS = 4;
-
-const timerOptions = Array(NUM_TIMER_OPTIONS)
-  .fill(0)
-  .map((_, i) => i + TIMER_MIN);
-
-const playerCardsOptions = Array(NUM_CARDS_IN_HAND_OPTIONS)
-  .fill(0)
-  .map((_, i) => i + NUM_CARDS_IN_HAND_DEFAULT - 1);
+const NUM_CARDS_IN_HAND_MIN = 4;
+const NUM_CARDS_IN_HAND_MAX = 7;
 
 const cardBacks = ['/red.png', '/yellow.png', '/blue.png'];
 
@@ -22,14 +15,13 @@ const cardFronts = [
   { id: 'suit', label: 'Suit', className: '' },
 ];
 
-// NOTE TO SELF: cardBack, cardFront, timer, playerCards are indexes into their respective arrays
 const defaultSettings = {
-  cardBack: 0, // SEE NOTE
-  cardFront: 0, // SEE NOTE
+  cardBack: 0,
+  cardFront: 0,
   music: 50,
   soundfx: 50,
-  timer: 0, // SEE NOTE
-  playerCards: 1, // SEE NOTE
+  timer: TIMER_MIN,
+  playerCards: NUM_CARDS_IN_HAND_DEFAULT,
   previewCard: {
     suit: suits.hearts.id,
     rank: ranks.aceRank.id,
@@ -37,6 +29,14 @@ const defaultSettings = {
   },
 };
 
-const allConstants = { defaultSettings, cardBacks, cardFronts, timerOptions, playerCardsOptions };
+const allConstants = {
+  defaultSettings,
+  cardBacks,
+  cardFronts,
+  TIMER_MIN,
+  TIMER_MAX,
+  NUM_CARDS_IN_HAND_MIN,
+  NUM_CARDS_IN_HAND_MAX,
+};
 
 export default allConstants;

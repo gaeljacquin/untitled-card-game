@@ -2,7 +2,14 @@ import * as z from 'zod';
 import { Hydrate } from '@/types/hydrate';
 import allConstants from '@/utils/constants';
 
-const { cardBacks, cardFronts, timerOptions, playerCardsOptions } = allConstants;
+const {
+  cardBacks,
+  cardFronts,
+  TIMER_MIN,
+  TIMER_MAX,
+  NUM_CARDS_IN_HAND_MIN,
+  NUM_CARDS_IN_HAND_MAX,
+} = allConstants;
 
 export const settingsSchema = z.object({
   cardBack: z.number().min(0).max(cardBacks.length),
@@ -14,8 +21,13 @@ export const settingsSchema = z.object({
   }),
   music: z.number().min(0).max(100),
   soundfx: z.number().min(0).max(100),
-  timer: z.number().min(0).max(timerOptions.length),
-  playerCards: z.number().min(0).max(playerCardsOptions.length),
+  timer: z.coerce.number().int().positive().min(TIMER_MIN).max(TIMER_MAX),
+  playerCards: z.coerce
+    .number()
+    .int()
+    .positive()
+    .min(NUM_CARDS_IN_HAND_MIN)
+    .max(NUM_CARDS_IN_HAND_MAX),
 });
 
 export type FormData = z.infer<typeof settingsSchema>;

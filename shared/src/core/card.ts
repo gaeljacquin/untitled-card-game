@@ -67,10 +67,6 @@ export class ABCard implements Card {
       this.letter.toLowerCase() === 'u'
     );
   }
-
-  generatePreviewCard(suit) {
-    return new ABCard(false, ranks.aceRank, suit, 'B');
-  }
 }
 
 export default ABCard;
