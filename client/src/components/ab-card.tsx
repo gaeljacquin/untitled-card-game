@@ -9,8 +9,7 @@ import settingsStore from '@/stores/settings';
 import allConstants from '@/utils/constants';
 
 type Props = Card & {
-  previewIndex?: number | null;
-  isSelectedPreview?: boolean;
+  preview?: boolean;
 };
 
 const shapeMap = {
@@ -22,22 +21,8 @@ const shapeMap = {
   circle: Circle,
 };
 
-export function ABCardFaceUp({
-  rank,
-  suit,
-  letter,
-  previewIndex = null,
-  isSelectedPreview = false,
-}: Props) {
-  let cardFrontIndex;
-
-  if (!previewIndex) {
-    const { cardFront } = settingsStore();
-    cardFrontIndex = cardFront;
-  } else {
-    cardFrontIndex = previewIndex;
-  }
-
+export function ABCardFaceUp({ rank, suit, letter, preview = false }: Props) {
+  const { cardFront: cardFrontIndex } = settingsStore();
   const { cardFronts } = allConstants;
   const cardFront = cardFronts[cardFrontIndex];
   const cardColor = suit.isRed
@@ -64,10 +49,8 @@ export function ABCardFaceUp({
       className={cn(
         'relative cursor-pointer preserve-3d',
         'transition-transform duration-500',
-        previewIndex !== undefined && previewIndex !== null
-          ? 'w-48 h-72  scale-90 hover:scale-100'
-          : 'w-32 h-48 hover:scale-105',
-        isSelectedPreview && 'ring-4 ring-white/50 scale-100 rotate-3 rounded-2xl'
+        'w-32 h-48 hover:scale-105',
+        preview ? 'w-48 h-72' : 'w-32 h-48  hover:scale-105'
       )}
     >
       <div className="absolute inset-0 w-full h-full rounded-xl shadow-lg border-2 border-border preserve-3d">

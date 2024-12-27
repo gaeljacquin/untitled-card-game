@@ -18,8 +18,8 @@ export default function Settings() {
           <AnimatedLogoDynamic logo={'game'} loop={false} autoplay={false} />
         </span>
       </div>
-      <div className="max-w-4xl mx-auto space-y-8 mt-16">
-        <SectionCard title="Settings" className="text-center text-white p-4">
+      <div className="max-w-4xl mx-auto space-y-8 mt-16 mb-16">
+        <SectionCard title="Settings" className="flex flex-col text-center text-white p-4">
           <SettingsForm />
         </SectionCard>
       </div>
