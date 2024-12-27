@@ -1,6 +1,7 @@
 'use client';
 
-import { previewCard, ranks, suits } from '@annabelle/shared/src/constants/card';
+import { ranks, suits } from '@annabelle/shared/src/constants/card';
+import { ABCardPreview } from '@annabelle/shared/src/core/card';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PopoverClose } from '@radix-ui/react-popover';
 import { Check } from 'lucide-react';
@@ -16,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -46,13 +48,16 @@ export default function Settings() {
       soundfx: settings.soundfx,
       timer: settings.timer,
       playerCards: settings.playerCards,
-      previewCard: {
-        suit: settings.previewCard.suit,
-        rank: settings.previewCard.rank,
-        letter: settings.previewCard.letter,
-      },
+      previewCard: settings.previewCard,
+      labelNotValue: settings.labelNotValue,
     },
   });
+
+  const previewCard = new ABCardPreview(
+    ranks[settings.previewCard.rank as keyof typeof ranks],
+    suits[settings.previewCard.suit as keyof typeof suits],
+    settings.previewCard.letter
+  );
 
   function onSubmit(data: FormData) {
     updateSettings(data);
@@ -127,7 +132,7 @@ export default function Settings() {
           </div>
 
           <div className="grid grid-cols-3 gap-4">
-            <div className="grid grid-row-1 gap-8">
+            <div className="grid grid-row-1 gap-4">
               <FormField
                 control={form.control}
                 name="cardFront"
@@ -144,6 +149,10 @@ export default function Settings() {
                                 value={item.id}
                                 onSelect={() => {
                                   form.setValue('cardFront', index);
+                                  updateSettings({
+                                    ...settings,
+                                    cardFront: index,
+                                  });
                                 }}
                               >
                                 <span>{item.label}</span>
@@ -166,6 +175,31 @@ export default function Settings() {
                   </FormItem>
                 )}
               />
+
+              <div className="flex items-center justify-center bg-black/50 border-white/20 rounded-xl space-x-2">
+                <FormField
+                  control={form.control}
+                  name="labelNotValue"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center">
+                      <FormControl>
+                        <Switch
+                          className={`data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-slate-400 items-center rounded-full transition-colors`}
+                          checked={field.value}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            updateSettings({
+                              ...settings,
+                              labelNotValue: checked,
+                            });
+                          }}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormLabel className="text-base">A/J/Q/K</FormLabel>
+              </div>
             </div>
 
             <div className="grid grid-row-1 gap-8">
@@ -189,6 +223,13 @@ export default function Settings() {
                                   value={item.id}
                                   onSelect={() => {
                                     form.setValue('previewCard.rank', item.id);
+                                    updateSettings({
+                                      ...settings,
+                                      previewCard: {
+                                        ...settings.previewCard,
+                                        rank: item.id,
+                                      },
+                                    });
                                   }}
                                 >
                                   <span>{item.label}</span>
@@ -226,6 +267,13 @@ export default function Settings() {
                                 value={item.id}
                                 onSelect={() => {
                                   form.setValue('previewCard.suit', item.id);
+                                  updateSettings({
+                                    ...settings,
+                                    previewCard: {
+                                      ...settings.previewCard,
+                                      suit: item.id,
+                                    },
+                                  });
                                 }}
                               >
                                 <span>{item.label}</span>
@@ -256,7 +304,18 @@ export default function Settings() {
                       <Input
                         {...field}
                         maxLength={1}
-                        className="text-center bg-black/50 border-white/20"
+                        className="text-center bg-black/50 border-white/20 uppercase"
+                        onChange={(e) => {
+                          const value = (e as React.ChangeEvent<HTMLInputElement>).target.value;
+                          form.setValue('previewCard.letter', value);
+                          updateSettings({
+                            ...settings,
+                            previewCard: {
+                              ...settings.previewCard,
+                              letter: value,
+                            },
+                          });
+                        }}
                       />
                     </FormControl>
                   </FormItem>
@@ -267,7 +326,7 @@ export default function Settings() {
             <div className="grid grid-row-1 bg-black/40 border-white/20 rounded-xl">
               <SectionCard title="Preview" classNameTitle="text-lg">
                 <div className="flex justify-center">
-                  <CardFrontPreview card={previewCard} />
+                  <CardFrontPreview card={previewCard} valueNotLabel={!settings.labelNotValue} />
                 </div>
               </SectionCard>
             </div>

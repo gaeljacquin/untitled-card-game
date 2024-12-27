@@ -24,9 +24,10 @@ const defaultSettings = {
   playerCards: NUM_CARDS_IN_HAND_DEFAULT,
   previewCard: {
     suit: suits.hearts.id,
-    rank: ranks.aceRank.id,
+    rank: ranks.ace.id,
     letter: 'B',
   },
+  labelNotValue: true, // only applicable to face cards
 };
 
 const allConstants = {

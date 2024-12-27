@@ -22,11 +22,11 @@ export class ABCard implements Card {
   starting: boolean;
   // joker: boolean = false;
 
-  constructor(starting: boolean = false, rank?: Rank, suit?: Suit, letter?: Letter) {
+  constructor(starting: boolean = false) {
     this.starting = starting;
-    this.rank = rank ?? this.getRandomRankOrSuit(ranks);
-    this.suit = suit ?? this.getRandomRankOrSuit(suits);
-    this.letter = letter ?? this.getRandomLetter();
+    this.rank = this.getRandomRankOrSuit(ranks);
+    this.suit = this.getRandomRankOrSuit(suits);
+    this.letter = this.getRandomLetter();
   }
 
   setPlayed() {
@@ -69,4 +69,11 @@ export class ABCard implements Card {
   }
 }
 
-export default ABCard;
+export class ABCardPreview extends ABCard {
+  constructor(rank: Rank, suit: Suit, letter: Letter) {
+    super(false);
+    this.rank = rank;
+    this.suit = suit;
+    this.letter = letter;
+  }
+}

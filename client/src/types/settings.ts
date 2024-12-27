@@ -28,6 +28,7 @@ export const settingsSchema = z.object({
     .positive()
     .min(NUM_CARDS_IN_HAND_MIN)
     .max(NUM_CARDS_IN_HAND_MAX),
+  labelNotValue: z.boolean(),
 });
 
 export type FormData = z.infer<typeof settingsSchema>;

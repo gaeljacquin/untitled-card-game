@@ -5,10 +5,11 @@ import { ABCardFaceUp } from './ab-card';
 type Props = {
   card: Card;
   className?: string;
+  valueNotLabel?: boolean;
 };
 
 export default function CardFrontPreview(props: Props) {
-  const { card, className } = props;
+  const { card, className, valueNotLabel } = props;
 
   return (
     <div
@@ -18,7 +19,7 @@ export default function CardFrontPreview(props: Props) {
         className
       )}
     >
-      <ABCardFaceUp {...card} preview={true} />
+      <ABCardFaceUp {...card} valueNotLabel={valueNotLabel} preview={true} />
     </div>
   );
 }

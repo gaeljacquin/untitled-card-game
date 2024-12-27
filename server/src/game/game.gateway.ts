@@ -9,7 +9,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import cors from '@/utils/cors';
 import { ABGame } from '@annabelle/shared/dist/core/game';
-import ABCard from '@annabelle/shared/dist/core/card';
+import { ABCard } from '@annabelle/shared/dist/core/card';
 import { dealCards } from '@annabelle/shared/dist/functions/card';
 import { maxDeal } from '@annabelle/shared/dist/constants/card';
 

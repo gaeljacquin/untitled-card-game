@@ -1,9 +1,10 @@
 'use client';
 
-import ABCard from '@annabelle/shared/src/core/card';
+import { ABCard } from '@annabelle/shared/src/core/card';
 import { ABCardFaceDown, ABCardFaceUp } from '@/components/ab-card';
 import SectionCard from '@/components/section-card';
 import { Button } from '@/components/ui/button';
+import settingsStore from '@/stores/settings';
 
 type Props = {
   startingCard: ABCard;
@@ -11,6 +12,8 @@ type Props = {
 };
 
 export default function PlayingField({ startingCard, playerCards }: Props) {
+  const { labelNotValue } = settingsStore();
+
   return (
     <div className="flex flex-col w-full justify-between">
       <SectionCard title="" className="mt-7 rounded-3xl h-full">
@@ -22,7 +25,7 @@ export default function PlayingField({ startingCard, playerCards }: Props) {
           <hr />
           <div className="p-4 sm:p-8 flex flex-wrap gap-2 sm:gap-4 items-center justify-center">
             {playerCards.map((item) => (
-              <ABCardFaceUp key={crypto.randomUUID()} {...item} />
+              <ABCardFaceUp key={crypto.randomUUID()} {...item} valueNotLabel={!labelNotValue} />
             ))}
           </div>
         </>

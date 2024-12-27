@@ -10,6 +10,7 @@ import allConstants from '@/utils/constants';
 
 type Props = Card & {
   preview?: boolean;
+  valueNotLabel?: boolean;
 };
 
 const shapeMap = {
@@ -21,7 +22,13 @@ const shapeMap = {
   circle: Circle,
 };
 
-export function ABCardFaceUp({ rank, suit, letter, preview = false }: Props) {
+export function ABCardFaceUp({
+  rank,
+  suit,
+  letter,
+  preview = false,
+  valueNotLabel = false,
+}: Props) {
   const { cardFront: cardFrontIndex } = settingsStore();
   const { cardFronts } = allConstants;
   const cardFront = cardFronts[cardFrontIndex];
@@ -63,7 +70,7 @@ export function ABCardFaceUp({ rank, suit, letter, preview = false }: Props) {
           <div
             className={cn('absolute top-2 left-2 text-base sm:text-xl font-bold', cardColor.text)}
           >
-            <div>{rank.label}</div>
+            <div>{valueNotLabel ? rank.value : rank.label}</div>
             <div>{suit.sign}</div>
           </div>
 
@@ -73,7 +80,7 @@ export function ABCardFaceUp({ rank, suit, letter, preview = false }: Props) {
               cardColor.text
             )}
           >
-            <div>{rank.label}</div>
+            <div>{valueNotLabel ? rank.value : rank.label}</div>
             <div>{suit.sign}</div>
           </div>
 
