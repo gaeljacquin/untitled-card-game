@@ -18,9 +18,9 @@ export class Card implements ICard {
   public _rank: Rank;
   public _suit: Suit;
 
-  constructor(rank: Rank, suit: Suit) {
-    this._rank = rank;
-    this._suit = suit;
+  constructor(rank: Rank | null, suit: Suit | null, random = false) {
+    this._rank = random ? Rank.getRandomRank() : (rank as Rank);
+    this._suit = random ? Suit.getRandomSuit() : (suit as Suit);
   }
 
   get rank(): Rank {
@@ -53,11 +53,7 @@ export class ABCard extends Card implements IABCard {
   private readonly _starting: boolean;
 
   constructor(starting: boolean = false) {
-    super(Rank.getRankById('ace')!, Suit.getSuitById('hearts')!);
-    const randomRank = Rank.getRandomRank();
-    const randomSuit = Suit.getRandomSuit();
-    this._rank = randomRank;
-    this._suit = randomSuit;
+    super(null, null, true);
     this._letter = this.getRandomLetter(starting)!;
     this._starting = starting;
   }
