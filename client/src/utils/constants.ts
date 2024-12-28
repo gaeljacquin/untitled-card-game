@@ -6,8 +6,6 @@ import {
   RectangleVertical,
   Shield,
   Square,
-  Squircle,
-  Star,
 } from 'lucide-react';
 
 const TIMER_MIN = 3;
@@ -24,7 +22,7 @@ const cardFronts = [
   { id: 'circle', label: 'Circle', component: Circle, className: '' },
   { id: 'square', label: 'Square', component: Square, className: '' },
   { id: 'badge', label: 'Badge', component: Badge, className: '' },
-  { id: 'hexagon', label: 'Hexagon', component: Hexagon, className: '' },
+  { id: 'hexagon', label: 'Hexagon', component: Hexagon, className: 'rotate-90' },
   {
     id: 'rectangleVertical',
     label: 'Rectangle - Vertical',
@@ -38,8 +36,6 @@ const cardFronts = [
     className: '',
   },
   { id: 'shield', label: 'Shield', component: Shield, className: '' },
-  { id: 'squircle', label: 'Squircle', component: Squircle, className: '' },
-  { id: 'star', label: 'Star', component: Star, className: '' },
 ];
 cardFronts.sort((a, b) => {
   if (a.id === 'default') return -1;
@@ -52,14 +48,15 @@ cardFronts.sort((a, b) => {
 const defaultSettings = {
   cardBack: 0,
   cardFront: 0,
-  timer: TIMER_MIN,
-  playerCards: NUM_CARDS_IN_HAND_DEFAULT,
   previewCard: {
     suit: 'hearts',
     rank: 'ace',
     letter: 'B',
   },
   labelNotValue: true,
+  timer: TIMER_MIN,
+  playerCards: NUM_CARDS_IN_HAND_DEFAULT,
+  showAudioPlayer: false,
 };
 
 const topRightToaster =

@@ -62,7 +62,7 @@ export default function Game() {
         <GameSidebar game={game} />
         <PlayingField startingCard={startingCard} playerCards={playerCards} />
       </div>
-      <AudioPlayer showControls />
+      <AudioPlayer />
     </>
   );
 }

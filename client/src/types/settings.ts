@@ -19,6 +19,7 @@ export const settingsSchema = z.object({
     rank: z.string(),
     letter: z.string().min(1).max(1),
   }),
+  labelNotValue: z.boolean(),
   timer: z.coerce.number().int().positive().min(TIMER_MIN).max(TIMER_MAX),
   playerCards: z.coerce
     .number()
@@ -26,7 +27,7 @@ export const settingsSchema = z.object({
     .positive()
     .min(NUM_CARDS_IN_HAND_MIN)
     .max(NUM_CARDS_IN_HAND_MAX),
-  labelNotValue: z.boolean(),
+  showAudioPlayer: z.boolean(),
 });
 
 export type FormData = z.infer<typeof settingsSchema>;

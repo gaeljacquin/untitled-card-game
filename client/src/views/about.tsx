@@ -61,7 +61,7 @@ export default function About() {
           </div>
         </SectionCard>
       </div>
-      <AudioPlayer showControls className="mt-56" />
+      <AudioPlayer className="mt-56" />
     </>
   );
 }

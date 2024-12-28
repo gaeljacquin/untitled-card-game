@@ -98,7 +98,7 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
-          <AudioPlayer showControls />
+          <AudioPlayer />
         </div>
       </PageTransition>
     </BackgroundGradientAnimation>

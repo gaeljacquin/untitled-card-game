@@ -25,7 +25,7 @@ export default function HowToPlay() {
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="flex flex-col items-center justify-center gap-3 text-center">
             <h1 className="text-2xl font-semibold text-white">How to Play</h1>
-            <AudioPlayer showControls className="-mt-7" />
+            <AudioPlayer className="-mt-7 mb-4" />
           </div>
           <BasicRules />
           <HandRankings />

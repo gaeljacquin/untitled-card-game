@@ -45,10 +45,11 @@ export default function Settings() {
     defaultValues: {
       cardBack: settings.cardBack,
       cardFront: settings.cardFront,
-      timer: settings.timer,
-      playerCards: settings.playerCards,
       previewCard: settings.previewCard,
       labelNotValue: settings.labelNotValue,
+      timer: settings.timer,
+      playerCards: settings.playerCards,
+      showAudioPlayer: settings.showAudioPlayer,
     },
   });
 
@@ -362,7 +363,7 @@ export default function Settings() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <FormField
             control={form.control}
             name="timer"
@@ -404,6 +405,33 @@ export default function Settings() {
               </FormItem>
             )}
           />
+
+          <div className="flex items-center justify-center bg-black/50 border-white/20 rounded-xl">
+            <FormField
+              control={form.control}
+              name="showAudioPlayer"
+              render={({ field }) => (
+                <FormItem className="space-y-4">
+                  <div className="flex items-center justify-center gap-2">
+                    <FormLabel>Show Audio Player</FormLabel>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      className={`data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-slate-400 items-center rounded-full transition-colors`}
+                      checked={field.value}
+                      onCheckedChange={(checked) => {
+                        field.onChange(checked);
+                        updateSettings({
+                          ...settings,
+                          showAudioPlayer: checked,
+                        });
+                      }}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

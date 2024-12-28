@@ -70,6 +70,7 @@ export function ABCardFaceUp(props: Props) {
                 className={cn(
                   'h-auto absolute',
                   preview ? 'w-48' : 'w-32',
+                  cardFront.className,
                   cardColor.letter,
                   cardColor.fill
                 )}
