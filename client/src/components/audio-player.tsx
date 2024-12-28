@@ -2,16 +2,18 @@
 
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { cn } from '@/lib/utils';
 import audioStore from '@/stores/audio';
 
 const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
 
 type Props = {
   showControls?: boolean;
+  className?: string;
 };
 
 export default function AudioPlayer(props: Props) {
-  const { showControls } = props;
+  const { showControls, className = '' } = props;
   const { playing, volume, muted, getCurrentTrack } = audioStore();
   const [mounted, setMounted] = useState(false);
   const track = getCurrentTrack();
@@ -23,7 +25,7 @@ export default function AudioPlayer(props: Props) {
   if (!mounted) return null;
 
   return (
-    <div className={showControls ? 'w-full max-w-2xl mx-auto' : 'hidden'}>
+    <div className={cn(showControls ? 'w-full max-w-2xl mx-auto' : 'hidden', className)}>
       <ReactPlayer
         url={track.url}
         playing={playing}

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
+import AudioPlayer from '@/components/audio-player';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
 import { Button } from '@/components/ui/button';
 import InteractiveHoverButton from '@/components/ui/interactive-hover-button';
@@ -97,6 +98,7 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
+          <AudioPlayer showControls />
         </div>
       </PageTransition>
     </BackgroundGradientAnimation>

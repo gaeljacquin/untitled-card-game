@@ -6,6 +6,7 @@ import { ABGame } from '@annabelle/shared/src/core/game';
 import { Timer } from '@annabelle/shared/src/core/timer';
 import { io } from 'socket.io-client';
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
+import AudioPlayer from '@/components/audio-player';
 import GameSidebar from '@/components/game-sidebar';
 import Placeholder from '@/components/placeholder';
 import PlayingField from '@/components/playing-field';
@@ -61,6 +62,7 @@ export default function Game() {
         <GameSidebar game={game} />
         <PlayingField startingCard={startingCard} playerCards={playerCards} />
       </div>
+      <AudioPlayer showControls />
     </>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
+import AudioPlayer from '@/components/audio-player';
 import { BasicRules } from '@/components/basic-rules';
 import { GamePhases } from '@/components/game-phases';
 import { HandRankings } from '@/components/hand-rankings';
@@ -24,6 +25,7 @@ export default function HowToPlay() {
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="flex flex-col items-center justify-center gap-3 text-center">
             <h1 className="text-2xl font-semibold text-white">How to Play</h1>
+            <AudioPlayer showControls className="-mt-7" />
           </div>
           <BasicRules />
           <HandRankings />

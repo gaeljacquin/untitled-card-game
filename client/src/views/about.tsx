@@ -1,6 +1,7 @@
 'use client';
 
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
+import AudioPlayer from '@/components/audio-player';
 import SectionCard from '@/components/section-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { FlipWords } from '@/components/ui/flip-words';
@@ -60,6 +61,7 @@ export default function About() {
           </div>
         </SectionCard>
       </div>
+      <AudioPlayer showControls className="mt-56" />
     </>
   );
 }
