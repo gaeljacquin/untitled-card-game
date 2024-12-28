@@ -32,8 +32,8 @@ export default function Home() {
       gradient: 'bg-gradient-to-r from-purple-800 to-pink-700',
     },
     {
-      label: 'About',
-      slug: 'about',
+      label: 'Credits',
+      slug: 'credits',
       gradient: 'bg-gradient-to-r from-fuchsia-800 to-sky-700',
     },
   ];
