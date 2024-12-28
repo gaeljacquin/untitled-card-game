@@ -52,8 +52,6 @@ cardFronts.sort((a, b) => {
 const defaultSettings = {
   cardBack: 0,
   cardFront: 0,
-  music: 50,
-  soundfx: 50,
   timer: TIMER_MIN,
   playerCards: NUM_CARDS_IN_HAND_DEFAULT,
   previewCard: {

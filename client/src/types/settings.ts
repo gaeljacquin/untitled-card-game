@@ -19,8 +19,6 @@ export const settingsSchema = z.object({
     rank: z.string(),
     letter: z.string().min(1).max(1),
   }),
-  music: z.number().min(0).max(100),
-  soundfx: z.number().min(0).max(100),
   timer: z.coerce.number().int().positive().min(TIMER_MIN).max(TIMER_MAX),
   playerCards: z.coerce
     .number()

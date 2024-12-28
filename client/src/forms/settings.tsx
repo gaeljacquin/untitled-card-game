@@ -18,7 +18,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
@@ -46,8 +45,6 @@ export default function Settings() {
     defaultValues: {
       cardBack: settings.cardBack,
       cardFront: settings.cardFront,
-      music: settings.music,
-      soundfx: settings.soundfx,
       timer: settings.timer,
       playerCards: settings.playerCards,
       previewCard: settings.previewCard,
@@ -363,52 +360,6 @@ export default function Settings() {
               </SectionCard>
             </div>
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField
-            control={form.control}
-            name="music"
-            render={({ field }) => (
-              <FormItem className="space-y-4 mb-4">
-                <div className="flex items-center gap-2">
-                  <FormLabel>Music</FormLabel>
-                </div>
-                <FormControl>
-                  <Slider
-                    className="cursor-pointer"
-                    min={0}
-                    max={100}
-                    step={1}
-                    value={[field.value]}
-                    onValueChange={([value]) => field.onChange(value)}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="soundfx"
-            render={({ field }) => (
-              <FormItem className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <FormLabel>Sound FX</FormLabel>
-                </div>
-                <FormControl>
-                  <Slider
-                    className="cursor-pointer"
-                    min={0}
-                    max={100}
-                    step={1}
-                    value={[field.value]}
-                    onValueChange={([value]) => field.onChange(value)}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
