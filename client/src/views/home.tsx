@@ -5,16 +5,21 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
+import AskRtfm from '@/components/ask-rtfm';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
 import { Button } from '@/components/ui/button';
 import InteractiveHoverButton from '@/components/ui/interactive-hover-button';
 import { PageTransition } from '@/components/ui/page-transition';
 import { cn } from '@/lib/utils';
+import miscStore from '@/stores/misc';
 import appinfo from '@/utils/appinfo';
 
 export default function Home() {
+  const { askRtfm, muteAskRtfm } = miscStore();
   const [newGameClicked, setNewGameClicked] = useState(false);
+  const [menuButtonClicked, setMenuButtonClicked] = useState(false);
+  const [askRtfmOpen, setAskRtfmOpen] = useState(false);
   const menuItems = [
     {
       label: 'New Game',
@@ -37,6 +42,29 @@ export default function Home() {
       gradient: 'bg-gradient-to-r from-fuchsia-800 to-sky-700',
     },
   ];
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>, slug: string) => {
+    switch (slug) {
+      case 'game':
+        if (askRtfm) {
+          e.preventDefault();
+          setAskRtfmOpen(true);
+        } else {
+          setNewGameClicked(true);
+        }
+        break;
+      case 'how-to-play':
+        if (askRtfm) {
+          muteAskRtfm();
+        } else {
+          setMenuButtonClicked(true);
+        }
+        break;
+      default:
+        setMenuButtonClicked(true);
+        break;
+    }
+  };
 
   return (
     <BackgroundGradientAnimation
@@ -89,9 +117,12 @@ export default function Home() {
                   <Link href={'/' + item.slug}>
                     <InteractiveHoverButton
                       text={item.label}
-                      className="w-full h-16 text-lg border-0 opacity-75 hover:opacity-100"
+                      className={cn(
+                        'w-full h-16 text-lg border-0 opacity-75 hover:opacity-100',
+                        menuButtonClicked && 'pointer-events-none'
+                      )}
                       gradient={item.gradient}
-                      onClick={item.slug === 'game' ? () => setNewGameClicked(true) : undefined}
+                      onClick={(e) => handleClick(e, item.slug)}
                     />
                   </Link>
                 )}
@@ -99,7 +130,15 @@ export default function Home() {
             ))}
           </div>
           <div>
-            <AudioControlsDynamic className="space-y-8 bg-white/10 backdrop-blur-sm rounded-2xl p-8 mt-16" />
+            <AskRtfm
+              askRtfmOpen={askRtfmOpen}
+              setAskRtfmOpen={setAskRtfmOpen}
+              setNewGameClicked={setNewGameClicked}
+              newGameClicked={newGameClicked}
+              menuButtonClicked={menuButtonClicked}
+              setMenuButtonClicked={setMenuButtonClicked}
+            />
+            <AudioControlsDynamic className="space-y-8 bg-white/10 backdrop-blur-sm rounded-2xl p-8 mt-16 border" />
           </div>
         </div>
       </PageTransition>
