@@ -1,3 +1,5 @@
+import { getRandomIndex } from '../functions/shufflers';
+
 export type RankId =
   | 'ace'
   | 'two'
@@ -60,8 +62,7 @@ export class Rank implements IRank {
   }
 
   public static getRandomRank(): Rank {
-    const index = Math.floor(Math.random() * this.ranks.length);
-
+    const index = getRandomIndex(this.ranks);
     return this.ranks[index];
   }
 

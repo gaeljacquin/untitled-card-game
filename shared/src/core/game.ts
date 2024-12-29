@@ -1,6 +1,6 @@
 import { mainQuestList } from '../constants/main-quest';
 import { numSideQuests, sideQuestList } from '../constants/side-quest';
-import { shuffler } from '../functions/shufflers';
+import { getRandomIndex, shuffler } from '../functions/shufflers';
 import { MainQuest, SideQuest } from './quest';
 import { Timer } from './timer';
 import { ABWord } from './word';
@@ -39,7 +39,7 @@ export class ABGame implements Game {
   }
 
   setMainQuest() {
-    const randomIndex = Math.floor(Math.random() * mainQuestList.length);
+    const randomIndex = getRandomIndex(mainQuestList);
     const randomMainQuest = mainQuestList[randomIndex];
     const mainQuest = new MainQuest(randomMainQuest);
 

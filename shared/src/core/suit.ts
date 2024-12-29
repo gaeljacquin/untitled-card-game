@@ -1,3 +1,5 @@
+import { getRandomIndex } from '../functions/shufflers';
+
 export type SuitId = 'hearts' | 'spades' | 'diamonds' | 'clubs';
 
 type SuitSign = '♥' | '♠' | '♦' | '♣';
@@ -40,7 +42,7 @@ export class Suit implements ISuit {
   }
 
   public static getRandomSuit(): Suit {
-    const index = Math.floor(Math.random() * this.suits.length);
+    const index = getRandomIndex(this.suits);
 
     return this.suits[index];
   }

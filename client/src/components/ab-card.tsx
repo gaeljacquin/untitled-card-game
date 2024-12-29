@@ -37,7 +37,7 @@ export function ABCardFaceUp(props: Props) {
         'relative cursor-pointer preserve-3d',
         'transition-transform duration-500',
         'w-32 h-48 hover:scale-105',
-        preview ? 'w-48 h-72' : 'w-32 h-48  hover:scale-105'
+        preview ? 'w-48 h-72' : 'w-36 h-56 hover:scale-105'
       )}
     >
       <div className="absolute inset-0 w-full h-full rounded-xl shadow-lg border-2 border-border preserve-3d">
@@ -69,7 +69,7 @@ export function ABCardFaceUp(props: Props) {
               <ShapeIcon
                 className={cn(
                   'h-auto absolute',
-                  preview ? 'w-48' : 'w-32',
+                  preview ? 'w-40' : 'w-24',
                   cardFront.className,
                   cardColor.letter,
                   cardColor.fill
@@ -78,9 +78,10 @@ export function ABCardFaceUp(props: Props) {
             )}
             <span
               className={cn(
-                'text-4xl sm:text-6xl font-bold uppercase',
+                'font-bold uppercase',
                 'absolute',
-                cardColor.letter
+                cardColor.letter,
+                preview ? 'text-4xl sm:text-6xl' : 'text-2xl sm:text-4xl'
               )}
             >
               {letter}
@@ -97,7 +98,7 @@ export function ABCardFaceDown() {
   const { cardBacks } = allConstants;
 
   return (
-    <div className={cn('relative w-32 h-48 cursor-pointer preserve-3d', 'scale-105')}>
+    <div className={cn('relative w-36 h-56 cursor-pointer preserve-3d', 'scale-105')}>
       <div className="absolute inset-0 w-full h-full rounded-xl shadow-lg preserve-3d">
         <div
           className={cn(
