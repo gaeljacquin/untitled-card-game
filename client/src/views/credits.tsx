@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import _ from '@/components/_';
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
-import AudioPlayer from '@/components/audio-player';
+import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import SectionCard from '@/components/section-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { FlipWords } from '@/components/ui/flip-words';
@@ -81,8 +81,11 @@ export default function Credits() {
             <p className="text-center text-white mt-16">Thank you for playing!</p>
           </div>
         </SectionCard>
+
+        <div className="max-w-4xl">
+          <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-4 mt-32" />
+        </div>
       </div>
-      <AudioPlayer className="mt-56" />
     </>
   );
 }

@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import AudioPlayer from '@/components/audio-player';
 import { cn } from '@/lib/utils';
 import appinfo from '@/utils/appinfo';
 
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           disableTransitionOnChange
         >
           <div className="flex flex-col min-h-screen">{children}</div>
+          <AudioPlayer />
           <Footer />
           <Toaster />
         </NextThemesProvider>

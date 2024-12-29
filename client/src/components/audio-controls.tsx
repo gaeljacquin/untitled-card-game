@@ -1,11 +1,19 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { Pause, Play, SkipBack, SkipForward, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
+import { cn } from '@/lib/utils';
 import audioStore from '@/stores/audio';
+import settingsStore from '@/stores/settings';
 
-export default function AudioControls() {
+type Props = {
+  className?: string;
+};
+
+export default function AudioControls(props: Props) {
+  const { className } = props;
   const {
     playing,
     volume,
@@ -17,12 +25,17 @@ export default function AudioControls() {
     previousTrack,
     getCurrentTrack,
   } = audioStore();
+  const { showAudioPlayer } = settingsStore();
   const track = getCurrentTrack();
+  const pathname = usePathname();
 
   return (
-    <div className="space-y-8 flex flex-col items-center justify-center -mt-8">
-      <div className="text-md font-medium text-white">
-        Now Playing: {track.title} - {track.artist}
+    <div className={cn(className, pathname !== '/settings' && !showAudioPlayer && 'hidden')}>
+      <div className="text-md text-white text-center">
+        <p>Now Playing</p>
+        <p>
+          {track.title} - {track.artist}
+        </p>
       </div>
       <div className="flex items-center space-x-4">
         <Button size="icon" onClick={previousTrack}>

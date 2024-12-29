@@ -1,7 +1,9 @@
+import { getRandomIndex } from '@annabelle/shared/src/functions/shufflers';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { AudioStore } from '@/types/audio';
-import tracks from '@/utils/tracks';
+import { AudioStore, Tracks } from '@/types/audio';
+
+const tracks: Tracks = [];
 
 const audioStore = create(
   persist(
@@ -9,7 +11,7 @@ const audioStore = create(
       playing: true,
       volume: 0.2,
       muted: false,
-      currentTrackIndex: 0,
+      currentTrackIndex: getRandomIndex(tracks),
       tracks,
       setPlaying: (playing) => set({ playing }),
       setVolume: (volume) => set({ volume }),
