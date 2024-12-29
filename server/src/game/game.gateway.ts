@@ -62,5 +62,13 @@ export class GameGateway
     });
   }
 
-  async nameless() {}
+  @SubscribeMessage('ab-check')
+  async abCheck(client: Socket, payload: any): Promise<void> {
+    const abWord = payload.abWord;
+    console.info(`AB Word received from client ${client.id}: ${abWord}`);
+    const valid = Math.random() >= 0.5;
+    const emit = { abWord, valid };
+
+    client.emit('ab-check-res', emit);
+  }
 }

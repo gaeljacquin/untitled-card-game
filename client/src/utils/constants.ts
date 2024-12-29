@@ -15,6 +15,8 @@ const NUM_CARDS_IN_HAND_DEFAULT = 5;
 const NUM_CARDS_IN_HAND_MIN = 4;
 const NUM_CARDS_IN_HAND_MAX = 7;
 
+const MIN_WORD_LENGTH = 5;
+
 const cardBacks = ['/red.png', '/yellow.png', '/blue.png'];
 
 const cardFronts = [
@@ -60,13 +62,14 @@ const defaultSettings = {
 };
 
 const topRightToaster =
-  'top-0 right-0 flex fixed md:backdrop-opacity-5 md:backdrop-invert md:bg-white/10 md:text-white md:max-w-[400px] md:top-4 md:right-4';
+  'top-0 right-0 flex fixed md:backdrop-opacity-10 md:bg-black/40 md:text-white md:max-w-[400px] md:top-4 md:right-4';
 
 const allConstants = {
   TIMER_MIN,
   TIMER_MAX,
   NUM_CARDS_IN_HAND_MIN,
   NUM_CARDS_IN_HAND_MAX,
+  MIN_WORD_LENGTH,
   cardBacks,
   cardFronts,
   defaultSettings,
