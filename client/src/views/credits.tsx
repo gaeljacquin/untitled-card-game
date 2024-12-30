@@ -83,7 +83,7 @@ export default function Credits() {
         </SectionCard>
 
         <div className="max-w-4xl">
-          <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-4 mt-32" />
+          <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-4 mt-32 border border-gray-200/40" />
         </div>
       </div>
     </>

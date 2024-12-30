@@ -65,8 +65,11 @@ export class GameGateway
 
   @SubscribeMessage('ab-check')
   async abCheck(client: Socket, payload: any): Promise<void> {
-    const abWord = payload.abWord;
-    console.info(`AB Word received from client ${client.id}: ${abWord}`);
+    const abCards = payload.abCards;
+    console.info(`AB Cards received from client ${client.id}: ${abCards}`);
+    const letters = abCards.map((card) => card.letter);
+    const abWord = letters.join('');
+    console.info('abWord: ', abWord);
     const abCheckRes = await this.gameService.abCheckLambda(abWord);
     const valid = abCheckRes['is_ab_word'] || abCheckRes['is_ab_prefix'];
     const emit = { abWord, valid };

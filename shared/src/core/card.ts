@@ -111,6 +111,10 @@ export class ABCard extends Card implements IABCard {
   public isVowel(): boolean {
     return vowels.includes(this._letter.toLocaleLowerCase());
   }
+
+  public _toString(): string {
+    return `${this._letter} - ${this._rank.label} of ${this._suit.label}`;
+  }
 }
 
 export class ABCardPreview extends ABCard {

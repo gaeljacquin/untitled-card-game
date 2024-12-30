@@ -109,7 +109,13 @@ export function ABCardFaceDown() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Image src={cardBacks[cardBack]} alt="Card Back" layout="fill" objectFit="cover" />
+                <Image
+                  src={cardBacks[cardBack]}
+                  alt="Card Back"
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-xl"
+                />
               </TooltipTrigger>
               <TooltipContent className="-mt-14 ml-8">Deal</TooltipContent>
             </Tooltip>

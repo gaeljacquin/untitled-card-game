@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { Rank } from '@annabelle/shared/src/core/rank';
+import { Suit } from '@annabelle/shared/src/core/suit';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { io } from 'socket.io-client';
@@ -37,12 +39,17 @@ export default function ABChecker() {
   });
 
   function onSubmit(data: FormData) {
-    console.log(data);
-    socket.emit('ab-check', { ...data });
+    const abWord = data.abWord.toLowerCase();
+    const abCards = Array.from({ length: abWord.length }, (_, index) => ({
+      rank: Rank.getRandomRank(),
+      suit: Suit.getRandomSuit(),
+      letter: abWord[index],
+    }));
+    socket.emit('ab-check', { abCards });
     toast({
       variant: 'default',
       title: 'AB Checker',
-      description: data.abWord + ' sent for AB Checking',
+      description: "Sent '" + data.abWord + "' for AB Checking",
       duration: 3000,
       action: <ToastAction altText="Clear">Clear</ToastAction>,
       className: cn(topRightToaster),
@@ -84,6 +91,7 @@ export default function ABChecker() {
                 <FormControl>
                   <Input
                     {...field}
+                    autoComplete="off"
                     className="text-center bg-black/50 border-white/20 uppercase placeholder:text-white/70"
                     placeholder="Type here"
                     onChange={(e) => {
