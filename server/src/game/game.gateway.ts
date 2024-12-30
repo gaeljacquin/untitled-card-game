@@ -12,12 +12,13 @@ import { ABGame } from '@annabelle/shared/dist/core/game';
 import { ABCard } from '@annabelle/shared/dist/core/card';
 import { dealCards } from '@annabelle/shared/dist/functions/card';
 import { maxDeal } from '@annabelle/shared/dist/constants/other';
+import { GameService } from '@/src/game/game.service';
 
 @WebSocketGateway({ cors })
 export class GameGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor() {}
+  constructor(private readonly gameService: GameService) {}
 
   @WebSocketServer() server: Server;
 
@@ -66,7 +67,8 @@ export class GameGateway
   async abCheck(client: Socket, payload: any): Promise<void> {
     const abWord = payload.abWord;
     console.info(`AB Word received from client ${client.id}: ${abWord}`);
-    const valid = Math.random() >= 0.5;
+    const abCheckRes = await this.gameService.abCheckLambda(abWord);
+    const valid = abCheckRes['is_ab_word'] || abCheckRes['is_ab_prefix'];
     const emit = { abWord, valid };
 
     client.emit('ab-check-res', emit);
