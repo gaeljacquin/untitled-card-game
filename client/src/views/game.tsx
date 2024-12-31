@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { ABCard } from '@annabelle/shared/src/core/card';
 import { ABGame } from '@annabelle/shared/src/core/game';
 import { Timer } from '@annabelle/shared/src/core/timer';
-import { io } from 'socket.io-client';
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import GameSidebar from '@/components/game-sidebar';
@@ -12,9 +11,10 @@ import Placeholder from '@/components/placeholder';
 import PlayingField from '@/components/playing-field';
 import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
+import socketInit from '@/utils/socket-init';
 
 export default function Game() {
-  const socket = io(`${process.env.serverUrl}`);
+  const socket = socketInit();
   const { timer } = settingsStore();
   const [startingCard, setStartingCard] = useState<ABCard | null>(null);
   const [playerCards, setPlayerCards] = useState<ABCard[]>([]);

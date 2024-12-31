@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { ABCard } from '@annabelle/shared/src/core/card';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -19,16 +20,12 @@ import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
 import { abCheckSchema, FormData } from '@/types/ab-check';
 import allConstants from '@/utils/constants';
+import socketInit from '@/utils/socket-init';
 
-type Props = {
-  wsConnect: () => void;
-  abSend: (arg0: ABCard[]) => void;
-};
-
-export default function ABChecker(props: Props) {
-  const { wsConnect, abSend } = props;
+export default function ABChecker() {
+  const socket = socketInit();
   const { toast } = useToast();
-  const { abCheckStatus } = settingsStore();
+  const { abCheckStatus, setAbCheckStatus } = settingsStore();
   const { topRightToaster } = allConstants;
 
   const form = useForm<FormData>({
@@ -38,6 +35,24 @@ export default function ABChecker(props: Props) {
     },
   });
 
+  const wsConnect = () => {
+    socket.on('connect', () => {
+      console.info('Connected to server');
+    });
+
+    socket.on('ab-check-res', (data) => {
+      setAbCheckStatus({
+        abWord: data.abWord,
+        valid: data.valid,
+      });
+    });
+
+    return () => {
+      socket.off('connect');
+      socket.off('ab-check-res');
+    };
+  };
+
   function onSubmit(data: FormData) {
     const abWord = data.abWord.toLowerCase();
     const abCards = Array.from({ length: abWord.length }, (_, index) => {
@@ -46,7 +61,7 @@ export default function ABChecker(props: Props) {
 
       return abCard;
     });
-    abSend(abCards);
+    socket.emit('ab-check', { abCards });
     toast({
       variant: 'default',
       title: 'AB Checker',
@@ -57,6 +72,10 @@ export default function ABChecker(props: Props) {
     });
     wsConnect();
   }
+
+  useEffect(() => {
+    wsConnect();
+  }, []);
 
   return (
     <Form {...form}>
