@@ -1,3 +1,5 @@
+import { Hydrate } from '@/types/hydrate';
+
 export type Track = {
   title: string;
   artist: string;
@@ -6,7 +8,7 @@ export type Track = {
 
 export type Tracks = Track[];
 
-export type AudioStore = {
+export type AudioStore = Hydrate & {
   playing: boolean;
   volume: number;
   muted: boolean;

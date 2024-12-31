@@ -1,26 +1,23 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import Placeholder from '@/components/placeholder';
 import audioStore from '@/stores/audio';
 
 const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
 
 export default function AudioPlayer() {
-  const { playing, volume, muted, getCurrentTrack } = audioStore();
-  const [mounted, setMounted] = useState(false);
-  const track = getCurrentTrack();
+  const { playing, volume, muted, _hasHydrated, getCurrentTrack } = audioStore();
+  const track = getCurrentTrack() ?? '';
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
+  if (!_hasHydrated) {
+    return <Placeholder />;
+  }
 
   return (
     <div className="hidden">
       <ReactPlayer
-        url={track.url}
+        url={track.url ?? ''}
         playing={playing}
         volume={volume}
         muted={muted}

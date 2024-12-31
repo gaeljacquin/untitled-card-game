@@ -26,7 +26,7 @@ export default function AudioControls(props: Props) {
     getCurrentTrack,
   } = audioStore();
   const { showAudioPlayer } = settingsStore();
-  const track = getCurrentTrack();
+  const track = getCurrentTrack() ?? '';
   const pathname = usePathname();
 
   return (
@@ -34,7 +34,7 @@ export default function AudioControls(props: Props) {
       <div className="text-md text-white text-center">
         <p>Now Playing</p>
         <p>
-          {track.title} - {track.artist}
+          {track.title ?? ''} - {track.artist ?? ''}
         </p>
       </div>
       <div className="flex items-center space-x-4">
