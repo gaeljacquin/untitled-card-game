@@ -1,11 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { Rank } from '@annabelle/shared/src/core/rank';
-import { Suit } from '@annabelle/shared/src/core/suit';
+import { ABCard } from '@annabelle/shared/src/core/card';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { io } from 'socket.io-client';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -19,16 +16,19 @@ import { Input } from '@/components/ui/input';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import settingsStore from '@/stores/settings';
 import { abCheckSchema, FormData } from '@/types/ab-check';
 import allConstants from '@/utils/constants';
 
-export default function ABChecker() {
-  const socket = io(`${process.env.serverUrl}`);
+type Props = {
+  wsConnect: () => void;
+  abSend: (arg0: ABCard[]) => void;
+};
+
+export default function ABChecker(props: Props) {
+  const { wsConnect, abSend } = props;
   const { toast } = useToast();
-  const [abCheckStatus, setAbCheckStatus] = useState({
-    abWord: '',
-    valid: false,
-  });
+  const { abCheckStatus } = settingsStore();
   const { topRightToaster } = allConstants;
 
   const form = useForm<FormData>({
@@ -40,12 +40,13 @@ export default function ABChecker() {
 
   function onSubmit(data: FormData) {
     const abWord = data.abWord.toLowerCase();
-    const abCards = Array.from({ length: abWord.length }, (_, index) => ({
-      rank: Rank.getRandomRank(),
-      suit: Suit.getRandomSuit(),
-      letter: abWord[index],
-    }));
-    socket.emit('ab-check', { abCards });
+    const abCards = Array.from({ length: abWord.length }, (_, index) => {
+      const abCard = new ABCard(false);
+      abCard._letter = abWord[index];
+
+      return abCard;
+    });
+    abSend(abCards);
     toast({
       variant: 'default',
       title: 'AB Checker',
@@ -56,19 +57,6 @@ export default function ABChecker() {
     });
     wsConnect();
   }
-
-  const wsConnect = () => {
-    socket.on('ab-check-res', (data) => {
-      setAbCheckStatus({
-        abWord: data.abWord,
-        valid: data.valid,
-      });
-    });
-
-    return () => {
-      socket.off('ab-check-res');
-    };
-  };
 
   return (
     <Form {...form}>
@@ -94,10 +82,6 @@ export default function ABChecker() {
                     autoComplete="off"
                     className="text-center bg-black/50 border-white/20 uppercase placeholder:text-white/70"
                     placeholder="Type here"
-                    onChange={(e) => {
-                      form.clearErrors();
-                      field.onChange(e);
-                    }}
                   />
                 </FormControl>
                 <FormMessage className="text-white bg-red-500 p-4 rounded-xl" />

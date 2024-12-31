@@ -10,6 +10,10 @@ const settingsStore = create(
     devtools<SettingsStore>((set, get) => ({
       ...defaultSettings,
       _hasHydrated: false,
+      abCheckStatus: {
+        abWord: '',
+        valid: false,
+      },
       setHasHydrated: (_hasHydrated) => {
         set({ _hasHydrated });
       },
@@ -20,6 +24,9 @@ const settingsStore = create(
         set({ ...defaultSettings, _hasHydrated: true });
       },
       getSettings: () => get(),
+      setAbCheckStatus: (abCheckStatus) => {
+        set((prev) => ({ ...prev, abCheckStatus }));
+      },
     })),
     {
       onRehydrateStorage: (state) => {
@@ -27,8 +34,9 @@ const settingsStore = create(
       },
       name: 'settings',
       partialize: (state) => {
-        const { _hasHydrated, ...rest } = state;
+        const { _hasHydrated, abCheckStatus, ...rest } = state;
         void _hasHydrated;
+        void abCheckStatus;
 
         return { ...rest };
       },

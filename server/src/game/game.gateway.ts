@@ -41,6 +41,7 @@ export class GameGateway
   @SubscribeMessage('hello-ws')
   async wsHello(client: Socket, payload: any): Promise<void> {
     console.info(`Message received from client ${client.id}: ${payload}`);
+
     client.emit('hello-ws-res', {
       message: `Hello back to you, ${payload.name}`,
     });
@@ -66,9 +67,8 @@ export class GameGateway
   @SubscribeMessage('ab-check')
   async abCheck(client: Socket, payload: any): Promise<void> {
     const abCards = payload.abCards;
+    const abWord = abCards.map((card) => card._letter).join('');
     console.info(`AB Cards received from client ${client.id}: ${abCards}`);
-    const letters = abCards.map((card) => card.letter);
-    const abWord = letters.join('');
     console.info('abWord: ', abWord);
     const abCheckRes = await this.gameService.abCheckLambda(abWord);
     const valid = abCheckRes['is_ab_word'] || abCheckRes['is_ab_prefix'];
