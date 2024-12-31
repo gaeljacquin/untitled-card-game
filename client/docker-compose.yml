@@ -1,0 +1,15 @@
+services:
+  annabelle-client:
+    image: annabelle-client
+    build:
+      context: .
+      target: ${BUILD_TARGET:-dev}
+      additional_contexts:
+        root-folder: ../
+    volumes:
+      - /app/node_modules
+      - /app/client/node_modules
+    env_file:
+      - .env
+    ports:
+      - '3001:3000'

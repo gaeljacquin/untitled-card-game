@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     author: 'Gaël Jacquin',
     linktree: 'https://linktr.ee/gaeljacquin',
     profilePic: '/gael-himself.webp',
-    serverUrl: `${process.env.SERVER_URL}`,
+    serverUrl: `${process.env.NEXT_PUBLIC_SERVER_URL}`,
   },
   images: {
     remotePatterns: [

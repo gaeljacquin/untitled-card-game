@@ -2,6 +2,7 @@
   "name": "@annabelle/client",
   "scripts": {
     "dev": "npx env-cmd -f \".env.local\" next dev",
+    "dev-docker": "next dev",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
