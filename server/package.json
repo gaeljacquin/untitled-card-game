@@ -8,6 +8,8 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "prettier:check": "prettier --check \"**/*.{ts,js,json}\"",
+    "prettier:write": "prettier --write \"**/*.{ts,js,json}\"",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",

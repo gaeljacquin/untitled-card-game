@@ -10,8 +10,8 @@
     "lint-fix": "next lint && pnpm lint:stylelint-fix",
     "lint:stylelint": "stylelint \"**/*.css\" --cache",
     "lint:stylelint-fix": "stylelint \"**/*.css\" --cache  --fix",
-    "prettier:check": "prettier --check \"**/*.{ts,tsx}\"",
-    "prettier:write": "prettier --write \"**/*.{ts,tsx}\""
+    "prettier:check": "prettier --check \"**/*.{ts,tsx,json}\"",
+    "prettier:write": "prettier --write \"**/*.{ts,tsx,json}\""
   },
   "dependencies": {
     "@annabelle/shared": "workspace:*",

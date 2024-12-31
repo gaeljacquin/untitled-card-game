@@ -3,6 +3,10 @@
   "main": "dist/index.js",
   "types": "src/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "prettier:write": "prettier --write \"**/*.{ts,js,mjs,cjs,json}\""
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
   }
 }
