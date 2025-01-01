@@ -109,7 +109,7 @@ export default function ABChecker() {
           />
         </div>
 
-        <div className="flex items-center justify-center bg-white/80 backdrop-sm-blur border-black/20 rounded-md p-5">
+        <div className="flex items-center justify-center bg-white/80 backdrop-blur-sm border-black/20 rounded-md p-5">
           <p className="text-center text-black uppercase pointer-events-none">
             {!abCheckStatus.abWord ? (
               <span className="text-sky-600 text-lg font-bold">?</span>

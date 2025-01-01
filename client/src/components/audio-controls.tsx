@@ -32,10 +32,9 @@ export default function AudioControls(props: Props) {
   return (
     <div className={cn(className, pathname !== '/settings' && !showAudioPlayer && 'hidden')}>
       <div className="text-md text-white text-center">
-        <p>Now Playing</p>
-        <p>
-          {track.title ?? ''} - {track.artist ?? ''}
-        </p>
+        <p className="font-sans italic">Now Playing</p>
+        <p>{track.title ?? ''}</p>
+        <p>{track.artist ?? ''}</p>
       </div>
       <div className="flex items-center space-x-4">
         <Button size="icon" onClick={previousTrack}>
