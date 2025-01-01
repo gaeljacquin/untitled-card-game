@@ -1,9 +1,10 @@
 import { getRandomIndex } from '@annabelle/shared/src/functions/shufflers';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+import playlist from '@/assets/playlist.json';
 import { AudioStore, Tracks } from '@/types/audio';
 
-const tracks: Tracks = [];
+const tracks: Tracks = playlist ?? [];
 
 const audioStore = create(
   persist(
