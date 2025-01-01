@@ -1,15 +1,18 @@
 services:
-  annabelle-server:
+  server:
     image: annabelle-server
+    container_name: annabelle-server
     build:
       context: .
+      dockerfile: Dockerfile
       target: ${BUILD_TARGET:-dev}
       additional_contexts:
         root-folder: ../
     volumes:
       - /app/node_modules
       - /app/server/node_modules
-    env_file:
-      - .env
+    environment:
+      CLIENT_URL: ${CLIENT_URL}
+      AWS_LAMBDA_URL: ${AWS_LAMBDA_URL}
     ports:
-      - '8080:8080'
+      - '8080:3000'

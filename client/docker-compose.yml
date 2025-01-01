@@ -1,15 +1,19 @@
 services:
-  annabelle-client:
+  client:
     image: annabelle-client
+    container_name: annabelle-client
     build:
       context: .
+      dockerfile: Dockerfile
       target: ${BUILD_TARGET:-dev}
       additional_contexts:
         root-folder: ../
+      args:
+        SERVER_URL: ${SERVER_URL}
     volumes:
       - /app/node_modules
       - /app/client/node_modules
-    env_file:
-      - .env
+    environment:
+      SERVER_URL: ${SERVER_URL}
     ports:
       - '3001:3000'

@@ -17,6 +17,8 @@ WORKDIR /app/client
 CMD ["pnpm", "dev-docker"]
 
 FROM base AS build
+ARG SERVER_URL
+ENV SERVER_URL=$SERVER_URL
 WORKDIR /app
 COPY . ./client
 WORKDIR /app/client
