@@ -15,20 +15,22 @@ export type RankId =
   | 'queen'
   | 'king';
 
+type JokerRank = 'joker';
+
 interface IRank {
   readonly value: number;
-  readonly id: RankId;
+  readonly id: RankId | JokerRank;
   readonly label: string;
   readonly labelFull: string;
 }
 
 export class Rank implements IRank {
   readonly value: number;
-  readonly id: RankId;
+  readonly id: RankId | JokerRank;
   readonly label: string;
   readonly labelFull: string;
 
-  private constructor(value: number, label: string, id: RankId, labelFull: string) {
+  private constructor(value: number, label: string, id: RankId | JokerRank, labelFull: string) {
     this.value = value;
     this.label = label;
     this.id = id;
@@ -61,12 +63,16 @@ export class Rank implements IRank {
     return rank;
   }
 
-  public static getRandomRank(): Rank {
+  public static getRandom(): Rank {
     const index = getRandomIndex(this.ranks);
     return this.ranks[index];
   }
 
   public static getAllRanks(): Rank[] {
     return [...this.ranks];
+  }
+
+  public static setJoker(): Rank {
+    return new Rank(-1, '?', 'joker', 'Joker');
   }
 }

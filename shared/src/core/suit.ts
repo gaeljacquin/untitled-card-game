@@ -1,23 +1,29 @@
 import { getRandomIndex } from '../functions/shufflers';
 
 export type SuitId = 'hearts' | 'spades' | 'diamonds' | 'clubs';
-
+type JokerSuit = 'joker';
 type SuitSign = '♥' | '♠' | '♦' | '♣';
+type JokerSign = '?';
 
 interface ISuit {
-  readonly sign: SuitSign;
-  readonly id: SuitId;
+  readonly sign: SuitSign | JokerSign;
+  readonly id: SuitId | JokerSuit;
   readonly label: string;
   readonly isRed: boolean;
 }
 
 export class Suit implements ISuit {
-  readonly sign: SuitSign;
-  readonly id: SuitId;
+  readonly sign: SuitSign | JokerSign;
+  readonly id: SuitId | JokerSuit;
   readonly label: string;
   readonly isRed: boolean;
 
-  private constructor(sign: SuitSign, id: SuitId, label: string, isRed: boolean) {
+  private constructor(
+    sign: SuitSign | JokerSign,
+    id: SuitId | JokerSuit,
+    label: string,
+    isRed: boolean
+  ) {
     this.sign = sign;
     this.id = id;
     this.label = label;
@@ -41,7 +47,7 @@ export class Suit implements ISuit {
     return suit;
   }
 
-  public static getRandomSuit(): Suit {
+  public static getRandom(): Suit {
     const index = getRandomIndex(this.suits);
 
     return this.suits[index];
@@ -49,5 +55,9 @@ export class Suit implements ISuit {
 
   public static getAllSuits(): Suit[] {
     return [...this.suits];
+  }
+
+  public static setJoker(): Suit {
+    return new Suit('?', 'joker', 'Joker', false);
   }
 }

@@ -1,3 +1,5 @@
+import { IconType } from 'react-icons';
+import jokerIcons from '../constants/joker-icon';
 import { nonStarters } from '../constants/other';
 import { getRandomIndex } from '../functions/shufflers';
 import { Rank } from './rank';
@@ -18,9 +20,9 @@ export class Card implements ICard {
   public _rank: Rank;
   public _suit: Suit;
 
-  constructor(rank: Rank | null, suit: Suit | null, random = false) {
-    this._rank = random ? Rank.getRandomRank() : (rank as Rank);
-    this._suit = random ? Suit.getRandomSuit() : (suit as Suit);
+  constructor(rank: Rank, suit: Suit) {
+    this._rank = rank;
+    this._suit = suit;
   }
 
   get rank(): Rank {
@@ -32,8 +34,8 @@ export class Card implements ICard {
   }
 
   public static generateRandomCard(): Card {
-    const suit = Suit.getRandomSuit();
-    const rank = Rank.getRandomRank();
+    const suit = Suit.getRandom();
+    const rank = Rank.getRandom();
 
     return new Card(rank, suit);
   }
@@ -52,9 +54,11 @@ export class ABCard extends Card implements IABCard {
   private _discard: boolean = false;
   private readonly _starting: boolean;
 
-  constructor(starting: boolean = false) {
-    super(null, null, true);
-    this._letter = this.getRandomLetter(starting)!;
+  constructor(starting: boolean = false, joker: boolean = false) {
+    const rank = joker ? Rank.setJoker() : Rank.getRandom();
+    const suit = joker ? Suit.setJoker() : Suit.getRandom();
+    super(rank, suit);
+    this._letter = this.getRandom(starting)!;
     this._starting = starting;
   }
 
@@ -98,11 +102,10 @@ export class ABCard extends Card implements IABCard {
     this._discard = value;
   }
 
-  getRandomLetter(starting: boolean = false): Letter {
+  getRandom(starting: boolean = false): Letter {
     const filteredAlphabet = starting
       ? alphabet.filter((letter) => !nonStarters.has(letter.toLocaleLowerCase()))
       : alphabet;
-
     const randomIndex = getRandomIndex(filteredAlphabet);
 
     return filteredAlphabet[randomIndex];
@@ -144,5 +147,34 @@ export class ABCardPreview extends ABCard {
 
   setLetter(value: Letter) {
     this._letter = value;
+  }
+}
+
+export class ABJoker extends ABCard {
+  public icon: IconType;
+  public playable: boolean;
+
+  constructor() {
+    super(false, true);
+    this.icon = this.getRandomIcon();
+    this.playable = false;
+  }
+
+  getLetter(): Letter | '' {
+    return this._letter;
+  }
+
+  setLetter(value: Letter | '') {
+    this._letter = value;
+  }
+
+  setPlayable(value: boolean) {
+    this.playable = value && this.played;
+  }
+
+  getRandomIcon(): IconType {
+    const randomIndex = getRandomIndex(jokerIcons);
+
+    return jokerIcons[randomIndex];
   }
 }
