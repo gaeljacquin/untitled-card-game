@@ -17,7 +17,7 @@ const NUM_CARDS_IN_HAND_MAX = 7;
 
 const MIN_WORD_LENGTH = 5;
 
-const cardBacks = ['/red.png', '/yellow.png', '/blue.png'];
+const cardBacks = ['/red.webp', '/yellow.webp', '/blue.webp'];
 
 const cardFronts = [
   { id: 'default', label: 'Default', component: null, className: '' },

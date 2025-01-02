@@ -27,7 +27,7 @@ export function HandRankings() {
         </div>
         <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1646809014367-2c267bcba69f"
+            src="/fireworks.jpg"
             alt="Hand Rankings Placeholder"
             fill
             className="object-cover"

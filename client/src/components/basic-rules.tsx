@@ -16,12 +16,7 @@ export function BasicRules() {
           </ul>
         </div>
         <div className="relative aspect-video rounded-lg overflow-hidden">
-          <Image
-            src="https://images.unsplash.com/photo-1542222780-b06f7307d2c5"
-            alt="Basic Rules Placeholder"
-            fill
-            className="object-cover"
-          />
+          <Image src="/fireworks.jpg" alt="Placeholder" fill className="object-cover" />
         </div>
       </div>
     </SectionCard>

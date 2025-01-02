@@ -43,12 +43,7 @@ export function GamePhases() {
           ))}
         </div>
         <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
-          <Image
-            src="https://images.unsplash.com/photo-1624543591069-0ed958c0c3e7"
-            alt="Basic Rules Placeholder"
-            fill
-            className="object-cover"
-          />
+          <Image src="/fireworks.jpg" alt="Basic Rules Placeholder" fill className="object-cover" />
         </div>
       </div>
     </SectionCard>
