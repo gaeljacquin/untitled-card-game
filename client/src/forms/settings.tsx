@@ -85,6 +85,41 @@ export default function Settings() {
     });
   }
 
+  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value.toUpperCase();
+
+    if (/^[A-Z]$/.test(value) || value === '') {
+      form.setValue('previewCard.letter', value);
+
+      if (value === '') {
+        lastValidValueRef.current = lastValidValueRef.current;
+      } else {
+        lastValidValueRef.current = value;
+
+        updateSettings({
+          ...settings,
+          previewCard: {
+            ...settings.previewCard,
+            letter: value,
+          },
+        });
+      }
+    }
+  }
+
+  function onBlur() {
+    if (currentLetter === '') {
+      form.setValue('previewCard.letter', lastValidValueRef.current);
+      updateSettings({
+        ...settings,
+        previewCard: {
+          ...settings.previewCard,
+          letter: lastValidValueRef.current,
+        },
+      });
+    }
+  }
+
   if (!(_hasHydrated && previewCard)) {
     return <Placeholder />;
   }
@@ -314,38 +349,8 @@ export default function Settings() {
                         maxLength={1}
                         type="text"
                         className="text-center bg-black/50 border-white/20 uppercase"
-                        onChange={(e) => {
-                          const value = e.target.value.toUpperCase();
-                          if (/^[A-Z]$/.test(value) || value === '') {
-                            form.setValue('previewCard.letter', value);
-
-                            if (value === '') {
-                              lastValidValueRef.current = lastValidValueRef.current;
-                            } else {
-                              lastValidValueRef.current = value;
-
-                              updateSettings({
-                                ...settings,
-                                previewCard: {
-                                  ...settings.previewCard,
-                                  letter: value,
-                                },
-                              });
-                            }
-                          }
-                        }}
-                        onBlur={() => {
-                          if (currentLetter === '') {
-                            form.setValue('previewCard.letter', lastValidValueRef.current);
-                            updateSettings({
-                              ...settings,
-                              previewCard: {
-                                ...settings.previewCard,
-                                letter: lastValidValueRef.current,
-                              },
-                            });
-                          }
-                        }}
+                        onChange={(e) => onChange(e)}
+                        onBlur={() => onBlur()}
                       />
                     </FormControl>
                   </FormItem>

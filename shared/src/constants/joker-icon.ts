@@ -1,12 +1,17 @@
-import { BiSolidMask } from 'react-icons/bi';
-import { FaMask } from 'react-icons/fa';
-import { GiCarnivalMask, GiDominoMask, GiDoubleFaceMask, GiDualityMask } from 'react-icons/gi';
+import {
+  GiCardJoker,
+  GiCarnivalMask,
+  GiDominoMask,
+  GiDoubleFaceMask,
+  GiDualityMask,
+} from 'react-icons/gi';
 import { LuVenetianMask } from 'react-icons/lu';
+import { TbJoker } from 'react-icons/tb';
 
 const jokerIcons = [
-  BiSolidMask,
-  FaMask,
+  TbJoker,
   GiCarnivalMask,
+  GiCardJoker,
   GiDominoMask,
   GiDoubleFaceMask,
   GiDualityMask,

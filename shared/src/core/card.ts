@@ -58,7 +58,7 @@ export class ABCard extends Card implements IABCard {
     const rank = joker ? Rank.setJoker() : Rank.getRandom();
     const suit = joker ? Suit.setJoker() : Suit.getRandom();
     super(rank, suit);
-    this._letter = this.getRandom(starting)!;
+    this._letter = joker ? '*' : this.getRandomLetter(starting)!;
     this._starting = starting;
   }
 
@@ -102,7 +102,7 @@ export class ABCard extends Card implements IABCard {
     this._discard = value;
   }
 
-  getRandom(starting: boolean = false): Letter {
+  getRandomLetter(starting: boolean = false): Letter {
     const filteredAlphabet = starting
       ? alphabet.filter((letter) => !nonStarters.has(letter.toLocaleLowerCase()))
       : alphabet;
@@ -158,14 +158,6 @@ export class ABJoker extends ABCard {
     super(false, true);
     this.icon = this.getRandomIcon();
     this.playable = false;
-  }
-
-  getLetter(): Letter | '' {
-    return this._letter;
-  }
-
-  setLetter(value: Letter | '') {
-    this._letter = value;
   }
 
   setPlayable(value: boolean) {
