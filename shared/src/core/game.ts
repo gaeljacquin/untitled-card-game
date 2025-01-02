@@ -70,7 +70,7 @@ export class ABGame implements Game {
   getPlayedWordsPlain(): PlayedWordPlain[] {
     return this.abWords.map((word) => {
       return {
-        word: word.join(''),
+        word: word.getPlainWord(),
         valid: word.valid,
       };
     });

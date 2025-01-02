@@ -9,10 +9,10 @@ import {
 import { Server, Socket } from 'socket.io';
 import cors from '@/utils/cors';
 import { ABGame } from '@annabelle/shared/dist/core/game';
-import { ABCard } from '@annabelle/shared/dist/core/card';
 import { dealCards } from '@annabelle/shared/dist/functions/card';
 import { maxDeal } from '@annabelle/shared/dist/constants/other';
 import { GameService } from '@/src/game/game.service';
+import { ABWord } from '@annabelle/shared/dist/core/word';
 
 @WebSocketGateway({ cors })
 export class GameGateway
@@ -51,7 +51,8 @@ export class GameGateway
   async gameInit(client: Socket, payload: any): Promise<void> {
     console.info(`Message received from client ${client.id}: ${payload}`);
     const game = payload.game;
-    const startingCard = new ABCard(true);
+    const abWord = new ABWord();
+    const startingCard = abWord.getStartingCard();
     const playerCards = dealCards(maxDeal);
     const emit = {
       startingCard,
@@ -67,13 +68,11 @@ export class GameGateway
   @SubscribeMessage('ab-check')
   async abCheck(client: Socket, payload: any): Promise<void> {
     const abCards = payload.abCards;
-    const abWord = abCards.map((card) => card._letter).join('');
-    console.info(`AB Cards received from client ${client.id}: ${abCards}`);
-    console.info('abWord: ', abWord);
-    const abCheckRes = await this.gameService.abCheckLambda(abWord);
+    const abWordPlain = abCards.map((card) => card._letter).join(''); // TODO: Change this later
+    const abCheckRes = await this.gameService.abCheckLambda(abWordPlain);
     const valid =
       abCheckRes['ab_word']['valid'] || abCheckRes['ab_prefix']['valid'];
-    const emit = { abWord, valid };
+    const emit = { status: 'ok', abWordPlain, valid };
 
     client.emit('ab-check-res', emit);
   }

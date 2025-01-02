@@ -18,4 +18,11 @@ export class GameService {
 
     return data;
   }
+
+  async abVerify(): Promise<object> {
+    // TODO: Implement rules verification
+    const data = null;
+
+    return data;
+  }
 }
