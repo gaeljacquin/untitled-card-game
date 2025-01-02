@@ -36,7 +36,7 @@ export default function AudioControls(props: Props) {
         <p>{track.title ?? ''}</p>
         <p>{track.artist ?? ''}</p>
       </div>
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center justify-center space-x-4">
         <Button size="icon" onClick={previousTrack}>
           <SkipBack className="h-4 w-4" />
         </Button>

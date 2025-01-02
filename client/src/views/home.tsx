@@ -41,6 +41,11 @@ export default function Home() {
       slug: 'credits',
       gradient: 'bg-gradient-to-r from-fuchsia-800 to-sky-700',
     },
+    {
+      label: 'AB Tools',
+      slug: 'ab-tools',
+      gradient: 'bg-gradient-to-r from-lime-700 via-rose-700 to-violet-500',
+    },
   ];
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>, slug: string) => {

@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import settingsStore from '@/stores/settings';
+import abToolsStore from '@/stores/ab-tools';
 import { abCheckSchema, FormData } from '@/types/ab-check';
 import allConstants from '@/utils/constants';
 import socketInit from '@/utils/socket-init';
@@ -25,7 +25,7 @@ import socketInit from '@/utils/socket-init';
 export default function ABChecker() {
   const socket = socketInit();
   const { toast } = useToast();
-  const { abCheckStatus, setAbCheckStatus } = settingsStore();
+  const { abCheckStatus, setAbCheckStatus } = abToolsStore();
   const { topRightToaster } = allConstants;
 
   const form = useForm<FormData>({
