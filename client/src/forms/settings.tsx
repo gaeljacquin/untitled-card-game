@@ -53,8 +53,8 @@ export default function Settings() {
     },
   });
 
-  const previewRank = Rank.getRankById(settings.previewCard.rank as RankId);
-  const previewSuit = Suit.getSuitById(settings.previewCard.suit as SuitId);
+  const previewRank = Rank.getById(settings.previewCard.rank as RankId);
+  const previewSuit = Suit.getById(settings.previewCard.suit as SuitId);
   const previewCard = new ABCardPreview();
   previewCard.setRank(previewRank);
   previewCard.setSuit(previewSuit);
@@ -250,7 +250,7 @@ export default function Settings() {
                     <Command className="bg-black/50 border-white/20">
                       <CommandList className="w-full mt-2">
                         <CommandGroup>
-                          {Object.values(Rank.getAllRanks())
+                          {Rank.getAllValues()
                             .filter(
                               (item) =>
                                 item.id === 'ace' ||
@@ -302,7 +302,7 @@ export default function Settings() {
                     <Command className="bg-black/50 border-white/20">
                       <CommandList className="w-full mt-2 h-auto">
                         <CommandGroup>
-                          {Object.values(Suit.getAllSuits()).map((item, index) => {
+                          {Suit.getAllValues().map((item, index) => {
                             return (
                               <CommandItem
                                 className="flex items-center justify-between text-white aria-selected:text-black text-md"

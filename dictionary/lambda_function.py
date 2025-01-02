@@ -1,26 +1,54 @@
 import json
+import re
+
 from nltk.corpus import words
 
-MIN_WORD_LENGTH = 5
 DICTIONARY = set(words.words())
 
 def check_ab_word(word):
-    is_ab_word = len(word) >= MIN_WORD_LENGTH and word in DICTIONARY
+    process_asterisks = '^' + word.replace('*', '.') + '$'
+    pattern = re.compile(process_asterisks)
+    matches = [
+        entry for entry in DICTIONARY
+        if pattern.match(entry)
+    ]
+    valid = len(matches) > 0
+    result = { "valid": valid, "matches": matches or None }
 
-    return is_ab_word
+    return result
 
 def check_ab_prefix(prefix):
-    matching_words = [word for word in DICTIONARY if word.startswith(prefix) and len(prefix) >= MIN_WORD_LENGTH]
-    is_ab_prefix = len(matching_words) > 0
+    process_asterisks = '^' + prefix.replace('*', '.')
+    pattern = re.compile(process_asterisks)
+    matches = [
+        entry for entry in DICTIONARY
+        if pattern.match(entry)
+    ]
+    valid = len(matches) > 0
+    result = {"valid": valid, "matches": matches or None}
 
-    return { "is_ab_prefix": is_ab_prefix, "matching_words": matching_words or None }
+    return result
+
+def ab_checks(ab_string):
+    ab_word_check = check_ab_word(ab_string)
+    ab_prefix_check = check_ab_prefix(ab_string)
+    response = {
+        "word": ab_string,
+        "ab_word": {
+            "valid": ab_word_check['valid'],
+            "matches": ab_word_check['matches']
+            },
+        "ab_prefix": {
+            "valid": ab_prefix_check['valid'],
+            "matches": ab_prefix_check['matches']
+            },
+        }
+
+    return response
 
 def handler(event, context):
     word = event.get('word')
-    is_ab_word = check_ab_word(word)
-    ab_prefix = check_ab_prefix(word)
-    matching_words = ab_prefix['matching_words']
-    is_ab_prefix = ab_prefix['is_ab_prefix']
-    response = { "word": word, "is_ab_word": is_ab_word, "is_ab_prefix": is_ab_prefix, "matching_words": matching_words, "num_matching_words": len(matching_words) }
+    response = ab_checks(word)
+    print(response)
 
     return response

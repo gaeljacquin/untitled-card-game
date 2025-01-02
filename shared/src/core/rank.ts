@@ -53,7 +53,7 @@ export class Rank implements IRank {
     new Rank(13, 'K', 'king', 'King'),
   ];
 
-  public static getRankById(id: RankId): Rank {
+  public static getById(id: RankId): Rank {
     const rank = this.ranks.find((rank) => rank.id === id);
 
     if (!rank) {
@@ -68,8 +68,12 @@ export class Rank implements IRank {
     return this.ranks[index];
   }
 
-  public static getAllRanks(): Rank[] {
+  public static getAll(): Rank[] {
     return [...this.ranks];
+  }
+
+  public static getAllValues() {
+    return Object.values(Rank.getAll());
   }
 
   public static setJoker(): Rank {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { ABCard } from '@annabelle/shared/src/core/card';
+import { ABCard, ABJoker } from '@annabelle/shared/src/core/card';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
@@ -56,7 +56,14 @@ export default function ABChecker() {
   function onSubmit(data: FormData) {
     const abWord = data.abWord.toLowerCase();
     const abCards = Array.from({ length: abWord.length }, (_, index) => {
-      const abCard = new ABCard(false);
+      let abCard;
+
+      if (abWord[index] === '*') {
+        abCard = new ABJoker();
+      } else {
+        abCard = new ABCard(false);
+      }
+
       abCard._letter = abWord[index];
 
       return abCard;
@@ -103,6 +110,7 @@ export default function ABChecker() {
                     placeholder="Type here"
                   />
                 </FormControl>
+                <p className="text-sm mt-4 -mb-2">Use * for wildcards (up to 3)</p>
                 <FormMessage className="text-white bg-red-500 p-4 rounded-xl" />
               </FormItem>
             )}

@@ -71,7 +71,8 @@ export class GameGateway
     console.info(`AB Cards received from client ${client.id}: ${abCards}`);
     console.info('abWord: ', abWord);
     const abCheckRes = await this.gameService.abCheckLambda(abWord);
-    const valid = abCheckRes['is_ab_word'] || abCheckRes['is_ab_prefix'];
+    const valid =
+      abCheckRes['ab_word']['valid'] || abCheckRes['ab_prefix']['valid'];
     const emit = { abWord, valid };
 
     client.emit('ab-check-res', emit);

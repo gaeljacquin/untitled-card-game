@@ -11,7 +11,10 @@ export const abCheckSchema = z
         MIN_WORD_LENGTH,
         'The word/fragment must contain at least ' + MIN_WORD_LENGTH + ' letters'
       )
-      .regex(/^[a-zA-Z]+$/, 'Only letters of the English alphabet are allowed'),
+      .regex(
+        /^[a-zA-Z]*(?:\*[a-zA-Z]*){0,3}$/,
+        'Only letters and (up to 3) asterisks (*) are allowed'
+      ),
   })
   .required();
 

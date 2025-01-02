@@ -37,7 +37,7 @@ export class Suit implements ISuit {
     new Suit('♣', 'clubs', 'Clubs', false),
   ];
 
-  public static getSuitById(id: SuitId): Suit {
+  public static getById(id: SuitId): Suit {
     const suit = this.suits.find((suit) => suit.id === id);
 
     if (!suit) {
@@ -53,8 +53,12 @@ export class Suit implements ISuit {
     return this.suits[index];
   }
 
-  public static getAllSuits(): Suit[] {
+  public static getAll(): Suit[] {
     return [...this.suits];
+  }
+
+  public static getAllValues() {
+    return Object.values(Suit.getAll());
   }
 
   public static setJoker(): Suit {
