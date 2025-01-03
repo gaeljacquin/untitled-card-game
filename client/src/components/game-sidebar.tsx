@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ABGame, PlayedWordPlain } from '@annabelle/shared';
-import { SideQuest } from '@annabelle/shared/src/core/quest';
+import { ABGame, ABWord } from '@annabelle/shared';
+import { ABSideQuest } from '@annabelle/shared/src/core/quest';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle, ChevronsDown, ChevronsUp, CircleX } from 'lucide-react';
 import Placeholder from '@/components/placeholder';
@@ -14,7 +14,8 @@ import { Separator } from '@/components/ui/separator';
 import statsStore from '@/stores/stats';
 
 export default function GameSidebar({ game }: { game: ABGame }) {
-  const { mainQuest, sideQuests } = game;
+  const mainQuest = game.getMainQuest();
+  const sideQuests = game.getSideQuests();
   const {
     currentStreak,
     bestStreak,
@@ -58,7 +59,7 @@ export default function GameSidebar({ game }: { game: ABGame }) {
           <h3 className="text-lg font-semibold">Side Quests</h3>
           <ul>
             {sideQuests.length > 0 &&
-              sideQuests.map((item: SideQuest) => (
+              sideQuests.map((item: ABSideQuest) => (
                 <li className="text-sm" key={item.id}>
                   {item.label}
                 </li>
@@ -173,16 +174,19 @@ export default function GameSidebar({ game }: { game: ABGame }) {
             <CommandList className="w-full mt-2 h-36">
               <CommandGroup>
                 {gameState.playedWords.length > 0 &&
-                  gameState.playedWords.map((item: PlayedWordPlain, index) => {
+                  gameState.playedWords.map((item: ABWord, index) => {
+                    const word = item.getWord();
+                    const valid = item.getValid();
+
                     return (
                       <CommandItem
                         className="flex items-center justify-between text-white aria-selected:text-black text-md"
-                        key={item.word + '-' + index}
-                        value={item.word}
+                        key={word + '-' + index}
+                        value={word}
                       >
-                        <span>{item.word.toLocaleUpperCase()}</span>
+                        <span>{word.toLocaleUpperCase()}</span>
                         <span>
-                          {item.valid ? <CheckCircle /> : <CircleX className="text-red-500" />}
+                          {valid ? <CheckCircle /> : <CircleX className="text-red-500" />}
                         </span>
                       </CommandItem>
                     );

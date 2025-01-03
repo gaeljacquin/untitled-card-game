@@ -1,16 +1,11 @@
 import { ABCard, ABJoker } from './card';
 
 type AnyABCard = ABCard | ABJoker;
-type ABCards = Array<AnyABCard>;
+type ABCards = AnyABCard[];
 
-interface IABWord {
-  cards: ABCards;
-  valid: boolean;
-}
-
-export class ABWord implements IABWord {
-  public cards: ABCards;
-  public valid: boolean = false;
+export class ABWord {
+  private cards: ABCards;
+  private valid: boolean = false;
 
   constructor() {
     const startingCard = new ABCard(true);
@@ -44,6 +39,10 @@ export class ABWord implements IABWord {
     this.cards[target] = placeholder;
   }
 
+  public getCards(): ABCards {
+    return this.cards;
+  }
+
   public countCards(): number {
     return this.cards.length;
   }
@@ -52,11 +51,15 @@ export class ABWord implements IABWord {
     return this.cards.filter((card) => card instanceof ABJoker).length;
   }
 
-  public setAsValid(): void {
+  public setValid(): void {
     this.valid = true;
   }
 
-  public getPlainWord(): string {
+  public getValid(): boolean {
+    return this.valid;
+  }
+
+  public getWord(): string {
     return this.cards.map((card) => card.getLetter()).join('');
   }
 }

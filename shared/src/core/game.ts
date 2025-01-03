@@ -1,78 +1,109 @@
+import { v4 as uuidv4 } from 'uuid';
 import { mainQuestList } from '../constants/main-quest';
 import { numSideQuests, sideQuestList } from '../constants/side-quest';
 import { getRandomIndex, shuffler } from '../functions/shufflers';
-import { MainQuest, SideQuest } from './quest';
+import { ABMainQuest, ABSideQuest } from './quest';
 import { Timer } from './timer';
 import { ABWord } from './word';
 
-export type PlayedWordPlain = {
-  word: string;
-  valid: boolean;
-};
-
-interface Game {
-  timer: Timer;
+interface IABGame {
+  id: string;
   createdAt: Date;
+  timer: Timer;
   played: boolean;
   won: boolean;
 }
 
-export class ABGame implements Game {
-  timer: Timer;
-  createdAt: Date;
-  played: boolean;
-  won: boolean;
-  abWords: ABWord[];
-  mainQuest: MainQuest;
-  sideQuests: SideQuest[];
-  score: number;
+export class ABGame implements IABGame {
+  readonly id: string;
+  readonly createdAt: Date;
+  readonly timer: Timer;
+  public played: boolean;
+  public won: boolean;
+  private discards: number;
+  private words: ABWord[];
+  private readonly mainQuest: ABMainQuest;
+  private readonly sideQuests: ABSideQuest[];
+  public score: number;
 
   constructor(timer: Timer) {
+    this.id = uuidv4();
+    this.createdAt = new Date();
     this.timer = timer;
-    this.abWords = [];
+    this.words = [];
     this.played = false;
     this.won = false;
-    this.createdAt = new Date();
+    this.discards = 0;
     this.mainQuest = this.setMainQuest();
     this.sideQuests = this.setSideQuests();
     this.score = 0;
   }
 
+  public getMainQuest() {
+    return this.mainQuest;
+  }
+
   setMainQuest() {
     const randomIndex = getRandomIndex(mainQuestList);
     const randomMainQuest = mainQuestList[randomIndex];
-    const mainQuest = new MainQuest(randomMainQuest);
+    const mainQuest = new ABMainQuest(randomMainQuest);
 
     return mainQuest;
   }
 
+  public getSideQuests() {
+    return this.sideQuests;
+  }
+
   setSideQuests() {
-    const shuffled = shuffler(sideQuestList).slice(0, numSideQuests) as SideQuest[];
-    const sideQuests = shuffled.map((item: SideQuest) => {
-      return new SideQuest(item);
+    const shuffled = shuffler(sideQuestList).slice(0, numSideQuests) as ABSideQuest[];
+    const sideQuests = shuffled.map((item: ABSideQuest) => {
+      return new ABSideQuest(item);
     });
 
     return sideQuests;
   }
 
-  addABWord(word: ABWord) {
-    this.abWords.push(word);
+  public setPlayed() {
+    this.played = true;
   }
 
-  getValidWords() {
-    return this.abWords.filter((word) => word.valid);
+  public addWord(word: ABWord) {
+    this.words.push(word);
   }
 
-  getInvalidWords() {
-    return this.abWords.filter((word) => !word.valid);
+  public getWords() {
+    const validWords = [];
+    const invalidWords = [];
+
+    for (const word of this.words) {
+      if (word.getValid()) {
+        validWords.push(word);
+      } else {
+        invalidWords.push(word);
+      }
+    }
+
+    return { validWords, invalidWords };
   }
 
-  getPlayedWordsPlain(): PlayedWordPlain[] {
-    return this.abWords.map((word) => {
-      return {
-        word: word.getPlainWord(),
-        valid: word.valid,
-      };
-    });
+  public getScore() {
+    return this.score;
+  }
+
+  public setScore(score: number) {
+    this.score = score;
+  }
+
+  public getTimer() {
+    return this.timer;
+  }
+
+  public getDiscards() {
+    return this.discards;
+  }
+
+  public setDiscards(discards: number) {
+    this.discards = discards;
   }
 }

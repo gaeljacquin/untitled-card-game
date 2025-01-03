@@ -1,4 +1,5 @@
 import { IconType } from 'react-icons';
+import { v4 as uuidv4 } from 'uuid';
 import jokerIcons from '../constants/joker-icon';
 import { nonStarters } from '../constants/other';
 import { getRandomIndex } from '../functions/shufflers';
@@ -6,8 +7,9 @@ import { Rank } from './rank';
 import { Suit } from './suit';
 
 interface ICard {
-  readonly rank: Rank;
-  readonly suit: Suit;
+  id: string;
+  rank: Rank;
+  suit: Suit;
 }
 
 const vowels = [...'aeiou'];
@@ -17,10 +19,12 @@ const alphabet = vowels.concat(consonants);
 type Letter = (typeof alphabet)[number];
 
 export class Card implements ICard {
-  public rank: Rank;
-  public suit: Suit;
+  public readonly id: string;
+  public readonly rank: Rank;
+  public readonly suit: Suit;
 
   constructor(rank: Rank, suit: Suit) {
+    this.id = uuidv4();
     this.rank = rank;
     this.suit = suit;
   }
@@ -32,20 +36,13 @@ export class Card implements ICard {
   getSuit(): Suit {
     return this.suit;
   }
-
-  public static generateRandomCard(): Card {
-    const suit = Suit.getRandom();
-    const rank = Rank.getRandom();
-
-    return new Card(rank, suit);
-  }
 }
 
 export class ABCard extends Card {
-  public letter: Letter;
+  public readonly letter: Letter;
   protected played: boolean = false;
   private discard: boolean = false;
-  public starting: boolean;
+  public readonly starting: boolean;
 
   constructor(starting: boolean = false, joker: boolean = false) {
     const rank = joker ? Rank.setJoker() : Rank.getRandom();
@@ -99,13 +96,13 @@ export class ABCard extends Card {
   public isVowel(): boolean {
     return vowels.includes(this.letter.toLocaleLowerCase());
   }
-
-  public _toString(): string {
-    return `${this.letter} - ${this.rank.label} of ${this.suit.label}`;
-  }
 }
 
 export class ABCardPlus extends ABCard {
+  declare public rank: Rank;
+  declare public suit: Suit;
+  declare public letter: Letter;
+
   constructor(starting: boolean = false) {
     super(starting);
   }
