@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { ABCardPlus, ABJoker } from '@annabelle/shared/src/core/card';
+import { ABCardPlus, ABJoker } from '@annabelle/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';

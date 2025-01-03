@@ -1,4 +1,4 @@
-import { ABCard } from '@annabelle/shared/src/core/card';
+import { ABCard } from '@annabelle/shared';
 import { cn } from '@/lib/utils';
 import { ABCardFaceUp } from './ab-card';
 

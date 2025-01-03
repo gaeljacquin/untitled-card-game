@@ -1,9 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { ABCardPlus } from '@annabelle/shared/src/core/card';
-import { Rank, RankId } from '@annabelle/shared/src/core/rank';
-import { Suit, SuitId } from '@annabelle/shared/src/core/suit';
+import { ABCardPlus, Rank, RankId, Suit, SuitId } from '@annabelle/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PopoverClose } from '@radix-ui/react-popover';
 import { Check } from 'lucide-react';

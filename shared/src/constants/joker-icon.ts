@@ -8,7 +8,7 @@ import {
 import { LuVenetianMask } from 'react-icons/lu';
 import { TbJoker } from 'react-icons/tb';
 
-const jokerIcons = [
+export const jokerIcons = [
   TbJoker,
   GiCarnivalMask,
   GiCardJoker,
@@ -17,5 +17,3 @@ const jokerIcons = [
   GiDualityMask,
   LuVenetianMask,
 ];
-
-export default jokerIcons;

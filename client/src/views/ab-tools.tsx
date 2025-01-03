@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import jokerIcons from '@annabelle/shared/src/constants/joker-icon';
+import { jokerIcons } from '@annabelle/shared';
 import { IconType } from 'react-icons';
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';

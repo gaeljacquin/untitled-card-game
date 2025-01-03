@@ -15,8 +15,10 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".",
     "paths": {
-      "@annabelle/shared": ["./node_modules/@annabelle/src"],
+      "@annabelle/shared": ["./node_modules/@annabelle/shared/src"],
+      "@annabelle/shared/*": ["./node_modules/@annabelle/shared/src/*"],
       "@/*": ["./src/*"]
     },
     "plugins": [{ "name": "next" }]

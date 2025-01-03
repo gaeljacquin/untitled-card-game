@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ABGame, ABWord } from '@annabelle/shared';
-import { ABSideQuest } from '@annabelle/shared/src/core/quest';
+import { ABGame, ABSideQuest, ABWord } from '@annabelle/shared';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle, ChevronsDown, ChevronsUp, CircleX } from 'lucide-react';
 import Placeholder from '@/components/placeholder';

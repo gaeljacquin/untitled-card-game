@@ -1,7 +1,10 @@
 {
   "name": "@annabelle/shared",
   "main": "dist/index.js",
-  "types": "src/index.d.ts",
+  "types": "dist/index.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "scripts": {
     "build": "tsc",
     "prettier:write": "prettier --write \"**/*.{ts,js,mjs,cjs,json}\""

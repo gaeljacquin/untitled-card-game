@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ABJoker } from '@annabelle/shared/src/core/card';
+import { ABJoker } from '@annabelle/shared';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
