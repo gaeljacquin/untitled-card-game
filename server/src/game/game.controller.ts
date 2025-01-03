@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { GameService } from '@/src/game/game.service';
+import { GameService } from '@/game/game.service';
 
 @Controller('game')
 export class GameController {

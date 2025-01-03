@@ -1,10 +1,10 @@
 import { IconType } from 'react-icons';
 import { v4 as uuidv4 } from 'uuid';
-import { jokerIcons } from '@/constants/joker-icon';
-import { nonStarters } from '@/constants/other';
-import { Rank } from '@/core/rank';
-import { Suit } from '@/core/suit';
-import { getRandomIndex } from '@/functions/shufflers';
+import { jokerIcons } from '../constants/joker-icon';
+import { nonStarters } from '../constants/other';
+import { getRandomIndex } from '../functions/shufflers';
+import { Rank } from './rank';
+import { Suit } from './suit';
 
 interface ICard {
   id: string;

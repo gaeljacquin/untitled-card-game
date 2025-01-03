@@ -1,4 +1,4 @@
-import { getRandomIndex } from '@/functions/shufflers';
+import { getRandomIndex } from '../functions/shufflers';
 
 export type RankId =
   | 'ace'

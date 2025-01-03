@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
-import { mainQuestList } from '@/constants/main-quest';
-import { numSideQuests, sideQuestList } from '@/constants/side-quest';
-import { ABMainQuest, ABSideQuest } from '@/core/quest';
-import { Timer } from '@/core/timer';
-import { ABWord } from '@/core/word';
-import { getRandomIndex, shuffler } from '@/functions/shufflers';
+import { mainQuestList } from '../constants/main-quest';
+import { numSideQuests, sideQuestList } from '../constants/side-quest';
+import { getRandomIndex, shuffler } from '../functions/shufflers';
+import { ABMainQuest, ABSideQuest } from './quest';
+import { Timer } from './timer';
+import { ABWord } from './word';
 
 interface IABGame {
   id: string;

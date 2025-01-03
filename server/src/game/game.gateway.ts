@@ -11,7 +11,7 @@ import cors from '@/utils/cors';
 import { ABGame } from '@annabelle/shared/dist/core/game';
 import { dealCards } from '@annabelle/shared/dist/functions/card';
 import { maxDeal } from '@annabelle/shared/dist/constants/other';
-import { GameService } from '@/src/game/game.service';
+import { GameService } from '@/game/game.service';
 import { ABWord } from '@annabelle/shared/dist/core/word';
 
 @WebSocketGateway({ cors })
@@ -58,7 +58,7 @@ export class GameGateway
       startingCard,
       playerCards,
     };
-    this.abGameMap.set(client.id, { game, ...emit });
+    this.abGameMap.set(client.id, { ...game, ...emit });
 
     client.emit('game-init-res', {
       ...emit,

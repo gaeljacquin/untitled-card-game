@@ -10,10 +10,11 @@
     "target": "esnext",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "@annabelle/shared": ["./node_modules/@annabelle/shared"],
-      "@/*": ["./*"]
+      "@annabelle/shared/*": ["./node_modules/@annabelle/shared/*"],
+      "@/*": ["./src/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
