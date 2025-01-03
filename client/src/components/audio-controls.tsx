@@ -32,11 +32,10 @@ export default function AudioControls(props: Props) {
   return (
     <div className={cn(className, pathname !== '/settings' && !showAudioPlayer && 'hidden')}>
       <div className="text-md text-white text-center">
-        <p className="font-sans italic">Now Playing</p>
         <p>{track.title ?? ''}</p>
         <p>{track.artist ?? ''}</p>
       </div>
-      <div className="flex items-center justify-center space-x-4">
+      <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
         <Button size="icon" onClick={previousTrack}>
           <SkipBack className="h-4 w-4" />
         </Button>
@@ -49,14 +48,15 @@ export default function AudioControls(props: Props) {
         <Button size="icon" onClick={() => setMuted(!muted)}>
           {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
         </Button>
-        <div className="w-[200px]">
-          <Slider
-            value={[volume * 100]}
-            max={100}
-            step={1}
-            onValueChange={(value) => setVolume(value[0] / 100)}
-          />
-        </div>
+      </div>
+      <div className="w-[100px] md:w-[200px]">
+        <Slider
+          value={[volume * 100]}
+          max={100}
+          step={1}
+          onValueChange={(value) => setVolume(value[0] / 100)}
+          className="mb-2"
+        />
       </div>
     </div>
   );

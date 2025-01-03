@@ -29,7 +29,7 @@ export default function Home() {
     {
       label: 'How to Play',
       slug: 'how-to-play',
-      gradient: 'bg-gradient-to-r from-yellow-700 to-rose-700',
+      gradient: 'bg-gradient-to-r from-red-800 via-rose-500 to-slate-700',
     },
     {
       label: 'Settings',

@@ -6,27 +6,19 @@ import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import SectionCard from '@/components/section-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { FlipWords } from '@/components/ui/flip-words';
 import { cn } from '@/lib/utils';
 
 export default function Credits() {
-  const myTitles = ['Developer', 'Designer'];
-
   return (
     <>
-      <div className="fixed inset-0 bg-center opacity-50 flex items-center justify-center pointer-events-none">
-        <span
-          className={cn(
-            'flex items-center justify-center w-[56rem] h-auto',
-            'bg-transparent grayscale'
-          )}
-        >
+      <div className="fixed inset-0 flex items-center justify-center pointer-events-none opacity-50 z-0">
+        <span className={cn('w-[56rem] h-auto', 'bg-transparent grayscale')}>
           <AnimatedLogoDynamic logo={'game'} loop={false} autoplay={false} />
         </span>
       </div>
 
-      <div className="max-w-4xl mx-auto space-y-8 mt-16">
-        <SectionCard title="" className="text-center text-white p-4">
+      <div className="container max-w-4xl mx-auto space-y-4 mt-16 relative z-10">
+        <SectionCard title="" className="text-center text-white p-1 md:p-4">
           <div className="flex flex-col items-center justify-center">
             <h3 className="text-xl font-semibold mb-6">About</h3>
             <p className="text-md mb-8">
@@ -39,28 +31,26 @@ export default function Credits() {
           <div className="flex flex-col items-center justify-center">
             <h3 className="text-xl font-semibold mb-6">Team</h3>
 
-            <div className="flex flex-row items-center justify-center w-full max-w-xl space-x-12">
-              <div className="flex items-center space-x-4">
-                <Avatar>
-                  <AvatarImage src={process.env.profilePic ?? ''} />
-                  <AvatarFallback>Profile Picture</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h4 className="font-semibold">
-                    <FlipWords words={myTitles} className="text-white" />
-                  </h4>
-                  <p>{process.env.author}</p>
+            <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-xl space-y-8 md:space-y-0 md:space-x-12">
+              <div className="flex flex-col md:flex-row-2 items-center justify-center space-x-4">
+                <div className="flex flex-col md:flex-row-1 items-center justify-center space-y-1">
+                  <Avatar className="text-center h-16 w-16">
+                    <AvatarImage src={process.env.profilePic ?? ''} />
+                    <AvatarFallback>Profile Picture</AvatarFallback>
+                  </Avatar>
+                  <h4 className="font-semibold">Developer</h4>
+                  <p className="text-center">{process.env.author}</p>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-4">
-                <Avatar>
-                  <AvatarImage src="/fireworks.jpg" />
-                  <AvatarFallback>Fireworks</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h4 className="font-semibold">Playtesters</h4>
-                  <p>Friends & Family</p>
+              <div className="flex items-center justify-center space-x-4">
+                <div className="flex flex-col md:flex-row-1 items-center justify-center space-y-1">
+                  <Avatar className="text-center h-16 w-16">
+                    <AvatarImage src="/fireworks.jpg" />
+                    <AvatarFallback>Fireworks</AvatarFallback>
+                  </Avatar>
+                  <h4 className="font-semibold">Testers</h4>
+                  <p className="text-center">Friends & Family</p>
                 </div>
               </div>
             </div>
@@ -78,13 +68,13 @@ export default function Credits() {
           </div>
 
           <div className="flex flex-col items-center justify-center">
-            <p className="text-center text-white mt-16">Thank you for playing!</p>
+            <p className="text-center text-white mt-8 mb-7">Thank you for playing!</p>
           </div>
         </SectionCard>
+      </div>
 
-        <div className="max-w-4xl">
-          <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-4 mt-32 border border-gray-200/40" />
-        </div>
+      <div className="container max-w-4xl mx-auto space-y-4 mb-32">
+        <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 mt-32 border border-gray-200/40" />
       </div>
     </>
   );

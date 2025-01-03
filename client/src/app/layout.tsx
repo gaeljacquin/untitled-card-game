@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Saira } from 'next/font/google';
-import Footer from '@/components/footer';
 import { Toaster } from '@/components/ui/toaster';
 
 import './globals.css';
@@ -36,7 +35,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           <div className="flex flex-col min-h-screen">{children}</div>
           <AudioPlayer />
-          <Footer />
           <Toaster />
         </NextThemesProvider>
       </body>

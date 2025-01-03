@@ -1,15 +1,15 @@
-'use client';
-
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 export default function Footer() {
-  const pathname = usePathname();
-
   return (
-    <div className="relative container mx-auto flex flex-col items-center justify-center">
-      <footer className={cn('absolute -mt-16 z-50', pathname === '/' ? 'hidden' : 'block')}>
+    <div className="flex items-center justify-center">
+      <footer
+        className={cn(
+          'container mx-auto px-4 py-8 text-center text-indigo-300 relative z-10 bg-transparent',
+          'bottom-0'
+        )}
+      >
         <p className="text-white">
           © 2024{' '}
           <Link

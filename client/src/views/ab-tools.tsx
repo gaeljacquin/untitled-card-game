@@ -16,22 +16,19 @@ const ABJokerCard = dynamic(() => import('@/components/ab-joker-card'), {
 export default function ABTools() {
   return (
     <>
-      <div className="fixed inset-0 bg-center opacity-50 flex items-center justify-center pointer-events-none">
-        <span
-          className={cn(
-            'flex items-center justify-center w-[56rem] h-auto',
-            'bg-transparent grayscale'
-          )}
-        >
+      <div className="fixed inset-0 flex items-center justify-center pointer-events-none opacity-50 z-0">
+        <span className={cn('w-[56rem] h-auto', 'bg-transparent grayscale')}>
           <AnimatedLogoDynamic logo={'game'} loop={false} autoplay={false} />
         </span>
       </div>
-      <div className="max-w-4xl mx-auto space-y-8 mt-16 mb-16">
+
+      <div className="container max-w-4xl mx-auto space-y-8 mt-16 mb-16 relative z-10">
         <SectionCard title="AB Checker" className="flex flex-col text-center text-white p-4">
           <ABChecker />
         </SectionCard>
       </div>
-      <div className="max-w-4xl mx-auto space-y-8 mt-16 mb-16">
+
+      <div className="container max-w-4xl mx-auto space-y-8 mt-16 mb-16">
         <SectionCard title="Lookin' cool Joker" className="text-center text-white p-4">
           <div className="flex flex-row items-center justify-center gap-7 text-center mb-7">
             <ABJokerCard preview={true} />
@@ -43,8 +40,9 @@ export default function ABTools() {
           </div>
         </SectionCard>
       </div>
-      <div className="max-w-4xl mx-auto mb-16">
-        <AudioControlsDynamic className="space-y-8 bg-white/10 backdrop-blur-sm rounded-2xl p-8 mt-3 border border-gray-200/20" />
+
+      <div className="container max-w-4xl mx-auto space-y-8 mt-16 mb-16">
+        <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 mt-3 border border-gray-200/20" />
       </div>
     </>
   );
