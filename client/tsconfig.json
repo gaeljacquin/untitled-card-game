@@ -17,8 +17,8 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@annabelle/shared": ["./node_modules/@annabelle/shared/src"],
-      "@annabelle/shared/*": ["./node_modules/@annabelle/shared/src/*"],
+      "@annabelle/shared": ["./node_modules/@annabelle/shared/dist"],
+      "@annabelle/shared/*": ["./node_modules/@annabelle/shared/dist/*"],
       "@/*": ["./src/*"]
     },
     "plugins": [{ "name": "next" }]

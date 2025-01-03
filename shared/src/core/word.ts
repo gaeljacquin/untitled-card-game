@@ -1,4 +1,6 @@
-import { ABCard, ABJoker } from './card';
+import { ABCard, ABJoker } from '@/core/card';
+
+// import { ABCard, ABJoker } from './card';
 
 type AnyABCard = ABCard | ABJoker;
 type ABCards = AnyABCard[];

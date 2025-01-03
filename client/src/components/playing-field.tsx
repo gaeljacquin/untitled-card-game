@@ -1,6 +1,6 @@
 'use client';
 
-import { ABCard } from '@annabelle/shared';
+import { ABCard } from '@annabelle/shared/core/card';
 import { ABCardFaceDown, ABCardFaceUp } from '@/components/ab-card';
 import SectionCard from '@/components/section-card';
 import { Button } from '@/components/ui/button';

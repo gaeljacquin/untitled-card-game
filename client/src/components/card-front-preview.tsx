@@ -1,6 +1,6 @@
-import { ABCard } from '@annabelle/shared';
+import { ABCard } from '@annabelle/shared/core/card';
+import { ABCardFaceUp } from '@/components/ab-card';
 import { cn } from '@/lib/utils';
-import { ABCardFaceUp } from './ab-card';
 
 type Props = {
   card: ABCard;

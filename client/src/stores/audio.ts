@@ -1,4 +1,4 @@
-import { getRandomIndex } from '@annabelle/shared';
+import { getRandomIndex } from '@annabelle/shared/functions/shufflers';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import playlist from '@/assets/playlist.json';

@@ -1,5 +1,5 @@
-import { maxDeal, minDeal } from '../constants/other';
-import { ABCard } from '../core/card';
+import { maxDeal, minDeal } from '@/constants/other';
+import { ABCard } from '@/core/card';
 
 export function dealCards(amount: number) {
   if (amount < minDeal || amount > maxDeal) {

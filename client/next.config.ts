@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import path from 'path';
 
 const nextConfig: NextConfig = {
   env: {
@@ -16,6 +17,14 @@ const nextConfig: NextConfig = {
         pathname: '**',
       },
     ],
+  },
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.resolve(__dirname, '../shared/src'),
+      '@annabelle/shared': path.resolve(__dirname, '../shared/src'),
+    };
+    return config;
   },
 };
 

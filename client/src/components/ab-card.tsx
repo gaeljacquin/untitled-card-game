@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { ABCard } from '@annabelle/shared';
+import { ABCard } from '@annabelle/shared/core/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';

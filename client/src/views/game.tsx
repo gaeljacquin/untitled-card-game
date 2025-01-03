@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ABCard, ABGame, Timer } from '@annabelle/shared';
+import { ABCard } from '@annabelle/shared/core/card';
+import { ABGame } from '@annabelle/shared/core/game';
+import { Timer } from '@annabelle/shared/core/timer';
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import GameSidebar from '@/components/game-sidebar';

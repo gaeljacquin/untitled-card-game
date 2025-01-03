@@ -1,4 +1,4 @@
-import { getRandomIndex } from '../functions/shufflers';
+import { getRandomIndex } from '@/functions/shufflers';
 
 export type SuitId = 'hearts' | 'spades' | 'diamonds' | 'clubs';
 type JokerSuit = 'joker';
