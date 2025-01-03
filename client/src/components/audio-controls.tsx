@@ -35,7 +35,7 @@ export default function AudioControls(props: Props) {
         <p>{track.title ?? ''}</p>
         <p>{track.artist ?? ''}</p>
       </div>
-      <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+      <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
         <Button size="icon" onClick={previousTrack}>
           <SkipBack className="h-4 w-4" />
         </Button>
@@ -49,7 +49,7 @@ export default function AudioControls(props: Props) {
           {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
         </Button>
       </div>
-      <div className="w-[100px] md:w-[200px]">
+      <div className="w-[100px] sm:w-[200px]">
         <Slider
           value={[volume * 100]}
           max={100}

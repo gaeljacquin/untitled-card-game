@@ -87,18 +87,18 @@ export default function Home() {
             <div
               className={cn(
                 'rounded-2xl mb-4 mx-auto flex items-center justify-center mb-7',
-                'w-[56rem] h-32',
+                'w-[20rem] h-2 sm:w-[24rem] sm:h-5 md:w-[40rem] md:h-16 lg:w-[56rem] lg:h-32',
                 'bg-transparent'
               )}
             >
               <AnimatedLogoDynamic logo={'game'} loop autoplay />
             </div>
-            <h3 className="text-xl font-semibold bg-clip-text text-transparent bg-green-200">
+            <h3 className="text-md sm:text-lg md:text-xl font-semibold bg-clip-text text-transparent bg-green-200">
               {appinfo.description}
             </h3>
           </motion.div>
 
-          <div className="sm:grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-xl">
+          <div className="grid-cols-1 space-y-8 w-full max-w-xl">
             {menuItems.map((item, index) => (
               <motion.div
                 key={item.label}
@@ -109,7 +109,7 @@ export default function Home() {
                 {newGameClicked ? (
                   <Button
                     className={cn(
-                      'w-full h-16 text-lg border-0 rounded-full font-semibold',
+                      'w-full h-16 text-sm sm:text-md md:text-lg border-0 rounded-full font-semibold',
                       item.slug === 'game' && item.gradient,
                       item.slug === 'game' && 'pointer-events-none'
                     )}
@@ -123,7 +123,7 @@ export default function Home() {
                     <InteractiveHoverButton
                       text={item.label}
                       className={cn(
-                        'w-full h-16 text-lg border-0 opacity-75 hover:opacity-100',
+                        'w-full h-16 xs:text-sm sm:text-md md:text-lg border-0 opacity-75 hover:opacity-100',
                         menuButtonClicked && 'pointer-events-none'
                       )}
                       gradient={item.gradient}
@@ -143,7 +143,9 @@ export default function Home() {
               menuButtonClicked={menuButtonClicked}
               setMenuButtonClicked={setMenuButtonClicked}
             />
-            <AudioControlsDynamic className="space-y-8 bg-white/10 backdrop-blur-sm rounded-2xl p-8 mt-16 border" />
+          </div>
+          <div className="container max-w-4xl mx-auto -mt-16">
+            <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 mt-32 border border-gray-200/40" />
           </div>
         </div>
       </PageTransition>
