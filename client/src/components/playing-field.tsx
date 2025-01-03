@@ -1,6 +1,7 @@
 'use client';
 
 import { ABCard } from '@annabelle/shared/core/card';
+import { ABCards, AnyABCard } from '@annabelle/shared/core/word';
 import { ABCardFaceDown, ABCardFaceUp } from '@/components/ab-card';
 import SectionCard from '@/components/section-card';
 import { Button } from '@/components/ui/button';
@@ -30,7 +31,7 @@ export default function PlayingField(props: Props) {
           </div>
           <hr />
           <div className="p-4 sm:p-8 flex flex-wrap gap-2 sm:gap-4 items-center justify-center">
-            {(playerCards as ABCard[]).map((item: ABCard) => (
+            {(playerCards as ABCards).map((item: AnyABCard) => (
               <ABCardFaceUp key={crypto.randomUUID()} card={item} valueNotLabel={!labelNotValue} />
             ))}
           </div>

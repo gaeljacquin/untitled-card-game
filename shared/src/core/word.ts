@@ -1,7 +1,7 @@
 import { ABCard, ABJoker } from './card';
 
-type AnyABCard = ABCard | ABJoker;
-type ABCards = AnyABCard[];
+export type AnyABCard = ABCard | ABJoker;
+export type ABCards = AnyABCard[];
 
 export class ABWord {
   private cards: ABCards;

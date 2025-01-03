@@ -15,9 +15,9 @@ type Props = {
 
 export function ABCardFaceUp(props: Props) {
   const { card, preview, valueNotLabel } = props;
-  const rank = card.getRank();
-  const suit = card.getSuit();
-  const letter = card.getLetter();
+  const rank = card.rank;
+  const suit = card.suit;
+  const letter = card.letter;
   const { cardFront: cardFrontIndex } = settingsStore();
   const { cardFronts } = allConstants;
   const cardFront = cardFronts[cardFrontIndex];
