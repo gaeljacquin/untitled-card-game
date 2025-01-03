@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { ABCard, ABJoker } from '@annabelle/shared/src/core/card';
+import { ABCardPlus, ABJoker } from '@annabelle/shared/src/core/card';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
@@ -61,10 +61,9 @@ export default function ABChecker() {
       if (abWord[index] === '*') {
         abCard = new ABJoker();
       } else {
-        abCard = new ABCard(false);
+        abCard = new ABCardPlus(false);
+        abCard.setLetter(abWord[index]);
       }
-
-      abCard._letter = abWord[index];
 
       return abCard;
     });

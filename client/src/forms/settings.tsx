@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { ABCardPreview } from '@annabelle/shared/src/core/card';
+import { ABCardPlus } from '@annabelle/shared/src/core/card';
 import { Rank, RankId } from '@annabelle/shared/src/core/rank';
 import { Suit, SuitId } from '@annabelle/shared/src/core/suit';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -55,7 +55,7 @@ export default function Settings() {
 
   const previewRank = Rank.getById(settings.previewCard.rank as RankId);
   const previewSuit = Suit.getById(settings.previewCard.suit as SuitId);
-  const previewCard = new ABCardPreview();
+  const previewCard = new ABCardPlus();
   previewCard.setRank(previewRank);
   previewCard.setSuit(previewSuit);
   previewCard.setLetter(settings.previewCard.letter);
