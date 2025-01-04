@@ -3,20 +3,17 @@
 import { useEffect, useState } from 'react';
 import { ABCard } from '@annabelle/shared/core/card';
 import { ABGame } from '@annabelle/shared/core/game';
-import { Timer } from '@annabelle/shared/core/timer';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import BackgroundLogo from '@/components/background-logo';
 import Placeholder from '@/components/placeholder';
 import PlayingField from '@/components/playing-field';
-import settingsStore from '@/stores/settings';
 import socketInit from '@/utils/socket-init';
 
 export default function Game() {
   const socket = socketInit();
-  const { timer } = settingsStore();
   const [startingCard, setStartingCard] = useState<ABCard | null>(null);
   const [playerCards, setPlayerCards] = useState<ABCard[]>([]);
-  const game = new ABGame(timer as Timer);
+  const game = new ABGame();
 
   const wsConnect = () => {
     socket.on('connect', () => {

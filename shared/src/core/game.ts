@@ -3,13 +3,11 @@ import { mainQuestList } from '../constants/main-quest';
 import { numSideQuests, sideQuestList } from '../constants/side-quest';
 import { getRandomIndex, shuffler } from '../functions/shufflers';
 import { ABMainQuest, ABSideQuest } from './quest';
-import { Timer } from './timer';
 import { ABWord } from './word';
 
 interface IABGame {
   id: string;
   createdAt: Date;
-  timer: Timer;
   played: boolean;
   won: boolean;
 }
@@ -17,7 +15,6 @@ interface IABGame {
 export class ABGame implements IABGame {
   readonly id: string;
   readonly createdAt: Date;
-  readonly timer: Timer;
   public played: boolean;
   public won: boolean;
   private discards: number;
@@ -26,10 +23,9 @@ export class ABGame implements IABGame {
   private readonly sideQuests: ABSideQuest[];
   public score: number;
 
-  constructor(timer: Timer) {
+  constructor() {
     this.id = uuidv4();
     this.createdAt = new Date();
-    this.timer = timer;
     this.words = [];
     this.played = false;
     this.won = false;
@@ -93,10 +89,6 @@ export class ABGame implements IABGame {
 
   public setScore(score: number) {
     this.score = score;
-  }
-
-  public getTimer() {
-    return this.timer;
   }
 
   public getDiscards() {

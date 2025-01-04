@@ -4,7 +4,6 @@ export * from './core/card';
 export * from './core/word';
 export * from './core/quest';
 export * from './core/game';
-export * from './core/timer';
 
 export * from './constants/main-quest';
 export * from './constants/side-quest';

@@ -1,11 +1,8 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { SettingsStore } from '@/types/settings';
-import allConstants from '@/utils/constants';
 
-const { TIMER_MIN, NUM_CARDS_IN_HAND_DEFAULT } = allConstants;
-
-const initialSettings = {
+export const initialSettings = {
   cardBack: 0,
   cardFront: 0,
   previewCard: {
@@ -15,8 +12,6 @@ const initialSettings = {
   },
   labelNotValue: true,
   rankSwitchLetter: false,
-  timer: TIMER_MIN,
-  playerCards: NUM_CARDS_IN_HAND_DEFAULT,
   showAudioPlayer: false,
 };
 

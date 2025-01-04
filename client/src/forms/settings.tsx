@@ -22,36 +22,19 @@ import { Switch } from '@/components/ui/switch';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import settingsStore from '@/stores/settings';
+import settingsStore, { initialSettings } from '@/stores/settings';
 import { FormData, settingsSchema } from '@/types/settings';
 import allConstants from '@/utils/constants';
 
 export default function Settings() {
-  const { getSettings, _hasHydrated, updateSettings, resetSettings } = settingsStore();
+  const { _hasHydrated, getSettings, updateSettings, resetSettings } = settingsStore();
   const settings = getSettings();
   const { toast } = useToast();
-  const {
-    cardBacks,
-    cardFronts,
-    TIMER_MIN,
-    TIMER_MAX,
-    NUM_CARDS_IN_HAND_MIN,
-    NUM_CARDS_IN_HAND_MAX,
-    topRightToaster,
-  } = allConstants;
+  const { cardBacks, cardFronts, topRightToaster } = allConstants;
 
   const form = useForm<FormData>({
     resolver: zodResolver(settingsSchema),
-    defaultValues: {
-      cardBack: settings.cardBack,
-      cardFront: settings.cardFront,
-      previewCard: settings.previewCard,
-      labelNotValue: settings.labelNotValue,
-      rankSwitchLetter: settings.rankSwitchLetter,
-      timer: settings.timer,
-      playerCards: settings.playerCards,
-      showAudioPlayer: settings.showAudioPlayer,
-    },
+    defaultValues: settings,
   });
 
   const previewRank = Rank.getById(settings.previewCard.rank as RankId);
@@ -77,6 +60,7 @@ export default function Settings() {
 
   function confirmResetSettings() {
     resetSettings();
+    form.reset({ ...initialSettings });
     toast({
       variant: 'default',
       title: 'Settings reset to default',
@@ -139,7 +123,13 @@ export default function Settings() {
                 </div>
                 <FormControl>
                   <RadioGroup
-                    onValueChange={(value) => field.onChange(parseInt(value))}
+                    onValueChange={(value) => {
+                      field.onChange(parseInt(value));
+                      updateSettings({
+                        ...settings,
+                        cardBack: parseInt(value),
+                      });
+                    }}
                     defaultValue={field.value.toString()}
                     className="grid grid-cols-2 md:grid-cols-4 gap-6"
                   >
@@ -401,86 +391,40 @@ export default function Settings() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <FormField
-            control={form.control}
-            name="timer"
-            render={({ field }) => (
-              <FormItem className="space-y-4 mb-6">
-                <div className="flex items-center gap-2">
-                  <FormLabel>Timer (minutes)</FormLabel>
-                </div>
-                <FormControl>
-                  <Input
-                    type="number"
-                    {...field}
-                    min={TIMER_MIN}
-                    max={TIMER_MAX}
-                    className="text-center bg-black/50 border-white/20"
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="playerCards"
-            render={({ field }) => (
-              <FormItem className="space-y-4 mb-6">
-                <div className="flex items-center gap-2">
-                  <FormLabel>Player Cards</FormLabel>
-                </div>
-                <FormControl>
-                  <Input
-                    type="number"
-                    {...field}
-                    min={NUM_CARDS_IN_HAND_MIN}
-                    max={NUM_CARDS_IN_HAND_MAX}
-                    className="text-center bg-black/50 border-white/20"
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <div className="flex items-center justify-center bg-black/50 border-white/20 rounded-xl">
+          <div className="flex items-center justify-center bg-black/50 border-white/20 rounded-xl w-full">
             <FormField
               control={form.control}
               name="showAudioPlayer"
               render={({ field }) => (
-                <FormItem className="space-y-4">
-                  <div className="flex items-center justify-center gap-2">
+                <FormItem>
+                  <div className="flex flex-row items-center justify-center p-4 gap-4">
                     <FormLabel>Show Audio Player</FormLabel>
+                    <FormControl>
+                      <Switch
+                        className={`data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-slate-400 items-center rounded-full transition-colors`}
+                        checked={field.value}
+                        onCheckedChange={(checked) => {
+                          field.onChange(checked);
+                          updateSettings({
+                            ...settings,
+                            showAudioPlayer: checked,
+                          });
+                        }}
+                      />
+                    </FormControl>
                   </div>
-                  <FormControl>
-                    <Switch
-                      className={`data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-slate-400 items-center rounded-full transition-colors`}
-                      checked={field.value}
-                      onCheckedChange={(checked) => {
-                        field.onChange(checked);
-                        updateSettings({
-                          ...settings,
-                          showAudioPlayer: checked,
-                        });
-                      }}
-                    />
-                  </FormControl>
                 </FormItem>
               )}
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Button type="submit" className="w-full bg-white/20 hover:bg-white/30 border-white/20">
-            Save
-          </Button>
-
+        <div className="flex items-center justify-center">
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 type="button"
-                className="w-full bg-white/20 hover:bg-white/30 border-white/20"
+                className="w-48 h-12 bg-white/20 hover:bg-white/30 border-white/20 text-md"
               >
                 Reset
               </Button>
@@ -498,7 +442,9 @@ export default function Settings() {
                       type="button"
                       variant="secondary"
                       className="w-full text-md"
-                      onClick={() => confirmResetSettings()}
+                      onClick={() => {
+                        confirmResetSettings();
+                      }}
                     >
                       Yes
                     </Button>
