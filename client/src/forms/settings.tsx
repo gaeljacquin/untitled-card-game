@@ -47,7 +47,7 @@ export default function Settings() {
       cardFront: settings.cardFront,
       previewCard: settings.previewCard,
       labelNotValue: settings.labelNotValue,
-      flipRankLetter: settings.flipRankLetter,
+      rankSwitchLetter: settings.rankSwitchLetter,
       timer: settings.timer,
       playerCards: settings.playerCards,
       showAudioPlayer: settings.showAudioPlayer,
@@ -247,7 +247,7 @@ export default function Settings() {
                   </FormLabel>
                   <FormField
                     control={form.control}
-                    name="flipRankLetter"
+                    name="rankSwitchLetter"
                     render={({ field }) => (
                       <FormItem className="flex items-center">
                         <FormControl>
@@ -258,7 +258,7 @@ export default function Settings() {
                               field.onChange(checked);
                               updateSettings({
                                 ...settings,
-                                flipRankLetter: checked,
+                                rankSwitchLetter: checked,
                               });
                             }}
                           />

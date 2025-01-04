@@ -20,7 +20,7 @@ export const settingsSchema = z.object({
     letter: z.string().min(1).max(1),
   }),
   labelNotValue: z.boolean(),
-  flipRankLetter: z.boolean(),
+  rankSwitchLetter: z.boolean(),
   timer: z.coerce.number().int().positive().min(TIMER_MIN).max(TIMER_MAX),
   playerCards: z.coerce
     .number()

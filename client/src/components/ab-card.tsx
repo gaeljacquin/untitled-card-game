@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { suitIconMap } from '@annabelle/shared/constants/suit-icon';
 import { ABCard } from '@annabelle/shared/core/card';
 import { SuitId } from '@annabelle/shared/core/suit';
+import { FaChessQueen } from 'react-icons/fa6';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
@@ -20,7 +21,7 @@ export function ABCardFaceUp(props: Props) {
   const rank = card.rank;
   const suit = card.suit;
   const letter = card.letter;
-  const { cardFront: cardFrontIndex, flipRankLetter } = settingsStore();
+  const { cardFront: cardFrontIndex, rankSwitchLetter } = settingsStore();
   const { cardFronts } = allConstants;
   const cardFront = cardFronts[cardFrontIndex];
   const cardColor = suit.isRed
@@ -28,11 +29,13 @@ export function ABCardFaceUp(props: Props) {
     : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' };
   const SuitIcon = suitIconMap[suit.id as SuitId];
   let ShapeIcon = null;
-  const uwu = valueNotLabel ? rank.value : rank.label;
-  const main = flipRankLetter ? letter : uwu;
-  const sub = flipRankLetter ? uwu : letter;
+  const rankDisplay = valueNotLabel ? rank.value : rank.label;
+  const main = rankSwitchLetter ? letter : rankDisplay;
+  const sub = rankSwitchLetter ? rankDisplay : letter;
+  const showUwu = !valueNotLabel && rank.aceFace;
+  const suitIconFill = cardFront.id === 'suitIcon';
 
-  if (cardFront.id === 'suitIcon') {
+  if (suitIconFill) {
     ShapeIcon = suitIconMap[suit.id as SuitId];
     cardColor.text = 'text-white';
     cardColor.fill = 'fill-white';
@@ -66,13 +69,28 @@ export function ABCardFaceUp(props: Props) {
           </div>
 
           <div
+            className={cn('absolute top-3 right-2 text-base sm:text-xl font-bold', cardColor.text)}
+          >
+            {showUwu && rankSwitchLetter && <FaChessQueen className={cn('h-6 w-6')} />}
+          </div>
+
+          <div
             className={cn(
               'absolute bottom-2 right-2 text-base sm:text-xl font-bold rotate-180',
               cardColor.text
             )}
           >
-            <div>{sub}</div>
+            <span className={cn('flex items-center justify-center')}>{sub}</span>
             <SuitIcon className={cn('h-6 w-6')} />
+          </div>
+
+          <div
+            className={cn(
+              'absolute bottom-3 left-2 text-base sm:text-xl font-bold rotate-180',
+              cardColor.text
+            )}
+          >
+            {showUwu && rankSwitchLetter && <FaChessQueen className={cn('h-6 w-6')} />}
           </div>
 
           <div className="relative flex items-center justify-center h-full w-full">
@@ -92,10 +110,15 @@ export function ABCardFaceUp(props: Props) {
                 'font-bold uppercase',
                 'absolute',
                 cardColor.letter,
-                preview ? 'text-4xl sm:text-6xl' : 'text-2xl sm:text-4xl'
+                preview ? 'text-4xl sm:text-6xl' : 'text-2xl sm:text-4xl',
+                'flex-col-1 items-center justify-center',
+                suitIconFill && '-mt-4'
               )}
             >
-              {main}
+              <span className={cn('flex items-center justify-center')}>
+                {showUwu && !rankSwitchLetter && <FaChessQueen className={cn('h-6 w-6')} />}
+              </span>
+              <span className={cn('flex items-center justify-center')}>{main}</span>
             </span>
           </div>
         </div>

@@ -1,11 +1,5 @@
-import {
-  Badge,
-  Circle,
-  Hexagon,
-  RectangleHorizontal,
-  RectangleVertical,
-  Square,
-} from 'lucide-react';
+import { Badge, Circle, Hexagon, RectangleVertical as Rectangle, Square } from 'lucide-react';
+import { TiStarFullOutline as Star } from 'react-icons/ti';
 
 const TIMER_MIN = 3;
 const TIMER_MAX = 5;
@@ -25,21 +19,21 @@ const cardFronts = [
   { id: 'badge', label: 'Badge', component: Badge, className: '' },
   { id: 'hexagon', label: 'Hexagon', component: Hexagon, className: 'rotate-90' },
   {
-    id: 'rectangleVertical',
-    label: 'Rectangle - Vertical',
-    component: RectangleVertical,
-    className: '',
-  },
-  {
-    id: 'rectangleHorizontal',
-    label: 'Rectangle - Horizontal',
-    component: RectangleHorizontal,
+    id: 'rectangle',
+    label: 'Rectangle',
+    component: Rectangle,
     className: '',
   },
   {
     id: 'suitIcon',
     label: 'Suit',
     component: null,
+    className: '',
+  },
+  {
+    id: 'star',
+    label: 'Star',
+    component: Star,
     className: '',
   },
 ];

@@ -22,6 +22,7 @@ interface IRank {
   readonly id: RankId | JokerRank;
   readonly label: string;
   readonly labelFull: string;
+  readonly aceFace: boolean;
 }
 
 export class Rank implements IRank {
@@ -29,12 +30,14 @@ export class Rank implements IRank {
   readonly id: RankId | JokerRank;
   readonly label: string;
   readonly labelFull: string;
+  readonly aceFace: boolean;
 
   private constructor(value: number, label: string, id: RankId | JokerRank, labelFull: string) {
     this.value = value;
     this.label = label;
     this.id = id;
     this.labelFull = labelFull;
+    this.aceFace = ['ace', 'jack', 'queen', 'king'].includes(id);
   }
 
   private static readonly ranks: Rank[] = [

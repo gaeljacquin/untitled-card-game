@@ -14,7 +14,7 @@ const initialSettings = {
     letter: 'B',
   },
   labelNotValue: true,
-  flipRankLetter: false,
+  rankSwitchLetter: false,
   timer: TIMER_MIN,
   playerCards: NUM_CARDS_IN_HAND_DEFAULT,
   showAudioPlayer: false,
