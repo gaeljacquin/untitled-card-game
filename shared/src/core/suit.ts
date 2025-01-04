@@ -2,39 +2,29 @@ import { getRandomIndex } from '../functions/shufflers';
 
 export type SuitId = 'hearts' | 'spades' | 'diamonds' | 'clubs';
 type JokerSuit = 'joker';
-type SuitSign = '♥' | '♠' | '♦' | '♣';
-type JokerSign = '?';
 
 interface ISuit {
-  readonly sign: SuitSign | JokerSign;
   readonly id: SuitId | JokerSuit;
   readonly label: string;
   readonly isRed: boolean;
 }
 
 export class Suit implements ISuit {
-  readonly sign: SuitSign | JokerSign;
   readonly id: SuitId | JokerSuit;
   readonly label: string;
   readonly isRed: boolean;
 
-  private constructor(
-    sign: SuitSign | JokerSign,
-    id: SuitId | JokerSuit,
-    label: string,
-    isRed: boolean
-  ) {
-    this.sign = sign;
+  private constructor(id: SuitId | JokerSuit, label: string, isRed: boolean) {
     this.id = id;
     this.label = label;
     this.isRed = isRed;
   }
 
   private static readonly suits: Suit[] = [
-    new Suit('♥', 'hearts', 'Hearts', true),
-    new Suit('♠', 'spades', 'Spades', false),
-    new Suit('♦', 'diamonds', 'Diamonds', true),
-    new Suit('♣', 'clubs', 'Clubs', false),
+    new Suit('hearts', 'Hearts', true),
+    new Suit('spades', 'Spades', false),
+    new Suit('diamonds', 'Diamonds', true),
+    new Suit('clubs', 'Clubs', false),
   ];
 
   public static getById(id: SuitId): Suit {
@@ -62,6 +52,6 @@ export class Suit implements ISuit {
   }
 
   public static setJoker(): Suit {
-    return new Suit('?', 'joker', 'Joker', false);
+    return new Suit('joker', 'Joker', false);
   }
 }

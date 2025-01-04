@@ -1,7 +1,7 @@
 import { IconType } from 'react-icons';
 import { v4 as uuidv4 } from 'uuid';
-import { jokerIcons } from '../constants/joker-icon';
 import { nonStarters } from '../constants/other';
+import { jokerIcons } from '../constants/suit-icon';
 import { getRandomIndex } from '../functions/shufflers';
 import { Rank } from './rank';
 import { Suit } from './suit';
