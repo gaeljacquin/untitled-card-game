@@ -2,11 +2,10 @@
 
 import Image from 'next/image';
 import { Coins } from 'lucide-react';
-import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
+import BackgroundLogo from '@/components/background-logo';
 import SectionCard from '@/components/section-card';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
 
 export default function HowToPlay() {
   const rankings = [
@@ -63,13 +62,9 @@ export default function HowToPlay() {
 
   return (
     <>
-      <div className="fixed inset-0 flex items-center justify-center pointer-events-none opacity-50 z-0">
-        <span className={cn('w-[56rem] h-auto', 'bg-transparent grayscale')}>
-          <AnimatedLogoDynamic logo={'game'} loop={false} autoplay={false} />
-        </span>
-      </div>
+      <BackgroundLogo />
 
-      <div className="container max-w-4xl mx-auto space-y-8 mt-16 mb-16 relative z-10">
+      <div className="max-w-4xl mx-auto space-y-8 mt-16 mb-16 relative z-10">
         <SectionCard title="How to Play" className="flex flex-col text-center text-white p-4">
           <h3 className="text-center text-lg mb-4">Basic Rules</h3>
 
@@ -169,7 +164,7 @@ export default function HowToPlay() {
         </SectionCard>
       </div>
 
-      <div className="container max-w-4xl mx-auto space-y-8 mt-16 mb-16">
+      <div className="max-w-4xl mx-auto space-y-8 mt-16 mb-16">
         <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 mt-3 border border-gray-200/20" />
       </div>
     </>

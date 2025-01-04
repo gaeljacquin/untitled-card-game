@@ -4,12 +4,10 @@ import { useEffect, useState } from 'react';
 import { ABCard } from '@annabelle/shared/core/card';
 import { ABGame } from '@annabelle/shared/core/game';
 import { Timer } from '@annabelle/shared/core/timer';
-import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
-import GameSidebar from '@/components/game-sidebar';
+import BackgroundLogo from '@/components/background-logo';
 import Placeholder from '@/components/placeholder';
 import PlayingField from '@/components/playing-field';
-import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
 import socketInit from '@/utils/socket-init';
 
@@ -48,21 +46,13 @@ export default function Game() {
 
   return (
     <>
-      <div className="fixed inset-0 bg-center opacity-50 flex items-center justify-center pointer-events-none">
-        <span
-          className={cn(
-            'flex items-center justify-center w-[56rem] h-auto',
-            'bg-transparent grayscale'
-          )}
-        >
-          <AnimatedLogoDynamic logo={'game'} loop={false} autoplay={false} />
-        </span>
+      <BackgroundLogo />
+
+      <PlayingField startingCard={startingCard} playerCards={playerCards} />
+
+      <div className="max-w-4xl mx-auto space-y-8 mt-16 mb-16">
+        <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-4 mt-20 border border-gray-200/50" />
       </div>
-      <div className="flex flex-row gap-4 justify-between">
-        <GameSidebar game={game} />
-        <PlayingField startingCard={startingCard} playerCards={playerCards} />
-      </div>
-      <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-4 mt-20 border border-gray-200/50" />
     </>
   );
 }

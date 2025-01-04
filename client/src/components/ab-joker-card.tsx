@@ -28,7 +28,7 @@ export default function ABJokerCard(props: Props) {
           'relative cursor-pointer preserve-3d',
           'transition-transform',
           'w-32 h-48 hover:scale-105',
-          preview ? 'w-48 h-72' : 'w-36 h-56 hover:scale-105',
+          preview ? 'w-32 h-48 md:w-48 md:h-72' : 'w-36 h-56 hover:scale-105',
           'shadow-animate rounded-xl',
           'mb-8'
         )}
@@ -36,7 +36,7 @@ export default function ABJokerCard(props: Props) {
         <div className="w-full h-full rounded-xl shadow-lg border-2 border-border preserve-3d">
           <div className={cn('w-full h-full bg-white rounded-xl p-4', 'backface-hidden no-select')}>
             <div className="flex flex-col items-center justify-center h-full w-full gap-2">
-              <Icon className={cn('h-auto', 'w-24', cardColor.letter)} />
+              <Icon className={cn('h-auto', 'w-12 md:w-24', cardColor.letter)} />
             </div>
           </div>
         </div>

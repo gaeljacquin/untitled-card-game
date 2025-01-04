@@ -2,22 +2,17 @@
 
 import Link from 'next/link';
 import _ from '@/components/_';
-import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
+import BackgroundLogo from '@/components/background-logo';
 import SectionCard from '@/components/section-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { cn } from '@/lib/utils';
 
 export default function Credits() {
   return (
     <>
-      <div className="fixed inset-0 flex items-center justify-center pointer-events-none opacity-50 z-0">
-        <span className={cn('w-[56rem] h-auto', 'bg-transparent grayscale')}>
-          <AnimatedLogoDynamic logo={'game'} loop={false} autoplay={false} />
-        </span>
-      </div>
+      <BackgroundLogo />
 
-      <div className="container max-w-4xl mx-auto space-y-4 mt-16 relative z-10">
+      <div className="max-w-4xl mx-auto space-y-4 mt-16 relative z-10">
         <SectionCard title="" className="text-center text-white p-1 md:p-4">
           <div className="flex flex-col items-center justify-center">
             <h3 className="text-xl font-semibold mb-6">About</h3>
@@ -73,7 +68,7 @@ export default function Credits() {
         </SectionCard>
       </div>
 
-      <div className="container max-w-4xl mx-auto space-y-4 mb-32">
+      <div className="max-w-4xl mx-auto space-y-4 mb-32">
         <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 mt-32 border border-gray-200/40" />
       </div>
     </>
