@@ -4,9 +4,11 @@ import {
   Hexagon,
   RectangleHorizontal,
   RectangleVertical,
-  Shield,
   Square,
 } from 'lucide-react';
+import { BsFillSuitDiamondFill as Diamonds } from 'react-icons/bs';
+import { GiClubs as Clubs, GiSpades as Spades } from 'react-icons/gi';
+import { ImHeart as Hearts } from 'react-icons/im';
 
 const TIMER_MIN = 3;
 const TIMER_MAX = 5;
@@ -18,6 +20,13 @@ const NUM_CARDS_IN_HAND_MAX = 7;
 const MIN_WORD_LENGTH = 5;
 
 const cardBacks = ['/red.webp', '/yellow.webp', '/blue.webp'];
+
+const suitIconMap = {
+  spades: Spades,
+  hearts: Hearts,
+  diamonds: Diamonds,
+  clubs: Clubs,
+};
 
 const cardFronts = [
   { id: 'default', label: 'Default', component: null, className: '' },
@@ -37,7 +46,12 @@ const cardFronts = [
     component: RectangleHorizontal,
     className: '',
   },
-  { id: 'shield', label: 'Shield', component: Shield, className: '' },
+  {
+    id: 'suitIcon',
+    label: 'Suit',
+    component: null,
+    className: '',
+  },
 ];
 cardFronts.sort((a, b) => {
   if (a.id === 'default') return -1;
@@ -74,6 +88,7 @@ const allConstants = {
   cardFronts,
   defaultSettings,
   topRightToaster,
+  suitIconMap,
 };
 
 export default allConstants;

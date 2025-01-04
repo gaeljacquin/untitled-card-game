@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { SuitId } from '@annabelle/shared';
 import { ABCard } from '@annabelle/shared/core/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
@@ -19,14 +20,18 @@ export function ABCardFaceUp(props: Props) {
   const suit = card.suit;
   const letter = card.letter;
   const { cardFront: cardFrontIndex } = settingsStore();
-  const { cardFronts } = allConstants;
+  const { cardFronts, suitIconMap } = allConstants;
   const cardFront = cardFronts[cardFrontIndex];
   const cardColor = suit.isRed
-    ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500' }
-    : { text: 'text-black', letter: 'text-black', fill: 'fill-black' };
+    ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
+    : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' };
   let ShapeIcon = null;
 
-  if (cardFront.id !== 'default') {
+  if (cardFront.id === 'suitIcon') {
+    ShapeIcon = suitIconMap[suit.id as SuitId];
+    cardColor.text = 'text-white';
+    cardColor.fill = 'fill-white';
+  } else if (cardFront.id !== 'default') {
     ShapeIcon = cardFront.component;
     cardColor.letter = 'text-white';
   }
@@ -43,8 +48,9 @@ export function ABCardFaceUp(props: Props) {
       <div className="absolute inset-0 w-full h-full rounded-xl shadow-lg border-2 border-border preserve-3d">
         <div
           className={cn(
-            'absolute inset-0 w-full h-full bg-white rounded-xl p-4',
-            'backface-hidden no-select'
+            'absolute inset-0 w-full h-full rounded-xl p-4',
+            'backface-hidden no-select',
+            cardFront.id === 'suitIcon' ? cardColor.bg : 'bg-white'
           )}
         >
           <div
