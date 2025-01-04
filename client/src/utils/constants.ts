@@ -51,20 +51,6 @@ cardFronts.sort((a, b) => {
   return a.label.localeCompare(b.label);
 });
 
-const defaultSettings = {
-  cardBack: 0,
-  cardFront: 0,
-  previewCard: {
-    suit: 'hearts',
-    rank: 'ace',
-    letter: 'B',
-  },
-  labelNotValue: true,
-  timer: TIMER_MIN,
-  playerCards: NUM_CARDS_IN_HAND_DEFAULT,
-  showAudioPlayer: false,
-};
-
 const topRightToaster =
   'top-0 right-0 flex fixed md:backdrop-opacity-10 md:bg-black/40 md:text-white md:max-w-[400px] md:top-4 md:right-4';
 
@@ -76,8 +62,8 @@ const allConstants = {
   MIN_WORD_LENGTH,
   cardBacks,
   cardFronts,
-  defaultSettings,
   topRightToaster,
+  NUM_CARDS_IN_HAND_DEFAULT,
 };
 
 export default allConstants;

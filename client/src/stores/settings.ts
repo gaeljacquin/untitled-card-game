@@ -3,12 +3,27 @@ import { devtools, persist } from 'zustand/middleware';
 import { SettingsStore } from '@/types/settings';
 import allConstants from '@/utils/constants';
 
-const { defaultSettings } = allConstants;
+const { TIMER_MIN, NUM_CARDS_IN_HAND_DEFAULT } = allConstants;
+
+const initialSettings = {
+  cardBack: 0,
+  cardFront: 0,
+  previewCard: {
+    suit: 'hearts',
+    rank: 'ace',
+    letter: 'B',
+  },
+  labelNotValue: true,
+  flipRankLetter: false,
+  timer: TIMER_MIN,
+  playerCards: NUM_CARDS_IN_HAND_DEFAULT,
+  showAudioPlayer: false,
+};
 
 const settingsStore = create(
   persist(
     devtools<SettingsStore>((set, get) => ({
-      ...defaultSettings,
+      ...initialSettings,
       _hasHydrated: false,
       abCheckStatus: {
         abWord: '',
@@ -21,7 +36,7 @@ const settingsStore = create(
         set({ ...settings, _hasHydrated: true });
       },
       resetSettings: () => {
-        set({ ...defaultSettings, _hasHydrated: true });
+        set({ ...initialSettings, _hasHydrated: true });
       },
       getSettings: () => get(),
       setAbCheckStatus: (abCheckStatus) => {

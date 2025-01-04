@@ -47,6 +47,7 @@ export default function Settings() {
       cardFront: settings.cardFront,
       previewCard: settings.previewCard,
       labelNotValue: settings.labelNotValue,
+      flipRankLetter: settings.flipRankLetter,
       timer: settings.timer,
       playerCards: settings.playerCards,
       showAudioPlayer: settings.showAudioPlayer,
@@ -215,29 +216,60 @@ export default function Settings() {
                 )}
               />
 
-              <div className="flex items-center justify-center bg-black/50 border-white/20 rounded-xl space-x-2">
-                <FormField
-                  control={form.control}
-                  name="labelNotValue"
-                  render={({ field }) => (
-                    <FormItem className="flex items-center">
-                      <FormControl>
-                        <Switch
-                          className={`data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-slate-400 items-center rounded-full transition-colors`}
-                          checked={field.value}
-                          onCheckedChange={(checked) => {
-                            field.onChange(checked);
-                            updateSettings({
-                              ...settings,
-                              labelNotValue: checked,
-                            });
-                          }}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormLabel className="text-base">A/J/Q/K</FormLabel>
+              <div className="flex flex-row space-x-2 justify-center">
+                <div className="flex items-center justify-center bg-black/50 border-white/20 rounded-xl space-x-2 w-full">
+                  <FormField
+                    control={form.control}
+                    name="labelNotValue"
+                    render={({ field }) => (
+                      <FormItem className="flex items-center">
+                        <FormControl>
+                          <Switch
+                            className="data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-slate-400 items-center rounded-full transition-colors"
+                            checked={field.value}
+                            onCheckedChange={(checked) => {
+                              field.onChange(checked);
+                              updateSettings({
+                                ...settings,
+                                labelNotValue: checked,
+                              });
+                            }}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormLabel className="text-base">A/J/Q/K</FormLabel>
+                </div>
+                <div className="flex items-center justify-center bg-black/50 border-white/20 rounded-xl space-x-2 w-full">
+                  <FormLabel className="text-base">
+                    2<small>B</small>
+                  </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="flipRankLetter"
+                    render={({ field }) => (
+                      <FormItem className="flex items-center">
+                        <FormControl>
+                          <Switch
+                            className="data-[state=checked]:bg-cyan-700 data-[state=unchecked]:bg-rose-600 items-center rounded-full transition-colors"
+                            checked={field.value}
+                            onCheckedChange={(checked) => {
+                              field.onChange(checked);
+                              updateSettings({
+                                ...settings,
+                                flipRankLetter: checked,
+                              });
+                            }}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormLabel className="text-base">
+                    B<small>2</small>
+                  </FormLabel>
+                </div>
               </div>
             </div>
 

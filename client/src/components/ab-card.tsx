@@ -20,7 +20,7 @@ export function ABCardFaceUp(props: Props) {
   const rank = card.rank;
   const suit = card.suit;
   const letter = card.letter;
-  const { cardFront: cardFrontIndex } = settingsStore();
+  const { cardFront: cardFrontIndex, flipRankLetter } = settingsStore();
   const { cardFronts } = allConstants;
   const cardFront = cardFronts[cardFrontIndex];
   const cardColor = suit.isRed
@@ -28,6 +28,9 @@ export function ABCardFaceUp(props: Props) {
     : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' };
   const SuitIcon = suitIconMap[suit.id as SuitId];
   let ShapeIcon = null;
+  const uwu = valueNotLabel ? rank.value : rank.label;
+  const main = flipRankLetter ? letter : uwu;
+  const sub = flipRankLetter ? uwu : letter;
 
   if (cardFront.id === 'suitIcon') {
     ShapeIcon = suitIconMap[suit.id as SuitId];
@@ -58,7 +61,7 @@ export function ABCardFaceUp(props: Props) {
           <div
             className={cn('absolute top-2 left-2 text-base sm:text-xl font-bold', cardColor.text)}
           >
-            <div>{letter}</div>
+            <div>{sub}</div>
             <SuitIcon className={cn('h-6 w-6')} />
           </div>
 
@@ -68,7 +71,7 @@ export function ABCardFaceUp(props: Props) {
               cardColor.text
             )}
           >
-            <div>{letter}</div>
+            <div>{sub}</div>
             <SuitIcon className={cn('h-6 w-6')} />
           </div>
 
@@ -92,7 +95,7 @@ export function ABCardFaceUp(props: Props) {
                 preview ? 'text-4xl sm:text-6xl' : 'text-2xl sm:text-4xl'
               )}
             >
-              {valueNotLabel ? rank.value : rank.label}
+              {main}
             </span>
           </div>
         </div>
