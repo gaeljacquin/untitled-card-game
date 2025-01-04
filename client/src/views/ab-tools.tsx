@@ -13,6 +13,10 @@ const ABJokerCard = dynamic(() => import('@/components/ab-joker-card'), {
   ssr: false,
 });
 
+const ABJokerAlt = dynamic(() => import('@/components/ab-joker-alt'), {
+  ssr: false,
+});
+
 export default function ABTools() {
   return (
     <>
@@ -28,6 +32,7 @@ export default function ABTools() {
         <SectionCard title="Lookin' cool Joker" className="text-center text-white p-4">
           <div className="flex flex-row items-center justify-center gap-7 text-center mb-7">
             <ABJokerCard preview={true} />
+            <ABJokerAlt />
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-7 text-center bg-black\50 backdrop-blur-sm rounded-2xl p-2">
             {jokerIcons.map((Icon: IconType) => (
