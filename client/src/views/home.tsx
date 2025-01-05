@@ -5,65 +5,24 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
-import AskRtfm from '@/components/ask-rtfm';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
 import { Button } from '@/components/ui/button';
 import InteractiveHoverButton from '@/components/ui/interactive-hover-button';
 import { PageTransition } from '@/components/ui/page-transition';
 import { cn } from '@/lib/utils';
-import miscStore from '@/stores/misc';
 import appinfo from '@/utils/appinfo';
+import allConstants from '@/utils/constants';
 
 export default function Home() {
-  const { askRtfm, muteAskRtfm } = miscStore();
   const [newGameClicked, setNewGameClicked] = useState(false);
   const [menuButtonClicked, setMenuButtonClicked] = useState(false);
-  const [askRtfmOpen, setAskRtfmOpen] = useState(false);
-  const menuItems = [
-    {
-      label: 'New Game',
-      slug: 'game',
-      gradient: 'bg-gradient-to-r from-cyan-600 to-emerald-900',
-    },
-    {
-      label: 'How to Play',
-      slug: 'how-to-play',
-      gradient: 'bg-gradient-to-r from-red-800 via-rose-500 to-slate-700',
-    },
-    {
-      label: 'Settings',
-      slug: 'settings',
-      gradient: 'bg-gradient-to-r from-purple-800 to-pink-700',
-    },
-    {
-      label: 'Credits',
-      slug: 'credits',
-      gradient: 'bg-gradient-to-r from-fuchsia-800 to-sky-700',
-    },
-    {
-      label: 'AB Tools',
-      slug: 'ab-tools',
-      gradient: 'bg-gradient-to-r from-lime-700 via-rose-700 to-violet-500',
-    },
-  ];
+  const { menuItems } = allConstants;
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>, slug: string) => {
     switch (slug) {
       case 'game':
-        if (askRtfm) {
-          e.preventDefault();
-          setAskRtfmOpen(true);
-        } else {
-          setNewGameClicked(true);
-        }
-        break;
-      case 'how-to-play':
-        if (askRtfm) {
-          muteAskRtfm();
-        } else {
-          setMenuButtonClicked(true);
-        }
+        setNewGameClicked(true);
         break;
       default:
         setMenuButtonClicked(true);
@@ -133,16 +92,6 @@ export default function Home() {
                 )}
               </motion.div>
             ))}
-          </div>
-          <div>
-            <AskRtfm
-              askRtfmOpen={askRtfmOpen}
-              setAskRtfmOpen={setAskRtfmOpen}
-              setNewGameClicked={setNewGameClicked}
-              newGameClicked={newGameClicked}
-              menuButtonClicked={menuButtonClicked}
-              setMenuButtonClicked={setMenuButtonClicked}
-            />
           </div>
           <div className="container max-w-4xl mx-auto -mt-16">
             <AudioControlsDynamic />
