@@ -1,8 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-import { mainQuestList } from '../constants/main-quest';
-import { numSideQuests, sideQuestList } from '../constants/side-quest';
-import { getRandomIndex, shuffler } from '../functions/shufflers';
-import { ABMainQuest, ABSideQuest } from './quest';
 import { ABWord } from './word';
 
 interface IABGame {
@@ -19,8 +15,6 @@ export class ABGame implements IABGame {
   public won: boolean;
   private discards: number;
   private words: ABWord[];
-  private readonly mainQuest: ABMainQuest;
-  private readonly sideQuests: ABSideQuest[];
   public score: number;
 
   constructor() {
@@ -30,34 +24,7 @@ export class ABGame implements IABGame {
     this.played = false;
     this.won = false;
     this.discards = 0;
-    this.mainQuest = this.setMainQuest();
-    this.sideQuests = this.setSideQuests();
     this.score = 0;
-  }
-
-  public getMainQuest() {
-    return this.mainQuest;
-  }
-
-  setMainQuest() {
-    const randomIndex = getRandomIndex(mainQuestList);
-    const randomMainQuest = mainQuestList[randomIndex];
-    const mainQuest = new ABMainQuest(randomMainQuest);
-
-    return mainQuest;
-  }
-
-  public getSideQuests() {
-    return this.sideQuests;
-  }
-
-  setSideQuests() {
-    const shuffled = shuffler(sideQuestList).slice(0, numSideQuests) as ABSideQuest[];
-    const sideQuests = shuffled.map((item: ABSideQuest) => {
-      return new ABSideQuest(item);
-    });
-
-    return sideQuests;
   }
 
   public setPlayed() {

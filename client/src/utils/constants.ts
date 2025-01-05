@@ -45,7 +45,7 @@ const menuItems = [
   {
     label: 'New Game',
     slug: 'game',
-    gradient: 'bg-gradient-to-r from-cyan-600 to-emerald-900',
+    gradient: 'bg-gradient-to-r from-lime-700 via-rose-700 to-violet-500',
   },
   {
     label: 'Settings',
@@ -60,7 +60,7 @@ const menuItems = [
   {
     label: 'AB Tools',
     slug: 'ab-tools',
-    gradient: 'bg-gradient-to-r from-lime-700 via-rose-700 to-violet-500',
+    gradient: 'bg-gradient-to-br from-red-800 via-rose-500 to-slate-700',
   },
 ];
 

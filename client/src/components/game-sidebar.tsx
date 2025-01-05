@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ABGame } from '@annabelle/shared/core/game';
-import { ABSideQuest } from '@annabelle/shared/core/quest';
 import { ABWord } from '@annabelle/shared/core/word';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle, ChevronsDown, ChevronsUp, CircleX } from 'lucide-react';
@@ -14,9 +12,7 @@ import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui
 import { Separator } from '@/components/ui/separator';
 import statsStore from '@/stores/stats';
 
-export default function GameSidebar({ game }: { game: ABGame }) {
-  const mainQuest = game.getMainQuest();
-  const sideQuests = game.getSideQuests();
+export default function GameSidebar() {
   const {
     currentStreak,
     bestStreak,
@@ -47,27 +43,6 @@ export default function GameSidebar({ game }: { game: ABGame }) {
   return (
     <SectionCard title="" className="w-1/2 mt-7 rounded-3xl">
       <div className="space-y-6 text-white">
-        <div className="space-y-2 -mt-6">
-          <h3 className="text-lg font-semibold">Main Quest</h3>
-          <ul>
-            <li className="text-sm">{mainQuest.label ?? ''}</li>
-          </ul>
-        </div>
-
-        <Separator />
-
-        <div className="space-y-2">
-          <h3 className="text-lg font-semibold">Side Quests</h3>
-          <ul>
-            {sideQuests.length > 0 &&
-              sideQuests.map((item: ABSideQuest) => (
-                <li className="text-sm" key={item.id}>
-                  {item.label}
-                </li>
-              ))}
-          </ul>
-        </div>
-
         <Separator />
 
         <div className="space-y-2">
