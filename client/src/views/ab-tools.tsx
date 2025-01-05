@@ -30,7 +30,7 @@ export default function ABTools() {
 
       <div className="max-w-4xl mx-auto space-y-8 mt-16 mb-16">
         <SectionCard title="Lookin' cool Joker" className="text-center text-white p-4">
-          <div className="flex flex-row items-center justify-center gap-7 text-center mb-7">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-7 text-center mb-7">
             <ABJokerCard preview={true} />
             <ABJokerAlt />
           </div>

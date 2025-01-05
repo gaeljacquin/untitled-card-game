@@ -217,128 +217,131 @@ export default function Settings() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-4">
-              <div className="">
-                <FormField
-                  control={form.control}
-                  name="previewCard.rank"
-                  render={({ field }) => (
-                    <FormItem className="space-y-4 flex">
-                      <Command className="bg-black/50 border-white/20">
-                        <CommandList className="w-full mt-2">
-                          <CommandGroup>
-                            {Rank.getAllValues()
-                              .filter(
-                                (item) =>
-                                  item.id === 'ace' ||
-                                  item.id === 'queen' ||
-                                  item.id === 'ten' ||
-                                  item.id === 'two'
-                              )
-                              .map((item, index) => {
-                                return (
-                                  <CommandItem
-                                    className="flex items-center justify-between text-white aria-selected:text-black text-md"
-                                    key={item.id + '-' + index}
-                                    value={item.id}
-                                    onSelect={() => {
-                                      form.setValue('previewCard.rank', item.id);
-                                      updateSettings({
-                                        ...settings,
-                                        previewCard: {
-                                          ...settings.previewCard,
-                                          rank: item.id,
-                                        },
-                                      });
-                                    }}
-                                  >
-                                    <span>{item.label}</span>
-                                    <Check
-                                      className={cn(
-                                        'mr-2 h-4 w-4',
-                                        field.value && item.id === field.value
-                                          ? 'opacity-100'
-                                          : 'opacity-0'
-                                      )}
-                                    />
-                                  </CommandItem>
-                                );
-                              })}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="">
-                <FormField
-                  control={form.control}
-                  name="previewCard.suit"
-                  render={({ field }) => (
-                    <FormItem className="space-y-4">
-                      <Command className="bg-black/50 border-white/20">
-                        <CommandList className="w-full mt-2 h-auto">
-                          <CommandGroup>
-                            {Suit.getAllValues().map((item, index) => {
-                              return (
-                                <CommandItem
-                                  className="flex items-center justify-between text-white aria-selected:text-black text-md"
-                                  key={item.id + '-' + index}
-                                  value={item.id}
-                                  onSelect={() => {
-                                    form.setValue('previewCard.suit', item.id);
-                                    updateSettings({
-                                      ...settings,
-                                      previewCard: {
-                                        ...settings.previewCard,
-                                        suit: item.id,
-                                      },
-                                    });
-                                  }}
-                                >
-                                  <span>{item.label}</span>
-                                  <Check
-                                    className={cn(
-                                      'mr-2 h-4 w-4',
-                                      field.value && item.id === field.value
-                                        ? 'opacity-100'
-                                        : 'opacity-0'
-                                    )}
-                                  />
-                                </CommandItem>
-                              );
-                            })}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
             <div className="flex flex-col items-center justify-center gap-4 backdrop-blur-sm bg-white/10 border-white/20 p-4 rounded-xl">
-              <CardFrontPreview card={previewCard} valueNotLabel={!settings.labelNotValue} />
-              <div className="">
-                <FormField
-                  control={form.control}
-                  name="previewCard.letter"
-                  render={({ field }) => (
-                    <FormItem className="space-y-4">
-                      <FormControl>
-                        <Input
-                          {...field}
-                          maxLength={1}
-                          type="text"
-                          className="text-center bg-black/50 border-white/20 uppercase"
-                          onChange={(e) => onChange(e)}
-                          onBlur={() => onBlur()}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <div className="flex flex-col items-center justify-center gap-4">
+                  <div className="w-full">
+                    <FormField
+                      control={form.control}
+                      name="previewCard.rank"
+                      render={({ field }) => (
+                        <FormItem className="space-y-4 flex">
+                          <Command className="bg-black/50 border-white/20">
+                            <CommandList className="w-full mt-2">
+                              <CommandGroup>
+                                {Rank.getAllValues()
+                                  .filter(
+                                    (item) =>
+                                      item.id === 'ace' ||
+                                      item.id === 'queen' ||
+                                      item.id === 'ten' ||
+                                      item.id === 'two'
+                                  )
+                                  .map((item, index) => {
+                                    return (
+                                      <CommandItem
+                                        className="flex items-center justify-between text-white aria-selected:text-black text-md"
+                                        key={item.id + '-' + index}
+                                        value={item.id}
+                                        onSelect={() => {
+                                          form.setValue('previewCard.rank', item.id);
+                                          updateSettings({
+                                            ...settings,
+                                            previewCard: {
+                                              ...settings.previewCard,
+                                              rank: item.id,
+                                            },
+                                          });
+                                        }}
+                                      >
+                                        <span>{item.label}</span>
+                                        <Check
+                                          className={cn(
+                                            'mr-2 h-4 w-4',
+                                            field.value && item.id === field.value
+                                              ? 'opacity-100'
+                                              : 'opacity-0'
+                                          )}
+                                        />
+                                      </CommandItem>
+                                    );
+                                  })}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <FormField
+                      control={form.control}
+                      name="previewCard.suit"
+                      render={({ field }) => (
+                        <FormItem className="space-y-4">
+                          <Command className="bg-black/50 border-white/20">
+                            <CommandList className="w-full mt-2 h-auto">
+                              <CommandGroup>
+                                {Suit.getAllValues().map((item, index) => {
+                                  return (
+                                    <CommandItem
+                                      className="flex items-center justify-between text-white aria-selected:text-black text-md"
+                                      key={item.id + '-' + index}
+                                      value={item.id}
+                                      onSelect={() => {
+                                        form.setValue('previewCard.suit', item.id);
+                                        updateSettings({
+                                          ...settings,
+                                          previewCard: {
+                                            ...settings.previewCard,
+                                            suit: item.id,
+                                          },
+                                        });
+                                      }}
+                                    >
+                                      <span>{item.label}</span>
+                                      <Check
+                                        className={cn(
+                                          'mr-2 h-4 w-4',
+                                          field.value && item.id === field.value
+                                            ? 'opacity-100'
+                                            : 'opacity-0'
+                                        )}
+                                      />
+                                    </CommandItem>
+                                  );
+                                })}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col items-center justify-center gap-4">
+                  <CardFrontPreview card={previewCard} valueNotLabel={!settings.labelNotValue} />
+                  <div className="">
+                    <FormField
+                      control={form.control}
+                      name="previewCard.letter"
+                      render={({ field }) => (
+                        <FormItem className="space-y-4">
+                          <FormControl>
+                            <Input
+                              {...field}
+                              maxLength={1}
+                              type="text"
+                              className="text-center bg-black/50 border-white/20 uppercase"
+                              onChange={(e) => onChange(e)}
+                              onBlur={() => onBlur()}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

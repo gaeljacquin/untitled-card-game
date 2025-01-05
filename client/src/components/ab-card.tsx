@@ -64,7 +64,7 @@ export function ABCardFaceUp(props: Props) {
           <div
             className={cn('absolute top-2 left-2 text-base sm:text-xl font-bold', cardColor.text)}
           >
-            <div>{sub}</div>
+            <span className={cn('flex items-center justify-center')}>{sub}</span>
             <SuitIcon className={cn('h-6 w-6')} />
           </div>
 
