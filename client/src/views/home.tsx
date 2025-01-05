@@ -145,7 +145,7 @@ export default function Home() {
             />
           </div>
           <div className="container max-w-4xl mx-auto -mt-16">
-            <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 mt-32 border border-gray-200/40" />
+            <AudioControlsDynamic />
           </div>
         </div>
       </BackgroundGradientAnimation>

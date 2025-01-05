@@ -6,6 +6,7 @@ import { ABGame } from '@annabelle/shared/core/game';
 import { motion } from 'framer-motion';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import BackgroundLogo from '@/components/background-logo';
+import Footer from '@/components/footer';
 import Placeholder from '@/components/placeholder';
 import PlayingField from '@/components/playing-field';
 import socketInit from '@/utils/socket-init';
@@ -43,19 +44,21 @@ export default function Game() {
   }
 
   return (
-    <motion.div
-      initial={{ scale: 0.5, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="text-center mb-8"
-    >
-      <BackgroundLogo />
+    <>
+      <motion.div
+        initial={{ scale: 0.5, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="text-center mb-8"
+      >
+        <BackgroundLogo />
 
-      <PlayingField startingCard={startingCard} playerCards={playerCards} />
+        <PlayingField startingCard={startingCard} playerCards={playerCards} />
 
-      <div className="max-w-4xl mx-auto space-y-8 mt-16 mb-16">
-        <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-4 mt-20 border border-gray-200/50" />
-      </div>
-    </motion.div>
+        <Footer />
+      </motion.div>
+
+      <AudioControlsDynamic />
+    </>
   );
 }

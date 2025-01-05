@@ -116,9 +116,13 @@ export function ABCardFaceUp(props: Props) {
               )}
             >
               <span className={cn('flex items-center justify-center')}>
-                {showUwu && !rankSwitchLetter && <FaChessQueen className={cn('h-6 w-6')} />}
+                {showUwu && !rankSwitchLetter && (
+                  <FaChessQueen className={cn(suitIconFill ? 'h-4 w-4' : 'h-5 w-5')} />
+                )}
               </span>
-              <span className={cn('flex items-center justify-center')}>{main}</span>
+              <span className={cn('flex items-center justify-center', suitIconFill && 'text-4xl')}>
+                {main}
+              </span>
             </span>
           </div>
         </div>
@@ -133,10 +137,10 @@ export function ABCardFaceDown() {
 
   return (
     <div className={cn('relative w-36 h-56 cursor-pointer preserve-3d', 'scale-105')}>
-      <div className="absolute inset-0 w-full h-full rounded-xl shadow-lg preserve-3d">
+      <div className="absolute inset-0 w-full h-full preserve-3d">
         <div
           className={cn(
-            'absolute inset-0 w-full h-full bg-white rounded-xl p-4',
+            'absolute inset-0 w-full h-full bg-transparent p-4',
             'backface-hidden no-select'
           )}
         >
@@ -146,9 +150,13 @@ export function ABCardFaceDown() {
                 <Image
                   src={cardBacks[cardBack]}
                   alt="Card Back"
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-xl"
+                  width={128}
+                  height={128}
+                  placeholder="blur"
+                  blurDataURL={'/blur.png'}
+                  className="rounded-2xl w-full h-48 object-contain"
+                  style={{ objectFit: 'contain' }}
+                  priority
                 />
               </TooltipTrigger>
               <TooltipContent className="-mt-14 ml-8">Deal</TooltipContent>

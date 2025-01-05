@@ -1,4 +1,3 @@
-import Footer from '@/components/footer';
 import ReturnMainMenu from '@/components/return-main-menu';
 import { PageTransition } from '@/components/ui/page-transition';
 import ABTools from '@/views/ab-tools';
@@ -11,7 +10,6 @@ export default function Page() {
           <ReturnMainMenu className="absolute top-4 left-4" />
           <ABTools />
         </div>
-        <Footer />
       </div>
     </PageTransition>
   );

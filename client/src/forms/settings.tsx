@@ -161,7 +161,18 @@ export default function Settings() {
                 />
               </div>
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-center">
-                <div className="flex flex-row items-center justify-center gap-2 p-2 rounded-xl bg-black/50 border-white/20 w-full">
+                <div className="flex flex-row items-center justify-center gap-4 p-4 rounded-xl bg-black/50 border-white/20 w-full">
+                  <FormLabel className="text-base">
+                    <div className="flex h-5 items-center justify-between space-x-2 text-sm">
+                      <div className="text-center">1</div>
+                      <div className="text-center">11</div>
+                    </div>
+                    <Separator />
+                    <div className="flex h-5 items-center justify-between space-x-4 text-sm">
+                      <div className="text-center">12</div>
+                      <div className="text-center">13</div>
+                    </div>
+                  </FormLabel>{' '}
                   <FormField
                     control={form.control}
                     name="labelNotValue"
@@ -169,7 +180,7 @@ export default function Settings() {
                       <FormItem className="flex items-center">
                         <FormControl>
                           <Switch
-                            className="data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-slate-400 items-center rounded-full transition-colors"
+                            className="data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-rose-600 items-center rounded-full transition-colors"
                             checked={field.value}
                             onCheckedChange={(checked) => {
                               field.onChange(checked);
@@ -183,11 +194,24 @@ export default function Settings() {
                       </FormItem>
                     )}
                   />
-                  <FormLabel className="text-base">A/J/Q/K</FormLabel>
-                </div>
-                <div className="flex flex-row items-center justify-center gap-2 p-2 rounded-xl bg-black/50 border-white/20 w-full">
                   <FormLabel className="text-base">
-                    2<small>B</small>
+                    <div className="flex h-5 items-center justify-between space-x-2 text-sm">
+                      <div className="text-center">A</div>
+                      <div className="text-center">J</div>
+                    </div>
+                    <Separator />
+                    <div className="flex h-5 items-center justify-between space-x-4 text-sm">
+                      <div className="text-center">Q</div>
+                      <div className="text-center">K</div>
+                    </div>
+                  </FormLabel>
+                </div>
+                <div className="flex flex-row items-center justify-center gap-4 p-4 rounded-xl bg-black/50 border-white/20 w-full">
+                  <FormLabel className="flex flex-col gap-1">
+                    <span className="bg-white/90 text-md text-black p-1 rounded-sm text-md">
+                      Rank
+                    </span>{' '}
+                    <span className="text-xs">Letter</span>
                   </FormLabel>
                   <FormField
                     control={form.control}
@@ -210,8 +234,11 @@ export default function Settings() {
                       </FormItem>
                     )}
                   />
-                  <FormLabel className="text-base">
-                    B<small>2</small>
+                  <FormLabel className="flex flex-col gap-1">
+                    <span className="bg-white/90 text-md text-black p-1 rounded-sm text-md">
+                      Letter
+                    </span>{' '}
+                    <span className="text-xs">Rank</span>
                   </FormLabel>
                 </div>
               </div>
@@ -349,64 +376,66 @@ export default function Settings() {
 
         <Separator />
 
-        <div className="mt-7">
-          <FormLabel className="text-base">Card back</FormLabel>
-        </div>
-        <div className="mb-12">
-          <FormField
-            control={form.control}
-            name="cardBack"
-            render={({ field }) => (
-              <FormItem className="space-y-4">
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={(value) => {
-                      field.onChange(parseInt(value));
-                      updateSettings({
-                        ...settings,
-                        cardBack: parseInt(value),
-                      });
-                    }}
-                    defaultValue={field.value.toString()}
-                    className="grid grid-cols-2 md:grid-cols-4 gap-6"
-                  >
-                    {cardBacks.map((item, index) => (
-                      <div key={item + '-' + index} className="relative">
-                        <RadioGroupItem
-                          value={index.toString()}
-                          className="sr-only"
-                          id={'card-back-' + (index + 1)}
-                        />
-                        <label htmlFor={'card-back-' + (index + 1)}>
-                          <CardBackPreview
-                            cardBack={item}
-                            index={index}
-                            isSelected={field.value === index}
+        <>
+          <div className="mt-7">
+            <FormLabel className="text-base">Card back</FormLabel>
+          </div>
+          <div className="flex flex-col items-center mb-16">
+            <FormField
+              control={form.control}
+              name="cardBack"
+              render={({ field }) => (
+                <FormItem className="space-y-4">
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={(value) => {
+                        field.onChange(parseInt(value));
+                        updateSettings({
+                          ...settings,
+                          cardBack: parseInt(value),
+                        });
+                      }}
+                      defaultValue={field.value.toString()}
+                      className="flex flex-col items-center sm:flex-row gap-7 mx-auto"
+                    >
+                      {cardBacks.map((item, index) => (
+                        <div key={item + '-' + index} className="relative">
+                          <RadioGroupItem
+                            value={index.toString()}
+                            className="sr-only"
+                            id={'card-back-' + (index + 1)}
                           />
-                        </label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </FormControl>
-              </FormItem>
-            )}
-          />
-        </div>
+                          <label htmlFor={'card-back-' + (index + 1)}>
+                            <CardBackPreview
+                              cardBack={item}
+                              index={index}
+                              isSelected={field.value === index}
+                            />
+                          </label>
+                        </div>
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+        </>
 
         <Separator />
 
-        <div className="mt-7">
-          <FormLabel className="text-base">Other</FormLabel>
-        </div>
-        <div className="flex flex-row w-1/2">
-          <div className="flex items-center justify-center bg-black/50 border-white/20 rounded-xl w-full">
+        <>
+          <div className="mt-7">
+            <FormLabel className="text-base">Other</FormLabel>
+          </div>
+          <div className="flex flex-col items-center justify-center bg-black/50 border-white/20 rounded-xl w-1/2 mx-auto">
             <FormField
               control={form.control}
               name="audioPlayerOnMain"
               render={({ field }) => (
                 <FormItem>
-                  <div className="flex flex-col items-center justify-center gap-2 sm:gap-1 p-4">
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+                  <div className="flex flex-col items-center gap-2 sm:gap-1 p-4">
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
                       <FormLabel>Show audio player on main page</FormLabel>
 
                       <FormControl>
@@ -428,14 +457,14 @@ export default function Settings() {
               )}
             />
           </div>
-        </div>
+        </>
 
         <div className="flex items-center justify-center">
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 type="button"
-                className="w-48 h-12 bg-white/20 hover:bg-white/30 border-white/20 text-md"
+                className="w-48 h-12 bg-white/20 hover:bg-white/30 border-white/20 text-md mt-8"
               >
                 Reset
               </Button>

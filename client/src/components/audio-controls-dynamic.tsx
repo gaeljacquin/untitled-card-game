@@ -1,20 +1,13 @@
 import dynamic from 'next/dynamic';
-import { cn } from '@/lib/utils';
-
-type Props = {
-  className?: string;
-};
 
 const AudioControls = dynamic(() => import('@/components/audio-controls'), {
   ssr: false,
 });
 
-const AudioControlsDynamic = (props: Props) => {
-  const { className } = props;
-
+const AudioControlsDynamic = () => {
   return (
     <>
-      <AudioControls className={cn(className)} />
+      <AudioControls />
       <span className="sr-only">Audio Player</span>
     </>
   );

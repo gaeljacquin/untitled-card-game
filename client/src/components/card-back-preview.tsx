@@ -22,11 +22,13 @@ export default function CardBackPreview(props: Props) {
       <Image
         src={cardBack}
         alt={'Card back ' + (index + 1)}
-        width={500}
-        height={500}
+        width={128}
+        height={128}
         placeholder="blur"
         blurDataURL={'/blur.png'}
-        className="rounded-2xl"
+        className="rounded-2xl w-full h-48 object-cover"
+        style={{ objectFit: 'cover' }}
+        priority
       />
     </div>
   );
