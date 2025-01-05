@@ -12,7 +12,7 @@ export const initialSettings = {
   },
   labelNotValue: true,
   rankSwitchLetter: false,
-  showAudioPlayer: false,
+  audioPlayerOnMain: false,
 };
 
 const settingsStore = create(

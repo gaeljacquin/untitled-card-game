@@ -25,12 +25,12 @@ export default function AudioControls(props: Props) {
     previousTrack,
     getCurrentTrack,
   } = audioStore();
-  const { showAudioPlayer } = settingsStore();
+  const { audioPlayerOnMain } = settingsStore();
   const track = getCurrentTrack() ?? '';
   const pathname = usePathname();
 
   return (
-    <div className={cn(className, pathname !== '/settings' && !showAudioPlayer && 'hidden')}>
+    <div className={cn(className, pathname === '/' && !audioPlayerOnMain && 'hidden')}>
       <div className="text-md text-white text-center">
         <p>{track.title ?? ''}</p>
         <p>{track.artist ?? ''}</p>

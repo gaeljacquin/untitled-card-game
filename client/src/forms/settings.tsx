@@ -402,12 +402,12 @@ export default function Settings() {
           <div className="flex items-center justify-center bg-black/50 border-white/20 rounded-xl w-full">
             <FormField
               control={form.control}
-              name="showAudioPlayer"
+              name="audioPlayerOnMain"
               render={({ field }) => (
                 <FormItem>
                   <div className="flex flex-col items-center justify-center gap-2 sm:gap-1 p-4">
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
-                      <FormLabel>Show Audio Player</FormLabel>
+                      <FormLabel>Show audio player on main page</FormLabel>
 
                       <FormControl>
                         <Switch
@@ -417,13 +417,12 @@ export default function Settings() {
                             field.onChange(checked);
                             updateSettings({
                               ...settings,
-                              showAudioPlayer: checked,
+                              audioPlayerOnMain: checked,
                             });
                           }}
                         />
                       </FormControl>
                     </div>
-                    <small>(Always visible on Settings page)</small>
                   </div>
                 </FormItem>
               )}

@@ -14,7 +14,7 @@ export const settingsSchema = z.object({
   }),
   labelNotValue: z.boolean(),
   rankSwitchLetter: z.boolean(),
-  showAudioPlayer: z.boolean(),
+  audioPlayerOnMain: z.boolean(),
 });
 
 export type FormData = z.infer<typeof settingsSchema>;
