@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import _ from '@/components/_';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import BackgroundLogo from '@/components/background-logo';
@@ -9,9 +10,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default function Credits() {
   return (
-    <>
+    <motion.div
+      initial={{ scale: 0.5, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="text-center mb-8"
+    >
+      {' '}
       <BackgroundLogo />
-
       <div className="max-w-4xl mx-auto space-y-4 mt-16 relative z-10">
         <SectionCard title="" className="text-center text-white p-1 md:p-4">
           <div className="flex flex-col items-center justify-center">
@@ -67,10 +73,9 @@ export default function Credits() {
           </div>
         </SectionCard>
       </div>
-
       <div className="max-w-4xl mx-auto space-y-4 mb-32">
         <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 mt-32 border border-gray-200/40" />
       </div>
-    </>
+    </motion.div>
   );
 }

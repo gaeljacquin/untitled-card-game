@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { ABCard } from '@annabelle/shared/core/card';
 import { ABGame } from '@annabelle/shared/core/game';
+import { motion } from 'framer-motion';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import BackgroundLogo from '@/components/background-logo';
 import Placeholder from '@/components/placeholder';
@@ -42,7 +43,12 @@ export default function Game() {
   }
 
   return (
-    <>
+    <motion.div
+      initial={{ scale: 0.5, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="text-center mb-8"
+    >
       <BackgroundLogo />
 
       <PlayingField startingCard={startingCard} playerCards={playerCards} />
@@ -50,6 +56,6 @@ export default function Game() {
       <div className="max-w-4xl mx-auto space-y-8 mt-16 mb-16">
         <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-4 mt-20 border border-gray-200/50" />
       </div>
-    </>
+    </motion.div>
   );
 }

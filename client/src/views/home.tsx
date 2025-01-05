@@ -72,11 +72,11 @@ export default function Home() {
   };
 
   return (
-    <BackgroundGradientAnimation
-      gradientBackgroundStart="rgba(4, 61, 34, 0.77)"
-      gradientBackgroundEnd="rgb(13, 20, 49)"
-    >
-      <PageTransition>
+    <PageTransition>
+      <BackgroundGradientAnimation
+        gradientBackgroundStart="rgba(4, 61, 34, 0.77)"
+        gradientBackgroundEnd="rgb(13, 20, 49)"
+      >
         <div className="min-h-screen flex flex-col items-center justify-center p-4 absolute z-50 inset-0">
           <motion.div
             initial={{ scale: 0.5, opacity: 0 }}
@@ -148,7 +148,7 @@ export default function Home() {
             <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 mt-32 border border-gray-200/40" />
           </div>
         </div>
-      </PageTransition>
-    </BackgroundGradientAnimation>
+      </BackgroundGradientAnimation>
+    </PageTransition>
   );
 }

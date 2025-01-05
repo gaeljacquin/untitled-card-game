@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { jokerIcons } from '@annabelle/shared/constants/joker-icon';
+import { motion } from 'framer-motion';
 import { IconType } from 'react-icons';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import BackgroundLogo from '@/components/background-logo';
@@ -19,7 +20,12 @@ const ABJokerAlt = dynamic(() => import('@/components/ab-joker-alt'), {
 
 export default function ABTools() {
   return (
-    <>
+    <motion.div
+      initial={{ scale: 0.5, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="text-center mb-8"
+    >
       <BackgroundLogo />
 
       <div className="max-w-4xl mx-auto space-y-8 mt-16 mb-16 relative z-10">
@@ -45,6 +51,6 @@ export default function ABTools() {
       <div className="max-w-4xl mx-auto space-y-8 mt-16 mb-16">
         <AudioControlsDynamic className="space-y-8 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 mt-3 border border-gray-200/20" />
       </div>
-    </>
+    </motion.div>
   );
 }
