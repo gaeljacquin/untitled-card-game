@@ -11,13 +11,13 @@ import { useForm } from 'react-hook-form';
 import CardBackPreview from '@/components/card-back-preview';
 import CardFrontPreview from '@/components/card-front-preview';
 import Placeholder from '@/components/placeholder';
-import SectionCard from '@/components/section-card';
 import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
@@ -112,15 +112,249 @@ export default function Settings() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className={cn('space-y-8')}>
+        <>
+          <FormLabel className="text-base">Card front</FormLabel>
+          <div className="flex flex-col gap-4 sm:flex-row sm:gap-7 mb-12">
+            <div className="flex flex-col flex-1 gap-4">
+              <div className="">
+                <FormField
+                  control={form.control}
+                  name="cardFront"
+                  render={({ field }) => (
+                    <FormItem className="space-y-4">
+                      <Command className="bg-black/50 border-white/20">
+                        <CommandList className="w-full mt-2 h-auto">
+                          <CommandGroup>
+                            {cardFronts.map((item, index) => {
+                              return (
+                                <CommandItem
+                                  className="flex items-center justify-between text-white aria-selected:text-black text-md"
+                                  key={item.id + '-' + index}
+                                  value={item.id}
+                                  onSelect={() => {
+                                    form.setValue('cardFront', index);
+                                    updateSettings({
+                                      ...settings,
+                                      cardFront: index,
+                                    });
+                                  }}
+                                >
+                                  <span>{item.label}</span>
+                                  <Check
+                                    className={cn(
+                                      'mr-2 h-4 w-4',
+                                      field.value !== undefined &&
+                                        field.value !== null &&
+                                        index === field.value
+                                        ? 'opacity-100'
+                                        : 'opacity-0'
+                                    )}
+                                  />
+                                </CommandItem>
+                              );
+                            })}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-center">
+                <div className="flex flex-row items-center justify-center gap-2 p-2 rounded-xl bg-black/50 border-white/20 w-full">
+                  <FormField
+                    control={form.control}
+                    name="labelNotValue"
+                    render={({ field }) => (
+                      <FormItem className="flex items-center">
+                        <FormControl>
+                          <Switch
+                            className="data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-slate-400 items-center rounded-full transition-colors"
+                            checked={field.value}
+                            onCheckedChange={(checked) => {
+                              field.onChange(checked);
+                              updateSettings({
+                                ...settings,
+                                labelNotValue: checked,
+                              });
+                            }}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormLabel className="text-base">A/J/Q/K</FormLabel>
+                </div>
+                <div className="flex flex-row items-center justify-center gap-2 p-2 rounded-xl bg-black/50 border-white/20 w-full">
+                  <FormLabel className="text-base">
+                    2<small>B</small>
+                  </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="rankSwitchLetter"
+                    render={({ field }) => (
+                      <FormItem className="flex items-center">
+                        <FormControl>
+                          <Switch
+                            className="data-[state=checked]:bg-cyan-700 data-[state=unchecked]:bg-rose-600 items-center rounded-full transition-colors"
+                            checked={field.value}
+                            onCheckedChange={(checked) => {
+                              field.onChange(checked);
+                              updateSettings({
+                                ...settings,
+                                rankSwitchLetter: checked,
+                              });
+                            }}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormLabel className="text-base">
+                    B<small>2</small>
+                  </FormLabel>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <div className="">
+                <FormField
+                  control={form.control}
+                  name="previewCard.rank"
+                  render={({ field }) => (
+                    <FormItem className="space-y-4 flex">
+                      <Command className="bg-black/50 border-white/20">
+                        <CommandList className="w-full mt-2">
+                          <CommandGroup>
+                            {Rank.getAllValues()
+                              .filter(
+                                (item) =>
+                                  item.id === 'ace' ||
+                                  item.id === 'queen' ||
+                                  item.id === 'ten' ||
+                                  item.id === 'two'
+                              )
+                              .map((item, index) => {
+                                return (
+                                  <CommandItem
+                                    className="flex items-center justify-between text-white aria-selected:text-black text-md"
+                                    key={item.id + '-' + index}
+                                    value={item.id}
+                                    onSelect={() => {
+                                      form.setValue('previewCard.rank', item.id);
+                                      updateSettings({
+                                        ...settings,
+                                        previewCard: {
+                                          ...settings.previewCard,
+                                          rank: item.id,
+                                        },
+                                      });
+                                    }}
+                                  >
+                                    <span>{item.label}</span>
+                                    <Check
+                                      className={cn(
+                                        'mr-2 h-4 w-4',
+                                        field.value && item.id === field.value
+                                          ? 'opacity-100'
+                                          : 'opacity-0'
+                                      )}
+                                    />
+                                  </CommandItem>
+                                );
+                              })}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="">
+                <FormField
+                  control={form.control}
+                  name="previewCard.suit"
+                  render={({ field }) => (
+                    <FormItem className="space-y-4">
+                      <Command className="bg-black/50 border-white/20">
+                        <CommandList className="w-full mt-2 h-auto">
+                          <CommandGroup>
+                            {Suit.getAllValues().map((item, index) => {
+                              return (
+                                <CommandItem
+                                  className="flex items-center justify-between text-white aria-selected:text-black text-md"
+                                  key={item.id + '-' + index}
+                                  value={item.id}
+                                  onSelect={() => {
+                                    form.setValue('previewCard.suit', item.id);
+                                    updateSettings({
+                                      ...settings,
+                                      previewCard: {
+                                        ...settings.previewCard,
+                                        suit: item.id,
+                                      },
+                                    });
+                                  }}
+                                >
+                                  <span>{item.label}</span>
+                                  <Check
+                                    className={cn(
+                                      'mr-2 h-4 w-4',
+                                      field.value && item.id === field.value
+                                        ? 'opacity-100'
+                                        : 'opacity-0'
+                                    )}
+                                  />
+                                </CommandItem>
+                              );
+                            })}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center justify-center gap-4 backdrop-blur-sm bg-white/10 border-white/20 p-4 rounded-xl">
+              <CardFrontPreview card={previewCard} valueNotLabel={!settings.labelNotValue} />
+              <div className="">
+                <FormField
+                  control={form.control}
+                  name="previewCard.letter"
+                  render={({ field }) => (
+                    <FormItem className="space-y-4">
+                      <FormControl>
+                        <Input
+                          {...field}
+                          maxLength={1}
+                          type="text"
+                          className="text-center bg-black/50 border-white/20 uppercase"
+                          onChange={(e) => onChange(e)}
+                          onBlur={() => onBlur()}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          </div>
+        </>
+
+        <Separator />
+
+        <div className="mt-7">
+          <FormLabel className="text-base">Card back</FormLabel>
+        </div>
         <div className="mb-12">
           <FormField
             control={form.control}
             name="cardBack"
             render={({ field }) => (
               <FormItem className="space-y-4">
-                <div className="flex items-center gap-2 mb-7">
-                  <FormLabel>Card Back</FormLabel>
-                </div>
                 <FormControl>
                   <RadioGroup
                     onValueChange={(value) => {
@@ -156,262 +390,37 @@ export default function Settings() {
           />
         </div>
 
-        <div className="mb-12">
-          <div className="flex items-center gap-2 mb-7">
-            <FormLabel>Card Front</FormLabel>
-          </div>
+        <Separator />
 
-          <div className="grid grid-cols-3 gap-4">
-            <div className="grid grid-row-1 gap-4">
-              <FormField
-                control={form.control}
-                name="cardFront"
-                render={({ field }) => (
-                  <FormItem className="space-y-4">
-                    <Command className="bg-black/50 border-white/20">
-                      <CommandList className="w-full mt-2 h-auto">
-                        <CommandGroup>
-                          {cardFronts.map((item, index) => {
-                            return (
-                              <CommandItem
-                                className="flex items-center justify-between text-white aria-selected:text-black text-md"
-                                key={item.id + '-' + index}
-                                value={item.id}
-                                onSelect={() => {
-                                  form.setValue('cardFront', index);
-                                  updateSettings({
-                                    ...settings,
-                                    cardFront: index,
-                                  });
-                                }}
-                              >
-                                <span>{item.label}</span>
-                                <Check
-                                  className={cn(
-                                    'mr-2 h-4 w-4',
-                                    field.value !== undefined &&
-                                      field.value !== null &&
-                                      index === field.value
-                                      ? 'opacity-100'
-                                      : 'opacity-0'
-                                  )}
-                                />
-                              </CommandItem>
-                            );
-                          })}
-                        </CommandGroup>
-                      </CommandList>
-                    </Command>
-                  </FormItem>
-                )}
-              />
-
-              <div className="flex flex-row space-x-2 justify-center">
-                <div className="flex items-center justify-center bg-black/50 border-white/20 rounded-xl space-x-2 w-full">
-                  <FormField
-                    control={form.control}
-                    name="labelNotValue"
-                    render={({ field }) => (
-                      <FormItem className="flex items-center">
-                        <FormControl>
-                          <Switch
-                            className="data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-slate-400 items-center rounded-full transition-colors"
-                            checked={field.value}
-                            onCheckedChange={(checked) => {
-                              field.onChange(checked);
-                              updateSettings({
-                                ...settings,
-                                labelNotValue: checked,
-                              });
-                            }}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormLabel className="text-base">A/J/Q/K</FormLabel>
-                </div>
-                <div className="flex items-center justify-center bg-black/50 border-white/20 rounded-xl space-x-2 w-full">
-                  <FormLabel className="text-base">
-                    2<small>B</small>
-                  </FormLabel>
-                  <FormField
-                    control={form.control}
-                    name="rankSwitchLetter"
-                    render={({ field }) => (
-                      <FormItem className="flex items-center">
-                        <FormControl>
-                          <Switch
-                            className="data-[state=checked]:bg-cyan-700 data-[state=unchecked]:bg-rose-600 items-center rounded-full transition-colors"
-                            checked={field.value}
-                            onCheckedChange={(checked) => {
-                              field.onChange(checked);
-                              updateSettings({
-                                ...settings,
-                                rankSwitchLetter: checked,
-                              });
-                            }}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormLabel className="text-base">
-                    B<small>2</small>
-                  </FormLabel>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-row-1 gap-4">
-              <FormField
-                control={form.control}
-                name="previewCard.rank"
-                render={({ field }) => (
-                  <FormItem className="space-y-4 flex">
-                    <Command className="bg-black/50 border-white/20">
-                      <CommandList className="w-full mt-2">
-                        <CommandGroup>
-                          {Rank.getAllValues()
-                            .filter(
-                              (item) =>
-                                item.id === 'ace' ||
-                                item.id === 'queen' ||
-                                item.id === 'ten' ||
-                                item.id === 'two'
-                            )
-                            .map((item, index) => {
-                              return (
-                                <CommandItem
-                                  className="flex items-center justify-between text-white aria-selected:text-black text-md"
-                                  key={item.id + '-' + index}
-                                  value={item.id}
-                                  onSelect={() => {
-                                    form.setValue('previewCard.rank', item.id);
-                                    updateSettings({
-                                      ...settings,
-                                      previewCard: {
-                                        ...settings.previewCard,
-                                        rank: item.id,
-                                      },
-                                    });
-                                  }}
-                                >
-                                  <span>{item.label}</span>
-                                  <Check
-                                    className={cn(
-                                      'mr-2 h-4 w-4',
-                                      field.value && item.id === field.value
-                                        ? 'opacity-100'
-                                        : 'opacity-0'
-                                    )}
-                                  />
-                                </CommandItem>
-                              );
-                            })}
-                        </CommandGroup>
-                      </CommandList>
-                    </Command>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="previewCard.suit"
-                render={({ field }) => (
-                  <FormItem className="space-y-4">
-                    <Command className="bg-black/50 border-white/20">
-                      <CommandList className="w-full mt-2 h-auto">
-                        <CommandGroup>
-                          {Suit.getAllValues().map((item, index) => {
-                            return (
-                              <CommandItem
-                                className="flex items-center justify-between text-white aria-selected:text-black text-md"
-                                key={item.id + '-' + index}
-                                value={item.id}
-                                onSelect={() => {
-                                  form.setValue('previewCard.suit', item.id);
-                                  updateSettings({
-                                    ...settings,
-                                    previewCard: {
-                                      ...settings.previewCard,
-                                      suit: item.id,
-                                    },
-                                  });
-                                }}
-                              >
-                                <span>{item.label}</span>
-                                <Check
-                                  className={cn(
-                                    'mr-2 h-4 w-4',
-                                    field.value && item.id === field.value
-                                      ? 'opacity-100'
-                                      : 'opacity-0'
-                                  )}
-                                />
-                              </CommandItem>
-                            );
-                          })}
-                        </CommandGroup>
-                      </CommandList>
-                    </Command>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="previewCard.letter"
-                render={({ field }) => (
-                  <FormItem className="space-y-4">
-                    <FormControl>
-                      <Input
-                        {...field}
-                        maxLength={1}
-                        type="text"
-                        className="text-center bg-black/50 border-white/20 uppercase"
-                        onChange={(e) => onChange(e)}
-                        onBlur={() => onBlur()}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="grid grid-row-1 bg-black/40 border-white/20 rounded-xl">
-              <SectionCard title="" classNameTitle="text-lg">
-                <div className="flex justify-center">
-                  <CardFrontPreview card={previewCard} valueNotLabel={!settings.labelNotValue} />
-                </div>
-              </SectionCard>
-            </div>
-          </div>
+        <div className="mt-7">
+          <FormLabel className="text-base">Other</FormLabel>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="flex flex-row w-1/2">
           <div className="flex items-center justify-center bg-black/50 border-white/20 rounded-xl w-full">
             <FormField
               control={form.control}
               name="showAudioPlayer"
               render={({ field }) => (
                 <FormItem>
-                  <div className="flex flex-row items-center justify-center p-4 gap-4">
-                    <FormLabel>Show Audio Player</FormLabel>
-                    <FormControl>
-                      <Switch
-                        className={`data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-slate-400 items-center rounded-full transition-colors`}
-                        checked={field.value}
-                        onCheckedChange={(checked) => {
-                          field.onChange(checked);
-                          updateSettings({
-                            ...settings,
-                            showAudioPlayer: checked,
-                          });
-                        }}
-                      />
-                    </FormControl>
+                  <div className="flex flex-col items-center justify-center gap-2 sm:gap-1 p-4">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+                      <FormLabel>Show Audio Player</FormLabel>
+
+                      <FormControl>
+                        <Switch
+                          className={`data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-slate-400 items-center rounded-full transition-colors`}
+                          checked={field.value}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            updateSettings({
+                              ...settings,
+                              showAudioPlayer: checked,
+                            });
+                          }}
+                        />
+                      </FormControl>
+                    </div>
+                    <small>(Always visible on Settings page)</small>
                   </div>
                 </FormItem>
               )}
