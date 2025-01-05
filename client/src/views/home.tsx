@@ -1,35 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Loader2 } from 'lucide-react';
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
+import MainMenuButtons from '@/components/main-menu-buttons';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
-import { Button } from '@/components/ui/button';
-import InteractiveHoverButton from '@/components/ui/interactive-hover-button';
 import { PageTransition } from '@/components/ui/page-transition';
 import { cn } from '@/lib/utils';
 import appinfo from '@/utils/appinfo';
-import allConstants from '@/utils/constants';
 
 export default function Home() {
-  const [newGameClicked, setNewGameClicked] = useState(false);
-  const [menuButtonClicked, setMenuButtonClicked] = useState(false);
-  const { menuItems } = allConstants;
-
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>, slug: string) => {
-    switch (slug) {
-      case 'game':
-        setNewGameClicked(true);
-        break;
-      default:
-        setMenuButtonClicked(true);
-        break;
-    }
-  };
-
   return (
     <PageTransition>
       <BackgroundGradientAnimation
@@ -57,42 +37,10 @@ export default function Home() {
             </h3>
           </motion.div>
 
-          <div className="grid-cols-1 space-y-8 w-full max-w-xl">
-            {menuItems.map((item, index) => (
-              <motion.div
-                key={item.label}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                {newGameClicked ? (
-                  <Button
-                    className={cn(
-                      'w-full h-16 text-sm sm:text-md md:text-lg border-0 rounded-full font-semibold',
-                      item.slug === 'game' && item.gradient,
-                      item.slug === 'game' && 'pointer-events-none'
-                    )}
-                    disabled={item.slug !== 'game'}
-                  >
-                    {item.slug === 'game' ? <span>Loading</span> : item.label}{' '}
-                    {item.slug === 'game' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  </Button>
-                ) : (
-                  <Link href={'/' + item.slug}>
-                    <InteractiveHoverButton
-                      text={item.label}
-                      className={cn(
-                        'w-full h-16 xs:text-sm sm:text-md md:text-lg border-0 opacity-75 hover:opacity-100',
-                        menuButtonClicked && 'pointer-events-none'
-                      )}
-                      gradient={item.gradient}
-                      onClick={(e) => handleClick(e, item.slug)}
-                    />
-                  </Link>
-                )}
-              </motion.div>
-            ))}
+          <div className="flex container items-center justify-center mx-auto mt-4">
+            <MainMenuButtons />
           </div>
+
           <div className="container max-w-4xl mx-auto -mt-16">
             <AudioControlsDynamic />
           </div>

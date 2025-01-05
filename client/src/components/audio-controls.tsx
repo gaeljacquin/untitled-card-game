@@ -72,7 +72,7 @@ export default function AudioControls() {
             max={100}
             step={1}
             onValueChange={(value) => setVolume(value[0] / 100)}
-            className="relative w-full bg-lime-200 rounded-xl"
+            className="relative w-full bg-gradient-to-r from-lime-400 via-rose-300 to-fuchsia-400 rounded-xl"
           >
             <span className="absolute h-full bg-emerald-700" />
           </Slider>
