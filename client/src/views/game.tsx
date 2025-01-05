@@ -55,7 +55,9 @@ export default function Game() {
 
         <PlayingField startingCard={startingCard} playerCards={playerCards} />
 
-        <Footer />
+        <div className="mt-32">
+          <Footer />
+        </div>
       </motion.div>
 
       <AudioControlsDynamic />
