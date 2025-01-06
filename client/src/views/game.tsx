@@ -13,7 +13,6 @@ import socketInit from '@/utils/socket-init';
 
 export default function Game() {
   const socket = socketInit();
-  const [startingCard, setStartingCard] = useState<ABCard | null>(null);
   const [playerCards, setPlayerCards] = useState<ABCard[]>([]);
   const game = new ABGame();
 
@@ -23,8 +22,7 @@ export default function Game() {
     });
 
     socket.on('game-init-res', (data) => {
-      const { startingCard, playerCards } = data;
-      setStartingCard(startingCard);
+      const { playerCards } = data;
       setPlayerCards(playerCards);
     });
 
@@ -39,7 +37,7 @@ export default function Game() {
     wsConnect();
   }, []);
 
-  if (!(startingCard && playerCards.length > 0)) {
+  if (!(playerCards.length > 0)) {
     return <Placeholder />;
   }
 
@@ -53,7 +51,7 @@ export default function Game() {
       >
         <BackgroundLogo />
 
-        <PlayingField startingCard={startingCard} playerCards={playerCards} />
+        <PlayingField playerCards={playerCards} />
 
         <div className="mt-32">
           <Footer />
