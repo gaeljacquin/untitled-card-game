@@ -1,13 +1,37 @@
 import Image from 'next/image';
+import { ABCard } from '@annabelle/shared/core/card';
+import { ABCardFaceUp } from '@/components/ab-card';
 import { cn } from '@/lib/utils';
 
-type Props = {
+type CardFrontProps = {
+  card: ABCard;
+  className?: string;
+  valueNotLabel?: boolean;
+};
+
+type CardBackProps = {
   cardBack: string;
   index: number;
   isSelected: boolean;
 };
 
-export default function CardBackPreview(props: Props) {
+export function CardFrontPreview(props: CardFrontProps) {
+  const { card, className, valueNotLabel } = props;
+
+  return (
+    <div
+      className={cn(
+        'relative cursor-pointer preserve-3d',
+        'transition-transform duration-500',
+        className
+      )}
+    >
+      <ABCardFaceUp card={card} valueNotLabel={valueNotLabel} preview={true} />
+    </div>
+  );
+}
+
+export function CardBackPreview(props: CardBackProps) {
   const { cardBack, index, isSelected } = props;
 
   return (
