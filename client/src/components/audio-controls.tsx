@@ -1,6 +1,5 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import {
   ChevronDown,
   ChevronUp,
@@ -16,7 +15,6 @@ import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
 import audioStore from '@/stores/audio';
 import miscStore from '@/stores/misc';
-import settingsStore from '@/stores/settings';
 
 export default function AudioControls() {
   const {
@@ -30,10 +28,8 @@ export default function AudioControls() {
     previousTrack,
     getCurrentTrack,
   } = audioStore();
-  const { audioPlayerOnMain } = settingsStore();
   const { audioPlayerVisible, toggleAudioPlayerVisibility } = miscStore();
   const track = getCurrentTrack() ?? '';
-  const pathname = usePathname();
 
   return (
     <div
@@ -42,8 +38,7 @@ export default function AudioControls() {
         audioPlayerVisible
           ? 'p-2 md:p-4 bg-black/30 backdrop-filter backdrop-blur-lg'
           : 'bg-transparent',
-        'transition-all duration-300 ease-in-out',
-        pathname === '/' && !audioPlayerOnMain && 'hidden'
+        'transition-all duration-300 ease-in-out'
       )}
     >
       <button

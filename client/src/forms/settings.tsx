@@ -421,43 +421,6 @@ export default function Settings() {
           </div>
         </>
 
-        <Separator />
-
-        <>
-          <div className="mt-7">
-            <FormLabel className="text-base">Other</FormLabel>
-          </div>
-          <div className="flex flex-col items-center justify-center bg-black/50 border-white/20 rounded-xl w-1/2 mx-auto">
-            <FormField
-              control={form.control}
-              name="audioPlayerOnMain"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex flex-col items-center gap-2 sm:gap-1 p-4">
-                    <div className="flex flex-col sm:flex-row items-center gap-4">
-                      <FormLabel>Show audio player on main page</FormLabel>
-
-                      <FormControl>
-                        <Switch
-                          className={`data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-slate-400 items-center rounded-full transition-colors`}
-                          checked={field.value}
-                          onCheckedChange={(checked) => {
-                            field.onChange(checked);
-                            updateSettings({
-                              ...settings,
-                              audioPlayerOnMain: checked,
-                            });
-                          }}
-                        />
-                      </FormControl>
-                    </div>
-                  </div>
-                </FormItem>
-              )}
-            />
-          </div>
-        </>
-
         <div className="flex items-center justify-center">
           <Popover>
             <PopoverTrigger asChild>
