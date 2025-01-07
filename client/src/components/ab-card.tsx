@@ -63,14 +63,18 @@ export function ABCardFaceUp(props: Props) {
           <div
             className={cn('absolute top-2 left-2 text-base sm:text-xl font-bold', cardColor.text)}
           >
-            <span className={cn('flex items-center justify-center')}>{sub}</span>
-            <SuitIcon className={cn('h-6 w-6')} />
+            <span className={cn('flex items-center justify-center', !preview && 'text-sm')}>
+              {sub}
+            </span>
+            <SuitIcon className={cn(preview ? 'h-6 w-6' : 'h-4 w-4')} />
           </div>
 
           <div
             className={cn('absolute top-3 right-2 text-base sm:text-xl font-bold', cardColor.text)}
           >
-            {showUwu && rankSwitchLetter && <FaChessQueen className={cn('h-6 w-6')} />}
+            {showUwu && rankSwitchLetter && (
+              <FaChessQueen className={cn(preview ? 'h-6 w-6' : 'h-4 w-4')} />
+            )}
           </div>
 
           <div
@@ -79,8 +83,10 @@ export function ABCardFaceUp(props: Props) {
               cardColor.text
             )}
           >
-            <span className={cn('flex items-center justify-center')}>{sub}</span>
-            <SuitIcon className={cn('h-6 w-6')} />
+            <span className={cn('flex items-center justify-center', !preview && 'text-sm')}>
+              {sub}
+            </span>
+            <SuitIcon className={cn(preview ? 'h-6 w-6' : 'h-4 w-4')} />
           </div>
 
           <div
@@ -89,7 +95,9 @@ export function ABCardFaceUp(props: Props) {
               cardColor.text
             )}
           >
-            {showUwu && rankSwitchLetter && <FaChessQueen className={cn('h-6 w-6')} />}
+            {showUwu && rankSwitchLetter && (
+              <FaChessQueen className={cn(preview ? 'h-6 w-6' : 'h-4 w-4')} />
+            )}
           </div>
 
           <div className="relative flex items-center justify-center h-full w-full">

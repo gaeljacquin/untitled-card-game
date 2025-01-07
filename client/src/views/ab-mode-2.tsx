@@ -12,7 +12,7 @@ import PlayingField from '@/components/playing-field';
 import socketInit from '@/utils/socket-init';
 
 const MODE_INFO = {
-  title: 'Poker 5x5',
+  title: 'Poker (5 x 5)',
   description: 'Make the best poker hands in a 5 x 5 grid!',
   gridSize: 5,
   className: 'grid-cols-[auto,repeat(5,1fr)]',

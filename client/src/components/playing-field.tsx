@@ -120,6 +120,11 @@ export default function PlayingField(props: Props) {
             </Button>
           </div>
         </div>
+
+        <div className="flex flex-row items-center justify-center gap-8 mt-8">
+          <Button>How to Play</Button>
+          <Button>Discard Pile</Button>
+        </div>
       </SectionCard>
     </div>
   );
