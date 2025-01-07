@@ -1,68 +1,46 @@
 import { v4 as uuidv4 } from 'uuid';
-import { ABWord } from './word';
+import { ABCards } from './card';
+import { ABMode } from './mode';
+import { ABSeed } from './seed';
 
 interface IABGame {
   id: string;
-  createdAt: Date;
+  mode: ABMode;
   played: boolean;
   won: boolean;
+  createdAt: Date;
 }
 
 export class ABGame implements IABGame {
   readonly id: string;
-  readonly createdAt: Date;
+  readonly mode: ABMode;
   public played: boolean;
   public won: boolean;
-  private discards: number;
-  private words: ABWord[];
-  public score: number;
+  public groupedABCards: Array<ABCards>;
+  public dealtABCardGroups: Array<ABCards>;
+  public grid: Array<ABCards>;
+  public discardedABCards: ABCards;
+  readonly createdAt: Date;
 
-  constructor() {
+  constructor(mode: ABMode) {
+    const seed = new ABSeed(mode);
+    const gridSize = mode.gridSize;
     this.id = uuidv4();
-    this.createdAt = new Date();
-    this.words = [];
+    this.mode = mode;
+    this.groupedABCards = seed.groupedABCards;
+    this.dealtABCardGroups = [];
+    this.discardedABCards = [];
+    this.grid = Array.from({ length: gridSize }, () => Array(gridSize).fill([null]));
     this.played = false;
     this.won = false;
-    this.discards = 0;
-    this.score = 0;
+    this.createdAt = new Date();
   }
 
   public setPlayed() {
     this.played = true;
   }
 
-  public addWord(word: ABWord) {
-    this.words.push(word);
-  }
-
-  public getWords() {
-    const validWords = [];
-    const invalidWords = [];
-
-    for (const word of this.words) {
-      if (word.getValid()) {
-        validWords.push(word);
-      } else {
-        invalidWords.push(word);
-      }
-    }
-
-    return { validWords, invalidWords };
-  }
-
-  public getScore() {
-    return this.score;
-  }
-
-  public setScore(score: number) {
-    this.score = score;
-  }
-
-  public getDiscards() {
-    return this.discards;
-  }
-
-  public setDiscards(discards: number) {
-    this.discards = discards;
+  public setWon() {
+    this.won = true;
   }
 }

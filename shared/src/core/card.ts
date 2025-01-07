@@ -18,6 +18,8 @@ const alphabet = vowels.concat(consonants);
 
 type Letter = (typeof alphabet)[number];
 
+type LetterOptions = 'vowel' | 'consonant' | 'any';
+
 export class Card implements ICard {
   public readonly id: string;
   public readonly rank: Rank;
@@ -42,18 +44,17 @@ export class ABCard extends Card {
   public readonly letter: Letter;
   protected played: boolean = false;
   private discard: boolean = false;
-  public readonly starting: boolean;
 
-  constructor(starting: boolean = false, joker: boolean = false) {
-    const rank = joker ? Rank.setJoker() : Rank.getRandom();
-    const suit = joker ? Suit.setJoker() : Suit.getRandom();
+  constructor(
+    _rank?: Rank | null,
+    _suit?: Suit | null,
+    joker: boolean = false,
+    letterOption: LetterOptions = 'any'
+  ) {
+    const rank = joker ? Rank.setJoker() : (_rank ?? Rank.getRandom());
+    const suit = joker ? Suit.setJoker() : (_suit ?? Suit.getRandom());
     super(rank, suit);
-    this.letter = joker ? '*' : this.getRandomLetter(starting)!;
-    this.starting = starting;
-  }
-
-  getStarting(): boolean {
-    return this.starting;
+    this.letter = joker ? '*' : this.getRandomLetter(letterOption)!;
   }
 
   getPlayed(): boolean {
@@ -84,17 +85,27 @@ export class ABCard extends Card {
     this.discard = value;
   }
 
-  getRandomLetter(starting: boolean = false): Letter {
-    const filteredAlphabet = starting
-      ? alphabet.filter((letter) => !nonStarters.has(letter.toLocaleLowerCase()))
-      : alphabet;
+  getRandomLetter(letterOption: LetterOptions = 'any'): Letter {
+    let list;
+
+    switch (letterOption) {
+      case 'vowel':
+        list = vowels;
+        break;
+      case 'consonant':
+        list = consonants;
+        break;
+      case 'any':
+        list = alphabet;
+        break;
+      default:
+        throw new Error(`Invalid option: ${letterOption}`);
+    }
+
+    const filteredAlphabet = list.filter((letter) => !nonStarters.has(letter));
     const randomIndex = getRandomIndex(filteredAlphabet);
 
     return filteredAlphabet[randomIndex];
-  }
-
-  public isVowel(): boolean {
-    return vowels.includes(this.letter.toLocaleLowerCase());
   }
 }
 
@@ -103,8 +114,8 @@ export class ABCardPlus extends ABCard {
   declare public suit: Suit;
   declare public letter: Letter;
 
-  constructor(starting: boolean = false) {
-    super(starting);
+  constructor() {
+    super();
   }
 
   getRank(): Rank {
@@ -137,7 +148,7 @@ export class ABJoker extends ABCard {
   private playable: boolean = false;
 
   constructor() {
-    super(false, true);
+    super(null, null, false);
     this.icon = this.getRandomIcon();
   }
 
@@ -155,3 +166,6 @@ export class ABJoker extends ABCard {
     return jokerIcons[randomIndex];
   }
 }
+
+export type AnyABCard = ABCard | ABJoker;
+export type ABCards = AnyABCard[];

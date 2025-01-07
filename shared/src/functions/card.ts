@@ -8,7 +8,7 @@ export function dealCards(amount: number) {
 
   const newCards = Array(amount)
     .fill(null)
-    .map(() => new ABCard(false));
+    .map(() => new ABCard(null, null, false));
 
   return newCards;
 }

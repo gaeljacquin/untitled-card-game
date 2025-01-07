@@ -61,7 +61,7 @@ export default function ABChecker() {
       if (abWord[index] === '*') {
         abCard = new ABJoker();
       } else {
-        abCard = new ABCardPlus(false);
+        abCard = new ABCardPlus();
         abCard.setLetter(abWord[index]);
       }
 

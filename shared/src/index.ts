@@ -1,7 +1,7 @@
 export * from './core/rank';
 export * from './core/suit';
 export * from './core/card';
-export * from './core/word';
+export * from './core/mode';
 export * from './core/game';
 
 export * from './constants/other';
