@@ -60,7 +60,7 @@ export default function PlayingField(props: Props) {
         description={description}
         className="flex flex-col text-center text-white p-4"
       >
-        <div className="p-4 sm:p-8 flex flex-wrap gap-2 sm:gap-4 items-center justify-start -mt-5">
+        <div className="p-4 sm:p-8 flex flex-wrap items-center justify-center -mt-5">
           <div className="flex flex-col sm:flex-row gap-8">
             <div className={cn(gridClass, 'gap-2 bg-amber-950/30 rounded-2xl p-8')}>
               <div></div>
@@ -92,14 +92,35 @@ export default function PlayingField(props: Props) {
                 </Fragment>
               ))}
             </div>
-
-            <div className=" bg-amber-950/30 rounded-2xl p-8">
-              <DiscardPile cards={[]} />
-            </div>
           </div>
         </div>
 
         <div className="flex flex-row items-center justify-center gap-8">
+          <div className="flex flex-col items-center justify-center gap-8 mt-8">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button className="bg-green-800 hover:bg-green-700 border border-2 border-slate-400">
+                  How to Play
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80">
+                <div>
+                  <p>How to Play instructions here</p>
+                </div>
+              </PopoverContent>
+            </Popover>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button className="bg-sky-800 hover:bg-sky-700 border border-2 border-slate-400">
+                  Discard Pile
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80">
+                <DiscardPile cards={[]} />
+              </PopoverContent>
+            </Popover>
+          </div>
+
           <div className="flex-[1_1_auto] basis-auto max-w-[70%] mt-7">
             <div className="flex flex-row items-center justify-center gap-4">
               <SortableContext
@@ -118,29 +139,6 @@ export default function PlayingField(props: Props) {
               Discard
             </Button>
           </div>
-        </div>
-
-        <div className="flex flex-row items-center justify-center gap-8 mt-8">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button>How to Play</Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80">
-              <div>
-                <p>How to Play instructions here</p>
-              </div>
-            </PopoverContent>
-          </Popover>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button>Discard Pile</Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80">
-              <div>
-                <p>Discard Pile here</p>
-              </div>
-            </PopoverContent>
-          </Popover>
         </div>
       </SectionCard>
     </div>
