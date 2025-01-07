@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { ABMode } from '@annabelle/shared/core/mode';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,24 +25,7 @@ export default function ModeSelect(props: Props) {
   const { selectMode, openSelectMode, newGameGradient, newGameHoverGradient } = props;
   const [anyButtonClicked, setAnyButtonClicked] = useState(false);
   const [clickedButton, setClickedButton] = useState<string>();
-
-  const modes = [
-    {
-      title: 'Poker (4 x 4)',
-      description: 'Make the best poker hands in a 4 x 4 grid!',
-      slug: 'mode-1',
-    },
-    {
-      title: 'Poker (5 x 5)',
-      description: 'Make the best poker hands in a 5 x 5 grid!',
-      slug: 'mode-2',
-    },
-    {
-      title: 'Words (5 x 5)',
-      description: 'Make the highest scoring words in a 5 x 5 grid!',
-      slug: 'mode-3',
-    },
-  ];
+  const modes = ABMode.getModes();
 
   const handleClose = () => {
     if (!anyButtonClicked) {
@@ -63,7 +47,7 @@ export default function ModeSelect(props: Props) {
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col items-center justify-center gap-8">
-          {modes.map((item) => (
+          {modes.map((item: ABMode) => (
             <Link
               key={item.slug}
               href={'/game/' + item.slug}

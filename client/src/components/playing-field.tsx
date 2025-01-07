@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useState } from 'react';
 import { IGridCell } from '@annabelle/shared/core/grid-cell';
+import { ABMode } from '@annabelle/shared/core/mode';
 import { ABCards, AnyABCard } from '@annabelle/shared/core/word';
 import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 import { motion } from 'framer-motion';
@@ -16,18 +17,13 @@ import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
 
 type Props = {
-  modeInfo: {
-    title: string;
-    description: string;
-    gridSize: number;
-    className: string;
-  };
+  mode: ABMode;
   playerCards: ABCards;
 };
 
 export default function PlayingField(props: Props) {
-  const { playerCards, modeInfo } = props;
-  const { title, description, gridSize, className } = modeInfo;
+  const { playerCards, mode } = props;
+  const { title, description, gridSize, gridClass } = mode;
   const { labelNotValue } = settingsStore();
   const [grid, setGrid] = useState<IGridCell[][]>([]);
 
@@ -64,7 +60,7 @@ export default function PlayingField(props: Props) {
       >
         <div className="p-4 sm:p-8 flex flex-wrap gap-2 sm:gap-4 items-center justify-start -mt-5">
           <div className="flex flex-col sm:flex-row gap-8">
-            <div className={cn('grid gap-2 bg-amber-950/30 rounded-2xl p-8', className)}>
+            <div className={cn('grid gap-2 bg-amber-950/30 rounded-2xl p-8', gridClass)}>
               <div></div>
               {Array.from({ length: gridSize }, (_, colIndex) => (
                 <motion.div
