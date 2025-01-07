@@ -56,7 +56,7 @@ export default function ModeSelect(props: Props) {
               <Button
                 type="button"
                 className={cn(
-                  'w-full h-auto px-7 py-4 text-md',
+                  'w-full h-auto px-7 py-4 text-md rounded-full',
                   anyButtonClicked && clickedButton === item.slug ? newGameGradient : 'bg-gray-700',
                   newGameHoverGradient
                 )}

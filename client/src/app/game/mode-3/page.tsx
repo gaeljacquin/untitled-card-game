@@ -1,12 +1,10 @@
-import { ABMode } from '@annabelle/shared/core/mode';
 import ReturnMainMenu from '@/components/return-main-menu';
 import { PageTransition } from '@/components/ui/page-transition';
 import ABMode3 from '@/views/ab-mode-3';
 
 export default function Page() {
   const modeSlug = 'mode-3';
-  const mode = ABMode.getMode(modeSlug)!;
-  const gridClass = `grid grid-cols-[auto,repeat(${mode.gridSize},1fr)]`;
+  const gridClass = 'grid grid-cols-[auto,repeat(5,1fr)]';
 
   return (
     <PageTransition>

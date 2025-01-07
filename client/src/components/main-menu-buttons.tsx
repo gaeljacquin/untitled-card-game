@@ -13,7 +13,6 @@ export default function MainMenuButtons() {
   const newGameGradient = 'bg-gradient-to-r from-lime-700 via-rose-700 to-violet-500';
   const newGameHoverGradient =
     'hover:bg-gradient-to-r hover:from-lime-700 hover:via-rose-700 hover:to-violet-500';
-
   const menuItems = [
     {
       label: 'New Game',
@@ -29,11 +28,6 @@ export default function MainMenuButtons() {
       label: 'Credits',
       slug: 'credits',
       gradient: 'bg-gradient-to-r from-fuchsia-800 to-sky-700',
-    },
-    {
-      label: 'AB Tools',
-      slug: 'ab-tools',
-      gradient: 'bg-gradient-to-br from-red-800 via-rose-500 to-slate-700',
     },
   ];
 

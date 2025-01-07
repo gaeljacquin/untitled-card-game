@@ -7,8 +7,7 @@ import { SuitId } from '@annabelle/shared/core/suit';
 import { FaChessQueen } from 'react-icons/fa6';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
-import settingsStore from '@/stores/settings';
-import allConstants from '@/utils/constants';
+import settingsStore, { cardBacks, cardFronts } from '@/stores/settings';
 
 type Props = {
   card: ABCard;
@@ -22,7 +21,6 @@ export function ABCardFaceUp(props: Props) {
   const suit = card.suit;
   const letter = card.letter;
   const { cardFront: cardFrontIndex, rankSwitchLetter } = settingsStore();
-  const { cardFronts } = allConstants;
   const cardFront = cardFronts[cardFrontIndex];
   const cardColor = suit.isRed
     ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
@@ -63,7 +61,9 @@ export function ABCardFaceUp(props: Props) {
           <div
             className={cn('absolute top-2 left-2 text-base sm:text-xl font-bold', cardColor.text)}
           >
-            <span className={cn('flex items-center justify-center', !preview && 'text-sm')}>
+            <span
+              className={cn('flex items-center justify-center uppercase', !preview && 'text-sm')}
+            >
               {sub}
             </span>
             <SuitIcon className={cn(preview ? 'h-6 w-6' : 'h-4 w-4')} />
@@ -83,7 +83,9 @@ export function ABCardFaceUp(props: Props) {
               cardColor.text
             )}
           >
-            <span className={cn('flex items-center justify-center', !preview && 'text-sm')}>
+            <span
+              className={cn('flex items-center justify-center uppercase', !preview && 'text-sm')}
+            >
               {sub}
             </span>
             <SuitIcon className={cn(preview ? 'h-6 w-6' : 'h-4 w-4')} />
@@ -140,7 +142,6 @@ export function ABCardFaceUp(props: Props) {
 
 export function ABCardFaceDown() {
   const { cardBack } = settingsStore();
-  const { cardBacks } = allConstants;
 
   return (
     <div className={cn('relative w-36 h-56 cursor-pointer preserve-3d', 'scale-105')}>

@@ -1,8 +1,6 @@
 import * as z from 'zod';
+import { cardBacks, cardFronts } from '@/stores/settings';
 import { Hydrate } from '@/types/hydrate';
-import allConstants from '@/utils/constants';
-
-const { cardBacks, cardFronts } = allConstants;
 
 export const settingsSchema = z.object({
   cardBack: z.number().min(0).max(cardBacks.length),

@@ -21,15 +21,13 @@ import { Switch } from '@/components/ui/switch';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import settingsStore, { initialSettings } from '@/stores/settings';
+import settingsStore, { cardBacks, cardFronts, initialSettings } from '@/stores/settings';
 import { FormData, settingsSchema } from '@/types/settings';
-import allConstants from '@/utils/constants';
 
 export default function Settings() {
   const { _hasHydrated, getSettings, updateSettings, resetSettings } = settingsStore();
   const settings = getSettings();
   const { toast } = useToast();
-  const { cardBacks, cardFronts, topRightToaster } = allConstants;
 
   const form = useForm<FormData>({
     resolver: zodResolver(settingsSchema),
@@ -53,7 +51,7 @@ export default function Settings() {
       title: 'Settings saved',
       duration: 3000,
       action: <ToastAction altText="Clear">Clear</ToastAction>,
-      className: cn(topRightToaster),
+      className: cn('top-right-toaster'),
     });
   }
 
@@ -65,7 +63,7 @@ export default function Settings() {
       title: 'Settings reset to default',
       duration: 3000,
       action: <ToastAction altText="Clear">Clear</ToastAction>,
-      className: cn(topRightToaster),
+      className: cn('top-right-toaster'),
     });
   }
 
