@@ -1,6 +1,6 @@
 const appinfo = {
   title: 'Annabelle',
-  description: 'A deck-building and word-building roguelite',
+  description: '',
 };
 
 export default appinfo;
