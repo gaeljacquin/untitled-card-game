@@ -1,6 +1,5 @@
 import { IconType } from 'react-icons';
 import { v4 as uuidv4 } from 'uuid';
-import { nonStarters } from '../constants/other';
 import { jokerIcons } from '../constants/suit-icon';
 import { getRandomIndex } from '../functions/shufflers';
 import { Rank } from './rank';
@@ -86,26 +85,25 @@ export class ABCard extends Card {
   }
 
   getRandomLetter(letterOption: LetterOptions = 'any'): Letter {
-    let list;
+    let letterList;
 
     switch (letterOption) {
       case 'vowel':
-        list = vowels;
+        letterList = vowels;
         break;
       case 'consonant':
-        list = consonants;
+        letterList = consonants;
         break;
       case 'any':
-        list = alphabet;
+        letterList = alphabet;
         break;
       default:
         throw new Error(`Invalid option: ${letterOption}`);
     }
 
-    const filteredAlphabet = list.filter((letter) => !nonStarters.has(letter));
-    const randomIndex = getRandomIndex(filteredAlphabet);
+    const randomIndex = getRandomIndex(letterList);
 
-    return filteredAlphabet[randomIndex];
+    return letterList[randomIndex];
   }
 }
 

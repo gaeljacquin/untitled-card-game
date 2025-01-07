@@ -28,9 +28,9 @@ export class ABGame implements IABGame {
     this.id = uuidv4();
     this.mode = mode;
     this.groupedABCards = seed.groupedABCards;
-    this.dealtABCardGroups = [];
-    this.discardedABCards = [];
+    this.dealtABCardGroups = Array.from({ length: gridSize }, () => Array(gridSize).fill([null]));
     this.grid = Array.from({ length: gridSize }, () => Array(gridSize).fill([null]));
+    this.discardedABCards = [];
     this.played = false;
     this.won = false;
     this.createdAt = new Date();
@@ -42,5 +42,12 @@ export class ABGame implements IABGame {
 
   public setWon() {
     this.won = true;
+  }
+
+  public deal(index: number) {
+    const abCardGroup = this.groupedABCards[index];
+    this.dealtABCardGroups[index] = abCardGroup;
+
+    return abCardGroup;
   }
 }

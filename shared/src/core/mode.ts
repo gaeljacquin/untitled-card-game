@@ -14,7 +14,6 @@ export class ABMode implements IABMode {
   public readonly description: string;
   public readonly slug: string;
   public readonly gridSize: number;
-  public readonly gridClass: string;
 
   constructor(
     type: IABModeType,
@@ -28,7 +27,6 @@ export class ABMode implements IABMode {
     this.description = description;
     this.slug = slug;
     this.gridSize = gridSize;
-    this.gridClass = `grid-cols-[auto,repeat(${gridSize},1fr)]`;
   }
 
   private static readonly modes = [

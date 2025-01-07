@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { ABCards } from '@annabelle/shared/core/card';
-import { ABGame } from '@annabelle/shared/core/game';
-import { ABMode } from '@annabelle/shared/core/mode';
 import { motion } from 'framer-motion';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import BackgroundLogo from '@/components/background-logo';
@@ -14,14 +12,13 @@ import socketInit from '@/utils/socket-init';
 
 type Props = {
   modeSlug: string;
+  gridClass: string;
 };
 
 export default function ABMode1(props: Props) {
-  const { modeSlug } = props;
+  const { modeSlug, gridClass } = props;
   const socket = socketInit();
-  const [playerCards, setPlayerCards] = useState<ABCards>([]);
-  const mode = ABMode.getMode(modeSlug)!;
-  const game = new ABGame(mode);
+  const [abCards, setABCards] = useState<ABCards>([]);
 
   const wsConnect = () => {
     socket.on('connect', () => {
@@ -29,8 +26,8 @@ export default function ABMode1(props: Props) {
     });
 
     socket.on('game-init-res', (data) => {
-      const { playerCards } = data;
-      setPlayerCards(playerCards);
+      const { abCards } = data;
+      setABCards(abCards);
     });
 
     return () => {
@@ -40,11 +37,11 @@ export default function ABMode1(props: Props) {
   };
 
   useEffect(() => {
-    socket.emit('game-init', { game });
+    socket.emit('game-init', { modeSlug });
     wsConnect();
   }, []);
 
-  if (!(playerCards.length > 0)) {
+  if (!(abCards.length > 0)) {
     return <Placeholder />;
   }
 
@@ -58,7 +55,7 @@ export default function ABMode1(props: Props) {
       >
         <BackgroundLogo />
 
-        <PlayingField mode={mode} playerCards={playerCards} />
+        <PlayingField modeSlug={modeSlug} abCards={abCards} gridClass={gridClass} />
 
         <div className="mt-32">
           <Footer />

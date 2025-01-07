@@ -17,13 +17,15 @@ import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
 
 type Props = {
-  mode: ABMode;
-  playerCards: ABCards;
+  modeSlug: string;
+  abCards: ABCards;
+  gridClass: string;
 };
 
 export default function PlayingField(props: Props) {
-  const { playerCards, mode } = props;
-  const { title, description, gridSize, gridClass } = mode;
+  const { modeSlug, abCards, gridClass } = props;
+  const mode = ABMode.getMode(modeSlug)!;
+  const { title, description, gridSize } = mode;
   const { labelNotValue } = settingsStore();
   const [grid, setGrid] = useState<IGridCell[][]>([]);
 
@@ -47,7 +49,7 @@ export default function PlayingField(props: Props) {
     setGrid(newGrid);
   };
 
-  if (!(playerCards.length > 0)) {
+  if (!(abCards.length > 0)) {
     return <Placeholder />;
   }
 
@@ -60,7 +62,7 @@ export default function PlayingField(props: Props) {
       >
         <div className="p-4 sm:p-8 flex flex-wrap gap-2 sm:gap-4 items-center justify-start -mt-5">
           <div className="flex flex-col sm:flex-row gap-8">
-            <div className={cn('grid gap-2 bg-amber-950/30 rounded-2xl p-8', gridClass)}>
+            <div className={cn(gridClass, 'gap-2 bg-amber-950/30 rounded-2xl p-8')}>
               <div></div>
               {Array.from({ length: gridSize }, (_, colIndex) => (
                 <motion.div
@@ -101,10 +103,10 @@ export default function PlayingField(props: Props) {
           <div className="flex-[1_1_auto] basis-auto max-w-[70%] mt-7">
             <div className="flex flex-row items-center justify-center gap-4">
               <SortableContext
-                items={playerCards.map((item) => item.id)}
+                items={abCards.map((item) => item.id)}
                 strategy={horizontalListSortingStrategy}
               >
-                {(playerCards as ABCards).map((item: AnyABCard) => (
+                {(abCards as ABCards).map((item: AnyABCard) => (
                   <ABCardFaceUp key={item.id} card={item} valueNotLabel={!labelNotValue} />
                 ))}
               </SortableContext>

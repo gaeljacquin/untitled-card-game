@@ -9,10 +9,8 @@ import {
 import { Server, Socket } from 'socket.io';
 import cors from '@/utils/cors';
 import { ABGame } from '@annabelle/shared/dist/core/game';
-import { dealCards } from '@annabelle/shared/dist/functions/card';
-import { maxDeal } from '@annabelle/shared/dist/constants/other';
 import { GameService } from '@/game/game.service';
-import { ABWord } from '@annabelle/shared/dist/core/word';
+import { ABMode } from '@annabelle/shared/dist/core/mode';
 
 @WebSocketGateway({ cors })
 export class GameGateway
@@ -50,15 +48,14 @@ export class GameGateway
   @SubscribeMessage('game-init')
   async gameInit(client: Socket, payload: any): Promise<void> {
     console.info(`Message received from client ${client.id}: ${payload}`);
-    const game = payload.game;
-    const abWord = new ABWord();
-    const startingCard = abWord.getStartingCard();
-    const playerCards = dealCards(maxDeal);
+    const { modeSlug } = payload;
+    const mode = ABMode.getMode(modeSlug);
+    const abGame = new ABGame(mode);
+    const abCards = abGame.deal(0);
     const emit = {
-      startingCard,
-      playerCards,
+      abCards,
     };
-    this.abGameMap.set(client.id, { ...game, ...emit });
+    this.abGameMap.set(client.id, abGame);
 
     client.emit('game-init-res', {
       ...emit,
