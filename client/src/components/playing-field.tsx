@@ -11,6 +11,7 @@ import { GridCell } from '@/components/grid-cell';
 import Placeholder from '@/components/placeholder';
 import SectionCard from '@/components/section-card';
 import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
 
@@ -122,8 +123,26 @@ export default function PlayingField(props: Props) {
         </div>
 
         <div className="flex flex-row items-center justify-center gap-8 mt-8">
-          <Button>How to Play</Button>
-          <Button>Discard Pile</Button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button>How to Play</Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80">
+              <div>
+                <p>How to Play instructions here</p>
+              </div>
+            </PopoverContent>
+          </Popover>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button>Discard Pile</Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80">
+              <div>
+                <p>Discard Pile here</p>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
       </SectionCard>
     </div>
