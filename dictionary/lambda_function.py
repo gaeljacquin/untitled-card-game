@@ -1,15 +1,16 @@
 import json
 import re
 
-from nltk.corpus import words
+with open('dictionary.json', 'r') as file:
+    data = json.load(file)
 
-DICTIONARY = set(words.words())
+dictionary = list(data.keys())
 
 def check_ab_word(word):
     process_asterisks = '^' + word.replace('*', '.') + '$'
     pattern = re.compile(process_asterisks)
     matches = [
-        entry for entry in DICTIONARY
+        entry for entry in dictionary
         if pattern.match(entry)
     ]
     valid = len(matches) > 0
@@ -21,7 +22,7 @@ def check_ab_prefix(prefix):
     process_asterisks = '^' + prefix.replace('*', '.')
     pattern = re.compile(process_asterisks)
     matches = [
-        entry for entry in DICTIONARY
+        entry for entry in dictionary
         if pattern.match(entry)
     ]
     valid = len(matches) > 0
