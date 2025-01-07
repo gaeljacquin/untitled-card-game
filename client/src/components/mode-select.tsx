@@ -43,7 +43,7 @@ export default function ModeSelect(props: Props) {
           <DialogDescription
             className={cn('text-center text-white/80', anyButtonClicked && 'text-white/70')}
           >
-            Make the best poker hands or highest scoring words in a grid!
+            Fill a given grid with the best poker hands or highest scoring words!
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col items-center justify-center gap-8">

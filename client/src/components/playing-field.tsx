@@ -23,7 +23,7 @@ type Props = {
 };
 
 export default function PlayingField(props: Props) {
-  const { modeSlug, abCards, gridClass } = props;
+  const { modeSlug, abCards, gridClass } = props; // passing gridClass prop with the grid size hardcoded as Tailwind does not like dynamic class names
   const mode = ABMode.getMode(modeSlug)!;
   const { title, description, gridSize } = mode;
   const { labelNotValue } = settingsStore();

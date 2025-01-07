@@ -12,11 +12,10 @@ import socketInit from '@/utils/socket-init';
 
 type Props = {
   modeSlug: string;
-  gridClass: string;
 };
 
 export default function ABMode1(props: Props) {
-  const { modeSlug, gridClass } = props;
+  const { modeSlug } = props;
   const socket = socketInit();
   const [abCards, setABCards] = useState<ABCards>([]);
 
@@ -55,7 +54,11 @@ export default function ABMode1(props: Props) {
       >
         <BackgroundLogo />
 
-        <PlayingField modeSlug={modeSlug} abCards={abCards} gridClass={gridClass} />
+        <PlayingField
+          modeSlug={modeSlug}
+          abCards={abCards}
+          gridClass="grid grid-cols-[auto,repeat(4,1fr)]"
+        />
 
         <div className="mt-32">
           <Footer />
