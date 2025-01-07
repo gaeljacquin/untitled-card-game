@@ -11,7 +11,14 @@ import Placeholder from '@/components/placeholder';
 import PlayingField from '@/components/playing-field';
 import socketInit from '@/utils/socket-init';
 
-export default function Game() {
+const MODE_INFO = {
+  title: 'Poker 4x4',
+  description: 'Make the best poker hands in a 4 x 4 grid!',
+  gridSize: 4,
+  className: 'grid-cols-[auto,repeat(4,1fr)]',
+};
+
+export default function ABMode1() {
   const socket = socketInit();
   const [playerCards, setPlayerCards] = useState<ABCard[]>([]);
   const game = new ABGame();
@@ -51,7 +58,7 @@ export default function Game() {
       >
         <BackgroundLogo />
 
-        <PlayingField playerCards={playerCards} />
+        <PlayingField modeInfo={MODE_INFO} playerCards={playerCards} />
 
         <div className="mt-32">
           <Footer />

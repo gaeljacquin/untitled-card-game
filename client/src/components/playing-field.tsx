@@ -11,16 +11,22 @@ import { GridCell } from '@/components/grid-cell';
 import Placeholder from '@/components/placeholder';
 import SectionCard from '@/components/section-card';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
 
 type Props = {
+  modeInfo: {
+    title: string;
+    description: string;
+    gridSize: number;
+    className: string;
+  };
   playerCards: ABCards;
 };
 
-const GRID_SIZE = 4;
-
 export default function PlayingField(props: Props) {
-  const { playerCards } = props;
+  const { playerCards, modeInfo } = props;
+  const { title, description, gridSize, className } = modeInfo;
   const { labelNotValue } = settingsStore();
   const [grid, setGrid] = useState<IGridCell[][]>([]);
 
@@ -29,10 +35,10 @@ export default function PlayingField(props: Props) {
   }, []);
 
   const initializeGrid = () => {
-    const newGrid: IGridCell[][] = Array(GRID_SIZE)
+    const newGrid: IGridCell[][] = Array(gridSize)
       .fill(null)
       .map((_, rowIndex) =>
-        Array(GRID_SIZE)
+        Array(gridSize)
           .fill(null)
           .map((_, columnIndex) => ({
             id: `cell-${rowIndex}-${columnIndex}`,
@@ -50,12 +56,16 @@ export default function PlayingField(props: Props) {
 
   return (
     <div className="flex w-full mx-auto items-center justify-center">
-      <SectionCard title="Poker 4x4" className="flex flex-col text-center text-white p-4">
+      <SectionCard
+        title={title}
+        description={description}
+        className="flex flex-col text-center text-white p-4"
+      >
         <div className="p-4 sm:p-8 flex flex-wrap gap-2 sm:gap-4 items-center justify-start -mt-5">
           <div className="flex flex-col sm:flex-row gap-8">
-            <div className="grid grid-cols-[auto,repeat(4,1fr)] gap-2 bg-amber-950/30 rounded-2xl p-8">
+            <div className={cn('grid gap-2 bg-amber-950/30 rounded-2xl p-8', className)}>
               <div></div>
-              {Array.from({ length: GRID_SIZE }, (_, colIndex) => (
+              {Array.from({ length: gridSize }, (_, colIndex) => (
                 <motion.div
                   key={`col-${colIndex}`}
                   className="text-center font-semibold"
