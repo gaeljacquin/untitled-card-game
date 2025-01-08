@@ -1,10 +1,10 @@
 'use client';
 
-import { AnyABCard } from '@annabelle/shared/core/word';
+import { ABCards } from '@annabelle/shared/core/word';
 import { AnimatePresence, motion } from 'framer-motion';
 
 interface Props {
-  cards: AnyABCard[];
+  cards: ABCards;
 }
 
 export function DiscardPile(props: Props) {

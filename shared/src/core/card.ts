@@ -1,6 +1,4 @@
-import { IconType } from 'react-icons';
 import { v4 as uuidv4 } from 'uuid';
-import { jokerIcons } from '../constants/suit-icon';
 import { getRandomIndex } from '../functions/shufflers';
 import { Rank } from './rank';
 import { Suit } from './suit';
@@ -41,19 +39,22 @@ export class Card implements ICard {
 
 export class ABCard extends Card {
   public readonly letter: Letter;
-  protected played: boolean = false;
+  public played: boolean = false;
   private discard: boolean = false;
+  public faceUp: boolean;
 
   constructor(
     _rank?: Rank | null,
     _suit?: Suit | null,
     joker: boolean = false,
-    letterOption: LetterOptions = 'any'
+    letterOption: LetterOptions = 'any',
+    faceUp: boolean = true
   ) {
     const rank = joker ? Rank.setJoker() : (_rank ?? Rank.getRandom());
     const suit = joker ? Suit.setJoker() : (_suit ?? Suit.getRandom());
     super(rank, suit);
     this.letter = joker ? '*' : this.getRandomLetter(letterOption)!;
+    this.faceUp = faceUp;
   }
 
   getPlayed(): boolean {
@@ -64,15 +65,15 @@ export class ABCard extends Card {
     return this.discard;
   }
 
-  public getLetter(): Letter {
+  getLetter(): Letter {
     return this.letter;
   }
 
-  public getRank(): Rank {
+  getRank(): Rank {
     return this.rank;
   }
 
-  public getSuit(): Suit {
+  getSuit(): Suit {
     return this.suit;
   }
 
@@ -141,29 +142,4 @@ export class ABCardPlus extends ABCard {
   }
 }
 
-export class ABJoker extends ABCard {
-  public icon: IconType;
-  private playable: boolean = false;
-
-  constructor() {
-    super(null, null, false);
-    this.icon = this.getRandomIcon();
-  }
-
-  getPlayable(): boolean {
-    return this.playable;
-  }
-
-  setPlayable(value: boolean) {
-    this.playable = value && this.played;
-  }
-
-  getRandomIcon(): IconType {
-    const randomIndex = getRandomIndex(jokerIcons);
-
-    return jokerIcons[randomIndex];
-  }
-}
-
-export type AnyABCard = ABCard | ABJoker;
-export type ABCards = AnyABCard[];
+export type ABCards = ABCard[];

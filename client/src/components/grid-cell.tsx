@@ -3,6 +3,7 @@
 import { IGridCell } from '@annabelle/shared/core/grid-cell';
 import { useDroppable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
+import ABCardComp from '@/components/ab-card';
 
 interface Props {
   cell: IGridCell;
@@ -33,7 +34,7 @@ export function GridCell(props: Props) {
             damping: 30,
           }}
         >
-          <></>
+          <ABCardComp card={cell.card} />
         </motion.div>
       )}
     </motion.div>
