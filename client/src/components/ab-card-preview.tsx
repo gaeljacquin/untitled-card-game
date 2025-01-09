@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { ABCard } from '@annabelle/shared/core/card';
-import { ABCardFaceUp } from '@/components/ab-card';
+import ABCardComp from '@/components/ab-card';
 import { cn } from '@/lib/utils';
 
 type CardFrontProps = {
@@ -26,7 +26,7 @@ export function CardFrontPreview(props: CardFrontProps) {
         className
       )}
     >
-      <ABCardFaceUp card={card} valueNotLabel={valueNotLabel} preview={true} />
+      <ABCardComp card={card} valueNotLabel={valueNotLabel} preview={true} />
     </div>
   );
 }

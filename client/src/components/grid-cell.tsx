@@ -6,6 +6,8 @@ import { useDroppable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
 import ABCardComp from '@/components/ab-card';
 
+// import { cn } from '@/lib/utils';
+
 interface Props {
   cell: IGridCell;
   modeType: IABModeType;
@@ -21,7 +23,7 @@ export function GridCell(props: Props) {
   return (
     <motion.div
       ref={setNodeRef}
-      className="w-28 h-40 border-2 rounded-2xl flex items-center justify-center"
+      className="aspect-[3/4] bg-amber-950/30 rounded-2xl overflow-hidden border border-white transition-transform relative group"
       animate={{
         borderColor: isOver ? '#3b82f6' : '#e5e7eb',
         backgroundColor: isOver ? '#eff6ff' : 'rgba(255, 255, 255, 0)',
@@ -35,8 +37,9 @@ export function GridCell(props: Props) {
             stiffness: 300,
             damping: 30,
           }}
+          className="p-1"
         >
-          <ABCardComp card={cell.card} modeType={modeType} />
+          <ABCardComp card={cell.card} modeType={modeType} isDragging />
         </motion.div>
       )}
     </motion.div>

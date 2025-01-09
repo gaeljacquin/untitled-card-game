@@ -34,12 +34,8 @@ export default function ABMode1(props: Props) {
       </ul>
     );
   };
-  const gridClass = cn(
-    // 'grid grid-cols-5 auto-rows-fr',
-    'grid grid-cols-5 sm:grid-cols-[auto,repeat(4,1fr)]',
-    'w-full aspect-square',
-    'items-center justify-items-center'
-  );
+  const gridClass = cn('grid grid-cols-4 gap-2 md:gap-4 bg-amber-950/30 rounded-xl p-6 md:p-10');
+  const playerHandClass = cn('grid grid-cols-5 gap-2 md:gap-4');
 
   const wsConnect = () => {
     socket.on('connect', () => {
@@ -64,22 +60,10 @@ export default function ABMode1(props: Props) {
     };
   };
 
-  // const temp = async (cardToDiscard, grid) => {
-  //   const response = await socket.emitWithAck('game-next-round', {
-  //     discardedABCard: cardToDiscard,
-  //     currentABGrid: grid,
-  //   });
-  //   const abCards: ABCards = response.abCards;
-  //   setABCards(abCards);
-  //   return abCards;
-  // };
-
   useEffect(() => {
     socket.emit('game-init', { modeSlug });
     wsConnect();
   }, []);
-
-  useEffect(() => {}, [abCards]);
 
   if (!(abCards.length > 0)) {
     return <Placeholder />;
@@ -99,8 +83,8 @@ export default function ABMode1(props: Props) {
           modeSlug={modeSlug}
           abCards={abCards}
           gridClass={gridClass}
+          playerHandClass={playerHandClass}
           howToPlayText={howToPlayText}
-          // temp={temp}
         />
 
         <div className="mt-32">

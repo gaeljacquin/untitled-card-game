@@ -5,10 +5,6 @@ import { ABCard, ABCards } from '@annabelle/shared/core/card';
 import { IGridCell } from '@annabelle/shared/core/grid-cell';
 import { ABMode } from '@annabelle/shared/core/mode';
 import {
-  calculateAvailableSpaces,
-  // evaluatePokerHand,
-} from '@annabelle/shared/functions/check-poker-hand';
-import {
   DndContext,
   DragEndEvent,
   DragOverlay,
@@ -19,17 +15,13 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
-import { motion } from 'framer-motion';
-import ABCardComp, { ABCardFaceUp } from '@/components/ab-card';
+import ABCardComp from '@/components/ab-card';
 import DiscardPile from '@/components/discard-pile';
-import GameOverModal from '@/components/game-over';
 import { GridCell } from '@/components/grid-cell';
-import HowToPlay from '@/components/how-to-play';
 import Placeholder from '@/components/placeholder';
 import SortableItem from '@/components/sortable-item';
 import { Button } from '@/components/ui/button';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
@@ -44,28 +36,12 @@ type Props = {
   modeSlug: string;
   abCards: ABCards;
   gridClass: string;
+  playerHandClass: string;
   howToPlayText: () => ReactNode;
 };
 
-const container = {
-  hidden: { opacity: 1, scale: 0 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      delayChildren: 0.3,
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-const cardSizeClass = cn(
-  'w-[60px] h-[84px] md:w-[100px] md:h-[140px]', // Adjust these values as needed
-  'text-xs md:text-base' // Adjust font size for cards
-);
-
 export default function PlayingField(props: Props) {
-  const { modeSlug, abCards, gridClass, howToPlayText } = props; // (1)
+  const { modeSlug, abCards, howToPlayText, gridClass } = props; // (1)
   const [playerHand, setPlayerHand] = useState<ABCards>([]);
   const mode = ABMode.getMode(modeSlug)!;
   const { title, description, gridSize, type } = mode;
@@ -226,7 +202,7 @@ export default function PlayingField(props: Props) {
       return;
     }
 
-    const gameState = getGameState(newGrid);
+    // const gameState = getGameState(newGrid);
 
     // if (gameState.isGameOver) {
     setGameState(gameState);
@@ -251,61 +227,42 @@ export default function PlayingField(props: Props) {
   }
 
   return (
-    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
-      <div className="min-h-screen p-2 md:p-4 backdrop-blur-sm bg-white/10 border-white/20 rounded-2xl">
+    <DndContext
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      sensors={sensors}
+      // collisionDetection={closestCorners}
+      // collisionDetection={rectIntersection}
+    >
+      <div className="min-h-screen backdrop-blur-sm bg-white/10 border-white/20 rounded-2xl p-4 md:p-8 ">
         <CardHeader className="text-white">
-          <CardTitle className={cn('text-xl md:text-2xl')}>{title}</CardTitle>
+          <CardTitle className={cn('text-2xl md:text-3xl', '-mt-7')}>{title}</CardTitle>
           {description && (
-            <CardDescription className="text-white/80 text-sm md:text-md">
+            <CardDescription className="text-white/80 text-md md:text-lg">
               {description}
             </CardDescription>
           )}
         </CardHeader>
-
-        {/* Main container with adjusted column widths */}
-        <div className="flex flex-col md:flex-row gap-2 md:gap-4">
+        <div className="flex flex-col-reverse md:flex-row gap-6">
           {/* Instructions Column */}
-          <ScrollArea className="h-48 md:h-auto md:w-[20%] p-2 md:p-4 rounded-lg shadow-md md:max-h-[calc(100vh-4rem)] overflow-y-auto bg-amber-950/30 rounded-2xl">
-            <HowToPlay content={howToPlayText} />
-          </ScrollArea>
+          <div
+            className={cn(
+              'md:w-1/4 bg-amber-950/30 rounded-2xl p-2 md:p-4 rounded-xl shadow-md',
+              'h-48 md:h-auto md:max-h-[calc(100vh-4rem)] overflow-y-auto'
+            )}
+          >
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <h1 className="text-lg text-center font-bold">How to Play</h1>
+            </div>
+            <div className="space-y-4">{howToPlayText()}</div>
+          </div>
 
-          {/* Main Card Grid and Player Hand Column - Enlarged */}
-          <div className="md:w-[65%] flex flex-col space-y-2">
-            {/* Grid Container - No scroll, scaled content */}
-            <div
-              className={cn(
-                gridClass,
-                'gap-1 md:gap-2 bg-amber-950/30 rounded-2xl p-2 md:p-4',
-                'w-full'
-              )}
-            >
-              {/* Your existing grid code */}
-              <div></div>
-              {Array.from({ length: gridSize }, (_, columnIndex) => (
-                <motion.div
-                  key={`col-${columnIndex}`}
-                  className="text-center font-semibold"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                >
-                  {/* $0 */}
-                  Available: <br /> {calculateAvailableSpaces(grid, columnIndex, false)}
-                </motion.div>
-              ))}
-
-              {grid.map((row, rowIndex) => (
-                <Fragment key={`row-${rowIndex}`}>
-                  <motion.div
-                    className="flex items-center justify-end font-semibold pr-4"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                  >
-                    {/* Royal Flush
-                      <br />
-                      $1000 */}
-                    Available: <br /> {calculateAvailableSpaces(grid, rowIndex, true)}
-                    {/* {evaluatePokerHand(row.map((element) => element.card))} */}
-                  </motion.div>
+          {/* Main Card Grid */}
+          <div className={cn('md:w-2/4 lg:w-1/2 space-y-5')}>
+            {/* Grid */}
+            <div className={cn(gridClass)}>
+              {grid.map((row, index) => (
+                <Fragment key={`main-${index}`}>
                   {row.map((cell) => (
                     <GridCell key={cell.id} cell={cell} modeType={type} />
                   ))}
@@ -315,14 +272,9 @@ export default function PlayingField(props: Props) {
 
             <Separator />
 
-            {/* Player Hand Container - No scroll, scaled content */}
-            <div className="w-full">
-              <motion.div
-                variants={container}
-                initial="hidden"
-                animate="visible"
-                className="flex flex-row items-center justify-center gap-4"
-              >
+            {/* Bottom Row */}
+            <div className="flex flex-[1_1_auto] basis-auto items-center justify-center gap-8 border border-dashed border-4 p-4">
+              <div className="flex flex-wrap gap-4 items-center justify-center">
                 <SortableContext
                   items={playerHand.map((item) => item.id)}
                   strategy={horizontalListSortingStrategy}
@@ -330,55 +282,46 @@ export default function PlayingField(props: Props) {
                   {playerHand.map((item) => (
                     <SortableItem key={item.id} id={item.id ?? 0}>
                       <ABCardComp
+                        key={`card-${item.id}`}
                         card={item}
                         valueNotLabel={!labelNotValue}
                         modeType={type}
-                        className={cardSizeClass}
+                        hover={true}
                         isDragging
+                        className="flex-shrink-0 flex items-center justify-center w-24 sm:w-32 md:w-40"
+                        inHand={true}
                       />
                     </SortableItem>
                   ))}
                 </SortableContext>
-              </motion.div>
+              </div>
             </div>
-
             <div className="flex items-center justify-center">
-              <Button onClick={handleDiscard} disabled={playerHand.length !== 1} className="mt-8">
+              <Button onClick={handleDiscard} disabled={playerHand.length !== 1} className="mt-2">
                 Next Round
               </Button>
             </div>
           </div>
 
-          {/* Discard Pile Column - Reduced width */}
-          <div className="h-48 md:h-auto md:w-[15%] bg-amber-950/30 rounded-2xl flex items-center justify-center p-2">
-            <div className="h-full">
+          {/* Side Column */}
+          <div
+            className={cn(
+              'md:w-1/4 bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md',
+              'h-48 md:h-auto md:max-h-[calc(100vh-4rem)] overflow-y-auto'
+            )}
+          >
+            <div className="grid grid-cols-1 gap-2 md:gap-4">
               <DiscardPile cards={discardPile} modeType={type} />
             </div>
           </div>
         </div>
-
-        <DragOverlay
-          dropAnimation={{
-            duration: 500,
-            easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
-          }}
-        >
-          {activeDrag && (
-            <ABCardFaceUp
-              card={activeDrag}
-              valueNotLabel={!labelNotValue}
-              modeType={type}
-              isDragging
-            />
-          )}
-        </DragOverlay>
-
-        <GameOverModal isOpen={gameState.gameOver} onRestart={initializeGame} />
       </div>
+
+      <DragOverlay>
+        {activeDrag ? (
+          <ABCardComp card={activeDrag} valueNotLabel={!labelNotValue} modeType={type} />
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 }
-
-/* Notes
-(1) Passing gridClass prop with the grid size hardcoded as Tailwind does not like dynamic class names
- */

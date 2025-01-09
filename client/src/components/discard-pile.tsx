@@ -16,7 +16,7 @@ export default function DiscardPile(props: Props) {
   return (
     <>
       <div className="flex items-center justify-center gap-2 mb-4">
-        <h2 className="text-md text-center font-semibold">Discard Pile</h2>
+        <h2 className="text-lg text-center font-bold">Discard Pile</h2>
       </div>
       <AnimatePresence>
         <div className="grid grid-cols-1 gap-4">

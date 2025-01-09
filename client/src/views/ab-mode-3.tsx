@@ -8,6 +8,7 @@ import BackgroundLogo from '@/components/background-logo';
 import Footer from '@/components/footer';
 import Placeholder from '@/components/placeholder';
 import PlayingField from '@/components/playing-field';
+import { cn } from '@/lib/utils';
 import socketInit from '@/utils/socket-init';
 
 type Props = {
@@ -35,6 +36,8 @@ export default function ABMode3(props: Props) {
       </ul>
     );
   };
+  const gridClass = cn('grid grid-cols-5 gap-2 md:gap-4 bg-amber-950/30 rounded-2xl p-2 md:p-4');
+  const playerHandClass = cn('grid grid-cols-6 gap-2 md:gap-4');
 
   const wsConnect = () => {
     socket.on('connect', () => {
@@ -74,8 +77,9 @@ export default function ABMode3(props: Props) {
         <PlayingField
           modeSlug={modeSlug}
           abCards={abCards}
-          gridClass="grid grid-cols-[auto,repeat(5,1fr)]"
+          gridClass={gridClass}
           howToPlayText={howToPlayText}
+          playerHandClass={playerHandClass}
         />
 
         <div className="mt-32">
