@@ -1,13 +1,13 @@
 'use client';
 
-import { ABCard, ABCards } from '@annabelle/shared/core/card';
+import { ABCard } from '@annabelle/shared/core/card';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { AnimatePresence, motion } from 'framer-motion';
 import ABCardComp from '@/components/ab-card';
 
 type Props = {
-  cards: ABCards;
+  card: ABCard;
 };
 
 function SortableCard({ card }: { card: ABCard }) {
@@ -29,22 +29,25 @@ function SortableCard({ card }: { card: ABCard }) {
 }
 
 export function PlayerHand(props: Props) {
-  const { cards } = props;
+  const { card } = props;
+  const spring = {
+    type: 'spring',
+    damping: 25,
+    stiffness: 120,
+  };
 
   return (
     <div className="flex gap-4">
       <AnimatePresence>
-        {cards.map((card, index) => (
-          <motion.div
-            key={card.id}
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 50, opacity: 0 }}
-            transition={{ delay: index * 0.1 }}
-          >
-            <SortableCard card={card} />
-          </motion.div>
-        ))}
+        <motion.div
+          key={card.id}
+          variants={{ hover: spring }}
+          initial="rest"
+          animate="hover"
+          exit="rest"
+        >
+          <SortableCard card={card} />
+        </motion.div>
       </AnimatePresence>
     </div>
   );

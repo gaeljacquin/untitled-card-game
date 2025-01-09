@@ -43,3 +43,5 @@ next-env.d.ts
 .stylelintcache
 
 */**/playlist.json
+
+*/**/archive

@@ -203,41 +203,6 @@ export default function Settings() {
                     </div>
                   </FormLabel>
                 </div>
-                <div className="flex flex-row items-center justify-center gap-4 p-4 rounded-xl bg-black/50 border-white/20 w-full">
-                  <FormLabel className="flex flex-col gap-1">
-                    <span className="bg-white/90 text-md text-black p-1 rounded-sm text-md">
-                      Rank
-                    </span>{' '}
-                    <span className="text-xs">Letter</span>
-                  </FormLabel>
-                  <FormField
-                    control={form.control}
-                    name="rankSwitchLetter"
-                    render={({ field }) => (
-                      <FormItem className="flex items-center">
-                        <FormControl>
-                          <Switch
-                            className="data-[state=checked]:bg-cyan-700 data-[state=unchecked]:bg-rose-600 items-center rounded-full transition-colors"
-                            checked={field.value}
-                            onCheckedChange={(checked) => {
-                              field.onChange(checked);
-                              updateSettings({
-                                ...settings,
-                                rankSwitchLetter: checked,
-                              });
-                            }}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormLabel className="flex flex-col gap-1">
-                    <span className="bg-white/90 text-md text-black p-1 rounded-sm text-md">
-                      Letter
-                    </span>{' '}
-                    <span className="text-xs">Rank</span>
-                  </FormLabel>
-                </div>
               </div>
             </div>
 
@@ -344,6 +309,41 @@ export default function Settings() {
                   </div>
                 </div>
                 <div className="flex flex-col items-center justify-center gap-4">
+                  <div className="flex flex-row items-center justify-center gap-4 p-4 rounded-xl bg-black/50 border-white/20 w-full">
+                    <FormLabel className="flex flex-col gap-1">
+                      <span className="bg-white/90 text-md text-black p-1 rounded-sm text-md">
+                        Rank
+                      </span>{' '}
+                      <span className="text-xs">Letter</span>
+                    </FormLabel>
+                    <FormField
+                      control={form.control}
+                      name="rankSwitchLetter"
+                      render={({ field }) => (
+                        <FormItem className="flex items-center">
+                          <FormControl>
+                            <Switch
+                              className="data-[state=checked]:bg-cyan-700 data-[state=unchecked]:bg-rose-600 items-center rounded-full transition-colors"
+                              checked={field.value}
+                              onCheckedChange={(checked) => {
+                                field.onChange(checked);
+                                updateSettings({
+                                  ...settings,
+                                  rankSwitchLetter: checked,
+                                });
+                              }}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <FormLabel className="flex flex-col gap-1">
+                      <span className="bg-white/90 text-md text-black p-1 rounded-sm text-md">
+                        Letter
+                      </span>{' '}
+                      <span className="text-xs">Rank</span>
+                    </FormLabel>
+                  </div>
                   <CardFrontPreview card={previewCard} valueNotLabel={!settings.labelNotValue} />
                   <div className="">
                     <FormField

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { suitIconMap } from '@annabelle/shared/constants/suit-icon';
 import { ABCard } from '@annabelle/shared/core/card';
+import { IABModeType } from '@annabelle/shared/core/mode';
 import { SuitId } from '@annabelle/shared/core/suit';
 import { useDraggable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
@@ -16,33 +17,33 @@ type Props = {
   preview?: boolean;
   valueNotLabel?: boolean;
   isDragging?: boolean;
+  modeType?: IABModeType;
+  className?: string;
 };
 
 export default function ABCardComp(props: Props) {
-  const { card, preview, valueNotLabel, isDragging } = props;
-  const { attributes, listeners, setNodeRef } = useDraggable({
+  const { card, preview, valueNotLabel, isDragging, modeType, className } = props;
+  const { attributes, listeners, setNodeRef, active } = useDraggable({
     id: card.id,
   });
-
-  if (isDragging) {
-    return <div className="w-28 h-48 bg-gray-200 rounded-xl" />;
-  }
 
   return (
     <motion.div
       ref={setNodeRef}
       {...listeners}
       {...attributes}
-      layout
-      initial={false}
-      animate={{
-        rotateY: card.faceUp ? 0 : 180,
-        scale: isDragging ? 1.05 : 1,
-      }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+      className={cn(
+        className ?? '',
+        active && card.id === active.id && isDragging && 'shadow-animate rounded-2xl'
+      )}
     >
       {card.faceUp ? (
-        <ABCardFaceUp card={card} preview={preview} valueNotLabel={valueNotLabel} />
+        <ABCardFaceUp
+          card={card}
+          preview={preview}
+          valueNotLabel={valueNotLabel}
+          modeType={modeType}
+        />
       ) : (
         <ABCardFaceDown />
       )}
@@ -51,7 +52,7 @@ export default function ABCardComp(props: Props) {
 }
 
 export function ABCardFaceUp(props: Props) {
-  const { card, preview, valueNotLabel } = props;
+  const { card, preview, valueNotLabel, modeType } = props;
   const rank = card.rank;
   const suit = card.suit;
   const letter = card.letter;
@@ -63,10 +64,28 @@ export function ABCardFaceUp(props: Props) {
   const SuitIcon = suitIconMap[suit.id as SuitId];
   let ShapeIcon = null;
   const rankDisplay = valueNotLabel ? rank.value : rank.label;
-  const main = rankSwitchLetter ? letter : rankDisplay;
-  const sub = rankSwitchLetter ? rankDisplay : letter;
   const showUwu = !valueNotLabel && rank.aceFace;
   const suitIconFill = cardFront.id === 'suitIcon';
+  let main;
+  let sub;
+
+  if (preview) {
+    if (rankSwitchLetter) {
+      main = letter;
+      sub = rankDisplay;
+    } else {
+      main = rankDisplay;
+      sub = letter;
+    }
+  } else {
+    if (modeType === 'abpoker') {
+      main = rankDisplay;
+      sub = letter;
+    } else {
+      main = letter;
+      sub = rankDisplay;
+    }
+  }
 
   if (suitIconFill) {
     ShapeIcon = suitIconMap[suit.id as SuitId];
@@ -82,10 +101,10 @@ export function ABCardFaceUp(props: Props) {
       className={cn(
         'relative cursor-pointer preserve-3d',
         'transition-transform duration-500',
-        preview ? 'w-48 h-72' : 'w-28 h-40 hover:scale-105'
+        'w-28 h-40 hover:scale-105'
       )}
     >
-      <div className="absolute inset-0 w-full h-full rounded-xl shadow-lg border-2 border-border preserve-3d">
+      <div className="absolute inset-0 w-full h-full">
         <div
           className={cn(
             'absolute inset-0 w-full h-full rounded-xl p-4',
@@ -96,19 +115,17 @@ export function ABCardFaceUp(props: Props) {
           <div
             className={cn('absolute top-2 left-2 text-base sm:text-xl font-bold', cardColor.text)}
           >
-            <span
-              className={cn('flex items-center justify-center uppercase', !preview && 'text-sm')}
-            >
+            <span className={cn('flex items-center justify-center uppercase', 'text-sm')}>
               {sub}
             </span>
-            <SuitIcon className={cn(preview ? 'h-6 w-6' : 'h-4 w-4')} />
+            <SuitIcon className={cn('h-4 w-4')} />
           </div>
 
           <div
             className={cn('absolute top-3 right-2 text-base sm:text-xl font-bold', cardColor.text)}
           >
-            {showUwu && rankSwitchLetter && (
-              <FaChessQueen className={cn(preview ? 'h-6 w-6' : 'h-3 w-3')} />
+            {showUwu && ((preview && rankSwitchLetter) || modeType !== 'abpoker') && (
+              <FaChessQueen className={cn('h-3 w-3')} />
             )}
           </div>
 
@@ -118,12 +135,10 @@ export function ABCardFaceUp(props: Props) {
               cardColor.text
             )}
           >
-            <span
-              className={cn('flex items-center justify-center uppercase', !preview && 'text-sm')}
-            >
+            <span className={cn('flex items-center justify-center uppercase', 'text-sm')}>
               {sub}
             </span>
-            <SuitIcon className={cn(preview ? 'h-6 w-6' : 'h-4 w-4')} />
+            <SuitIcon className={cn('h-4 w-4')} />
           </div>
 
           <div
@@ -132,8 +147,8 @@ export function ABCardFaceUp(props: Props) {
               cardColor.text
             )}
           >
-            {showUwu && rankSwitchLetter && (
-              <FaChessQueen className={cn(preview ? 'h-6 w-6' : 'h-3 w-3')} />
+            {showUwu && ((preview && rankSwitchLetter) || modeType !== 'abpoker') && (
+              <FaChessQueen className={cn('h-3 w-3')} />
             )}
           </div>
 
@@ -142,7 +157,7 @@ export function ABCardFaceUp(props: Props) {
               <ShapeIcon
                 className={cn(
                   'h-auto absolute',
-                  preview ? 'w-40' : 'w-20',
+                  'w-20',
                   cardFront.className,
                   cardColor.letter,
                   cardColor.fill
@@ -154,19 +169,20 @@ export function ABCardFaceUp(props: Props) {
                 'font-bold uppercase',
                 'absolute',
                 cardColor.letter,
-                preview ? 'text-4xl sm:text-6xl' : 'text-2xl sm:text-4xl',
+                'text-2xl sm:text-4xl',
                 'flex-col-1 items-center justify-center',
-                suitIconFill && '-mt-4'
+                suitIconFill && !suit.isRed && '-mt-4' // (1)
               )}
             >
               <span className={cn('flex items-center justify-center')}>
-                {showUwu && !rankSwitchLetter && <FaChessQueen className={cn('h-4 w-4')} />}
+                {showUwu && (!(preview && rankSwitchLetter) || modeType === 'abpoker') && (
+                  <FaChessQueen className={cn('h-4 w-4')} />
+                )}
               </span>
               <span
                 className={cn(
                   'flex items-center justify-center',
-                  suitIconFill ? 'text-3xl' : 'text-2xl',
-                  preview && 'text-4xl'
+                  suitIconFill ? 'text-xl' : 'text-2xl'
                 )}
               >
                 {main}
@@ -214,3 +230,7 @@ export function ABCardFaceDown() {
     </div>
   );
 }
+
+/* Notes
+(1) Letter spacing is off when suit is set to clubs or spades.
+ */

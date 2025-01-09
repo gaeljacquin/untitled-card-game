@@ -1,29 +1,40 @@
 'use client';
 
+import { IABModeType } from '@annabelle/shared/core/mode';
 import { ABCards } from '@annabelle/shared/core/word';
 import { AnimatePresence, motion } from 'framer-motion';
+import ABCardComp from '@/components/ab-card';
 
 interface Props {
   cards: ABCards;
+  modeType: IABModeType;
 }
 
-export function DiscardPile(props: Props) {
-  void props;
+export default function DiscardPile(props: Props) {
+  const { cards, modeType } = props;
 
   return (
-    <div className="w-full">
-      <motion.div
-        className="top-0 left-0 right-0 text-center text-md font-semibold"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      >
-        Discard pile
-      </motion.div>
-      <div className="h-auto mt-8">
-        <AnimatePresence>
-          <></>
-        </AnimatePresence>
+    <>
+      <div className="flex items-center justify-center gap-2 mb-4">
+        <h2 className="text-md text-center font-semibold">Discard Pile</h2>
       </div>
-    </div>
+      <AnimatePresence>
+        <div className="grid grid-cols-1 gap-4">
+          {cards.map((card, index) => (
+            <motion.div
+              key={card.id}
+              className="flex items-center justify-center gap-2 mb-4"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <div className="text-center text-lg font-semibold">
+                <ABCardComp card={card} modeType={modeType} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </AnimatePresence>
+    </>
   );
 }

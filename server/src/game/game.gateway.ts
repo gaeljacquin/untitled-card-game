@@ -62,15 +62,32 @@ export class GameGateway
     });
   }
 
-  @SubscribeMessage('ab-check')
-  async abCheck(client: Socket, payload: any): Promise<void> {
-    const abCards = payload.abCards;
-    const abWordPlain = abCards.map((card) => card._letter).join(''); // TODO: Change this later
-    const abCheckRes = await this.gameService.abCheckLambda(abWordPlain);
-    const valid =
-      abCheckRes['ab_word']['valid'] || abCheckRes['ab_prefix']['valid'];
-    const emit = { status: 'ok', abWordPlain, valid };
+  @SubscribeMessage('game-next-round')
+  async gameNextRound(client: Socket, payload: any): Promise<void> {
+    console.info(`Message received from client ${client.id}: ${payload}`);
+    const { discardedABCard, currentABGrid } = payload;
+    const abGame = this.abGameMap.get(client.id);
+    abGame.discardedABCards.push(discardedABCard);
+    abGame.grid = currentABGrid;
+    const gridSize = abGame.mode.gridSize;
+    let emit = {};
 
-    client.emit('ab-check-res', emit);
+    if (abGame.discardedABCards.length === gridSize) {
+      emit = {
+        gameOver: true,
+        abGame,
+      };
+    } else {
+      const abCards = abGame.deal(abGame.discardedABCards.length);
+      emit = {
+        abCards,
+      };
+    }
+
+    this.abGameMap.set(client.id, abGame);
+
+    client.emit('game-next-round-res', {
+      ...emit,
+    });
   }
 }
