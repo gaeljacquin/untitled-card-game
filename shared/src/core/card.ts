@@ -48,12 +48,18 @@ export class ABCard extends Card {
     _suit?: Suit | null,
     joker: boolean = false,
     letterOption: LetterOptions = 'any',
-    faceUp: boolean = true
+    faceUp: boolean = true,
+    letterOverride: boolean = false,
+    letter: Letter | null = null
   ) {
     const rank = joker ? Rank.setJoker() : (_rank ?? Rank.getRandom());
     const suit = joker ? Suit.setJoker() : (_suit ?? Suit.getRandom());
     super(rank, suit);
-    this.letter = joker ? '*' : this.getRandomLetter(letterOption)!;
+    this.letter = joker
+      ? '*'
+      : letterOverride && letter
+        ? letter
+        : this.getRandomLetter(letterOption)!;
     this.faceUp = faceUp;
   }
 
