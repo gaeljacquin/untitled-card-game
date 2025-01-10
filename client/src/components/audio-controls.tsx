@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import {
   ChevronDown,
   ChevronUp,
@@ -30,6 +31,8 @@ export default function AudioControls() {
   } = audioStore();
   const { audioPlayerVisible, toggleAudioPlayerVisibility } = miscStore();
   const track = getCurrentTrack() ?? '';
+  const pathname = usePathname();
+  const isHome = pathname === '/';
 
   return (
     <div
@@ -46,15 +49,24 @@ export default function AudioControls() {
         className={cn(
           'absolute left-1/2 transform -translate-x-1/2 bg-black/30 backdrop-filter backdrop-blur-lg text-white py-1 px-9 rounded-t-md focus:outline-none',
           'transition-all duration-300 ease-in-out',
-          'text-transparent hover:text-white',
           audioPlayerVisible ? 'translate-y-0 -top-8' : 'translate-y-full -top-0.5 sm:-top-4'
         )}
         aria-label={audioPlayerVisible ? 'Hide audio player' : 'Show audio player'}
       >
         {audioPlayerVisible ? (
-          <ChevronDown className="w-6 h-6" />
+          <ChevronDown
+            className={cn(
+              'w-6 h-6',
+              isHome ? 'text-white animate-bounce' : 'text-transparent hover:text-white'
+            )}
+          />
         ) : (
-          <ChevronUp className="w-6 h-6" />
+          <ChevronUp
+            className={cn(
+              'w-6 h-6',
+              isHome ? 'text-white animate-pulse' : 'text-transparent hover:text-white'
+            )}
+          />
         )}
       </button>
       <div
