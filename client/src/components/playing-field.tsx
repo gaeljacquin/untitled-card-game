@@ -47,7 +47,7 @@ type Props = {
 };
 
 export default function PlayingField(props: Props) {
-  const { modeSlug, abCards, howToPlayText, gridClass } = props; // (1)
+  const { modeSlug, abCards, howToPlayText, gridClass, playerHandClass } = props; // (1)
   const [playerHand, setPlayerHand] = useState<ABCards>([]);
   const mode = ABMode.getMode(modeSlug)!;
   const { title, description, gridSize, type } = mode;
@@ -233,13 +233,7 @@ export default function PlayingField(props: Props) {
   }
 
   return (
-    <DndContext
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      sensors={sensors}
-      // collisionDetection={closestCorners}
-      // collisionDetection={rectIntersection}
-    >
+    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
       <div className="min-h-screen backdrop-blur-sm bg-white/10 border-white/20 rounded-2xl p-4 md:p-8 ">
         <CardHeader className="text-white">
           <CardTitle className={cn('text-2xl md:text-3xl', '-mt-7')}>{title}</CardTitle>
@@ -250,7 +244,6 @@ export default function PlayingField(props: Props) {
           )}
         </CardHeader>
         <div className="flex flex-col-reverse md:flex-row gap-6">
-          {/* Instructions Column */}
           <div
             className={cn(
               'md:w-1/4 bg-amber-950/30 rounded-2xl p-2 md:p-4 rounded-xl shadow-md',
@@ -263,9 +256,7 @@ export default function PlayingField(props: Props) {
             <div className="space-y-4">{howToPlayText()}</div>
           </div>
 
-          {/* Main Card Grid */}
           <div className={cn('md:w-2/4 lg:w-1/2 space-y-5')}>
-            {/* Grid */}
             <div className={cn(gridClass)}>
               {grid.map((row, index) => (
                 <Fragment key={`main-${index}`}>
@@ -278,9 +269,15 @@ export default function PlayingField(props: Props) {
 
             <Separator />
 
-            {/* Bottom Row */}
-            <div className="flex flex-[1_1_auto] basis-auto items-center justify-center gap-8 border border-dashed border-4 p-4">
-              <div className="flex flex-wrap gap-4 items-center justify-center">
+            <div className="bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md">
+              <DiscardPile cards={discardPile} modeType={type} />
+            </div>
+          </div>
+
+          <div className="md:w-1/4 flex flex-col h-full space-y-4">
+            <div className="h-1/2 border border-4 border-dashed rounded-2xl p-4">
+              <h1 className="text-lg mb-2">Player Hand</h1>
+              <div className={playerHandClass}>
                 <SortableContext
                   items={playerHand.map((item) => item.id)}
                   strategy={horizontalListSortingStrategy}
@@ -294,24 +291,19 @@ export default function PlayingField(props: Props) {
                         modeType={type}
                         hover={true}
                         isDragging
-                        className="flex-shrink-0 flex items-center justify-center w-24 sm:w-32 md:w-40"
                         outsideGrid={true}
                       />
                     </SortableItem>
                   ))}
                 </SortableContext>
               </div>
+              <div className="flex items-center justify-center">
+                <Button onClick={handleDiscard} disabled={playerHand.length !== 1} className="mt-4">
+                  Next Round
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center justify-center">
-              <Button onClick={handleDiscard} disabled={playerHand.length !== 1} className="mt-2">
-                Next Round
-              </Button>
-            </div>
-          </div>
 
-          {/* Side Column */}
-          <div className="md:w-1/4 flex flex-col h-full">
-            {/* Top Half */}
             <div className="h-1/2 bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md mb-4">
               <LiveScore className="flex flex-col gap-4">
                 <>
@@ -348,11 +340,6 @@ export default function PlayingField(props: Props) {
                   ))}
                 </>
               </LiveScore>
-            </div>
-
-            {/* Bottom Half */}
-            <div className="h-1/2 bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md">
-              <DiscardPile cards={discardPile} modeType={type} />
             </div>
           </div>
         </div>

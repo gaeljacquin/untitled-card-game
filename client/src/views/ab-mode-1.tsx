@@ -35,7 +35,7 @@ export default function ABMode1(props: Props) {
     );
   };
   const gridClass = cn('grid grid-cols-4 gap-2 md:gap-4 bg-amber-950/30 rounded-xl p-6 md:p-10');
-  const playerHandClass = cn('grid grid-cols-5 gap-2 md:gap-4');
+  const playerHandClass = cn('grid grid-rows-1 sm:grid-cols-2 gap-2 md:gap-4 justify-items-center');
 
   const wsConnect = () => {
     socket.on('connect', () => {
