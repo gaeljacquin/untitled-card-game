@@ -169,7 +169,7 @@ export default function Settings() {
                       <div className="text-center">12</div>
                       <div className="text-center">13</div>
                     </div>
-                  </FormLabel>{' '}
+                  </FormLabel>
                   <FormField
                     control={form.control}
                     name="labelNotValue"
@@ -193,16 +193,40 @@ export default function Settings() {
                   />
                   <FormLabel className="text-base">
                     <div className="flex h-5 items-center justify-between space-x-2 text-sm">
-                      <div className="text-center">A</div>
-                      <div className="text-center">J</div>
+                      <div className="text-center">(A)ce</div>
+                      <div className="text-center">(J)ack</div>
                     </div>
                     <Separator />
                     <div className="flex h-5 items-center justify-between space-x-4 text-sm">
-                      <div className="text-center">Q</div>
-                      <div className="text-center">K</div>
+                      <div className="text-center">(Q)ueen</div>
+                      <div className="text-center">(K)ing</div>
                     </div>
                   </FormLabel>
                 </div>
+                {/* <div className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-black/50 border-white/20 w-full">
+                  <FormLabel className="text-base text-sm">Invert Colors</FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="invertColors"
+                    render={({ field }) => (
+                      <FormItem className="flex items-center">
+                        <FormControl>
+                          <Switch
+                            className="data-[state=checked]:bg-rose-600 data-[state=unchecked]:bg-slate-500 items-center rounded-full transition-colors"
+                            checked={field.value}
+                            onCheckedChange={(checked) => {
+                              field.onChange(checked);
+                              updateSettings({
+                                ...settings,
+                                invertColors: checked,
+                              });
+                            }}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div> */}
               </div>
             </div>
 
@@ -313,7 +337,7 @@ export default function Settings() {
                     <FormLabel className="flex flex-col gap-1">
                       <span className="bg-white/90 text-md text-black p-1 rounded-sm text-md">
                         Rank
-                      </span>{' '}
+                      </span>
                       <span className="text-xs">Letter</span>
                     </FormLabel>
                     <FormField
@@ -340,7 +364,7 @@ export default function Settings() {
                     <FormLabel className="flex flex-col gap-1">
                       <span className="bg-white/90 text-md text-black p-1 rounded-sm text-md">
                         Letter
-                      </span>{' '}
+                      </span>
                       <span className="text-xs">Rank</span>
                     </FormLabel>
                   </div>

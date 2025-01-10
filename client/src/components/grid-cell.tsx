@@ -5,20 +5,33 @@ import { IABModeType } from '@annabelle/shared/core/mode';
 import { useDroppable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
 import ABCardComp from '@/components/ab-card';
-
-// import { cn } from '@/lib/utils';
+import { BorderBeam } from '@/components/ui/border-beam';
 
 interface Props {
   cell: IGridCell;
   modeType: IABModeType;
+  gridSize: number;
 }
 
 export function GridCell(props: Props) {
-  const { cell, modeType } = props;
+  const { cell, modeType, gridSize } = props;
   const { setNodeRef, isOver } = useDroppable({
     id: cell.id,
     data: { type: 'grid', rowIndex: cell.rowIndex, columnIndex: cell.columnIndex },
   });
+
+  const isCornerCell =
+    (cell.rowIndex === 0 && cell.columnIndex === 0) ||
+    (cell.rowIndex === 0 && cell.columnIndex === gridSize - 1) ||
+    (cell.rowIndex === gridSize - 1 && cell.columnIndex === 0) ||
+    (cell.rowIndex === gridSize - 1 && cell.columnIndex === gridSize - 1);
+
+  const isCenterCell =
+    gridSize % 2 === 1 &&
+    cell.rowIndex === Math.floor(gridSize / 2) &&
+    cell.columnIndex === Math.floor(gridSize / 2);
+
+  const shouldShowBorderBeam = isCornerCell || isCenterCell;
 
   return (
     <motion.div
@@ -37,10 +50,19 @@ export function GridCell(props: Props) {
             stiffness: 300,
             damping: 30,
           }}
-          className="p-1"
+          className="p-0 sm:p-1"
         >
           <ABCardComp card={cell.card} modeType={modeType} isDragging />
         </motion.div>
+      )}
+      {shouldShowBorderBeam && (
+        <BorderBeam
+          size={125}
+          duration={7}
+          borderWidth={3}
+          colorFrom={'#67e8f9'} // cyan-300
+          colorTo={'#34d399'} // emerald-400
+        />
       )}
     </motion.div>
   );

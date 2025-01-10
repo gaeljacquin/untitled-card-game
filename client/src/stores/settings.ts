@@ -48,7 +48,7 @@ export const initialSettings = {
   },
   labelNotValue: true,
   rankSwitchLetter: false,
-  audioPlayerOnMain: false,
+  invertColors: false,
 };
 
 const settingsStore = create(

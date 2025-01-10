@@ -75,7 +75,7 @@ type ABCardFaceUpProps = {
 
 // (1)
 function ABCardFaceUp(props: ABCardFaceUpProps) {
-  const { card, valueNotLabel, modeType } = props;
+  const { card, valueNotLabel } = props;
   const rank = card.rank;
   const suit = card.suit;
   const letter = card.letter;
@@ -158,9 +158,7 @@ function ABCardFaceUp(props: ABCardFaceUpProps) {
               cardColor.text
             )}
           >
-            {showUwu && (rankSwitchLetter || modeType !== 'abpoker') && (
-              <FaChessQueen className={cn('h-3 w-3')} />
-            )}
+            {showUwu && rankSwitchLetter && <FaChessQueen className={cn('h-3 w-3')} />}
           </div>
 
           <div className="relative flex items-center justify-center h-full w-full">
@@ -186,9 +184,7 @@ function ABCardFaceUp(props: ABCardFaceUpProps) {
               )}
             >
               <span className={cn('flex items-center justify-center')}>
-                {showUwu && (!rankSwitchLetter || modeType === 'abpoker') && (
-                  <FaChessQueen className={cn('h-4 w-4')} />
-                )}
+                {showUwu && !rankSwitchLetter && <FaChessQueen className={cn('h-3 w-3')} />}
               </span>
               <span
                 className={cn(

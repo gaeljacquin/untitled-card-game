@@ -137,13 +137,12 @@ export default function PlayingField(props: Props) {
         if (newGrid[rowIndex][columnIndex].card) {
           const targetCard = newGrid[rowIndex][columnIndex].card! as ABCard;
 
-          if (!targetCard.played && playerHand.length === 1) {
+          if (!targetCard.played) {
             newGrid[rowIndex][columnIndex].card = { ...sourceCard, faceUp: true } as ABCard;
-            setPlayerHand((prev) =>
-              prev.map((c) =>
-                c.id === sourceCard.id ? ({ ...targetCard, faceUp: true } as ABCard) : c
-              )
-            );
+            setPlayerHand((prev) => {
+              const updatedHand = prev.filter((c) => c.id !== sourceCard.id);
+              return [...updatedHand, { ...targetCard, faceUp: true } as ABCard];
+            });
           }
         } else {
           newGrid[rowIndex][columnIndex].card = { ...sourceCard, faceUp: true } as ABCard;
@@ -173,9 +172,9 @@ export default function PlayingField(props: Props) {
         const newGrid = [...grid];
         newGrid[sourceCell.rowIndex][sourceCell.columnIndex].card = null;
         setGrid(newGrid);
-        const newPlayerHand = [...playerHand]; // Create a copy of the player's hand
-        newPlayerHand.splice(newIdx, 0, sourceCard); // Insert the card at the desired index
-        setPlayerHand(newPlayerHand); // Update the player's hand
+        const newPlayerHand = [...playerHand];
+        newPlayerHand.splice(newIdx, 0, sourceCard);
+        setPlayerHand(newPlayerHand);
       } else {
         const newPlayerHand = arrayMove(playerHand, oldIdx, newIdx);
         setPlayerHand(newPlayerHand);
@@ -245,7 +244,7 @@ export default function PlayingField(props: Props) {
         </CardHeader>
 
         <div className="flex flex-col-reverse md:flex-row gap-6">
-          <div className="md:w-1/4 flex flex-col h-full space-y-4">
+          <div className="md:w-1/3 flex flex-col h-full space-y-4">
             <div className="h-1/2 bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md">
               <LiveScore className="flex flex-col gap-4">
                 <>
@@ -302,7 +301,7 @@ export default function PlayingField(props: Props) {
               {grid.map((row, index) => (
                 <Fragment key={`main-${index}`}>
                   {row.map((cell) => (
-                    <GridCell key={cell.id} cell={cell} modeType={type} />
+                    <GridCell key={cell.id} cell={cell} modeType={type} gridSize={gridSize} />
                   ))}
                 </Fragment>
               ))}
@@ -315,9 +314,8 @@ export default function PlayingField(props: Props) {
             </div>
           </div>
 
-          <div className="md:w-1/4 flex flex-col h-full space-y-4">
+          <div className="md:w-1/8 flex flex-col h-full space-y-4">
             <div className="h-1/2 border border-4 border-dashed rounded-2xl p-4">
-              <h1 className="text-lg mb-2">Player Hand</h1>
               <div className={playerHandClass}>
                 <SortableContext
                   items={playerHand.map((item) => item.id)}
@@ -332,14 +330,17 @@ export default function PlayingField(props: Props) {
                         modeType={type}
                         hover={true}
                         isDragging
-                        outsideGrid={true}
+                        inGrid={false}
                       />
                     </SortableItem>
                   ))}
                 </SortableContext>
               </div>
+
+              <Separator className="my-4" />
+
               <div className="flex items-center justify-center">
-                <Button onClick={handleDiscard} disabled={playerHand.length !== 1} className="mt-4">
+                <Button onClick={handleDiscard} disabled={playerHand.length !== 1}>
                   Next Round
                 </Button>
               </div>

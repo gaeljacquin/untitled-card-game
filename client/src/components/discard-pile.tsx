@@ -17,7 +17,7 @@ export default function DiscardPile(props: Props) {
   return (
     <>
       <div className="flex items-center justify-center gap-2">
-        <h2 className="text-lg text-center font-bold">Discard Pile</h2>
+        <h2 className="text-md text-center font-bold">Discard Pile</h2>
       </div>
       <AnimatePresence>
         <div className={cn('space-y-2 mx-auto')}>
@@ -25,7 +25,7 @@ export default function DiscardPile(props: Props) {
             {cards.map((card, index) => (
               <motion.div
                 key={card.id}
-                className="overflow-hidden transition-transform relative group grayscale-[20%] pointer-events-none"
+                className="overflow-hidden transition-transform relative group brightness-50 pointer-events-none"
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -38,7 +38,7 @@ export default function DiscardPile(props: Props) {
                     damping: 30,
                   }}
                 >
-                  <ABCardComp card={card} modeType={modeType} outsideGrid={true} />
+                  <ABCardComp card={card} modeType={modeType} inGrid={false} />
                 </motion.div>
               </motion.div>
             ))}

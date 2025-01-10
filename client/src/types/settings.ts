@@ -12,6 +12,7 @@ export const settingsSchema = z.object({
   }),
   labelNotValue: z.boolean(),
   rankSwitchLetter: z.boolean(),
+  invertColors: z.boolean(),
 });
 
 export type FormData = z.infer<typeof settingsSchema>;

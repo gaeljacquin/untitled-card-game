@@ -37,7 +37,7 @@ export default function ABMode2(props: Props) {
     );
   };
   const gridClass = cn('grid grid-cols-5 gap-2 md:gap-4 bg-amber-950/30 rounded-2xl p-2 md:p-4');
-  const playerHandClass = cn('grid grid-rows-1 sm:grid-cols-2 gap-2 md:gap-4 justify-items-center');
+  const playerHandClass = cn('grid grid-rows-1 sm:grid-cols-1 gap-2 md:gap-4 justify-items-center');
 
   const wsConnect = () => {
     socket.on('connect', () => {
@@ -70,7 +70,7 @@ export default function ABMode2(props: Props) {
         initial={{ scale: 0.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="text-center mb-8"
+        className="header-text-uwu"
       >
         <BackgroundLogo />
 
@@ -82,7 +82,7 @@ export default function ABMode2(props: Props) {
           howToPlayText={howToPlayText}
         />
 
-        <div className="mt-32">
+        <div className="footer-spacing-uwu">
           <Footer />
         </div>
       </motion.div>

@@ -17,11 +17,11 @@ type Props = {
   modeType?: IABModeType;
   className?: string;
   hover?: boolean;
-  outsideGrid?: boolean;
+  inGrid?: boolean;
 };
 
 export default function ABCardComp(props: Props) {
-  const { card, valueNotLabel, isDragging, modeType, hover = false, outsideGrid } = props;
+  const { card, valueNotLabel, isDragging, modeType, hover = false, inGrid = true } = props;
   const { attributes, listeners, setNodeRef, active } = useDraggable({
     id: card.id,
   });
@@ -159,6 +159,106 @@ export default function ABCardComp(props: Props) {
     );
   };
 
+  // const gridCardComp = () => {
+  //   const suitIconClassName = cn('h-2 w-2 sm:h-4 sm:w-4');
+  //   const shapeIconClassName = cn(
+  //     'h-auto absolute',
+  //     'w-12 md:w-24',
+  //     cardFront.className,
+  //     cardColor.letter,
+  //     cardColor.fill
+  //   );
+
+  //   return (
+  //     <div className="absolute inset-0">
+  //       <div className="absolute inset-0 flex items-center justify-center">
+  //         <div
+  //           className={cn(
+  //             'absolute inset-0 w-full h-full rounded-xl p-4',
+  //             'backface-hidden no-select',
+  //             cardFront.id === 'suitIcon' ? cardColor.bg : 'bg-white'
+  //           )}
+  //         >
+  //           <div
+  //             className={cn('absolute top-2 left-2 text-base sm:text-xl font-bold', cardColor.text)}
+  //           >
+  //             <span
+  //               className={cn('flex items-center justify-center uppercase', 'text-xs sm:text-sm')}
+  //             >
+  //               {sub}
+  //             </span>
+  //             <SuitIcon className={suitIconClassName} />
+  //           </div>
+
+  //           <div
+  //             className={cn(
+  //               'absolute top-3 right-2 text-base text-sm sm:text-xl font-bold',
+  //               cardColor.text
+  //             )}
+  //           >
+  //             {showUwu && modeType !== 'abpoker' && (
+  //               <FaChessQueen className={cn('h-1 w-1 sm:h-3 sm:w-3')} />
+  //             )}
+  //           </div>
+
+  //           <div
+  //             className={cn(
+  //               'absolute bottom-2 right-2 text-base text-sm sm:text-xl font-bold rotate-180',
+  //               cardColor.text
+  //             )}
+  //           >
+  //             <span
+  //               className={cn('flex items-center justify-center uppercase', 'text-xs sm:text-sm')}
+  //             >
+  //               {sub}
+  //             </span>
+  //             <SuitIcon className={suitIconClassName} />
+  //           </div>
+
+  //           <div
+  //             className={cn(
+  //               'absolute bottom-3 left-2 text-base sm:text-xl font-bold rotate-180',
+  //               cardColor.text
+  //             )}
+  //           >
+  //             {showUwu && modeType !== 'abpoker' && (
+  //               <FaChessQueen className={cn('h-1 w-1 sm:h-3 sm:w-3')} />
+  //             )}
+  //           </div>
+
+  //           <div className="relative flex items-center justify-center h-full w-full">
+  //             {ShapeIcon && <ShapeIcon className={shapeIconClassName} />}
+  //             <span
+  //               className={cn(
+  //                 'font-bold uppercase',
+  //                 'absolute',
+  //                 cardColor.letter,
+  //                 'text-xs sm:text-md',
+  //                 'flex-col-1 items-center justify-center',
+  //                 suitIconFill && !suit.isRed && '-mt-4' // (1)
+  //               )}
+  //             >
+  //               <span className={cn('flex items-center justify-center')}>
+  //                 {showUwu && modeType === 'abpoker' && (
+  //                   <FaChessQueen className={cn('h-1 w-1 sm:h-2 sm:w-2')} />
+  //                 )}
+  //               </span>
+  //               <span
+  //                 className={cn(
+  //                   'flex items-center justify-center',
+  //                   suitIconFill ? 'text-sm sm:text-xl' : 'text-sm sm:text-md'
+  //                 )}
+  //               >
+  //                 {main}
+  //               </span>
+  //             </span>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // };
+
   return (
     <motion.div
       ref={setNodeRef}
@@ -166,11 +266,12 @@ export default function ABCardComp(props: Props) {
       {...attributes}
       className={cn(
         'aspect-[3/4] overflow-hidden transition-transform relative group',
-        outsideGrid && 'flex-shrink-0 flex items-center justify-center w-16 sm:w-20 md:w-24',
+        !inGrid && 'flex-shrink-0 flex items-center justify-center w-16 sm:w-20 md:w-24',
         hover && 'hover:scale-105',
         active && card.id === active.id && isDragging && 'shadow-animate rounded-2xl'
       )}
     >
+      {/* {inGrid ? gridCardComp() : cardComp()} */}
       {cardComp()}
     </motion.div>
   );
