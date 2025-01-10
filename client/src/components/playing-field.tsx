@@ -5,6 +5,10 @@ import { ABCard, ABCards } from '@annabelle/shared/core/card';
 import { IGridCell } from '@annabelle/shared/core/grid-cell';
 import { ABMode } from '@annabelle/shared/core/mode';
 import {
+  calculateAvailableSpaces,
+  // evaluatePokerHand,
+} from '@annabelle/shared/functions/check-poker-hand';
+import {
   DndContext,
   DragEndEvent,
   DragOverlay,
@@ -15,9 +19,11 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
+import { motion } from 'framer-motion';
 import ABCardComp from '@/components/ab-card';
 import DiscardPile from '@/components/discard-pile';
 import { GridCell } from '@/components/grid-cell';
+import LiveScore from '@/components/live-score';
 import Placeholder from '@/components/placeholder';
 import SortableItem from '@/components/sortable-item';
 import { Button } from '@/components/ui/button';
@@ -304,13 +310,48 @@ export default function PlayingField(props: Props) {
           </div>
 
           {/* Side Column */}
-          <div
-            className={cn(
-              'md:w-1/4 bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md',
-              'h-48 md:h-auto md:max-h-[calc(100vh-4rem)] overflow-y-auto'
-            )}
-          >
-            <div className="grid grid-cols-1 gap-2 md:gap-4">
+          <div className="md:w-1/4 flex flex-col h-full">
+            {/* Top Half */}
+            <div className="h-1/2 bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md mb-4">
+              <LiveScore className="flex flex-col gap-4">
+                <>
+                  {Array.from({ length: gridSize }, (_, index) => (
+                    <motion.div
+                      key={`col-${index}`}
+                      className="text-center font-semibold"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
+                      <p className="flex justify-between text-sm">
+                        <span>Column {index + 1}: </span>
+                        <span>Available - {calculateAvailableSpaces(grid, index, false)}</span>
+                      </p>
+                    </motion.div>
+                  ))}
+                </>
+
+                <Separator />
+
+                <>
+                  {grid.map((_, index) => (
+                    <motion.div
+                      key={`row-${index}`}
+                      className="text-center font-semibold"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
+                      <p className="flex justify-between text-sm">
+                        <span>Row {index + 1}: </span>
+                        <span>Available - {calculateAvailableSpaces(grid, index, true)}</span>
+                      </p>
+                    </motion.div>
+                  ))}
+                </>
+              </LiveScore>
+            </div>
+
+            {/* Bottom Half */}
+            <div className="h-1/2 bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md">
               <DiscardPile cards={discardPile} modeType={type} />
             </div>
           </div>
