@@ -295,7 +295,7 @@ export default function PlayingField(props: Props) {
                         hover={true}
                         isDragging
                         className="flex-shrink-0 flex items-center justify-center w-24 sm:w-32 md:w-40"
-                        inHand={true}
+                        outsideGrid={true}
                       />
                     </SortableItem>
                   ))}

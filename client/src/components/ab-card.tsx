@@ -17,11 +17,11 @@ type Props = {
   modeType?: IABModeType;
   className?: string;
   hover?: boolean;
-  inHand?: boolean;
+  outsideGrid?: boolean;
 };
 
 export default function ABCardComp(props: Props) {
-  const { card, valueNotLabel, isDragging, modeType, hover = false, inHand } = props;
+  const { card, valueNotLabel, isDragging, modeType, hover = false, outsideGrid } = props;
   const { attributes, listeners, setNodeRef, active } = useDraggable({
     id: card.id,
   });
@@ -166,7 +166,7 @@ export default function ABCardComp(props: Props) {
       {...attributes}
       className={cn(
         'aspect-[3/4] overflow-hidden transition-transform relative group',
-        inHand && 'flex-shrink-0 flex items-center justify-center w-24 sm:w-32 md:w-40',
+        outsideGrid && 'flex-shrink-0 flex items-center justify-center w-24 sm:w-32 md:w-40',
         hover && 'hover:scale-105',
         active && card.id === active.id && isDragging && 'shadow-animate rounded-2xl'
       )}
