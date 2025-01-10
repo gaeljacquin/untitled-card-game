@@ -82,21 +82,20 @@ export class ABSeed implements IABSeed {
   }
 
   private generateABWordCards(gridSize: number, numCards: number) {
-    const total = numCards * gridSize;
     const randomVowelCards = Array.from(
-      { length: numCards },
+      { length: gridSize },
       () => new ABCard(null, null, false, 'vowel')
     );
     const randomCards = Array.from(
-      { length: total - numCards },
+      { length: gridSize ^ 2 },
       () => new ABCard(null, null, false, 'any')
     );
     const cards = randomVowelCards.concat(randomCards);
     const shuffledCards = shuffler(cards) as ABCards;
     const result: ABCards[] = [];
 
-    for (let i = 0; i < numCards; i++) {
-      result.push(shuffledCards.slice(i * gridSize, (i + 1) * gridSize));
+    for (let i = 0; i < gridSize; i++) {
+      result.push(shuffledCards.slice(i * numCards, (i + 1) * numCards));
     }
 
     return result;

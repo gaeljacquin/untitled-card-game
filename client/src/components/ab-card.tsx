@@ -12,7 +12,6 @@ import settingsStore, { cardFronts } from '@/stores/settings';
 
 type Props = {
   card: ABCard;
-  preview?: boolean;
   valueNotLabel?: boolean;
   isDragging?: boolean;
   modeType?: IABModeType;
@@ -22,14 +21,14 @@ type Props = {
 };
 
 export default function ABCardComp(props: Props) {
-  const { card, preview, valueNotLabel, isDragging, modeType, hover = false, inHand } = props;
+  const { card, valueNotLabel, isDragging, modeType, hover = false, inHand } = props;
   const { attributes, listeners, setNodeRef, active } = useDraggable({
     id: card.id,
   });
   const rank = card.rank;
   const suit = card.suit;
   const letter = card.letter;
-  const { cardFront: cardFrontIndex, rankSwitchLetter } = settingsStore();
+  const { cardFront: cardFrontIndex } = settingsStore();
   const cardFront = cardFronts[cardFrontIndex];
   const cardColor = suit.isRed
     ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
@@ -42,22 +41,12 @@ export default function ABCardComp(props: Props) {
   let main;
   let sub;
 
-  if (preview) {
-    if (rankSwitchLetter) {
-      main = letter;
-      sub = rankDisplay;
-    } else {
-      main = rankDisplay;
-      sub = letter;
-    }
+  if (modeType === 'abpoker') {
+    main = rankDisplay;
+    sub = letter;
   } else {
-    if (modeType === 'abpoker') {
-      main = rankDisplay;
-      sub = letter;
-    } else {
-      main = letter;
-      sub = rankDisplay;
-    }
+    main = letter;
+    sub = rankDisplay;
   }
 
   if (suitIconFill) {
@@ -97,7 +86,7 @@ export default function ABCardComp(props: Props) {
                 cardColor.text
               )}
             >
-              {showUwu && ((preview && rankSwitchLetter) || modeType !== 'abpoker') && (
+              {showUwu && modeType !== 'abpoker' && (
                 <FaChessQueen className={cn('h-1 w-1 sm:h-3 sm:w-3')} />
               )}
             </div>
@@ -122,7 +111,7 @@ export default function ABCardComp(props: Props) {
                 cardColor.text
               )}
             >
-              {showUwu && ((preview && rankSwitchLetter) || modeType !== 'abpoker') && (
+              {showUwu && modeType !== 'abpoker' && (
                 <FaChessQueen className={cn('h-1 w-1 sm:h-3 sm:w-3')} />
               )}
             </div>
@@ -150,7 +139,7 @@ export default function ABCardComp(props: Props) {
                 )}
               >
                 <span className={cn('flex items-center justify-center')}>
-                  {showUwu && (!(preview && rankSwitchLetter) || modeType === 'abpoker') && (
+                  {showUwu && modeType === 'abpoker' && (
                     <FaChessQueen className={cn('h-1 w-1 sm:h-4 sm:w-4')} />
                   )}
                 </span>
@@ -169,10 +158,6 @@ export default function ABCardComp(props: Props) {
       </div>
     );
   };
-
-  if (preview) {
-    return cardComp();
-  }
 
   return (
     <motion.div
