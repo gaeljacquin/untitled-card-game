@@ -16,11 +16,11 @@ export default function DiscardPile(props: Props) {
 
   return (
     <>
-      <div className="flex items-center justify-center gap-2 mb-1">
+      <div className="flex items-center justify-center gap-2">
         <h2 className="text-lg text-center font-bold">Discard Pile</h2>
       </div>
       <AnimatePresence>
-        <div className={cn('space-y-5 mx-auto')}>
+        <div className={cn('space-y-2 mx-auto')}>
           <div className="grid grid-rows-1 gap-4">
             {cards.map((card, index) => (
               <motion.div
@@ -37,7 +37,6 @@ export default function DiscardPile(props: Props) {
                     stiffness: 300,
                     damping: 30,
                   }}
-                  className="p-5"
                 >
                   <ABCardComp card={card} modeType={modeType} outsideGrid={true} />
                 </motion.div>

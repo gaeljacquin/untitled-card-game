@@ -243,17 +243,58 @@ export default function PlayingField(props: Props) {
             </CardDescription>
           )}
         </CardHeader>
+
         <div className="flex flex-col-reverse md:flex-row gap-6">
-          <div
-            className={cn(
-              'md:w-1/4 bg-amber-950/30 rounded-2xl p-2 md:p-4 rounded-xl shadow-md',
-              'h-48 md:h-auto md:max-h-[calc(100vh-4rem)] overflow-y-auto'
-            )}
-          >
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <h1 className="text-lg text-center font-bold">How to Play</h1>
+          <div className="md:w-1/4 flex flex-col h-full space-y-4">
+            <div className="h-1/2 bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md">
+              <LiveScore className="flex flex-col gap-4">
+                <>
+                  {Array.from({ length: gridSize }, (_, index) => (
+                    <motion.div
+                      key={`col-${index}`}
+                      className="text-center font-semibold"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
+                      <p className="flex justify-between text-sm">
+                        <span>Column {index + 1}: </span>
+                        <span>Available - {calculateAvailableSpaces(grid, index, false)}</span>
+                      </p>
+                    </motion.div>
+                  ))}
+                </>
+
+                <Separator />
+
+                <>
+                  {grid.map((_, index) => (
+                    <motion.div
+                      key={`row-${index}`}
+                      className="text-center font-semibold"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
+                      <p className="flex justify-between text-sm">
+                        <span>Row {index + 1}: </span>
+                        <span>Available - {calculateAvailableSpaces(grid, index, true)}</span>
+                      </p>
+                    </motion.div>
+                  ))}
+                </>
+              </LiveScore>{' '}
             </div>
-            <div className="space-y-4">{howToPlayText()}</div>
+
+            <div
+              className={cn(
+                'h-1/2 bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md mb-4',
+                'overflow-y-auto'
+              )}
+            >
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <h1 className="text-lg text-center font-bold">How to Play</h1>
+              </div>
+              <div className="space-y-4">{howToPlayText()}</div>
+            </div>
           </div>
 
           <div className={cn('md:w-2/4 lg:w-1/2 space-y-5')}>
@@ -302,44 +343,6 @@ export default function PlayingField(props: Props) {
                   Next Round
                 </Button>
               </div>
-            </div>
-
-            <div className="h-1/2 bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md mb-4">
-              <LiveScore className="flex flex-col gap-4">
-                <>
-                  {Array.from({ length: gridSize }, (_, index) => (
-                    <motion.div
-                      key={`col-${index}`}
-                      className="text-center font-semibold"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                    >
-                      <p className="flex justify-between text-sm">
-                        <span>Column {index + 1}: </span>
-                        <span>Available - {calculateAvailableSpaces(grid, index, false)}</span>
-                      </p>
-                    </motion.div>
-                  ))}
-                </>
-
-                <Separator />
-
-                <>
-                  {grid.map((_, index) => (
-                    <motion.div
-                      key={`row-${index}`}
-                      className="text-center font-semibold"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                    >
-                      <p className="flex justify-between text-sm">
-                        <span>Row {index + 1}: </span>
-                        <span>Available - {calculateAvailableSpaces(grid, index, true)}</span>
-                      </p>
-                    </motion.div>
-                  ))}
-                </>
-              </LiveScore>
             </div>
           </div>
         </div>
