@@ -1,6 +1,5 @@
 import { ABCard } from '@annabelle/shared/core/card';
 import { IGridCell } from '@annabelle/shared/core/grid-cell';
-import { ABCards } from '@annabelle/shared/core/word';
 import { GameState } from '@/types/game-state';
 
 export function getGameState(grid: IGridCell[][]): GameState {
@@ -11,6 +10,7 @@ export function getGameState(grid: IGridCell[][]): GameState {
     gameOver: isGridFull(grid),
     totalCards: totalCells,
     playedCards,
+    totalScore: 0,
   };
 }
 
@@ -18,14 +18,6 @@ export function isGridFull(grid: IGridCell[][]): boolean {
   return grid.every((row) => row.every((cell) => cell.card !== null));
 }
 
-export function canMoveCard(card: ABCard, playerHand: ABCards): boolean {
-  // If the card is already played, it cannot be moved
-  if (card.played) return false;
-
-  // If it's the last card in hand, only allow swapping
-  if (playerHand.length === 1 && playerHand[0].id === card.id) {
-    return false;
-  }
-
-  return true;
+export function canMoveCard(card: ABCard): boolean {
+  return !card.played;
 }

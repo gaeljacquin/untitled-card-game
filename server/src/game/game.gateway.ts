@@ -69,6 +69,8 @@ export class GameGateway
     const abGame = this.abGameMap.get(client.id);
     abGame.discardedABCards.push(discardedABCard);
     abGame.grid = newGrid;
+    this.abGameMap.set(client.id, abGame);
+    const updatedABGame = this.abGameMap.get(client.id);
     const gridSize = abGame.mode.gridSize;
     let emit = {};
 
@@ -100,7 +102,7 @@ export class GameGateway
       ),
     };
 
-    if (abGame.discardedABCards.length === gridSize) {
+    if (updatedABGame.discardedABCards.length === gridSize) {
       let result = null;
 
       if (abGame.mode.type === 'abword') {
@@ -112,13 +114,11 @@ export class GameGateway
         result,
       };
     } else {
-      const abCards = abGame.deal(abGame.discardedABCards.length);
+      const abCards = updatedABGame.deal(updatedABGame.discardedABCards.length);
       emit = {
         abCards,
       };
     }
-
-    this.abGameMap.set(client.id, abGame);
 
     client.emit('game-next-round-res', {
       ...emit,

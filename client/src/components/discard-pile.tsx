@@ -21,7 +21,7 @@ export default function DiscardPile(props: Props) {
       </div>
       <AnimatePresence>
         <div className={cn('space-y-2 mx-auto')}>
-          <div className="grid grid-rows-1 gap-4">
+          <div className="grid grid-cols-1 sm:grid-rows-1 gap-4">
             {cards.map((card, index) => (
               <motion.div
                 key={card.id}

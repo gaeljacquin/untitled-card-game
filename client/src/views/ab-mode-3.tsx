@@ -13,7 +13,7 @@ import BackgroundLogo from '@/components/background-logo';
 import Footer from '@/components/footer';
 import Placeholder from '@/components/placeholder';
 import PlayingField from '@/components/playing-field';
-import { Button } from '@/components/ui/button';
+// import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import socketInit from '@/utils/socket-init';
 
@@ -26,6 +26,13 @@ export default function ABMode3(props: Props) {
   const socket = socketInit();
   const [abCards, setABCards] = useState<ABCards>([]);
   const [abGameOver, setABGameOver] = useState<boolean>(false);
+  const [abMode3Result, setABMode3Result] = useState<{
+    [key: string]: {
+      word: string;
+      match: string;
+      points_final: number;
+    };
+  } | null>(null);
   const howToPlayText = () => {
     return (
       <ul className="list-disc list-inside space-y-5 text-white text-sm text-start">
@@ -45,7 +52,6 @@ export default function ABMode3(props: Props) {
   };
   const gridClass = cn('grid grid-cols-5 gap-2 md:gap-4 bg-amber-950/30 rounded-2xl p-2 md:p-4');
   const playerHandClass = cn('grid grid-rows-1 sm:grid-cols-1 gap-2 md:gap-4 justify-items-center');
-
   const wsConnect = () => {
     socket.on('connect', () => {
       console.info('Connected to server');
@@ -57,10 +63,14 @@ export default function ABMode3(props: Props) {
     });
 
     socket.on('game-next-round-res', (data) => {
-      const { abCards, gameOver } = data;
+      const { abCards, gameOver, result } = data;
 
       if (gameOver) {
         setABGameOver(true);
+
+        if (result) {
+          setABMode3Result(result);
+        }
       } else {
         setABCards(abCards);
       }
@@ -81,7 +91,7 @@ export default function ABMode3(props: Props) {
     socket.emit('game-next-round', data);
   };
 
-  if (!(abCards.length > 0)) {
+  if ((!abCards || abCards.length === 0) && !abGameOver) {
     return <Placeholder />;
   }
 
@@ -106,12 +116,13 @@ export default function ABMode3(props: Props) {
           evaluateRow={evaluateRowWord}
           evaluateSpecial={evaluateSpecialWord}
           gameOver={abGameOver}
+          mode3Result={abMode3Result}
         />
 
         <div className="footer-spacing-uwu">
-          <Button variant="destructive" onClick={() => setABGameOver(true)}>
+          {/* <Button variant="destructive" onClick={() => setABGameOver(true)}>
             Simulate Game Over
-          </Button>
+          </Button> */}
 
           <Footer />
         </div>

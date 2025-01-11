@@ -6,6 +6,7 @@ import { useDroppable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
 import ABCardComp from '@/components/ab-card';
 import { BorderBeam } from '@/components/ui/border-beam';
+import { cn } from '@/lib/utils';
 
 interface Props {
   cell: IGridCell;
@@ -18,7 +19,7 @@ interface Props {
 
 export function GridCell(props: Props) {
   const { cell, modeType, gridSize, lockedCells, rowIndex, columnIndex } = props;
-  const { setNodeRef, isOver } = useDroppable({
+  const droppable = {
     id: cell.id,
     data: {
       type: 'grid',
@@ -26,7 +27,8 @@ export function GridCell(props: Props) {
       columnIndex: cell.columnIndex,
       isLocked: lockedCells.has(`cell-${rowIndex}-${columnIndex}`),
     },
-  });
+  };
+  const { setNodeRef, isOver } = useDroppable(droppable);
 
   const isCornerCell =
     (cell.rowIndex === 0 && cell.columnIndex === 0) ||
@@ -58,7 +60,7 @@ export function GridCell(props: Props) {
             stiffness: 300,
             damping: 30,
           }}
-          className="p-0 sm:p-1"
+          className={cn('p-0 sm:p-1', cell.card.played && 'brightness-50')}
         >
           <ABCardComp card={cell.card} modeType={modeType} isDragging />
         </motion.div>

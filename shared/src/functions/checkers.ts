@@ -195,8 +195,28 @@ export const evaluateSpecialHand = (grid: IGridCell[][]) => {
 
   return {
     name: result.name + '*',
-    points: Math.ceil(result.points * 1.5),
+    points: Math.ceil(result.points * 2),
   };
+};
+
+export const evaluateTotalPokerScore = (grid: IGridCell[][]) => {
+  const gridSize = grid.length;
+  let totalScore = 0;
+
+  for (let row = 0; row < gridSize; row++) {
+    const rowScore = evaluateRowHand(grid, row);
+    totalScore += rowScore.points;
+  }
+
+  for (let col = 0; col < gridSize; col++) {
+    const colScore = evaluateColumnHand(grid, col);
+    totalScore += colScore.points;
+  }
+
+  const specialScore = evaluateSpecialHand(grid);
+  totalScore += specialScore.points;
+
+  return totalScore;
 };
 
 export const evaluateRowWord = (grid: IGridCell[][], row: number) => {

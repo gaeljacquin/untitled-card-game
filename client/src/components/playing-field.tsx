@@ -4,6 +4,7 @@ import { Fragment, ReactNode, useEffect, useState } from 'react';
 import { ABCard, ABCards } from '@annabelle/shared/core/card';
 import { IGridCell } from '@annabelle/shared/core/grid-cell';
 import { ABMode } from '@annabelle/shared/core/mode';
+import { evaluateTotalPokerScore } from '@annabelle/shared/functions/checkers';
 import {
   DndContext,
   DragEndEvent,
@@ -24,22 +25,11 @@ import Placeholder from '@/components/placeholder';
 import SortableItem from '@/components/sortable-item';
 import { Button } from '@/components/ui/button';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
 import { GameState } from '@/types/game-state';
-import {
-  canMoveCard,
-  getGameState,
-  // isGridFull
-} from '@/utils/game-state';
+import { canMoveCard, getGameState } from '@/utils/game-state';
 
 type Props = {
   modeSlug: string;
@@ -52,6 +42,13 @@ type Props = {
   evaluateRow: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
   evaluateSpecial: (arg0: IGridCell[][]) => { name: string; points: number };
   gameOver?: boolean;
+  mode3Result?: {
+    [key: string]: {
+      word: string;
+      match: string;
+      points_final: number;
+    };
+  } | null;
 };
 
 export default function PlayingField(props: Props) {
@@ -66,6 +63,7 @@ export default function PlayingField(props: Props) {
     evaluateRow,
     evaluateSpecial,
     gameOver = false,
+    mode3Result,
   } = props; // (1)
   const [playerHand, setPlayerHand] = useState<ABCards>([]);
   const mode = ABMode.getMode(modeSlug)!;
@@ -78,6 +76,7 @@ export default function PlayingField(props: Props) {
     gameOver: false,
     totalCards: abCards.length,
     playedCards: 0,
+    totalScore: 0,
   });
   const [lockedCells, setLockedCells] = useState<Set<string>>(new Set());
   const mouseSensor = useSensor(MouseSensor);
@@ -120,7 +119,12 @@ export default function PlayingField(props: Props) {
       );
     setGrid(newGrid);
     setDiscardPile(discardPile);
-    setGameState({ gameOver: false, totalCards: gridSize * gridSize, playedCards: 0 });
+    setGameState({
+      gameOver: false,
+      totalCards: gridSize * gridSize,
+      playedCards: 0,
+      totalScore: 0,
+    });
   };
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -129,7 +133,7 @@ export default function PlayingField(props: Props) {
       playerHand.find((c) => c.id === active.id) ||
       grid.flat().find((cell) => cell.card?.id === active.id)?.card;
 
-    if (card && canMoveCard(card, playerHand)) {
+    if (card && canMoveCard(card)) {
       setActiveDrag(card);
     }
   };
@@ -156,24 +160,35 @@ export default function PlayingField(props: Props) {
       const newGrid = [...grid];
 
       if (playerHand.includes(sourceCard)) {
-        if (playerHand.length === 1 && !newGrid[rowIndex][columnIndex].card) {
-          setActiveDrag(null);
-          return;
-        }
+        // Handle last card in hand - only allow swapping with unplayed cards
+        if (playerHand.length === 1) {
+          const targetCard = newGrid[rowIndex][columnIndex].card;
 
-        if (newGrid[rowIndex][columnIndex].card) {
-          const targetCard = newGrid[rowIndex][columnIndex].card! as ABCard;
-
-          if (!targetCard.played) {
-            newGrid[rowIndex][columnIndex].card = { ...sourceCard, faceUp: true } as ABCard;
-            setPlayerHand((prev) => {
-              const updatedHand = prev.filter((c) => c.id !== sourceCard.id);
-              return [...updatedHand, { ...targetCard, faceUp: true } as ABCard];
-            });
+          // If target cell is empty or card is played, return card to hand
+          if (!targetCard || targetCard.played) {
+            setActiveDrag(null);
+            return;
           }
-        } else {
+
+          // Swap the cards
           newGrid[rowIndex][columnIndex].card = { ...sourceCard, faceUp: true } as ABCard;
-          setPlayerHand((prev) => prev.filter((c) => c.id !== sourceCard.id));
+          setPlayerHand([{ ...targetCard, faceUp: true } as ABCard]);
+        } else {
+          // Handle normal card placement
+          if (newGrid[rowIndex][columnIndex].card) {
+            const targetCard = newGrid[rowIndex][columnIndex].card! as ABCard;
+
+            if (!targetCard.played) {
+              newGrid[rowIndex][columnIndex].card = { ...sourceCard, faceUp: true } as ABCard;
+              setPlayerHand((prev) => {
+                const updatedHand = prev.filter((c) => c.id !== sourceCard.id);
+                return [...updatedHand, { ...targetCard, faceUp: true } as ABCard];
+              });
+            }
+          } else {
+            newGrid[rowIndex][columnIndex].card = { ...sourceCard, faceUp: true } as ABCard;
+            setPlayerHand((prev) => prev.filter((c) => c.id !== sourceCard.id));
+          }
         }
       } else if (!sourceCard.played) {
         const sourceCell = grid.flat().find((cell) => cell.card?.id === active.id);
@@ -235,16 +250,14 @@ export default function PlayingField(props: Props) {
     const cardToDiscard = playerHand[0];
     setDiscardPile((prev) => [...prev, { ...cardToDiscard, faceUp: true }] as ABCards);
     setPlayerHand([]);
+    handleNextRound({ discardedABCard: cardToDiscard, newGrid });
 
     const isGridFull = newGrid.every((row) => row.every((cell) => cell.card !== null));
+
     if (isGridFull) {
       setGameState((prev) => ({ ...prev, gameOver: true }));
       return;
     }
-
-    void gameState; // Temporary
-
-    handleNextRound({ cardToDiscard, newGrid });
   };
 
   useEffect(() => {
@@ -263,9 +276,19 @@ export default function PlayingField(props: Props) {
     }
   }, [abCards]);
 
-  useEffect(() => {}, [gameOver]);
+  useEffect(() => {
+    if (gameOver) {
+      const totalScore = mode3Result
+        ? Object.values(mode3Result).reduce((sum, item) => sum + item.points_final, 0)
+        : evaluateTotalPokerScore(grid);
+      setGameState((prev) => ({
+        ...prev,
+        totalScore: totalScore,
+      }));
+    }
+  }, [gameOver]);
 
-  if (!(abCards.length > 0)) {
+  if (!abCards || abCards.length === 0) {
     return <Placeholder />;
   }
 
@@ -283,59 +306,163 @@ export default function PlayingField(props: Props) {
 
         <div className="flex flex-col-reverse md:flex-row gap-6">
           <div className="md:w-1/3 flex flex-col h-full space-y-4">
-            <div className="h-1/2 bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md">
-              <LiveScore className="flex flex-col gap-4">
-                <>
-                  {Array.from({ length: gridSize }, (_, index) => (
-                    <motion.div
-                      key={`col-${index}`}
-                      className="text-center font-semibold"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                    >
-                      <p className="flex items-center justify-between gap-2 text-sm">
-                        <span>Column {index + 1}: </span>
-                        <span>{evaluateColumn(grid, index).name}</span>
-                        <span>${evaluateColumn(grid, index).points}</span>
-                      </p>
-                    </motion.div>
-                  ))}
-                </>
-
-                <Separator />
-
-                <>
-                  {grid.map((_, index) => (
-                    <motion.div
-                      key={`row-${index}`}
-                      className="text-center font-semibold"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                    >
-                      <p className="flex items-center justify-between gap-2 text-sm">
-                        <span>Row {index + 1} </span>
-                        <span>{evaluateRow(grid, index).name}</span>
-                        <span>${evaluateRow(grid, index).points}</span>
-                      </p>
-                    </motion.div>
-                  ))}
-                </>
-
-                <Separator />
-
-                <>
-                  <motion.div
-                    className="text-center font-semibold"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                  >
-                    <p className="flex items-center justify-between gap-2 text-sm">
-                      <span>Special</span>
-                      <span>{evaluateSpecial(grid).name}</span>
-                      <span>${evaluateSpecial(grid).points}</span>
-                    </p>
-                  </motion.div>
-                </>
+            <div
+              className={cn(
+                'h-1/2 bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md',
+                gameOver && 'shadow-animate rounded-2xl'
+              )}
+            >
+              <LiveScore
+                className="flex flex-col gap-4"
+                title={gameOver ? 'Final Score' : 'Live Score'}
+              >
+                {gameOver && mode3Result ? (
+                  <>
+                    <>
+                      {Array.from({ length: gridSize }, (_, index) => (
+                        <motion.div
+                          key={`col-${index}`}
+                          className="text-center font-semibold"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                        >
+                          <p className="flex items-center justify-between gap-2 text-sm">
+                            <span>Column {index + 1}: </span>
+                            <span>
+                              {mode3Result[`col-${index}`].word} &rarr;{' '}
+                              {mode3Result[`col-${index}`].match}
+                            </span>
+                            <span>${mode3Result[`col-${index}`].points_final}</span>
+                          </p>
+                        </motion.div>
+                      ))}
+                    </>
+                    <Separator />
+                    <>
+                      {grid.map((_, index) => (
+                        <motion.div
+                          key={`row-${index}`}
+                          className="text-center font-semibold"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                        >
+                          <p className="flex items-center justify-between gap-2 text-sm">
+                            <span>Row {index + 1} </span>
+                            <span>{evaluateRow(grid, index).name}</span>
+                            <span>${evaluateRow(grid, index).points}</span>
+                          </p>
+                        </motion.div>
+                      ))}
+                    </>
+                    <Separator />
+                    <>
+                      <motion.div
+                        className="text-center font-semibold"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                      >
+                        <p className="flex items-center justify-between gap-2 text-sm">
+                          <span>Special</span>
+                          <span>{evaluateSpecial(grid).name}</span>
+                          <span>${evaluateSpecial(grid).points}</span>
+                        </p>
+                      </motion.div>
+                    </>
+                    <Separator />
+                    <>
+                      <motion.div
+                        className="text-center font-semibold"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                      >
+                        <p className="flex items-center justify-between gap-2 text-sm">
+                          <span>Total Score</span>
+                          <span>${gameState.totalScore}</span>
+                        </p>
+                      </motion.div>
+                    </>
+                  </>
+                ) : (
+                  <>
+                    <>
+                      {Array.from({ length: gridSize }, (_, index) => (
+                        <motion.div
+                          key={`col-${index}`}
+                          className="text-center font-semibold"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                        >
+                          <p className="flex items-center justify-between gap-2 text-sm">
+                            <span>Column {index + 1}: </span>
+                            <span>{evaluateColumn(grid, index).name}</span>
+                            <span>${evaluateColumn(grid, index).points}</span>
+                          </p>
+                        </motion.div>
+                      ))}
+                    </>
+                    <Separator />
+                    <>
+                      {grid.map((_, index) => (
+                        <motion.div
+                          key={`row-${index}`}
+                          className="text-center font-semibold"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                        >
+                          <p className="flex items-center justify-between gap-2 text-sm">
+                            <span>Row {index + 1} </span>
+                            <span>{evaluateRow(grid, index).name}</span>
+                            <span>${evaluateRow(grid, index).points}</span>
+                          </p>
+                        </motion.div>
+                      ))}
+                    </>
+                    <Separator />
+                    <>
+                      <motion.div
+                        className="text-center font-semibold"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                      >
+                        <p className="flex items-center justify-between gap-2 text-sm">
+                          <span>Special</span>
+                          <span>{evaluateSpecial(grid).name}</span>
+                          <span>${evaluateSpecial(grid).points}</span>
+                        </p>
+                      </motion.div>
+                    </>
+                    {gameOver && (
+                      <>
+                        <Separator />
+                        <>
+                          <motion.div
+                            className="text-center font-semibold"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                          >
+                            <p className="flex items-center justify-between gap-2 text-sm">
+                              <span>Bonus Points</span>
+                              <span>$0</span>
+                            </p>
+                          </motion.div>
+                        </>
+                      </>
+                    )}
+                    <Separator />
+                    <>
+                      <motion.div
+                        className="text-center font-semibold"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                      >
+                        <p className="flex items-center justify-between gap-2 text-sm">
+                          <span>Total Score</span>
+                          <span>${gameState.totalScore}</span>
+                        </p>
+                      </motion.div>
+                    </>
+                  </>
+                )}
               </LiveScore>
             </div>
 
@@ -355,7 +482,7 @@ export default function PlayingField(props: Props) {
           <div className={cn('md:w-2/4 lg:w-1/2 space-y-5')}>
             <div className={cn(gridClass)}>
               {grid.map((row, index) => (
-                <Fragment key={`main-${index}`}>
+                <Fragment key={`grid-${index}`}>
                   {row.map((cell, rowIndex) => (
                     <GridCell
                       key={cell.id}
@@ -386,7 +513,7 @@ export default function PlayingField(props: Props) {
                   strategy={horizontalListSortingStrategy}
                 >
                   {playerHand.map((item) => (
-                    <SortableItem key={item.id} id={item.id ?? 0}>
+                    <SortableItem key={item.id} id={item.id ?? crypto.randomUUID()}>
                       <ABCardComp
                         key={`card-${item.id}`}
                         card={item}
@@ -411,20 +538,6 @@ export default function PlayingField(props: Props) {
             </div>
           </div>
         </div>
-
-        <Dialog open={gameOver} onOpenChange={() => {}}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Game Over!</DialogTitle>
-              <DialogDescription>
-                You've filled the entire grid. Would you like to play again?
-              </DialogDescription>
-            </DialogHeader>
-            <div className="flex justify-end">
-              <Button>Play Again</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
       </div>
 
       <DragOverlay>
