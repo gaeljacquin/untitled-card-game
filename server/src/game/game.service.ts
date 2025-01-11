@@ -12,7 +12,7 @@ export class GameService {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ wordMap }),
+      body: JSON.stringify(wordMap),
     });
     const data = await response.json();
 

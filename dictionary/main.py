@@ -9,7 +9,7 @@ def hello_world():
   return "Hello, World"
 
 @app.route("/abcheck", methods=['POST'])
-def ab_checks_rest():
+def ab_check_rest():
   word_map = request.json
   res = ab_check(word_map)
 

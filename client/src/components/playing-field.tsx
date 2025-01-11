@@ -42,7 +42,7 @@ type Props = {
   evaluateRow: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
   evaluateSpecial: (arg0: IGridCell[][]) => { name: string; points: number };
   gameOver?: boolean;
-  mode3Result?: {
+  abResult: {
     [key: string]: {
       word: string;
       match: string;
@@ -63,7 +63,7 @@ export default function PlayingField(props: Props) {
     evaluateRow,
     evaluateSpecial,
     gameOver = false,
-    mode3Result,
+    abResult,
   } = props; // (1)
   const [playerHand, setPlayerHand] = useState<ABCards>([]);
   const mode = ABMode.getMode(modeSlug)!;
@@ -77,6 +77,7 @@ export default function PlayingField(props: Props) {
     totalCards: abCards.length,
     playedCards: 0,
     totalScore: 0,
+    bonusPoints: 0,
   });
   const [lockedCells, setLockedCells] = useState<Set<string>>(new Set());
   const mouseSensor = useSensor(MouseSensor);
@@ -124,6 +125,7 @@ export default function PlayingField(props: Props) {
       totalCards: gridSize * gridSize,
       playedCards: 0,
       totalScore: 0,
+      bonusPoints: 0,
     });
   };
 
@@ -277,16 +279,32 @@ export default function PlayingField(props: Props) {
   }, [abCards]);
 
   useEffect(() => {
-    if (gameOver) {
-      const totalScore = mode3Result
-        ? Object.values(mode3Result).reduce((sum, item) => sum + item.points_final, 0)
-        : evaluateTotalPokerScore(grid);
+    if (gameOver && abResult) {
+      const totalScore =
+        type === 'abword'
+          ? Object.values(abResult).reduce((sum, item) => sum + item.points_final, 0)
+          : evaluateTotalPokerScore(grid);
+      const bonusPoints =
+        type === 'abword'
+          ? evaluateTotalPokerScore(grid)
+          : Object.values(abResult).reduce((sum, item) => sum + item.points_final, 0);
       setGameState((prev) => ({
         ...prev,
-        totalScore: totalScore,
+        totalScore: totalScore + bonusPoints,
+        bonusPoints: bonusPoints,
       }));
     }
   }, [gameOver]);
+
+  useEffect(() => {
+    if (type === 'abpoker') {
+      const totalScore = evaluateTotalPokerScore(grid);
+      setGameState((prev) => ({
+        ...prev,
+        totalScore,
+      }));
+    }
+  }, [grid]);
 
   if (!abCards || abCards.length === 0) {
     return <Placeholder />;
@@ -302,6 +320,10 @@ export default function PlayingField(props: Props) {
               {description}
             </CardDescription>
           )}
+          <CardDescription className="text-md bg-white/70 text-rose-800 p-2">
+            The game is currently in beta. Please reload the page if you get stuck or the game
+            crashes.
+          </CardDescription>
         </CardHeader>
 
         <div className="flex flex-col-reverse md:flex-row gap-6">
@@ -316,7 +338,7 @@ export default function PlayingField(props: Props) {
                 className="flex flex-col gap-4"
                 title={gameOver ? 'Final Score' : 'Live Score'}
               >
-                {gameOver && mode3Result ? (
+                {gameOver && abResult && type === 'abword' ? (
                   <>
                     <>
                       {Array.from({ length: gridSize }, (_, index) => (
@@ -328,11 +350,15 @@ export default function PlayingField(props: Props) {
                         >
                           <p className="flex items-center justify-between gap-2 text-sm">
                             <span>Column {index + 1}: </span>
-                            <span>
-                              {mode3Result[`col-${index}`].word} &rarr;{' '}
-                              {mode3Result[`col-${index}`].match}
-                            </span>
-                            <span>${mode3Result[`col-${index}`].points_final}</span>
+                            {type === 'abword' ? (
+                              <span>
+                                {abResult[`col-${index}`].word} &rarr;{' '}
+                                {abResult[`col-${index}`].match}
+                              </span>
+                            ) : (
+                              <></>
+                            )}
+                            <span>${abResult[`col-${index}`].points_final}</span>
                           </p>
                         </motion.div>
                       ))}
@@ -442,7 +468,7 @@ export default function PlayingField(props: Props) {
                           >
                             <p className="flex items-center justify-between gap-2 text-sm">
                               <span>Bonus Points</span>
-                              <span>$0</span>
+                              <span>${gameState.bonusPoints}</span>
                             </p>
                           </motion.div>
                         </>
@@ -511,6 +537,7 @@ export default function PlayingField(props: Props) {
                 <SortableContext
                   items={playerHand.map((item) => item.id)}
                   strategy={horizontalListSortingStrategy}
+                  key={crypto.randomUUID()}
                 >
                   {playerHand.map((item) => (
                     <SortableItem key={item.id} id={item.id ?? crypto.randomUUID()}>

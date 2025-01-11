@@ -7,34 +7,97 @@ with open('dictionary.json', 'r') as file:
 dictionary = list(data.keys())
 
 def ab_check(word_map):
+    result = {}
+
     for key in word_map:
-        word = word_map[key]['word'].lower()
+        try:
+            current = word_map[key]
+            word = str(current.get('word', '')).lower()
 
-        if word in dictionary:
-            word_map[key]['valid'] = True
-            word_map[key]['match'] = word
-            word_map[key]['points_final'] = word_map[key]['points'] + 100
-            continue
+            result[key] = {
+                'word': word,
+                'points': current.get('points', 0),
+                'label': current.get('label', ''),
+                'valid': False,
+                'match': '',
+                'points_final': 0
+            }
 
-        word_perms = permutations(word)
-        found_valid = False
-        found_match = ''
+            if word in dictionary:
+                result[key]['valid'] = True
+                result[key]['match'] = word
+                result[key]['points_final'] = result[key]['points'] + 100
+                continue
 
-        for perm in word_perms:
-            perm_word = ''.join(perm)
+            word_perms = permutations(word)
+            found_valid = False
+            found_match = ''
 
-            if perm_word in dictionary:
-                found_valid = True
-                found_match = perm_word
-                break
+            for perm in word_perms:
+                perm_word = ''.join(perm)
+                if perm_word in dictionary:
+                    found_valid = True
+                    found_match = perm_word
+                    break
 
-        word_map[key]['valid'] = found_valid
-        word_map[key]['match'] = found_match
-        word_map[key]['points_final'] = word_map[key]['points'] + 100 if found_valid else 0
+            result[key]['valid'] = found_valid
+            result[key]['match'] = found_match
+            result[key]['points_final'] = result[key]['points'] + 100 if found_valid else 0
 
-    return word_map
+        except Exception as e:
+            result[key] = {
+                'error': str(e),
+                'valid': False,
+                'match': '',
+                'points_final': 0
+            }
 
-def handler(event):
-    word_map = event
+    return result
 
-    return ab_check(word_map)
+
+def handler(event, context):
+    try:
+        # Check if the event comes from API Gateway (will have 'body' field)
+        if isinstance(event, dict) and 'body' in event:
+            # If body is a string, parse it
+            if isinstance(event['body'], str):
+                payload = json.loads(event['body'])
+            else:
+                payload = event['body']
+        else:
+            # Direct Lambda invocation
+            payload = event
+
+        # Create word map from the payload
+        word_map = {
+            str(key): {
+                'word': str(value.get('word', '')),
+                'points': value.get('points', 0),
+                'label': value.get('label', '')
+            }
+            for key, value in payload.items()
+        }
+
+        result = ab_check(word_map)
+
+        # Return formatted response for API Gateway
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'  # For CORS support
+            },
+            'body': json.dumps(result)
+        }
+
+    except Exception as e:
+        return {
+            'statusCode': 400,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({
+                'error': str(e)
+            })
+        }

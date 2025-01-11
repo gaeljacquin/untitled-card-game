@@ -26,6 +26,13 @@ export default function ABMode2(props: Props) {
   const socket = socketInit();
   const [abCards, setABCards] = useState<ABCards>([]);
   const [abGameOver, setABGameOver] = useState<boolean>(false);
+  const [abResult, setABResult] = useState<{
+    [key: string]: {
+      word: string;
+      match: string;
+      points_final: number;
+    };
+  } | null>(null);
   const howToPlayText = () => {
     return (
       <ul className="list-disc list-inside space-y-5 text-white text-sm text-start">
@@ -35,7 +42,6 @@ export default function ABMode2(props: Props) {
         <li>Click 'Confirm'</li>
         <li>The remaining card is moved to the discard pile, and a new set of 6 cards are dealt</li>
         <li>Rinse and repeat until the grid is filled</li>
-        <li>The discard pile is activated when you score 4+ poker hands in the grid</li>
         <li>
           For an extra challenge, try to make a poker hand using the center and corners of the grid!
         </li>
@@ -57,10 +63,11 @@ export default function ABMode2(props: Props) {
     });
 
     socket.on('game-next-round-res', (data) => {
-      const { abCards, gameOver } = data;
+      const { abCards, gameOver, abResult } = data;
 
-      if (gameOver) {
+      if (gameOver && abResult) {
         setABGameOver(true);
+        setABResult(abResult);
       } else {
         setABCards(abCards);
       }
@@ -107,6 +114,7 @@ export default function ABMode2(props: Props) {
           evaluateRow={evaluateRowHand}
           evaluateSpecial={evaluateSpecialHand}
           gameOver={abGameOver}
+          abResult={abResult}
         />
 
         <div className="footer-spacing-uwu">

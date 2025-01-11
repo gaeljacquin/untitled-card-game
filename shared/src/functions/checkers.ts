@@ -37,7 +37,7 @@ export function evaluatePokerHands(cards: ABCard[]): PokerHand {
   }
 
   if (cards.length > 5) {
-    throw new Error('A poker hand cannot contain more than 5 cards');
+    throw new Error('Invalid number of cards');
   }
 
   const countBySuit = new Map<string, number>();

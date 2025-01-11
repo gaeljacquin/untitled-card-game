@@ -74,16 +74,22 @@ export class GameGateway
     const gridSize = abGame.mode.gridSize;
     let emit = {};
 
+    console.log(abGame);
+    console.log(abGame.mode.type);
+
     const wordMap = {
       ...Object.fromEntries(
         newGrid.map((row, index) => [
           `row-${index + 1}`,
           {
             word: row.map((cell) => cell.card?.letter || '').join(''),
-            points: row.reduce(
-              (sum, cell) => sum + (cell.card?.rank.value || 0),
-              0,
-            ),
+            points:
+              abGame.mode.type === 'abpoker'
+                ? 0
+                : row.reduce(
+                    (sum, cell) => sum + (cell.card?.rank.value || 0),
+                    0,
+                  ),
             label: 'Row ' + (index + 1),
           },
         ]),
@@ -93,9 +99,15 @@ export class GameGateway
           `col-${index + 1}`,
           {
             word: newGrid.map((row) => row[index].card?.letter || '').join(''),
-            points: newGrid
-              .map((row) => row[index].card?.letter || '')
-              .reduce((sum, cell) => sum + (cell.card?.rank.value || 0), 0),
+            points:
+              abGame.mode.type === 'abpoker'
+                ? 0
+                : newGrid
+                    .map((row) => row[index].card?.letter || '')
+                    .reduce(
+                      (sum, cell) => sum + (cell.card?.rank.value || 0),
+                      0,
+                    ),
             label: 'Column ' + (index + 1),
           },
         ]),
@@ -103,21 +115,21 @@ export class GameGateway
     };
 
     if (updatedABGame.discardedABCards.length === gridSize) {
-      let result = null;
-
-      if (abGame.mode.type === 'abword') {
-        result = await this.gameService.abCheckLambda(wordMap);
-      }
+      console.log('Sending to Lambda:', wordMap); // Add this log
+      const response = await this.gameService.abCheckLambda(wordMap);
+      console.log('Lambda response body:', response['body']); // Add this log
+      const abResult = JSON.parse(response['body']);
 
       emit = {
         gameOver: true,
-        result,
+        abResult: abResult,
       };
     } else {
       const abCards = updatedABGame.deal(updatedABGame.discardedABCards.length);
       emit = {
         abCards,
       };
+      console.log(emit);
     }
 
     client.emit('game-next-round-res', {

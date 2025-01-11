@@ -26,7 +26,7 @@ export default function ABMode3(props: Props) {
   const socket = socketInit();
   const [abCards, setABCards] = useState<ABCards>([]);
   const [abGameOver, setABGameOver] = useState<boolean>(false);
-  const [abMode3Result, setABMode3Result] = useState<{
+  const [abResult, setABResult] = useState<{
     [key: string]: {
       word: string;
       match: string;
@@ -42,7 +42,6 @@ export default function ABMode3(props: Props) {
         <li>Click 'Confirm'</li>
         <li>The remaining card is moved to the discard pile, and a new set of 6 cards are dealt</li>
         <li>Rinse and repeat until the grid is filled</li>
-        <li>The discard pile is activated when you score 4+ valid words in the grid</li>
         <li>
           For an extra challenge, try to make a valid word using the center and corners of the grid!
         </li>
@@ -63,14 +62,11 @@ export default function ABMode3(props: Props) {
     });
 
     socket.on('game-next-round-res', (data) => {
-      const { abCards, gameOver, result } = data;
+      const { abCards, gameOver, abResult } = data;
 
-      if (gameOver) {
+      if (gameOver && abResult) {
         setABGameOver(true);
-
-        if (result) {
-          setABMode3Result(result);
-        }
+        setABResult(abResult);
       } else {
         setABCards(abCards);
       }
@@ -116,7 +112,7 @@ export default function ABMode3(props: Props) {
           evaluateRow={evaluateRowWord}
           evaluateSpecial={evaluateSpecialWord}
           gameOver={abGameOver}
-          mode3Result={abMode3Result}
+          abResult={abResult}
         />
 
         <div className="footer-spacing-uwu">

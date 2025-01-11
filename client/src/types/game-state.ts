@@ -3,4 +3,5 @@ export type GameState = {
   totalCards: number;
   playedCards: number;
   totalScore: number;
+  bonusPoints: number;
 };

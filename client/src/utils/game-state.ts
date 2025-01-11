@@ -11,6 +11,7 @@ export function getGameState(grid: IGridCell[][]): GameState {
     totalCards: totalCells,
     playedCards,
     totalScore: 0,
+    bonusPoints: 0,
   };
 }
 
