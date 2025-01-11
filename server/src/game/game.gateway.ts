@@ -71,12 +71,7 @@ export class GameGateway
     abGame.grid = newGrid;
     this.abGameMap.set(client.id, abGame);
     const updatedABGame = this.abGameMap.get(client.id);
-    const gridSize = abGame.mode.gridSize;
-    let emit = {};
-
-    console.log(abGame);
-    console.log(abGame.mode.type);
-
+    const gridSize = updatedABGame.mode.gridSize;
     const wordMap = {
       ...Object.fromEntries(
         newGrid.map((row, index) => [
@@ -87,7 +82,7 @@ export class GameGateway
               abGame.mode.type === 'abpoker'
                 ? 0
                 : row.reduce(
-                    (sum, cell) => sum + (cell.card?.rank.value || 0),
+                    (sum, cell) => sum + (cell.card?.rank.value * 10 || 0),
                     0,
                   ),
             label: 'Row ' + (index + 1),
@@ -105,7 +100,7 @@ export class GameGateway
                 : newGrid
                     .map((row) => row[index].card?.letter || '')
                     .reduce(
-                      (sum, cell) => sum + (cell.card?.rank.value || 0),
+                      (sum, cell) => sum + (cell.card?.rank.value * 10 || 0),
                       0,
                     ),
             label: 'Column ' + (index + 1),
@@ -113,13 +108,37 @@ export class GameGateway
         ]),
       ),
     };
+    let emit = {};
 
     if (updatedABGame.discardedABCards.length === gridSize) {
-      console.log('Sending to Lambda:', wordMap); // Add this log
-      const response = await this.gameService.abCheckLambda(wordMap);
-      console.log('Lambda response body:', response['body']); // Add this log
-      const abResult = JSON.parse(response['body']);
+      if (abGame.mode.type === 'abword') {
+        wordMap['special'] = {
+          word: [
+            newGrid[0][0].card?.letter || '',
+            newGrid[0][4].card?.letter || '',
+            newGrid[4][0].card?.letter || '',
+            newGrid[4][4].card?.letter || '',
+            newGrid[2][2].card?.letter || '',
+          ].join(''),
+          points:
+            (newGrid[0][0].card.rank.value +
+              newGrid[0][4].card.rank.value +
+              newGrid[4][0].card.rank.value +
+              newGrid[4][4].card.rank.value +
+              newGrid[2][2].card.rank.value) *
+            10,
+          label: 'Special',
+          valid: false,
+          match: '',
+          points_final: 0,
+        };
+      }
 
+      console.log(wordMap);
+
+      const response = await this.gameService.abCheckLambda(wordMap);
+      const abResult = JSON.parse(response['body']);
+      console.log(abResult);
       emit = {
         gameOver: true,
         abResult: abResult,
@@ -129,7 +148,6 @@ export class GameGateway
       emit = {
         abCards,
       };
-      console.log(emit);
     }
 
     client.emit('game-next-round-res', {

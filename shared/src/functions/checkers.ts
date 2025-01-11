@@ -240,7 +240,7 @@ export const evaluateRowWord = (grid: IGridCell[][], row: number) => {
     }
   }
 
-  const points = hasAtLeastOneCard ? wordValue : 0;
+  const points = (hasAtLeastOneCard ? wordValue : 0) * 10;
 
   return {
     name: '',
@@ -269,7 +269,7 @@ export const evaluateColumnWord = (grid: IGridCell[][], col: number) => {
     }
   }
 
-  const points = hasAtLeastOneCard ? wordValue : 0;
+  const points = (hasAtLeastOneCard ? wordValue : 0) * 10;
 
   return {
     name: '',
@@ -298,7 +298,7 @@ export const evaluateSpecialWord = (grid: IGridCell[][]) => {
     cornerCards.push(centerCard);
   }
 
-  const points = cornerCards.reduce((sum, card) => sum + card.rank.value, 0);
+  const points = cornerCards.reduce((sum, card) => sum + card.rank.value, 0) * 10;
 
   return {
     name: '',

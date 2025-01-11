@@ -83,6 +83,9 @@ export default function PlayingField(props: Props) {
   const mouseSensor = useSensor(MouseSensor);
   const touchSensor = useSensor(TouchSensor);
   const sensors = useSensors(mouseSensor, touchSensor);
+  // const placeholderKey = () => {
+  //   return crypto.randomUUID()
+  // }
 
   useEffect(() => {
     initializeGame();
@@ -350,15 +353,13 @@ export default function PlayingField(props: Props) {
                         >
                           <p className="flex items-center justify-between gap-2 text-sm">
                             <span>Column {index + 1}: </span>
-                            {type === 'abword' ? (
-                              <span>
-                                {abResult[`col-${index}`].word} &rarr;{' '}
-                                {abResult[`col-${index}`].match}
-                              </span>
-                            ) : (
-                              <></>
-                            )}
-                            <span>${abResult[`col-${index}`].points_final}</span>
+                            <span>
+                              {abResult[`col-${index + 1}`].word} &rarr;{' '}
+                              {abResult[`col-${index + 1}`].match !== ''
+                                ? abResult[`col-${index + 1}`].match
+                                : '_'}
+                            </span>
+                            <span>${abResult[`col-${index + 1}`].points_final}</span>
                           </p>
                         </motion.div>
                       ))}
@@ -374,8 +375,13 @@ export default function PlayingField(props: Props) {
                         >
                           <p className="flex items-center justify-between gap-2 text-sm">
                             <span>Row {index + 1} </span>
-                            <span>{evaluateRow(grid, index).name}</span>
-                            <span>${evaluateRow(grid, index).points}</span>
+                            <span>
+                              {abResult[`row-${index + 1}`].word} &rarr;{' '}
+                              {abResult[`row-${index + 1}`].match !== ''
+                                ? abResult[`row-${index + 1}`].match
+                                : '_'}
+                            </span>
+                            <span>${abResult[`row-${index + 1}`].points_final}</span>
                           </p>
                         </motion.div>
                       ))}
@@ -388,9 +394,31 @@ export default function PlayingField(props: Props) {
                         animate={{ opacity: 1 }}
                       >
                         <p className="flex items-center justify-between gap-2 text-sm">
+                          <span>Bonus Points</span>
+                          <span>${gameState.bonusPoints}</span>
+                        </p>
+                      </motion.div>
+                    </>
+                    <Separator />
+                    <>
+                      <motion.div
+                        className="text-center font-semibold"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                      >
+                        <p className="flex items-center justify-between gap-2 text-sm">
                           <span>Special</span>
-                          <span>{evaluateSpecial(grid).name}</span>
-                          <span>${evaluateSpecial(grid).points}</span>
+                          <span>
+                            {' '}
+                            {abResult['special'].word} &rarr;{' '}
+                            {abResult['special'].match !== '' ? abResult['special'].match : '_'}
+                          </span>
+                          <span>
+                            $
+                            {gameOver
+                              ? abResult['special'].points_final
+                              : evaluateSpecial(grid).points}
+                          </span>
                         </p>
                       </motion.div>
                     </>
@@ -474,19 +502,24 @@ export default function PlayingField(props: Props) {
                         </>
                       </>
                     )}
-                    <Separator />
-                    <>
-                      <motion.div
-                        className="text-center font-semibold"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                      >
-                        <p className="flex items-center justify-between gap-2 text-sm">
-                          <span>Total Score</span>
-                          <span>${gameState.totalScore}</span>
-                        </p>
-                      </motion.div>
-                    </>
+                    {type === 'abpoker' ||
+                      (type === 'abword' && gameOver && (
+                        <>
+                          <Separator />
+                          <>
+                            <motion.div
+                              className="text-center font-semibold"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                            >
+                              <p className="flex items-center justify-between gap-2 text-sm">
+                                <span>Total Score</span>
+                                <span>${gameState.totalScore}</span>
+                              </p>
+                            </motion.div>
+                          </>
+                        </>
+                      ))}
                   </>
                 )}
               </LiveScore>
@@ -506,6 +539,16 @@ export default function PlayingField(props: Props) {
           </div>
 
           <div className={cn('md:w-2/4 lg:w-1/2 space-y-5')}>
+            {gameOver && (
+              <div
+                className={cn(
+                  'flex items-center justify-center',
+                  'text-md bg-white/70 text-rose-800 p-2'
+                )}
+              >
+                Please reload the page to play a new round.
+              </div>
+            )}
             <div className={cn(gridClass)}>
               {grid.map((row, index) => (
                 <Fragment key={`grid-${index}`}>
@@ -537,10 +580,9 @@ export default function PlayingField(props: Props) {
                 <SortableContext
                   items={playerHand.map((item) => item.id)}
                   strategy={horizontalListSortingStrategy}
-                  key={crypto.randomUUID()}
                 >
                   {playerHand.map((item) => (
-                    <SortableItem key={item.id} id={item.id ?? crypto.randomUUID()}>
+                    <SortableItem key={item.id} id={item.id}>
                       <ABCardComp
                         key={`card-${item.id}`}
                         card={item}

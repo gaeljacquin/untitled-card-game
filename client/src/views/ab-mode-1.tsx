@@ -44,6 +44,9 @@ export default function ABMode1(props: Props) {
         <li>Rinse and repeat until the grid is filled</li>
         <li>For an extra challenge, try to make a poker hand using the corners of the grid!</li>
         <li>Bonus points when poker hands also form valid words!</li>
+        <li>
+          <span className="font-bold uppercase">Tip 1:</span> Aces have a value of 1
+        </li>
       </ul>
     );
   };

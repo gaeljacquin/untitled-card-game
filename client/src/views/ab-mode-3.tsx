@@ -45,12 +45,20 @@ export default function ABMode3(props: Props) {
         <li>
           For an extra challenge, try to make a valid word using the center and corners of the grid!
         </li>
-        <li>Bonus points when valid words also form poker hands!</li>
+        <li>Bonus points when valid words also form poker hands (one pair and up)!</li>
+        <li>
+          <span className="font-bold uppercase">Tip 1:</span> Aces have a value of 1
+        </li>
+        <li>
+          <span className="font-bold uppercase">Tip 2:</span> Live score is not representative of
+          word validity
+        </li>
       </ul>
     );
   };
   const gridClass = cn('grid grid-cols-5 gap-2 md:gap-4 bg-amber-950/30 rounded-2xl p-2 md:p-4');
   const playerHandClass = cn('grid grid-rows-1 sm:grid-cols-1 gap-2 md:gap-4 justify-items-center');
+
   const wsConnect = () => {
     socket.on('connect', () => {
       console.info('Connected to server');
@@ -75,6 +83,7 @@ export default function ABMode3(props: Props) {
     return () => {
       socket.off('connect');
       socket.off(`game-init-res`);
+      socket.off(`game-next-round-res`);
     };
   };
 

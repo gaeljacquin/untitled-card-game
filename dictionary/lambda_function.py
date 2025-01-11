@@ -8,6 +8,7 @@ dictionary = list(data.keys())
 
 def ab_check(word_map):
     result = {}
+    found_valid_count = 0
 
     for key in word_map:
         try:
@@ -38,6 +39,7 @@ def ab_check(word_map):
                 if perm_word in dictionary:
                     found_valid = True
                     found_match = perm_word
+                    found_valid_count += 1
                     break
 
             result[key]['valid'] = found_valid
@@ -51,6 +53,8 @@ def ab_check(word_map):
                 'match': '',
                 'points_final': 0
             }
+
+    result['special']['points_final'] *= 2 if found_valid_count >= 3 else 0
 
     return result
 
