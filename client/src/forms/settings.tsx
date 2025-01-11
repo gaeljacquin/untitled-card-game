@@ -1,9 +1,10 @@
 'use client';
 
-import { useRef } from 'react';
-import { ABCardPlus } from '@annabelle/shared/core/card';
+import { useEffect, useRef } from 'react';
+import { ABCard, ABCardPlus, ABCards } from '@annabelle/shared/core/card';
 import { Rank, RankId } from '@annabelle/shared/core/rank';
 import { Suit, SuitId } from '@annabelle/shared/core/suit';
+import { evaluatePokerHands } from '@annabelle/shared/functions/checkers';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PopoverClose } from '@radix-ui/react-popover';
 import { Check } from 'lucide-react';
@@ -23,6 +24,25 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import settingsStore, { cardBacks, cardFronts, initialSettings } from '@/stores/settings';
 import { FormData, settingsSchema } from '@/types/settings';
+
+function createExampleFiveCardHand(): ABCards {
+  return [
+    new ABCard(Rank.getById('ten'), Suit.getById('hearts')),
+    new ABCard(Rank.getById('ten'), Suit.getById('hearts')),
+    new ABCard(Rank.getById('ten'), Suit.getById('spades')),
+    new ABCard(Rank.getById('ten'), Suit.getById('hearts')),
+    new ABCard(Rank.getById('ten'), Suit.getById('hearts')),
+  ];
+}
+
+function createExampleFourCardHand(): ABCards {
+  return [
+    new ABCard(Rank.getById('jack'), Suit.getById('hearts')),
+    new ABCard(Rank.getById('five'), Suit.getById('clubs')),
+    new ABCard(Rank.getById('king'), Suit.getById('hearts')),
+    new ABCard(Rank.getById('ace'), Suit.getById('hearts')),
+  ];
+}
 
 export default function Settings() {
   const { _hasHydrated, getSettings, updateSettings, resetSettings } = settingsStore();
@@ -101,6 +121,14 @@ export default function Settings() {
       });
     }
   }
+
+  useEffect(() => {
+    const result4 = evaluatePokerHands(createExampleFiveCardHand());
+    const result5 = evaluatePokerHands(createExampleFourCardHand());
+
+    console.log(result4.name);
+    console.log(result5.name);
+  }, []);
 
   if (!(_hasHydrated && previewCard)) {
     return <Placeholder />;

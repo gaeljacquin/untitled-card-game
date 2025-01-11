@@ -4,10 +4,7 @@ import { Fragment, ReactNode, useEffect, useState } from 'react';
 import { ABCard, ABCards } from '@annabelle/shared/core/card';
 import { IGridCell } from '@annabelle/shared/core/grid-cell';
 import { ABMode } from '@annabelle/shared/core/mode';
-import {
-  calculateAvailableSpaces,
-  // evaluatePokerHand,
-} from '@annabelle/shared/functions/check-poker-hand';
+import { calculateAvailableSpaces } from '@annabelle/shared/functions/checkers';
 import {
   DndContext,
   DragEndEvent,

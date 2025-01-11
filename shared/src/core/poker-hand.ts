@@ -1,12 +1,10 @@
-export type PokerHand =
-  | 'Royal Flush'
-  | 'Straight Flush'
-  | 'Four of a Kind'
-  | 'Full House'
-  | 'Flush'
-  | 'Straight'
-  | 'Three of a Kind'
-  | 'Two Pair'
-  | 'One Pair'
-  | 'High Card'
-  | null;
+import { ABCards } from './card';
+
+export class PokerHand {
+  constructor(
+    public readonly name: string,
+    public readonly points: number,
+    public readonly ordinal: number,
+    public readonly cards: ABCards
+  ) {}
+}
