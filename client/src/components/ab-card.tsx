@@ -30,6 +30,12 @@ export default function ABCardComp(props: Props) {
   const letter = card.letter;
   const { cardFront: cardFrontIndex } = settingsStore();
   const cardFront = cardFronts[cardFrontIndex];
+
+  // (2)
+  if (!card || !card.suit) {
+    return null;
+  }
+
   const cardColor = suit.isRed
     ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
     : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' };
@@ -279,4 +285,5 @@ export default function ABCardComp(props: Props) {
 
 /* Notes
 (1) Letter spacing is off when suit is set to clubs or spades.
+(2) Fixes race condition in part
  */

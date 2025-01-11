@@ -7,7 +7,6 @@ export class GameController {
 
   @Post('abcheck')
   abCheck(@Body() wordMap: { [key: string]: unknown }) {
-    console.log(wordMap);
     return this.gameService.abCheckLambda(wordMap);
   }
 }

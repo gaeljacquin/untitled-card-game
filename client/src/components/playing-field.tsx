@@ -17,6 +17,7 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 import { motion } from 'framer-motion';
+import { Loader2 } from 'lucide-react';
 import ABCardComp from '@/components/ab-card';
 import DiscardPile from '@/components/discard-pile';
 import { GridCell } from '@/components/grid-cell';
@@ -80,12 +81,10 @@ export default function PlayingField(props: Props) {
     bonusPoints: 0,
   });
   const [lockedCells, setLockedCells] = useState<Set<string>>(new Set());
+  const [isDealing, setIsDealing] = useState(false);
   const mouseSensor = useSensor(MouseSensor);
   const touchSensor = useSensor(TouchSensor);
   const sensors = useSensors(mouseSensor, touchSensor);
-  // const placeholderKey = () => {
-  //   return crypto.randomUUID()
-  // }
 
   useEffect(() => {
     initializeGame();
@@ -232,7 +231,14 @@ export default function PlayingField(props: Props) {
   };
 
   const handleDiscard = async () => {
-    if (playerHand.length !== 1) return;
+    if (!playerHand || playerHand.length !== 1) {
+      return;
+    }
+
+    const cardToDiscard = playerHand[0];
+    if (!cardToDiscard) {
+      return;
+    }
 
     const newLockedCells = new Set<string>();
     grid.forEach((row, rowIndex) => {
@@ -252,13 +258,13 @@ export default function PlayingField(props: Props) {
     ) as IGridCell[][];
 
     setGrid(newGrid);
-    const cardToDiscard = playerHand[0];
     setDiscardPile((prev) => [...prev, { ...cardToDiscard, faceUp: true }] as ABCards);
+
+    await handleNextRound({ discardedABCard: cardToDiscard, newGrid });
+
     setPlayerHand([]);
-    handleNextRound({ discardedABCard: cardToDiscard, newGrid });
 
     const isGridFull = newGrid.every((row) => row.every((cell) => cell.card !== null));
-
     if (isGridFull) {
       setGameState((prev) => ({ ...prev, gameOver: true }));
       return;
@@ -267,16 +273,26 @@ export default function PlayingField(props: Props) {
 
   useEffect(() => {
     if (abCards && abCards.length > 0) {
+      setIsDealing(true);
       setPlayerHand(abCards);
 
-      abCards.forEach((_, index) => {
+      const promises = abCards.map((_, index) => {
+        return new Promise<void>((resolve) => {
+          setTimeout(() => {
+            setPlayerHand((prev) => [
+              ...prev.slice(0, index),
+              { ...prev[index], faceUp: true } as ABCard,
+              ...prev.slice(index + 1),
+            ]);
+            resolve();
+          }, index * 200);
+        });
+      });
+
+      Promise.all(promises).then(() => {
         setTimeout(() => {
-          setPlayerHand((prev) => [
-            ...prev.slice(0, index),
-            { ...prev[index], faceUp: true } as ABCard,
-            ...prev.slice(index + 1),
-          ]);
-        }, index * 200);
+          setIsDealing(false);
+        }, 200); // (1)
       });
     }
   }, [abCards]);
@@ -577,30 +593,36 @@ export default function PlayingField(props: Props) {
           <div className="md:w-1/8 flex flex-col h-full space-y-4">
             <div className="h-1/2 border border-4 border-dashed rounded-2xl p-4">
               <div className={playerHandClass}>
-                <SortableContext
-                  items={playerHand.map((item) => item.id)}
-                  strategy={horizontalListSortingStrategy}
-                >
-                  {playerHand.map((item) => (
-                    <SortableItem key={item.id} id={item.id}>
-                      <ABCardComp
-                        key={`card-${item.id}`}
-                        card={item}
-                        valueNotLabel={!labelNotValue}
-                        modeType={type}
-                        hover={true}
-                        isDragging
-                        inGrid={false}
-                      />
-                    </SortableItem>
-                  ))}
-                </SortableContext>
+                {isDealing ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  </>
+                ) : (
+                  <SortableContext
+                    items={playerHand.map((item) => item.id)}
+                    strategy={horizontalListSortingStrategy}
+                  >
+                    {playerHand.map((item) => (
+                      <SortableItem key={item.id} id={item.id}>
+                        <ABCardComp
+                          key={`card-${item.id}`}
+                          card={item}
+                          valueNotLabel={!labelNotValue}
+                          modeType={type}
+                          hover={true}
+                          isDragging
+                          inGrid={false}
+                        />
+                      </SortableItem>
+                    ))}
+                  </SortableContext>
+                )}
               </div>
 
               <Separator className="my-4" />
 
               <div className="flex items-center justify-center">
-                <Button onClick={handleDiscard} disabled={playerHand.length !== 1}>
+                <Button onClick={handleDiscard} disabled={playerHand.length !== 1 || isDealing}>
                   Confirm
                 </Button>
               </div>
@@ -617,3 +639,7 @@ export default function PlayingField(props: Props) {
     </DndContext>
   );
 }
+
+/* Notes
+(1) Added a small buffer after dealing the last card; part of the race condition fix
+*/

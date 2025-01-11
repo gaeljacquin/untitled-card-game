@@ -134,11 +134,8 @@ export class GameGateway
         };
       }
 
-      console.log(wordMap);
-
       const response = await this.gameService.abCheckLambda(wordMap);
       const abResult = JSON.parse(response['body']);
-      console.log(abResult);
       emit = {
         gameOver: true,
         abResult: abResult,
