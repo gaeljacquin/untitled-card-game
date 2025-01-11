@@ -2,6 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { ABCards } from '@annabelle/shared/core/card';
+import {
+  evaluateColumnHand,
+  evaluateRowHand,
+  evaluateSpecialHand,
+} from '@annabelle/shared/functions/checkers';
 import { motion } from 'framer-motion';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import BackgroundLogo from '@/components/background-logo';
@@ -89,6 +94,9 @@ export default function ABMode1(props: Props) {
           playerHandClass={playerHandClass}
           howToPlayText={howToPlayText}
           handleNextRound={handleNextRound}
+          evaluateColumn={evaluateColumnHand}
+          evaluateRow={evaluateRowHand}
+          evaluateSpecial={evaluateSpecialHand}
         />
 
         <div className="footer-spacing-uwu">

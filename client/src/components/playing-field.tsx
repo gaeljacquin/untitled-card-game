@@ -5,11 +5,6 @@ import { ABCard, ABCards } from '@annabelle/shared/core/card';
 import { IGridCell } from '@annabelle/shared/core/grid-cell';
 import { ABMode } from '@annabelle/shared/core/mode';
 import {
-  evaluateColumnHand,
-  evaluateRowHand,
-  evaluateSpecial,
-} from '@annabelle/shared/functions/checkers';
-import {
   DndContext,
   DragEndEvent,
   DragOverlay,
@@ -46,10 +41,23 @@ type Props = {
   playerHandClass: string;
   howToPlayText: () => ReactNode;
   handleNextRound: (arg0: { [key: string]: unknown }) => void;
+  evaluateColumn: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
+  evaluateRow: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
+  evaluateSpecial: (arg0: IGridCell[][]) => { name: string; points: number };
 };
 
 export default function PlayingField(props: Props) {
-  const { modeSlug, abCards, howToPlayText, gridClass, playerHandClass, handleNextRound } = props; // (1)
+  const {
+    modeSlug,
+    abCards,
+    howToPlayText,
+    gridClass,
+    playerHandClass,
+    handleNextRound,
+    evaluateColumn,
+    evaluateRow,
+    evaluateSpecial,
+  } = props; // (1)
   const [playerHand, setPlayerHand] = useState<ABCards>([]);
   const mode = ABMode.getMode(modeSlug)!;
   const { title, description, gridSize, type } = mode;
@@ -265,8 +273,8 @@ export default function PlayingField(props: Props) {
                     >
                       <p className="flex items-center justify-between gap-2 text-sm">
                         <span>Column {index + 1}: </span>
-                        <span>{evaluateColumnHand(grid, index).name}</span>
-                        <span>${evaluateColumnHand(grid, index).points}</span>
+                        <span>{evaluateColumn(grid, index).name}</span>
+                        <span>${evaluateColumn(grid, index).points}</span>
                       </p>
                     </motion.div>
                   ))}
@@ -284,8 +292,8 @@ export default function PlayingField(props: Props) {
                     >
                       <p className="flex items-center justify-between gap-2 text-sm">
                         <span>Row {index + 1} </span>
-                        <span>{evaluateRowHand(grid, index).name}</span>
-                        <span>${evaluateRowHand(grid, index).points}</span>
+                        <span>{evaluateRow(grid, index).name}</span>
+                        <span>${evaluateRow(grid, index).points}</span>
                       </p>
                     </motion.div>
                   ))}

@@ -159,7 +159,7 @@ export const evaluateColumnHand = (grid: IGridCell[][], columnIndex: number) => 
   };
 };
 
-export const evaluateSpecial = (grid: IGridCell[][]) => {
+export const evaluateSpecialHand = (grid: IGridCell[][]) => {
   const gridSize = grid.length;
 
   if (gridSize !== 4 && gridSize !== 5) {
@@ -177,7 +177,7 @@ export const evaluateSpecial = (grid: IGridCell[][]) => {
   ].filter((card) => card !== null);
 
   if (gridSize === 5) {
-    const centerCard = grid[2][2].card;
+    const centerCard = grid[2][2]?.card;
 
     if (centerCard) {
       cornerCards.push(centerCard);
@@ -196,5 +196,87 @@ export const evaluateSpecial = (grid: IGridCell[][]) => {
   return {
     name: result.name + '*',
     points: Math.ceil(result.points * 1.5),
+  };
+};
+
+export const evaluateRowWord = (grid: IGridCell[][], row: number) => {
+  if (!grid || !grid[row] || row < 0 || row >= grid.length) {
+    return {
+      name: '',
+      points: 0,
+    };
+  }
+
+  let wordValue = 0;
+  let hasAtLeastOneCard = false;
+
+  for (let col = 0; col < grid[row].length; col++) {
+    const cell = grid[row][col];
+    const card = cell?.card;
+
+    if (card) {
+      wordValue += card.rank.value;
+      hasAtLeastOneCard = true;
+    }
+  }
+
+  return {
+    name: '',
+    points: hasAtLeastOneCard ? wordValue : 0,
+  };
+};
+
+export const evaluateColumnWord = (grid: IGridCell[][], col: number) => {
+  if (!grid || col < 0 || col >= (grid[0]?.length || 0)) {
+    return {
+      name: '',
+      points: 0,
+    };
+  }
+
+  let wordValue = 0;
+  let hasAtLeastOneCard = false;
+
+  for (let row = 0; row < grid.length; row++) {
+    const cell = grid[row]?.[col];
+    const card = cell?.card;
+
+    if (card) {
+      wordValue += card.rank.value;
+      hasAtLeastOneCard = true;
+    }
+  }
+
+  return {
+    name: '',
+    points: hasAtLeastOneCard ? wordValue : 0,
+  };
+};
+
+export const evaluateSpecialWord = (grid: IGridCell[][]) => {
+  if (!grid || grid.length !== 5 || !grid[0] || grid[0].length !== 5) {
+    return {
+      name: '',
+      points: 0,
+    };
+  }
+
+  const cornerCards = [
+    grid[0][0]?.card,
+    grid[0][4]?.card,
+    grid[4][0]?.card,
+    grid[4][4]?.card,
+  ].filter((card): card is NonNullable<typeof card> => card !== null);
+
+  const centerCard = grid[2]?.[2]?.card;
+  if (centerCard) {
+    cornerCards.push(centerCard);
+  }
+
+  const points = cornerCards.reduce((sum, card) => sum + card.rank.value, 0);
+
+  return {
+    name: '',
+    points,
   };
 };
