@@ -25,7 +25,7 @@ export default function ABMode3(props: Props) {
         <li>6 cards are dealt at the start of the game</li>
         <li>Drag any 5 cards from your hand to an available cell in the grid</li>
         <li>Make a valid word on any row and column in the grid</li>
-        <li>Click 'Next Round'</li>
+        <li>Click 'Confirm'</li>
         <li>The remaining card is moved to the discard pile, and a new set of 6 cards are dealt</li>
         <li>Rinse and repeat until the grid is filled</li>
         <li>The discard pile is activated when you score 4+ valid words in the grid</li>

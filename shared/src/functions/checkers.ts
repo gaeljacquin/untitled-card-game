@@ -1,53 +1,108 @@
-import { ABCards } from '../core/card';
+import { ABCard } from '../core/card';
 import { IGridCell } from '../core/grid-cell';
-import { PokerHand } from '../core/poker-hand';
 
-export function evaluatePokerHands(cards: ABCards): PokerHand {
-  if (!(cards.length === 4 || cards.length === 5)) {
-    throw new Error('Invalid number of 4 cards');
+class PokerHand {
+  constructor(
+    public readonly name: string,
+    public readonly points: number,
+    public readonly rank: number,
+    public readonly cards: ABCard[]
+  ) {}
+}
+
+export function evaluatePokerHands(cards: ABCard[]): PokerHand {
+  if (cards.length === 0) {
+    return new PokerHand('Empty Hand', 0, 0, []);
+  }
+
+  if (cards.length < 4) {
+    const countByRank = new Map<number, number>();
+    cards.forEach((card) => {
+      const rankValue = card.rank.value;
+      countByRank.set(rankValue, (countByRank.get(rankValue) || 0) + 1);
+    });
+
+    const hasPair = Array.from(countByRank.values()).includes(2);
+    const hasThreeOfAKind = Array.from(countByRank.values()).includes(3);
+
+    if (hasThreeOfAKind) {
+      return new PokerHand('Three of a Kind', 180, 4, cards);
+    }
+
+    if (hasPair) {
+      return new PokerHand('One Pair', 5, 2, cards);
+    }
+
+    return new PokerHand('High Card', 0, 1, cards);
+  }
+
+  if (cards.length > 5) {
+    throw new Error('A poker hand cannot contain more than 5 cards');
   }
 
   const countBySuit = new Map<string, number>();
   const countByRank = new Map<number, number>();
 
   cards.forEach((card) => {
-    const suitName = card.getSuit().label;
-    const rankValue = card.getRank().value;
+    const suitName = card.suit.label;
+    const rankValue = card.rank.value;
     countBySuit.set(suitName, (countBySuit.get(suitName) || 0) + 1);
     countByRank.set(rankValue, (countByRank.get(rankValue) || 0) + 1);
   });
 
   const isFlush = countBySuit.size === 1;
 
-  const values = Array.from(cards)
-    .map((c) => c.getRank().value)
+  const sortedValues = Array.from(cards)
+    .map((c) => c.rank.value)
     .sort((a, b) => a - b);
 
-  const isStraight = values.every((val, idx) => idx === 0 || values[idx - 1] + 1 === val);
-  const isAceLowStraight = values[0] === 1 && values[1] === 2 && values[2] === 3 && values[3] === 4;
-  const isAceHighStraight =
-    values[0] === 1 && values[1] === 11 && values[2] === 12 && values[3] === 13;
+  const checkStraight = (values: number[]): boolean => {
+    const isRegularStraight = values.every((val, idx) => idx === 0 || values[idx - 1] + 1 === val);
+
+    if (isRegularStraight) return true;
+
+    if (values.length === 4) {
+      return values[0] === 1 && values[1] === 2 && values[2] === 3 && values[3] === 4;
+    }
+
+    if (values.length === 5) {
+      return (
+        values[0] === 1 && values[1] === 2 && values[2] === 3 && values[3] === 4 && values[4] === 5
+      );
+    }
+
+    return false;
+  };
+
+  const valuesWithAceHigh = [...sortedValues];
+  if (valuesWithAceHigh[0] === 1) {
+    valuesWithAceHigh.push(14);
+    valuesWithAceHigh.shift();
+    valuesWithAceHigh.sort((a, b) => a - b);
+  }
+
+  const isStraight = checkStraight(sortedValues) || checkStraight(valuesWithAceHigh);
 
   const isRoyalFlush =
     cards.length === 5 &&
     isFlush &&
-    values[0] === 1 &&
-    values[1] === 10 &&
-    values[2] === 11 &&
-    values[3] === 12 &&
-    values[4] === 13;
+    new Set(sortedValues).has(10) &&
+    new Set(sortedValues).has(11) &&
+    new Set(sortedValues).has(12) &&
+    new Set(sortedValues).has(13) &&
+    new Set(sortedValues).has(1); // Ace
 
   if (isRoyalFlush) {
     return new PokerHand('Royal Flush', 800, 10, cards);
   }
 
-  if (isFlush && (isStraight || isAceLowStraight || isAceHighStraight)) {
-    return new PokerHand('Straight Flush', 450, 8, cards);
+  if (isFlush && isStraight) {
+    return new PokerHand('Straight Flush', 450, 9, cards);
   }
 
   const hasFourOfAKind = Array.from(countByRank.values()).includes(4);
   if (hasFourOfAKind) {
-    return new PokerHand('Four of a Kind', 325, 7, cards);
+    return new PokerHand('Four of a Kind', 325, 8, cards);
   }
 
   const hasThreeOfAKind = Array.from(countByRank.values()).includes(3);
@@ -58,36 +113,88 @@ export function evaluatePokerHands(cards: ABCards): PokerHand {
   }
 
   if (isFlush) {
-    return new PokerHand('Flush', 125, 5, cards);
+    return new PokerHand('Flush', 125, 6, cards);
   }
 
-  if (isStraight || isAceLowStraight) {
-    return new PokerHand('Straight', 80, 4, cards);
+  if (isStraight) {
+    return new PokerHand('Straight', 80, 5, cards);
   }
 
   if (hasThreeOfAKind) {
-    return new PokerHand('Three of a Kind', 180, 6, cards);
+    return new PokerHand('Three of a Kind', 180, 4, cards);
   }
 
   if (pairCount === 2) {
-    return new PokerHand('Two Pairs', 60, 3, cards);
+    return new PokerHand('Two Pair', 60, 3, cards);
   }
 
   if (pairCount === 1) {
-    return new PokerHand('Pair', 5, 2, cards);
+    return new PokerHand('One Pair', 5, 2, cards);
   }
 
   return new PokerHand('High Card', 0, 1, cards);
 }
 
-export function calculateAvailableSpaces(
-  grid: IGridCell[][],
-  index: number,
-  isRow: boolean
-): number {
-  if (isRow) {
-    return grid[index].filter((cell) => !cell.card).length;
+export const evaluateRowHand = (grid: IGridCell[][], rowIndex: number) => {
+  const rowCards = grid[rowIndex].map((cell) => cell.card).filter((card) => card !== null);
+  const result = evaluatePokerHands(rowCards);
+  const name = result.name;
+  const points = result.points;
+
+  return {
+    name,
+    points,
+  };
+};
+
+export const evaluateColumnHand = (grid: IGridCell[][], columnIndex: number) => {
+  const columnCards = grid.map((row) => row[columnIndex].card).filter((card) => card !== null);
+  const result = evaluatePokerHands(columnCards);
+  const name = result.name;
+  const points = result.points;
+
+  return {
+    name,
+    points,
+  };
+};
+
+export const evaluateSpecial = (grid: IGridCell[][]) => {
+  const gridSize = grid.length;
+
+  if (gridSize !== 4 && gridSize !== 5) {
+    return {
+      name: 'Invalid Grid Size',
+      points: 0,
+    };
   }
 
-  return grid.map((row) => row[index]).filter((cell) => !cell.card).length;
-}
+  const cornerCards = [
+    grid[0][0].card,
+    grid[0][gridSize - 1].card,
+    grid[gridSize - 1][0].card,
+    grid[gridSize - 1][gridSize - 1].card,
+  ].filter((card) => card !== null);
+
+  if (gridSize === 5) {
+    const centerCard = grid[2][2].card;
+
+    if (centerCard) {
+      cornerCards.push(centerCard);
+    }
+  }
+
+  if (cornerCards.length < 2) {
+    return {
+      name: 'Empty Hand',
+      points: 0,
+    };
+  }
+
+  const result = evaluatePokerHands(cornerCards);
+
+  return {
+    name: result.name + '*',
+    points: Math.ceil(result.points * 1.5),
+  };
+};

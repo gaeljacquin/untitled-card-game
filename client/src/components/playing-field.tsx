@@ -4,7 +4,11 @@ import { Fragment, ReactNode, useEffect, useState } from 'react';
 import { ABCard, ABCards } from '@annabelle/shared/core/card';
 import { IGridCell } from '@annabelle/shared/core/grid-cell';
 import { ABMode } from '@annabelle/shared/core/mode';
-import { calculateAvailableSpaces } from '@annabelle/shared/functions/checkers';
+import {
+  evaluateColumnHand,
+  evaluateRowHand,
+  evaluateSpecial,
+} from '@annabelle/shared/functions/checkers';
 import {
   DndContext,
   DragEndEvent,
@@ -193,11 +197,9 @@ export default function PlayingField(props: Props) {
     ) as IGridCell[][];
 
     setGrid(newGrid);
-
     const cardToDiscard = playerHand[0];
     setDiscardPile((prev) => [...prev, { ...cardToDiscard, faceUp: true }] as ABCards);
     setPlayerHand([]);
-
     const isGridFull = newGrid.every((row) => row.every((cell) => cell.card !== null));
 
     if (isGridFull) {
@@ -261,9 +263,10 @@ export default function PlayingField(props: Props) {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                     >
-                      <p className="flex justify-between text-sm">
+                      <p className="flex items-center justify-between gap-2 text-sm">
                         <span>Column {index + 1}: </span>
-                        <span>Available - {calculateAvailableSpaces(grid, index, false)}</span>
+                        <span>{evaluateColumnHand(grid, index).name}</span>
+                        <span>${evaluateColumnHand(grid, index).points}</span>
                       </p>
                     </motion.div>
                   ))}
@@ -279,14 +282,31 @@ export default function PlayingField(props: Props) {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                     >
-                      <p className="flex justify-between text-sm">
-                        <span>Row {index + 1}: </span>
-                        <span>Available - {calculateAvailableSpaces(grid, index, true)}</span>
+                      <p className="flex items-center justify-between gap-2 text-sm">
+                        <span>Row {index + 1} </span>
+                        <span>{evaluateRowHand(grid, index).name}</span>
+                        <span>${evaluateRowHand(grid, index).points}</span>
                       </p>
                     </motion.div>
                   ))}
                 </>
-              </LiveScore>{' '}
+
+                <Separator />
+
+                <>
+                  <motion.div
+                    className="text-center font-semibold"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                  >
+                    <p className="flex items-center justify-between gap-2 text-sm">
+                      <span>Special</span>
+                      <span>{evaluateSpecial(grid).name}</span>
+                      <span>${evaluateSpecial(grid).points}</span>
+                    </p>
+                  </motion.div>
+                </>
+              </LiveScore>
             </div>
 
             <div
@@ -347,7 +367,7 @@ export default function PlayingField(props: Props) {
 
               <div className="flex items-center justify-center">
                 <Button onClick={handleDiscard} disabled={playerHand.length !== 1}>
-                  Next Round
+                  Confirm
                 </Button>
               </div>
             </div>
