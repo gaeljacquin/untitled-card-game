@@ -70,6 +70,7 @@ export default function PlayingField(props: Props) {
     totalCards: abCards.length,
     playedCards: 0,
   });
+  const [lockedCells, setLockedCells] = useState<Set<string>>(new Set());
   const mouseSensor = useSensor(MouseSensor);
   const touchSensor = useSensor(TouchSensor);
   const sensors = useSensors(mouseSensor, touchSensor);
@@ -136,6 +137,13 @@ export default function PlayingField(props: Props) {
 
     if (over.data.current?.type === 'grid') {
       const { rowIndex, columnIndex } = over.data.current;
+
+      const cellId = `cell-${rowIndex}-${columnIndex}`;
+      if (lockedCells.has(cellId)) {
+        setActiveDrag(null);
+        return;
+      }
+
       const newGrid = [...grid];
 
       if (playerHand.includes(sourceCard)) {
@@ -197,10 +205,20 @@ export default function PlayingField(props: Props) {
   const handleDiscard = async () => {
     if (playerHand.length !== 1) return;
 
+    const newLockedCells = new Set<string>();
+    grid.forEach((row, rowIndex) => {
+      row.forEach((cell, colIndex) => {
+        if (cell.card) {
+          newLockedCells.add(`cell-${rowIndex}-${colIndex}`);
+        }
+      });
+    });
+    setLockedCells(newLockedCells);
+
     const newGrid = grid.map((row) =>
       row.map((cell) => ({
         ...cell,
-        card: cell.card ? { ...cell.card, isPlayed: true } : null,
+        card: cell.card ? { ...cell.card, played: true } : null,
       }))
     ) as IGridCell[][];
 
@@ -208,19 +226,12 @@ export default function PlayingField(props: Props) {
     const cardToDiscard = playerHand[0];
     setDiscardPile((prev) => [...prev, { ...cardToDiscard, faceUp: true }] as ABCards);
     setPlayerHand([]);
-    const isGridFull = newGrid.every((row) => row.every((cell) => cell.card !== null));
 
+    const isGridFull = newGrid.every((row) => row.every((cell) => cell.card !== null));
     if (isGridFull) {
       setGameState((prev) => ({ ...prev, isGameOver: true }));
       return;
     }
-
-    // const gameState = getGameState(newGrid);
-
-    // if (gameState.isGameOver) {
-    // setGameState(gameState);
-    //   return;
-    // }
 
     void gameState; // Temporary
 
@@ -334,8 +345,16 @@ export default function PlayingField(props: Props) {
             <div className={cn(gridClass)}>
               {grid.map((row, index) => (
                 <Fragment key={`main-${index}`}>
-                  {row.map((cell) => (
-                    <GridCell key={cell.id} cell={cell} modeType={type} gridSize={gridSize} />
+                  {row.map((cell, rowIndex) => (
+                    <GridCell
+                      key={cell.id}
+                      cell={cell}
+                      modeType={type}
+                      gridSize={gridSize}
+                      lockedCells={lockedCells}
+                      rowIndex={rowIndex}
+                      columnIndex={index}
+                    />
                   ))}
                 </Fragment>
               ))}

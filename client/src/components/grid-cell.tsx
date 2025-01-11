@@ -11,13 +11,21 @@ interface Props {
   cell: IGridCell;
   modeType: IABModeType;
   gridSize: number;
+  lockedCells: Set<string>;
+  rowIndex: number;
+  columnIndex: number;
 }
 
 export function GridCell(props: Props) {
-  const { cell, modeType, gridSize } = props;
+  const { cell, modeType, gridSize, lockedCells, rowIndex, columnIndex } = props;
   const { setNodeRef, isOver } = useDroppable({
     id: cell.id,
-    data: { type: 'grid', rowIndex: cell.rowIndex, columnIndex: cell.columnIndex },
+    data: {
+      type: 'grid',
+      rowIndex: cell.rowIndex,
+      columnIndex: cell.columnIndex,
+      isLocked: lockedCells.has(`cell-${rowIndex}-${columnIndex}`),
+    },
   });
 
   const isCornerCell =
