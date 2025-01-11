@@ -50,7 +50,6 @@ export default function ABMode1(props: Props) {
     socket.on('game-next-round-res', (data) => {
       const { abCards } = data;
       setABCards(abCards);
-      console.log(abCards);
     });
 
     return () => {
@@ -64,6 +63,10 @@ export default function ABMode1(props: Props) {
     socket.emit('game-init', { modeSlug });
     wsConnect();
   }, []);
+
+  const handleNextRound = (data: { [key: string]: unknown }) => {
+    socket.emit('game-next-round', data);
+  };
 
   if (!(abCards.length > 0)) {
     return <Placeholder />;
@@ -85,6 +88,7 @@ export default function ABMode1(props: Props) {
           gridClass={gridClass}
           playerHandClass={playerHandClass}
           howToPlayText={howToPlayText}
+          handleNextRound={handleNextRound}
         />
 
         <div className="footer-spacing-uwu">

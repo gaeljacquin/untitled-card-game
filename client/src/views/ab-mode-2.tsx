@@ -49,9 +49,15 @@ export default function ABMode2(props: Props) {
       setABCards(abCards);
     });
 
+    socket.on('game-next-round-res', (data) => {
+      const { abCards } = data;
+      setABCards(abCards);
+    });
+
     return () => {
       socket.off('connect');
       socket.off(`game-init-res`);
+      socket.off(`game-next-round-res`);
     };
   };
 
@@ -59,6 +65,10 @@ export default function ABMode2(props: Props) {
     socket.emit('game-init', { modeSlug });
     wsConnect();
   }, []);
+
+  const handleNextRound = (data: { [key: string]: unknown }) => {
+    socket.emit('game-next-round', data);
+  };
 
   if (!(abCards.length > 0)) {
     return <Placeholder />;
@@ -80,6 +90,7 @@ export default function ABMode2(props: Props) {
           gridClass={gridClass}
           playerHandClass={playerHandClass}
           howToPlayText={howToPlayText}
+          handleNextRound={handleNextRound}
         />
 
         <div className="footer-spacing-uwu">

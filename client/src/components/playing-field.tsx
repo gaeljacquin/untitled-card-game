@@ -44,10 +44,11 @@ type Props = {
   gridClass: string;
   playerHandClass: string;
   howToPlayText: () => ReactNode;
+  handleNextRound: (arg0: { [key: string]: unknown }) => void;
 };
 
 export default function PlayingField(props: Props) {
-  const { modeSlug, abCards, howToPlayText, gridClass, playerHandClass } = props; // (1)
+  const { modeSlug, abCards, howToPlayText, gridClass, playerHandClass, handleNextRound } = props; // (1)
   const [playerHand, setPlayerHand] = useState<ABCards>([]);
   const mode = ABMode.getMode(modeSlug)!;
   const { title, description, gridSize, type } = mode;
@@ -210,22 +211,30 @@ export default function PlayingField(props: Props) {
     // const gameState = getGameState(newGrid);
 
     // if (gameState.isGameOver) {
-    setGameState(gameState);
+    // setGameState(gameState);
     //   return;
     // }
 
-    setTimeout(() => {
+    void gameState; // Temporary
+
+    handleNextRound({ cardToDiscard, newGrid });
+  };
+
+  useEffect(() => {
+    if (abCards && abCards.length > 0) {
       setPlayerHand(abCards);
 
-      abCards.forEach((_: unknown, index: number) => {
+      abCards.forEach((_, index) => {
         setTimeout(() => {
-          setPlayerHand((prev) =>
-            prev.map((c, i) => (i === index ? ({ ...c, faceUp: true } as ABCard) : c))
-          );
+          setPlayerHand((prev) => [
+            ...prev.slice(0, index),
+            { ...prev[index], faceUp: true } as ABCard,
+            ...prev.slice(index + 1),
+          ]);
         }, index * 200);
       });
-    }, 500);
-  };
+    }
+  }, [abCards]);
 
   if (!(abCards.length > 0)) {
     return <Placeholder />;
