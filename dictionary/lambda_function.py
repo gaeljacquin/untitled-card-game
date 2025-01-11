@@ -1,55 +1,40 @@
 import json
-import re
+from itertools import permutations
 
 with open('dictionary.json', 'r') as file:
     data = json.load(file)
 
 dictionary = list(data.keys())
 
-def check_ab_word(word):
-    process_asterisks = '^' + word.replace('*', '.') + '$'
-    pattern = re.compile(process_asterisks)
-    matches = [
-        entry for entry in dictionary
-        if pattern.match(entry)
-    ]
-    valid = len(matches) > 0
-    result = { "valid": valid, "matches": matches or None }
+def ab_check(word_map):
+    for key in word_map:
+        word = word_map[key]['word'].lower()
 
-    return result
+        if word in dictionary:
+            word_map[key]['valid'] = True
+            word_map[key]['match'] = word
+            word_map[key]['points_final'] = word_map[key]['points'] + 100
+            continue
 
-def check_ab_prefix(prefix):
-    process_asterisks = '^' + prefix.replace('*', '.')
-    pattern = re.compile(process_asterisks)
-    matches = [
-        entry for entry in dictionary
-        if pattern.match(entry)
-    ]
-    valid = len(matches) > 0
-    result = {"valid": valid, "matches": matches or None}
+        word_perms = permutations(word)
+        found_valid = False
+        found_match = ''
 
-    return result
+        for perm in word_perms:
+            perm_word = ''.join(perm)
 
-def ab_checks(ab_string):
-    ab_word_check = check_ab_word(ab_string)
-    ab_prefix_check = check_ab_prefix(ab_string)
-    response = {
-        "word": ab_string,
-        "ab_word": {
-            "valid": ab_word_check['valid'],
-            "matches": ab_word_check['matches']
-            },
-        "ab_prefix": {
-            "valid": ab_prefix_check['valid'],
-            "matches": ab_prefix_check['matches']
-            },
-        }
+            if perm_word in dictionary:
+                found_valid = True
+                found_match = perm_word
+                break
 
-    return response
+        word_map[key]['valid'] = found_valid
+        word_map[key]['match'] = found_match
+        word_map[key]['points_final'] = word_map[key]['points'] + 100 if found_valid else 0
 
-def handler(event, context):
-    word = event.get('word')
-    response = ab_checks(word)
-    print(response)
+    return word_map
 
-    return response
+def handler(event):
+    word_map = event
+
+    return ab_check(word_map)

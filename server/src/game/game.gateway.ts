@@ -65,17 +65,51 @@ export class GameGateway
   @SubscribeMessage('game-next-round')
   async gameNextRound(client: Socket, payload: any): Promise<void> {
     console.info(`Message received from client ${client.id}: ${payload}`);
-    const { discardedABCard, currentABGrid } = payload;
+    const { discardedABCard, newGrid } = payload;
     const abGame = this.abGameMap.get(client.id);
     abGame.discardedABCards.push(discardedABCard);
-    abGame.grid = currentABGrid;
+    abGame.grid = newGrid;
     const gridSize = abGame.mode.gridSize;
     let emit = {};
 
+    const wordMap = {
+      ...Object.fromEntries(
+        newGrid.map((row, index) => [
+          `row-${index + 1}`,
+          {
+            word: row.map((cell) => cell.card?.letter || '').join(''),
+            points: row.reduce(
+              (sum, cell) => sum + (cell.card?.rank.value || 0),
+              0,
+            ),
+            label: 'Row ' + (index + 1),
+          },
+        ]),
+      ),
+      ...Object.fromEntries(
+        Array.from({ length: gridSize }, (_, index) => [
+          `col-${index + 1}`,
+          {
+            word: newGrid.map((row) => row[index].card?.letter || '').join(''),
+            points: newGrid
+              .map((row) => row[index].card?.letter || '')
+              .reduce((sum, cell) => sum + (cell.card?.rank.value || 0), 0),
+            label: 'Column ' + (index + 1),
+          },
+        ]),
+      ),
+    };
+
     if (abGame.discardedABCards.length === gridSize) {
+      let result = null;
+
+      if (abGame.mode.type === 'abword') {
+        result = await this.gameService.abCheckLambda(wordMap);
+      }
+
       emit = {
         gameOver: true,
-        abGame,
+        result,
       };
     } else {
       const abCards = abGame.deal(abGame.discardedABCards.length);

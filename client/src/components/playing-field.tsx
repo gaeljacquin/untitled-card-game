@@ -24,6 +24,13 @@ import Placeholder from '@/components/placeholder';
 import SortableItem from '@/components/sortable-item';
 import { Button } from '@/components/ui/button';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
@@ -44,6 +51,7 @@ type Props = {
   evaluateColumn: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
   evaluateRow: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
   evaluateSpecial: (arg0: IGridCell[][]) => { name: string; points: number };
+  gameOver?: boolean;
 };
 
 export default function PlayingField(props: Props) {
@@ -57,6 +65,7 @@ export default function PlayingField(props: Props) {
     evaluateColumn,
     evaluateRow,
     evaluateSpecial,
+    gameOver = false,
   } = props; // (1)
   const [playerHand, setPlayerHand] = useState<ABCards>([]);
   const mode = ABMode.getMode(modeSlug)!;
@@ -229,7 +238,7 @@ export default function PlayingField(props: Props) {
 
     const isGridFull = newGrid.every((row) => row.every((cell) => cell.card !== null));
     if (isGridFull) {
-      setGameState((prev) => ({ ...prev, isGameOver: true }));
+      setGameState((prev) => ({ ...prev, gameOver: true }));
       return;
     }
 
@@ -253,6 +262,8 @@ export default function PlayingField(props: Props) {
       });
     }
   }, [abCards]);
+
+  useEffect(() => {}, [gameOver]);
 
   if (!(abCards.length > 0)) {
     return <Placeholder />;
@@ -400,6 +411,20 @@ export default function PlayingField(props: Props) {
             </div>
           </div>
         </div>
+
+        <Dialog open={gameOver} onOpenChange={() => {}}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Game Over!</DialogTitle>
+              <DialogDescription>
+                You've filled the entire grid. Would you like to play again?
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex justify-end">
+              <Button>Play Again</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <DragOverlay>

@@ -13,6 +13,7 @@ import BackgroundLogo from '@/components/background-logo';
 import Footer from '@/components/footer';
 import Placeholder from '@/components/placeholder';
 import PlayingField from '@/components/playing-field';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import socketInit from '@/utils/socket-init';
 
@@ -24,6 +25,7 @@ export default function ABMode3(props: Props) {
   const { modeSlug } = props;
   const socket = socketInit();
   const [abCards, setABCards] = useState<ABCards>([]);
+  const [abGameOver, setABGameOver] = useState<boolean>(false);
   const howToPlayText = () => {
     return (
       <ul className="list-disc list-inside space-y-5 text-white text-sm text-start">
@@ -55,8 +57,13 @@ export default function ABMode3(props: Props) {
     });
 
     socket.on('game-next-round-res', (data) => {
-      const { abCards } = data;
-      setABCards(abCards);
+      const { abCards, gameOver } = data;
+
+      if (gameOver) {
+        setABGameOver(true);
+      } else {
+        setABCards(abCards);
+      }
     });
 
     return () => {
@@ -98,9 +105,14 @@ export default function ABMode3(props: Props) {
           evaluateColumn={evaluateColumnWord}
           evaluateRow={evaluateRowWord}
           evaluateSpecial={evaluateSpecialWord}
+          gameOver={abGameOver}
         />
 
         <div className="footer-spacing-uwu">
+          <Button variant="destructive" onClick={() => setABGameOver(true)}>
+            Simulate Game Over
+          </Button>
+
           <Footer />
         </div>
       </motion.div>

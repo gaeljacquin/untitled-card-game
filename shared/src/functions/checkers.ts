@@ -220,9 +220,11 @@ export const evaluateRowWord = (grid: IGridCell[][], row: number) => {
     }
   }
 
+  const points = hasAtLeastOneCard ? wordValue : 0;
+
   return {
     name: '',
-    points: hasAtLeastOneCard ? wordValue : 0,
+    points,
   };
 };
 
@@ -247,9 +249,11 @@ export const evaluateColumnWord = (grid: IGridCell[][], col: number) => {
     }
   }
 
+  const points = hasAtLeastOneCard ? wordValue : 0;
+
   return {
     name: '',
-    points: hasAtLeastOneCard ? wordValue : 0,
+    points,
   };
 };
 
@@ -269,6 +273,7 @@ export const evaluateSpecialWord = (grid: IGridCell[][]) => {
   ].filter((card): card is NonNullable<typeof card> => card !== null);
 
   const centerCard = grid[2]?.[2]?.card;
+
   if (centerCard) {
     cornerCards.push(centerCard);
   }

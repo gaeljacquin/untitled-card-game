@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 
-from lambda_function import ab_checks
+from lambda_function import ab_check
 
 app = Flask(__name__)
 
@@ -8,10 +8,10 @@ app = Flask(__name__)
 def hello_world():
   return "Hello, World"
 
-@app.route("/abcheck")
+@app.route("/abcheck", methods=['POST'])
 def ab_checks_rest():
-  word = request.args.get('word', default='')
-  res = ab_checks(word)
+  word_map = request.json
+  res = ab_check(word_map)
 
   return jsonify(res), 200
 
