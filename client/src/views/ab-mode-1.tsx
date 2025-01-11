@@ -40,7 +40,7 @@ export default function ABMode1(props: Props) {
         <li>Drag any 4 cards from your hand to an available cell in the grid</li>
         <li>Make a poker hand on any row and column in the grid</li>
         <li>Click 'Confirm'</li>
-        <li>The remaining card is moved to the discard pile, and a new set of 5 cards are dealt</li>
+        <li>The remaining card is discarded, and a new set of 5 cards is dealt</li>
         <li>Rinse and repeat until the grid is filled</li>
         <li>For an extra challenge, try to make a poker hand using the corners of the grid!</li>
         <li>Bonus points when poker hands also form valid words!</li>

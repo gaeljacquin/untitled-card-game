@@ -19,7 +19,6 @@ import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import ABCardComp from '@/components/ab-card';
-import DiscardPile from '@/components/discard-pile';
 import { GridCell } from '@/components/grid-cell';
 import LiveScore from '@/components/live-score';
 import Placeholder from '@/components/placeholder';
@@ -72,7 +71,6 @@ export default function PlayingField(props: Props) {
   const { labelNotValue } = settingsStore();
   const [grid, setGrid] = useState<IGridCell[][]>([]);
   const [activeDrag, setActiveDrag] = useState<ABCard | null>(null);
-  const [discardPile, setDiscardPile] = useState<ABCards>([]);
   const [gameState, setGameState] = useState<GameState>({
     gameOver: false,
     totalCards: abCards.length,
@@ -121,7 +119,6 @@ export default function PlayingField(props: Props) {
           }))
       );
     setGrid(newGrid);
-    setDiscardPile(discardPile);
     setGameState({
       gameOver: false,
       totalCards: gridSize * gridSize,
@@ -258,7 +255,6 @@ export default function PlayingField(props: Props) {
     ) as IGridCell[][];
 
     setGrid(newGrid);
-    setDiscardPile((prev) => [...prev, { ...cardToDiscard, faceUp: true }] as ABCards);
 
     await handleNextRound({ discardedABCard: cardToDiscard, newGrid });
 
@@ -581,12 +577,6 @@ export default function PlayingField(props: Props) {
                   ))}
                 </Fragment>
               ))}
-            </div>
-
-            <Separator />
-
-            <div className="bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md">
-              <DiscardPile cards={discardPile} modeType={type} />
             </div>
           </div>
 
