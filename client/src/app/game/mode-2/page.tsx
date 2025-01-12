@@ -5,7 +5,17 @@ import ABMode from '@/views/ab-mode';
 
 export default function Page() {
   const modeSlug = 'mode-2';
-  const gridClass = cn('grid grid-cols-5 gap-2 md:gap-4 bg-amber-950/30 rounded-2xl p-2 md:p-4');
+  const gridClass = cn(
+    'grid gap-2 md:gap-3',
+    'grid-cols-[30px_repeat(5,_minmax(0,_1fr))]',
+    'grid-rows-[40px_repeat(5,_minmax(0,_1fr))]',
+    'w-full max-w-full',
+    '[&>*]:w-full [&>*]:aspect-[3/4]',
+    'md:[&>.cell]:w-[100px] md:[&>.cell]:h-[133px]',
+    'lg:[&>.cell]:w-[120px] lg:[&>.cell]:h-[160px]',
+    'mx-auto justify-center items-center',
+    'bg-amber-950/30 rounded-xl p-6 md:p-10'
+  );
   const howToPlayText = () => {
     return (
       <ul className="list-disc list-inside space-y-5 text-white text-sm text-start">

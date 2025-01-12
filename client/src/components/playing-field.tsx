@@ -16,15 +16,17 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
+// import { PopoverClose } from '@radix-ui/react-popover';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import ABCardComp from '@/components/ab-card';
+import DiscardPile from '@/components/discard-pile';
 import { GridCell } from '@/components/grid-cell';
-import LiveScore from '@/components/live-score';
 import Placeholder from '@/components/placeholder';
 import SortableItem from '@/components/sortable-item';
 import { Button } from '@/components/ui/button';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
@@ -51,6 +53,16 @@ type Props = {
   } | null;
 };
 
+const labelClass = cn(
+  'hidden sm:flex',
+  'items-center justify-center',
+  'text-white/70 text-sm md:text-base',
+  'font-medium',
+  '[&]:!w-auto [&]:!h-auto [&]:!aspect-none'
+);
+
+const cornerCellClass = cn('aspect-none', 'w-auto h-auto');
+
 export default function PlayingField(props: Props) {
   const {
     modeSlug,
@@ -61,16 +73,16 @@ export default function PlayingField(props: Props) {
     handleNextRound,
     evaluateColumn,
     evaluateRow,
-    evaluateSpecial,
     gameOver = false,
     abResult,
-  } = props; // (1)
+  } = props;
   const [playerHand, setPlayerHand] = useState<ABCards>([]);
   const mode = ABMode.getMode(modeSlug)!;
   const { title, description, gridSize, type } = mode;
   const { labelNotValue } = settingsStore();
   const [grid, setGrid] = useState<IGridCell[][]>([]);
   const [activeDrag, setActiveDrag] = useState<ABCard | null>(null);
+  const [discardPile, setDiscardPile] = useState<ABCards>([]);
   const [gameState, setGameState] = useState<GameState>({
     gameOver: false,
     totalCards: abCards.length,
@@ -119,6 +131,7 @@ export default function PlayingField(props: Props) {
           }))
       );
     setGrid(newGrid);
+    setDiscardPile(discardPile);
     setGameState({
       gameOver: false,
       totalCards: gridSize * gridSize,
@@ -207,7 +220,6 @@ export default function PlayingField(props: Props) {
       setGrid(newGrid);
     } else if (over.data.current?.type === 'hand' && !sourceCard.played) {
       const sourceCell = grid.flat().find((cell) => cell.card?.id === active.id);
-
       const oldIdx = playerHand.findIndex((card) => card.id === event.active.id);
       const newIdx = playerHand.findIndex((card) => card.id === event.over!.id);
 
@@ -255,10 +267,12 @@ export default function PlayingField(props: Props) {
     ) as IGridCell[][];
 
     setGrid(newGrid);
+    setDiscardPile((prev) => [...prev, { ...cardToDiscard, faceUp: true }] as ABCards);
 
     await handleNextRound({ discardedABCard: cardToDiscard, newGrid });
 
     setPlayerHand([]);
+    void gameState;
 
     const isGridFull = newGrid.every((row) => row.every((cell) => cell.card !== null));
     if (isGridFull) {
@@ -288,7 +302,7 @@ export default function PlayingField(props: Props) {
       Promise.all(promises).then(() => {
         setTimeout(() => {
           setIsDealing(false);
-        }, 200); // (1)
+        }, 200);
       });
     }
   }, [abCards]);
@@ -333,99 +347,14 @@ export default function PlayingField(props: Props) {
           </CardDescription>
         </CardHeader>
 
-        <div className="flex flex-col-reverse md:flex-row gap-6">
-          <div className="md:w-1/3 flex flex-col h-full space-y-4">
-            <div
-              className={cn(
-                'h-1/2 bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md',
-                gameOver && 'shadow-animate rounded-2xl'
-              )}
-            >
-              <LiveScore
-                className="flex flex-col gap-4"
-                title={gameOver ? 'Final Score' : 'Live Score'}
-              >
-                <>
-                  <>
-                    {Array.from({ length: gridSize }, (_, index) => (
-                      <motion.div
-                        key={`col-${index}`}
-                        className="text-center font-semibold"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                      >
-                        <p className="flex items-center justify-between gap-2 text-sm">
-                          <span>Column {index + 1}: </span>
-                          <span>{evaluateColumn(grid, index).name}</span>
-                          <span>${evaluateColumn(grid, index).points}</span>
-                        </p>
-                      </motion.div>
-                    ))}
-                  </>
-                  <Separator />
-                  <>
-                    {grid.map((_, index) => (
-                      <motion.div
-                        key={`row-${index}`}
-                        className="text-center font-semibold"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                      >
-                        <p className="flex items-center justify-between gap-2 text-sm">
-                          <span>Row {index + 1} </span>
-                          <span>{evaluateRow(grid, index).name}</span>
-                          <span>${evaluateRow(grid, index).points}</span>
-                        </p>
-                      </motion.div>
-                    ))}
-                  </>
-                  <Separator />
-                  <>
-                    <motion.div
-                      className="text-center font-semibold"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                    >
-                      <p className="flex items-center justify-between gap-2 text-sm">
-                        <span>Special</span>
-                        <span>{evaluateSpecial(grid).name}</span>
-                        <span>${evaluateSpecial(grid).points}</span>
-                      </p>
-                    </motion.div>
-                  </>
-                  <>
-                    <Separator />
-                    <>
-                      <motion.div
-                        className="text-center font-semibold"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                      >
-                        <p className="flex items-center justify-between gap-2 text-sm">
-                          <span>Total Score</span>
-                          <span>${gameState.totalScore}</span>
-                        </p>
-                      </motion.div>
-                    </>
-                  </>
-                </>
-              </LiveScore>
-            </div>
-
-            <div
-              className={cn(
-                'h-1/2 bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md mb-4',
-                'overflow-y-auto'
-              )}
-            >
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <h1 className="text-lg text-center font-bold">How to Play</h1>
-              </div>
-              <div className="space-y-4">{howToPlayText}</div>
+        <div className="grid grid-cols-1 sm:grid-cols-12 gap-6">
+          <div className="sm:col-span-2">
+            <div className="h-auto bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md">
+              <DiscardPile cards={discardPile} modeType={type} />
             </div>
           </div>
 
-          <div className={cn('md:w-2/4 lg:w-1/2 space-y-5')}>
+          <div className="sm:col-span-8">
             {gameOver && (
               <div
                 className={cn(
@@ -436,10 +365,30 @@ export default function PlayingField(props: Props) {
                 Please reload the page to play a new round.
               </div>
             )}
-            <div className={cn(gridClass)}>
-              {grid.map((row, index) => (
-                <Fragment key={`grid-${index}`}>
-                  {row.map((cell, rowIndex) => (
+            <div className={gridClass}>
+              <div className={cornerCellClass} />
+
+              {Array.from({ length: gridSize }, (_, colIndex) => (
+                <div key={`col-${colIndex}`} className={labelClass}>
+                  <motion.div>
+                    <span className="text-clip">{evaluateColumn(grid, colIndex).name}:</span>
+                    <br />
+                    <span className="text-clip">${evaluateColumn(grid, colIndex).points}</span>
+                  </motion.div>
+                </div>
+              ))}
+
+              {grid.map((row, rowIndex) => (
+                <Fragment key={`row-${rowIndex}`}>
+                  <div className={labelClass}>
+                    <motion.div>
+                      <span className="text-clip">{evaluateRow(grid, rowIndex).name}:</span>
+                      <br />
+                      <span className="text-clip">${evaluateRow(grid, rowIndex).points}</span>
+                    </motion.div>
+                  </div>
+
+                  {row.map((cell, colIndex) => (
                     <GridCell
                       key={cell.id}
                       cell={cell}
@@ -447,21 +396,39 @@ export default function PlayingField(props: Props) {
                       gridSize={gridSize}
                       lockedCells={lockedCells}
                       rowIndex={rowIndex}
-                      columnIndex={index}
+                      columnIndex={colIndex}
                     />
                   ))}
                 </Fragment>
               ))}
             </div>
+
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  className="w-48 h-12 bg-white/20 hover:bg-white/30 border-white/20 text-md mt-8"
+                >
+                  How to Play
+                </Button>
+              </PopoverTrigger>
+
+              <PopoverContent className="w-80 bg-transparent backdrop-blur-sm border-white/20">
+                <div className="grid gap-4">
+                  <div className="space-y-2">
+                    <h4 className="font-medium text-white">How to Play</h4>
+                  </div>
+                  <div className="flex items-center justify-center">{howToPlayText}</div>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
 
-          <div className="md:w-1/8 flex flex-col h-full space-y-4">
-            <div className="h-1/2 border border-4 border-dashed rounded-2xl p-4">
+          <div className="sm:col-span-2">
+            <div className="h-auto border border-4 border-dashed rounded-2xl p-4">
               <div className={playerHandClass}>
                 {isDealing ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  </>
+                  <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <SortableContext
                     items={playerHand.map((item) => item.id)}
@@ -488,7 +455,7 @@ export default function PlayingField(props: Props) {
 
               <div className="flex items-center justify-center">
                 <Button onClick={handleDiscard} disabled={playerHand.length !== 1 || isDealing}>
-                  Confirm
+                  Discard
                 </Button>
               </div>
             </div>
@@ -504,7 +471,3 @@ export default function PlayingField(props: Props) {
     </DndContext>
   );
 }
-
-/* Notes
-(1) Added a small buffer after dealing the last card; part of the race condition fix
-*/
