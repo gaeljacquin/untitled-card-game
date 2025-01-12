@@ -15,10 +15,11 @@ interface Props {
   lockedCells: Set<string>;
   rowIndex: number;
   columnIndex: number;
+  valueNotLabel: boolean;
 }
 
 export function GridCell(props: Props) {
-  const { cell, modeType, gridSize, lockedCells, rowIndex, columnIndex } = props;
+  const { cell, modeType, gridSize, lockedCells, rowIndex, columnIndex, valueNotLabel } = props;
   const droppable = {
     id: cell.id,
     data: {
@@ -62,7 +63,12 @@ export function GridCell(props: Props) {
           }}
           className={cn('p-0 sm:p-1', cell.card.played && 'brightness-50')}
         >
-          <ABCardComp card={cell.card} modeType={modeType} isDragging />
+          <ABCardComp
+            card={cell.card}
+            modeType={modeType}
+            valueNotLabel={valueNotLabel}
+            isDragging
+          />
         </motion.div>
       )}
       {shouldShowBorderBeam && (

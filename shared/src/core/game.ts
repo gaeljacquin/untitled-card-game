@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ABCards } from './card';
+import { ABDeck } from './deck';
 import { ABMode } from './mode';
-import { ABSeed } from './seed';
 
 interface IABGame {
   id: string;
@@ -16,18 +16,18 @@ export class ABGame implements IABGame {
   readonly mode: ABMode;
   public played: boolean;
   public won: boolean;
-  public groupedABCards: Array<ABCards>;
-  public dealtABCardGroups: Array<ABCards>;
+  public seededCards: ABCards[];
+  public dealtABCardGroups: ABCards[];
   public grid: Array<ABCards>;
   public discardedABCards: ABCards;
   readonly createdAt: Date;
 
   constructor(mode: ABMode) {
-    const seed = new ABSeed(mode);
+    const deck = new ABDeck(mode);
     const gridSize = mode.gridSize;
     this.id = uuidv4();
     this.mode = mode;
-    this.groupedABCards = seed.groupedABCards;
+    this.seededCards = deck.seededCards;
     this.dealtABCardGroups = Array.from({ length: gridSize }, () => Array(gridSize).fill([null]));
     this.grid = Array.from({ length: gridSize }, () => Array(gridSize).fill([null]));
     this.discardedABCards = [];
@@ -44,8 +44,8 @@ export class ABGame implements IABGame {
     this.won = true;
   }
 
-  public deal(index: number) {
-    const abCardGroup = this.groupedABCards[index];
+  public dealHand(index: number) {
+    const abCardGroup = this.seededCards[index];
     this.dealtABCardGroups[index] = abCardGroup;
 
     return abCardGroup;

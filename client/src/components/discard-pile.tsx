@@ -9,10 +9,11 @@ import { cn } from '@/lib/utils';
 interface Props {
   cards: ABCards;
   modeType: IABModeType;
+  valueNotLabel: boolean;
 }
 
 export default function DiscardPile(props: Props) {
-  const { cards, modeType } = props;
+  const { cards, modeType, valueNotLabel } = props;
 
   return (
     <>
@@ -38,7 +39,12 @@ export default function DiscardPile(props: Props) {
                     damping: 30,
                   }}
                 >
-                  <ABCardComp card={card} modeType={modeType} inGrid={false} />
+                  <ABCardComp
+                    card={card}
+                    modeType={modeType}
+                    valueNotLabel={valueNotLabel}
+                    inGrid={false}
+                  />
                 </motion.div>
               </motion.div>
             ))}

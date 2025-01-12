@@ -1,5 +1,7 @@
+import { IconType } from 'react-icons';
 import { v4 as uuidv4 } from 'uuid';
-// import { getRandomIndex } from '../functions/shufflers';
+import { jokerIcons } from '../constants/suit-icon';
+import { getRandomIndex } from '../functions/shufflers';
 import { Rank } from './rank';
 import { Suit } from './suit';
 
@@ -71,7 +73,7 @@ export class ABCard extends Card {
   }
 }
 
-export class ABCardPlus extends ABCard {
+export class ABCardPreview extends ABCard {
   declare public rank: Rank;
   declare public suit: Suit;
 
@@ -96,4 +98,22 @@ export class ABCardPlus extends ABCard {
   }
 }
 
-export type ABCards = ABCard[];
+export class ABJoker extends ABCard {
+  public icon: IconType;
+  private playable: boolean = false;
+
+  constructor() {
+    super(null, null, true, true);
+    this.icon = this.getRandomIcon();
+  }
+
+  getRandomIcon(): IconType {
+    const randomIndex = getRandomIndex(jokerIcons);
+
+    return jokerIcons[randomIndex];
+  }
+}
+
+export type ABCardPlus = ABCard | ABJoker;
+
+export type ABCards = ABCardPlus[];

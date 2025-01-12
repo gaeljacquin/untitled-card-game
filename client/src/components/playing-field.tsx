@@ -350,7 +350,7 @@ export default function PlayingField(props: Props) {
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-6">
           <div className="sm:col-span-2">
             <div className="h-auto bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md">
-              <DiscardPile cards={discardPile} modeType={type} />
+              <DiscardPile cards={discardPile} modeType={type} valueNotLabel={!labelNotValue} />
             </div>
           </div>
 
@@ -397,6 +397,7 @@ export default function PlayingField(props: Props) {
                       lockedCells={lockedCells}
                       rowIndex={rowIndex}
                       columnIndex={colIndex}
+                      valueNotLabel={!labelNotValue}
                     />
                   ))}
                 </Fragment>

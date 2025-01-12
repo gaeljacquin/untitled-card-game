@@ -51,7 +51,7 @@ export class GameGateway
     const { modeSlug } = payload;
     const mode = ABMode.getMode(modeSlug);
     const abGame = new ABGame(mode);
-    const abCards = abGame.deal(0);
+    const abCards = abGame.dealHand(0);
     const emit = {
       abCards,
     };
@@ -80,7 +80,9 @@ export class GameGateway
         abResult: null,
       };
     } else {
-      const abCards = updatedABGame.deal(updatedABGame.discardedABCards.length);
+      const abCards = updatedABGame.dealHand(
+        updatedABGame.discardedABCards.length,
+      );
       emit = {
         abCards,
       };

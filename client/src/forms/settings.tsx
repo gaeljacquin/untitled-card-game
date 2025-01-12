@@ -1,8 +1,8 @@
 'use client';
 
 // import { useEffect } from 'react';
-// import { ABCard, ABCardPlus, ABCards } from '@annabelle/shared/core/card';
-import { ABCardPlus } from '@annabelle/shared/core/card';
+// import { ABCard, ABCardPreview, ABCards } from '@annabelle/shared/core/card';
+import { ABCardPreview } from '@annabelle/shared/core/card';
 import { Rank, RankId } from '@annabelle/shared/core/rank';
 import { Suit, SuitId } from '@annabelle/shared/core/suit';
 // import { evaluatePokerHands } from '@annabelle/shared/functions/checkers';
@@ -56,7 +56,7 @@ export default function Settings() {
 
   const previewRank = Rank.getById(settings.previewCard.rank as RankId);
   const previewSuit = Suit.getById(settings.previewCard.suit as SuitId);
-  const previewCard = new ABCardPlus();
+  const previewCard = new ABCardPreview();
   previewCard.setRank(previewRank);
   previewCard.setSuit(previewSuit);
 
