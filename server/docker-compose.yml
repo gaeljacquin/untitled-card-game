@@ -13,6 +13,5 @@ services:
       - /app/server/node_modules
     environment:
       CLIENT_URL: ${CLIENT_URL}
-      AWS_LAMBDA_URL: ${AWS_LAMBDA_URL}
     ports:
       - '8080:3000'

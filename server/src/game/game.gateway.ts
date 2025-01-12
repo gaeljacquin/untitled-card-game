@@ -111,34 +111,9 @@ export class GameGateway
     let emit = {};
 
     if (updatedABGame.discardedABCards.length === gridSize) {
-      if (abGame.mode.type === 'abword') {
-        wordMap['special'] = {
-          word: [
-            newGrid[0][0].card?.letter || '',
-            newGrid[0][4].card?.letter || '',
-            newGrid[4][0].card?.letter || '',
-            newGrid[4][4].card?.letter || '',
-            newGrid[2][2].card?.letter || '',
-          ].join(''),
-          points:
-            (newGrid[0][0].card.rank.value +
-              newGrid[0][4].card.rank.value +
-              newGrid[4][0].card.rank.value +
-              newGrid[4][4].card.rank.value +
-              newGrid[2][2].card.rank.value) *
-            10,
-          label: 'Special',
-          valid: false,
-          match: '',
-          points_final: 0,
-        };
-      }
-
-      const response = await this.gameService.abCheckLambda(wordMap);
-      const abResult = JSON.parse(response['body']);
       emit = {
         gameOver: true,
-        abResult: abResult,
+        abResult: wordMap, // temporary
       };
     } else {
       const abCards = updatedABGame.deal(updatedABGame.discardedABCards.length);
