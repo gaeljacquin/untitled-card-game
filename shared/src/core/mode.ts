@@ -1,4 +1,4 @@
-export type IABModeType = 'abpoker' | 'abword';
+export type IABModeType = 'abpoker';
 
 interface IABMode {
   readonly type: IABModeType;
@@ -32,13 +32,6 @@ export class ABMode implements IABMode {
   private static readonly modes = [
     new ABMode('abpoker', 'Poker 4', 'Fill the 4 x 4 grid with the best poker hands!', 'mode-1', 4),
     new ABMode('abpoker', 'Poker 5', 'Fill the 5 x 5 grid with the best poker hands!', 'mode-2', 5),
-    new ABMode(
-      'abword',
-      'Word 5',
-      'Fill the 5 x 5 grid with the highest scoring words!',
-      'mode-3',
-      5
-    ),
   ];
 
   public static getModes() {

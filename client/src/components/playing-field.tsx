@@ -295,14 +295,8 @@ export default function PlayingField(props: Props) {
 
   useEffect(() => {
     if (gameOver && abResult) {
-      const totalScore =
-        type === 'abword'
-          ? Object.values(abResult).reduce((sum, item) => sum + item.points_final, 0)
-          : evaluateTotalPokerScore(grid);
-      const bonusPoints =
-        type === 'abword'
-          ? evaluateTotalPokerScore(grid)
-          : Object.values(abResult).reduce((sum, item) => sum + item.points_final, 0);
+      const totalScore = evaluateTotalPokerScore(grid);
+      const bonusPoints = Object.values(abResult).reduce((sum, item) => sum + item.points_final, 0);
       setGameState((prev) => ({
         ...prev,
         totalScore: totalScore + bonusPoints,
@@ -312,13 +306,11 @@ export default function PlayingField(props: Props) {
   }, [gameOver]);
 
   useEffect(() => {
-    if (type === 'abpoker') {
-      const totalScore = evaluateTotalPokerScore(grid);
-      setGameState((prev) => ({
-        ...prev,
-        totalScore,
-      }));
-    }
+    const totalScore = evaluateTotalPokerScore(grid);
+    setGameState((prev) => ({
+      ...prev,
+      totalScore,
+    }));
   }, [grid]);
 
   if (!abCards || abCards.length === 0) {
@@ -353,87 +345,72 @@ export default function PlayingField(props: Props) {
                 className="flex flex-col gap-4"
                 title={gameOver ? 'Final Score' : 'Live Score'}
               >
-                {gameOver && abResult && type === 'abword' ? (
+                <>
                   <>
-                    <>
-                      {Array.from({ length: gridSize }, (_, index) => (
-                        <motion.div
-                          key={`col-${index}`}
-                          className="text-center font-semibold"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                        >
-                          <p className="flex items-center justify-between gap-2 text-sm">
-                            <span>Column {index + 1}: </span>
-                            <span>
-                              {abResult[`col-${index + 1}`].word} &rarr;{' '}
-                              {abResult[`col-${index + 1}`].match !== ''
-                                ? abResult[`col-${index + 1}`].match
-                                : '_'}
-                            </span>
-                            <span>${abResult[`col-${index + 1}`].points_final}</span>
-                          </p>
-                        </motion.div>
-                      ))}
-                    </>
-                    <Separator />
-                    <>
-                      {grid.map((_, index) => (
-                        <motion.div
-                          key={`row-${index}`}
-                          className="text-center font-semibold"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                        >
-                          <p className="flex items-center justify-between gap-2 text-sm">
-                            <span>Row {index + 1} </span>
-                            <span>
-                              {abResult[`row-${index + 1}`].word} &rarr;{' '}
-                              {abResult[`row-${index + 1}`].match !== ''
-                                ? abResult[`row-${index + 1}`].match
-                                : '_'}
-                            </span>
-                            <span>${abResult[`row-${index + 1}`].points_final}</span>
-                          </p>
-                        </motion.div>
-                      ))}
-                    </>
-                    <Separator />
-                    <>
+                    {Array.from({ length: gridSize }, (_, index) => (
                       <motion.div
+                        key={`col-${index}`}
                         className="text-center font-semibold"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                       >
                         <p className="flex items-center justify-between gap-2 text-sm">
-                          <span>Bonus Points</span>
-                          <span>${gameState.bonusPoints}</span>
+                          <span>Column {index + 1}: </span>
+                          <span>{evaluateColumn(grid, index).name}</span>
+                          <span>${evaluateColumn(grid, index).points}</span>
                         </p>
                       </motion.div>
-                    </>
-                    <Separator />
-                    <>
+                    ))}
+                  </>
+                  <Separator />
+                  <>
+                    {grid.map((_, index) => (
                       <motion.div
+                        key={`row-${index}`}
                         className="text-center font-semibold"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                       >
                         <p className="flex items-center justify-between gap-2 text-sm">
-                          <span>Special</span>
-                          <span>
-                            {' '}
-                            {abResult['special'].word} &rarr;{' '}
-                            {abResult['special'].match !== '' ? abResult['special'].match : '_'}
-                          </span>
-                          <span>
-                            $
-                            {gameOver
-                              ? abResult['special'].points_final
-                              : evaluateSpecial(grid).points}
-                          </span>
+                          <span>Row {index + 1} </span>
+                          <span>{evaluateRow(grid, index).name}</span>
+                          <span>${evaluateRow(grid, index).points}</span>
                         </p>
                       </motion.div>
+                    ))}
+                  </>
+                  <Separator />
+                  <>
+                    <motion.div
+                      className="text-center font-semibold"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
+                      <p className="flex items-center justify-between gap-2 text-sm">
+                        <span>Special</span>
+                        <span>{evaluateSpecial(grid).name}</span>
+                        <span>${evaluateSpecial(grid).points}</span>
+                      </p>
+                    </motion.div>
+                  </>
+                  {gameOver && (
+                    <>
+                      <Separator />
+                      <>
+                        <motion.div
+                          className="text-center font-semibold"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                        >
+                          <p className="flex items-center justify-between gap-2 text-sm">
+                            <span>Bonus Points</span>
+                            <span>${gameState.bonusPoints}</span>
+                          </p>
+                        </motion.div>
+                      </>
                     </>
+                  )}
+                  <>
                     <Separator />
                     <>
                       <motion.div
@@ -448,92 +425,7 @@ export default function PlayingField(props: Props) {
                       </motion.div>
                     </>
                   </>
-                ) : (
-                  <>
-                    <>
-                      {Array.from({ length: gridSize }, (_, index) => (
-                        <motion.div
-                          key={`col-${index}`}
-                          className="text-center font-semibold"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                        >
-                          <p className="flex items-center justify-between gap-2 text-sm">
-                            <span>Column {index + 1}: </span>
-                            <span>{evaluateColumn(grid, index).name}</span>
-                            <span>${evaluateColumn(grid, index).points}</span>
-                          </p>
-                        </motion.div>
-                      ))}
-                    </>
-                    <Separator />
-                    <>
-                      {grid.map((_, index) => (
-                        <motion.div
-                          key={`row-${index}`}
-                          className="text-center font-semibold"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                        >
-                          <p className="flex items-center justify-between gap-2 text-sm">
-                            <span>Row {index + 1} </span>
-                            <span>{evaluateRow(grid, index).name}</span>
-                            <span>${evaluateRow(grid, index).points}</span>
-                          </p>
-                        </motion.div>
-                      ))}
-                    </>
-                    <Separator />
-                    <>
-                      <motion.div
-                        className="text-center font-semibold"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                      >
-                        <p className="flex items-center justify-between gap-2 text-sm">
-                          <span>Special</span>
-                          <span>{evaluateSpecial(grid).name}</span>
-                          <span>${evaluateSpecial(grid).points}</span>
-                        </p>
-                      </motion.div>
-                    </>
-                    {gameOver && (
-                      <>
-                        <Separator />
-                        <>
-                          <motion.div
-                            className="text-center font-semibold"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                          >
-                            <p className="flex items-center justify-between gap-2 text-sm">
-                              <span>Bonus Points</span>
-                              <span>${gameState.bonusPoints}</span>
-                            </p>
-                          </motion.div>
-                        </>
-                      </>
-                    )}
-                    {type === 'abpoker' ||
-                      (type === 'abword' && gameOver && (
-                        <>
-                          <Separator />
-                          <>
-                            <motion.div
-                              className="text-center font-semibold"
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                            >
-                              <p className="flex items-center justify-between gap-2 text-sm">
-                                <span>Total Score</span>
-                                <span>${gameState.totalScore}</span>
-                              </p>
-                            </motion.div>
-                          </>
-                        </>
-                      ))}
-                  </>
-                )}
+                </>
               </LiveScore>
             </div>
 

@@ -19,19 +19,8 @@ export class ABSeed implements IABSeed {
   }
 
   private getABCards(type: IABModeType, gridSize: number, numCards: number) {
-    let result: Array<ABCards>;
-
-    switch (type) {
-      case 'abpoker':
-        const seed = this.generateABPokerSeed(numCards);
-        result = this.generateABPokerCards(seed, gridSize, numCards);
-        break;
-      case 'abword':
-        result = this.generateABWordCards(gridSize, numCards);
-        break;
-      default:
-        throw new Error(`Invalid mode type: ${type}`);
-    }
+    const seed = this.generateABPokerSeed(numCards);
+    const result = this.generateABPokerCards(seed, gridSize, numCards);
 
     return result;
   }
@@ -71,27 +60,6 @@ export class ABSeed implements IABSeed {
       }
     }
 
-    const shuffledCards = shuffler(cards) as ABCards;
-    const result: ABCards[] = [];
-
-    for (let i = 0; i < gridSize; i++) {
-      result.push(shuffledCards.slice(i * numCards, (i + 1) * numCards));
-    }
-
-    return result;
-  }
-
-  private generateABWordCards(gridSize: number, numCards: number) {
-    const total = numCards * gridSize;
-    const randomVowelCards = Array.from(
-      { length: numCards },
-      () => new ABCard(null, null, false, 'vowel')
-    );
-    const randomCards = Array.from(
-      { length: total - numCards },
-      () => new ABCard(null, null, false, 'any')
-    );
-    const cards = randomVowelCards.concat(randomCards);
     const shuffledCards = shuffler(cards) as ABCards;
     const result: ABCards[] = [];
 

@@ -22,6 +22,4 @@ export type SettingsStore = FormData &
     updateSettings: (arg0: Partial<FormData>) => void;
     resetSettings: () => void;
     getSettings: () => FormData;
-    abCheckStatus: { [key: string]: string | boolean };
-    setAbCheckStatus: (arg0: { [key: string]: string | boolean }) => void;
   };
