@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, ReactNode, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { ABCard, ABCards } from '@annabelle/shared/core/card';
 import { IGridCell } from '@annabelle/shared/core/grid-cell';
 import { ABMode } from '@annabelle/shared/core/mode';
@@ -16,7 +16,6 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
-// import { PopoverClose } from '@radix-ui/react-popover';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import ABCardComp from '@/components/ab-card';
@@ -26,7 +25,6 @@ import Placeholder from '@/components/placeholder';
 import SortableItem from '@/components/sortable-item';
 import { Button } from '@/components/ui/button';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
@@ -38,7 +36,6 @@ type Props = {
   abCards: ABCards;
   gridClass: string;
   playerHandClass: string;
-  howToPlayText: ReactNode;
   handleNextRound: (arg0: { [key: string]: unknown }) => void;
   evaluateColumn: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
   evaluateRow: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
@@ -67,7 +64,6 @@ export default function PlayingField(props: Props) {
   const {
     modeSlug,
     abCards,
-    howToPlayText,
     gridClass,
     playerHandClass,
     handleNextRound,
@@ -327,10 +323,6 @@ export default function PlayingField(props: Props) {
     }));
   }, [grid]);
 
-  if (!abCards || abCards.length === 0) {
-    return <Placeholder />;
-  }
-
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
       <div className="min-h-screen backdrop-blur-sm bg-white/10 border-white/20 rounded-2xl p-4 md:p-8 ">
@@ -365,64 +357,49 @@ export default function PlayingField(props: Props) {
                 Please reload the page to play a new round.
               </div>
             )}
-            <div className={gridClass}>
-              <div className={cornerCellClass} />
 
-              {Array.from({ length: gridSize }, (_, colIndex) => (
-                <div key={`col-${colIndex}`} className={labelClass}>
-                  <motion.div>
-                    <span className="text-clip">{evaluateColumn(grid, colIndex).name}:</span>
-                    <br />
-                    <span className="text-clip">${evaluateColumn(grid, colIndex).points}</span>
-                  </motion.div>
-                </div>
-              ))}
+            {!abCards || abCards.length === 0 ? (
+              <Placeholder />
+            ) : (
+              <div className={gridClass}>
+                <div className={cornerCellClass} />
 
-              {grid.map((row, rowIndex) => (
-                <Fragment key={`row-${rowIndex}`}>
-                  <div className={labelClass}>
+                {Array.from({ length: gridSize }, (_, colIndex) => (
+                  <div key={`col-${colIndex}`} className={labelClass}>
                     <motion.div>
-                      <span className="text-clip">{evaluateRow(grid, rowIndex).name}:</span>
+                      <span className="text-clip">{evaluateColumn(grid, colIndex).name}:</span>
                       <br />
-                      <span className="text-clip">${evaluateRow(grid, rowIndex).points}</span>
+                      <span className="text-clip">${evaluateColumn(grid, colIndex).points}</span>
                     </motion.div>
                   </div>
+                ))}
 
-                  {row.map((cell, colIndex) => (
-                    <GridCell
-                      key={cell.id}
-                      cell={cell}
-                      modeType={type}
-                      gridSize={gridSize}
-                      lockedCells={lockedCells}
-                      rowIndex={rowIndex}
-                      columnIndex={colIndex}
-                      valueNotLabel={!labelNotValue}
-                    />
-                  ))}
-                </Fragment>
-              ))}
-            </div>
+                {grid.map((row, rowIndex) => (
+                  <Fragment key={`row-${rowIndex}`}>
+                    <div className={labelClass}>
+                      <motion.div>
+                        <span className="text-clip">{evaluateRow(grid, rowIndex).name}:</span>
+                        <br />
+                        <span className="text-clip">${evaluateRow(grid, rowIndex).points}</span>
+                      </motion.div>
+                    </div>
 
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  type="button"
-                  className="w-48 h-12 bg-white/20 hover:bg-white/30 border-white/20 text-md mt-8"
-                >
-                  How to Play
-                </Button>
-              </PopoverTrigger>
-
-              <PopoverContent className="w-80 bg-transparent backdrop-blur-sm border-white/20">
-                <div className="grid gap-4">
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-white">How to Play</h4>
-                  </div>
-                  <div className="flex items-center justify-center">{howToPlayText}</div>
-                </div>
-              </PopoverContent>
-            </Popover>
+                    {row.map((cell, colIndex) => (
+                      <GridCell
+                        key={cell.id}
+                        cell={cell}
+                        modeType={type}
+                        gridSize={gridSize}
+                        lockedCells={lockedCells}
+                        rowIndex={rowIndex}
+                        columnIndex={colIndex}
+                        valueNotLabel={!labelNotValue}
+                      />
+                    ))}
+                  </Fragment>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="sm:col-span-2">

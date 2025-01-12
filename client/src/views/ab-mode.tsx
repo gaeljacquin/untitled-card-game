@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ABCards } from '@annabelle/shared/core/card';
 import {
   evaluateColumnHand,
@@ -11,7 +11,6 @@ import { motion } from 'framer-motion';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import BackgroundLogo from '@/components/background-logo';
 import Footer from '@/components/footer';
-import Placeholder from '@/components/placeholder';
 import PlayingField from '@/components/playing-field';
 // import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -19,12 +18,11 @@ import socketInit from '@/utils/socket-init';
 
 type Props = {
   modeSlug: string;
-  howToPlayText: ReactNode;
   gridClass: string;
 };
 
 export default function ABMode(props: Props) {
-  const { modeSlug, howToPlayText, gridClass } = props;
+  const { modeSlug, gridClass } = props;
   const socket = socketInit();
   const [abCards, setABCards] = useState<ABCards>([]);
   const [abGameOver, setABGameOver] = useState<boolean>(false);
@@ -74,10 +72,6 @@ export default function ABMode(props: Props) {
     socket.emit('game-next-round', data);
   };
 
-  if ((!abCards || abCards.length === 0) && !abGameOver) {
-    return <Placeholder />;
-  }
-
   return (
     <>
       <motion.div
@@ -93,7 +87,6 @@ export default function ABMode(props: Props) {
           abCards={abCards}
           gridClass={gridClass}
           playerHandClass={playerHandClass}
-          howToPlayText={howToPlayText}
           handleNextRound={handleNextRound}
           evaluateColumn={evaluateColumnHand}
           evaluateRow={evaluateRowHand}
