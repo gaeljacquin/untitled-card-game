@@ -145,6 +145,11 @@
     animation: shadows 1.5s forwards;
   }
 
+  .shadow-animate-3 {
+    box-shadow: 0px 0px 10px 5px #9b128f;
+    animation: shadows 1.5 forwards;
+  }
+
   @keyframes shadows {
     0% {
       box-shadow: 0px 0px 10px 5px #48abe0;

@@ -2,7 +2,7 @@
 
 // import { useEffect } from 'react';
 // import { ABCard, ABCardPreview, ABCards } from '@annabelle/shared/core/card';
-import { ABCardPreview } from '@annabelle/shared/core/card';
+import { ABCardPreview, ABJoker } from '@annabelle/shared/core/card';
 import { Rank, RankId } from '@annabelle/shared/core/rank';
 import { Suit, SuitId } from '@annabelle/shared/core/suit';
 // import { evaluatePokerHands } from '@annabelle/shared/functions/checkers';
@@ -11,6 +11,7 @@ import { PopoverClose } from '@radix-ui/react-popover';
 import { Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { CardBackPreview, CardFrontPreview } from '@/components/ab-card-preview';
+import { JokerCardPreview } from '@/components/joker-card-preview';
 import Placeholder from '@/components/placeholder';
 import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
@@ -59,6 +60,7 @@ export default function Settings() {
   const previewCard = new ABCardPreview();
   previewCard.setRank(previewRank);
   previewCard.setSuit(previewSuit);
+  const jokerCard = new ABJoker();
 
   function onSubmit(data: FormData) {
     updateSettings(data);
@@ -328,6 +330,12 @@ export default function Settings() {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-4">
+            <div>
+              <p className="text-sm">Joker</p>
+            </div>
+            <JokerCardPreview card={jokerCard} />
           </div>
         </>
 
