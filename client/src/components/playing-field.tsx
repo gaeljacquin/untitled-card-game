@@ -393,23 +393,6 @@ export default function PlayingField(props: Props) {
                       </p>
                     </motion.div>
                   </>
-                  {gameOver && (
-                    <>
-                      <Separator />
-                      <>
-                        <motion.div
-                          className="text-center font-semibold"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                        >
-                          <p className="flex items-center justify-between gap-2 text-sm">
-                            <span>Bonus Points</span>
-                            <span>${gameState.bonusPoints}</span>
-                          </p>
-                        </motion.div>
-                      </>
-                    </>
-                  )}
                   <>
                     <Separator />
                     <>

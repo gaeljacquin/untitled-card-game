@@ -5,7 +5,6 @@ import { suitIconMap } from '@annabelle/shared/constants/suit-icon';
 import { ABCard } from '@annabelle/shared/core/card';
 import { IABModeType } from '@annabelle/shared/core/mode';
 import { SuitId } from '@annabelle/shared/core/suit';
-import { FaChessQueen } from 'react-icons/fa6';
 import { cn } from '@/lib/utils';
 import settingsStore, { cardFronts } from '@/stores/settings';
 
@@ -64,7 +63,7 @@ export function CardBackPreview(props: CardBackProps) {
   );
 }
 
-// (1)
+// Code from previous ABCard component
 type ABCardFaceUpProps = {
   card: ABCard;
   valueNotLabel?: boolean;
@@ -73,13 +72,12 @@ type ABCardFaceUpProps = {
   className?: string;
 };
 
-// (1)
+// Code from previous ABCard component
 function ABCardFaceUp(props: ABCardFaceUpProps) {
   const { card, valueNotLabel } = props;
   const rank = card.rank;
   const suit = card.suit;
-  const letter = card.letter;
-  const { cardFront: cardFrontIndex, rankSwitchLetter } = settingsStore();
+  const { cardFront: cardFrontIndex } = settingsStore();
   const cardFront = cardFronts[cardFrontIndex];
   const cardColor = suit.isRed
     ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
@@ -87,18 +85,8 @@ function ABCardFaceUp(props: ABCardFaceUpProps) {
   const SuitIcon = suitIconMap[suit.id as SuitId];
   let ShapeIcon = null;
   const rankDisplay = valueNotLabel ? rank.value : rank.label;
-  const showUwu = !valueNotLabel && rank.aceFace;
   const suitIconFill = cardFront.id === 'suitIcon';
-  let main;
-  let sub;
-
-  if (rankSwitchLetter) {
-    main = letter;
-    sub = rankDisplay;
-  } else {
-    main = rankDisplay;
-    sub = letter;
-  }
+  const main = rankDisplay;
 
   if (suitIconFill) {
     ShapeIcon = suitIconMap[suit.id as SuitId];
@@ -129,15 +117,9 @@ function ABCardFaceUp(props: ABCardFaceUpProps) {
             className={cn('absolute top-2 left-2 text-base sm:text-xl font-bold', cardColor.text)}
           >
             <span className={cn('flex items-center justify-center uppercase', 'text-sm')}>
-              {sub}
+              {main}
             </span>
             <SuitIcon className={cn('h-4 w-4')} />
-          </div>
-
-          <div
-            className={cn('absolute top-3 right-2 text-base sm:text-xl font-bold', cardColor.text)}
-          >
-            {showUwu && rankSwitchLetter && <FaChessQueen className={cn('h-3 w-3')} />}
           </div>
 
           <div
@@ -147,18 +129,9 @@ function ABCardFaceUp(props: ABCardFaceUpProps) {
             )}
           >
             <span className={cn('flex items-center justify-center uppercase', 'text-sm')}>
-              {sub}
+              {main}
             </span>
             <SuitIcon className={cn('h-4 w-4')} />
-          </div>
-
-          <div
-            className={cn(
-              'absolute bottom-3 left-2 text-base sm:text-xl font-bold rotate-180',
-              cardColor.text
-            )}
-          >
-            {showUwu && rankSwitchLetter && <FaChessQueen className={cn('h-3 w-3')} />}
           </div>
 
           <div className="relative flex items-center justify-center h-full w-full">
@@ -179,13 +152,9 @@ function ABCardFaceUp(props: ABCardFaceUpProps) {
                 'absolute',
                 cardColor.letter,
                 'text-2xl sm:text-4xl',
-                'flex-col-1 items-center justify-center',
-                suitIconFill && !suit.isRed && '-mt-4' // (1)
+                'flex-col-1 items-center justify-center'
               )}
             >
-              <span className={cn('flex items-center justify-center')}>
-                {showUwu && !rankSwitchLetter && <FaChessQueen className={cn('h-3 w-3')} />}
-              </span>
               <span
                 className={cn(
                   'flex items-center justify-center',
@@ -201,7 +170,3 @@ function ABCardFaceUp(props: ABCardFaceUpProps) {
     </div>
   );
 }
-
-/* Notes
-(1) Code from previous ABCard component
-*/

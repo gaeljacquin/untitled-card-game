@@ -72,48 +72,12 @@ export class GameGateway
     this.abGameMap.set(client.id, abGame);
     const updatedABGame = this.abGameMap.get(client.id);
     const gridSize = updatedABGame.mode.gridSize;
-    const wordMap = {
-      ...Object.fromEntries(
-        newGrid.map((row, index) => [
-          `row-${index + 1}`,
-          {
-            word: row.map((cell) => cell.card?.letter || '').join(''),
-            points:
-              abGame.mode.type === 'abpoker'
-                ? 0
-                : row.reduce(
-                    (sum, cell) => sum + (cell.card?.rank.value * 10 || 0),
-                    0,
-                  ),
-            label: 'Row ' + (index + 1),
-          },
-        ]),
-      ),
-      ...Object.fromEntries(
-        Array.from({ length: gridSize }, (_, index) => [
-          `col-${index + 1}`,
-          {
-            word: newGrid.map((row) => row[index].card?.letter || '').join(''),
-            points:
-              abGame.mode.type === 'abpoker'
-                ? 0
-                : newGrid
-                    .map((row) => row[index].card?.letter || '')
-                    .reduce(
-                      (sum, cell) => sum + (cell.card?.rank.value * 10 || 0),
-                      0,
-                    ),
-            label: 'Column ' + (index + 1),
-          },
-        ]),
-      ),
-    };
     let emit = {};
 
     if (updatedABGame.discardedABCards.length === gridSize) {
       emit = {
         gameOver: true,
-        abResult: wordMap, // temporary
+        abResult: null,
       };
     } else {
       const abCards = updatedABGame.deal(updatedABGame.discardedABCards.length);

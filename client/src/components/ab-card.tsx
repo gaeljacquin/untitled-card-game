@@ -6,7 +6,6 @@ import { IABModeType } from '@annabelle/shared/core/mode';
 import { SuitId } from '@annabelle/shared/core/suit';
 import { useDraggable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
-import { FaChessQueen } from 'react-icons/fa6';
 import { cn } from '@/lib/utils';
 import settingsStore, { cardFronts } from '@/stores/settings';
 
@@ -21,13 +20,12 @@ type Props = {
 };
 
 export default function ABCardComp(props: Props) {
-  const { card, valueNotLabel, isDragging, modeType, hover = false, inGrid = true } = props;
+  const { card, valueNotLabel, isDragging, hover = false, inGrid = true } = props;
   const { attributes, listeners, setNodeRef, active } = useDraggable({
     id: card.id,
   });
   const rank = card.rank;
   const suit = card.suit;
-  const letter = card.letter;
   const { cardFront: cardFrontIndex } = settingsStore();
   const cardFront = cardFronts[cardFrontIndex];
 
@@ -42,18 +40,7 @@ export default function ABCardComp(props: Props) {
   const SuitIcon = suitIconMap[suit.id as SuitId];
   let ShapeIcon = null;
   const rankDisplay = valueNotLabel ? rank.value : rank.label;
-  const showUwu = !valueNotLabel && rank.aceFace;
   const suitIconFill = cardFront.id === 'suitIcon';
-  let main;
-  let sub;
-
-  if (modeType === 'abpoker') {
-    main = rankDisplay;
-    sub = letter;
-  } else {
-    main = letter;
-    sub = rankDisplay;
-  }
 
   if (suitIconFill) {
     ShapeIcon = suitIconMap[suit.id as SuitId];
@@ -81,20 +68,9 @@ export default function ABCardComp(props: Props) {
               <span
                 className={cn('flex items-center justify-center uppercase', 'text-xs sm:text-sm')}
               >
-                {sub}
+                {rankDisplay}
               </span>
               <SuitIcon className={cn('h-2 w-2 sm:h-4 sm:w-4')} />
-            </div>
-
-            <div
-              className={cn(
-                'absolute top-3 right-2 text-base text-sm sm:text-xl font-bold',
-                cardColor.text
-              )}
-            >
-              {showUwu && modeType !== 'abpoker' && (
-                <FaChessQueen className={cn('h-1 w-1 sm:h-3 sm:w-3')} />
-              )}
             </div>
 
             <div
@@ -106,20 +82,9 @@ export default function ABCardComp(props: Props) {
               <span
                 className={cn('flex items-center justify-center uppercase', 'text-xs sm:text-sm')}
               >
-                {sub}
+                {rankDisplay}
               </span>
               <SuitIcon className={cn('h-2 w-2 sm:h-4 sm:w-4')} />
-            </div>
-
-            <div
-              className={cn(
-                'absolute bottom-3 left-2 text-base sm:text-xl font-bold rotate-180',
-                cardColor.text
-              )}
-            >
-              {showUwu && modeType !== 'abpoker' && (
-                <FaChessQueen className={cn('h-1 w-1 sm:h-3 sm:w-3')} />
-              )}
             </div>
 
             <div className="relative flex items-center justify-center h-full w-full">
@@ -144,18 +109,13 @@ export default function ABCardComp(props: Props) {
                   suitIconFill && !suit.isRed && '-mt-4' // (1)
                 )}
               >
-                <span className={cn('flex items-center justify-center')}>
-                  {showUwu && modeType === 'abpoker' && (
-                    <FaChessQueen className={cn('h-1 w-1 sm:h-4 sm:w-4')} />
-                  )}
-                </span>
                 <span
                   className={cn(
                     'flex items-center justify-center',
                     suitIconFill ? 'text-sm sm:text-xl' : 'text-md sm:text-2xl'
                   )}
                 >
-                  {main}
+                  {rankDisplay}
                 </span>
               </span>
             </div>
@@ -255,7 +215,7 @@ export default function ABCardComp(props: Props) {
   //                   suitIconFill ? 'text-sm sm:text-xl' : 'text-sm sm:text-md'
   //                 )}
   //               >
-  //                 {main}
+  //                 {rankDisplay}
   //               </span>
   //             </span>
   //           </div>

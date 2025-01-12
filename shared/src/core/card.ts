@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { getRandomIndex } from '../functions/shufflers';
+// import { getRandomIndex } from '../functions/shufflers';
 import { Rank } from './rank';
 import { Suit } from './suit';
 
@@ -8,14 +8,6 @@ interface ICard {
   rank: Rank;
   suit: Suit;
 }
-
-const vowels = [...'aeiou'];
-const consonants = [...'bcdfghjklmnpqrstvwxyz'];
-const alphabet = vowels.concat(consonants);
-
-type Letter = (typeof alphabet)[number];
-
-type LetterOptions = 'vowel' | 'consonant' | 'any';
 
 export class Card implements ICard {
   public readonly id: string;
@@ -38,7 +30,6 @@ export class Card implements ICard {
 }
 
 export class ABCard extends Card {
-  public readonly letter: Letter;
   public played: boolean = false;
   private discard: boolean = false;
   public faceUp: boolean;
@@ -47,13 +38,11 @@ export class ABCard extends Card {
     _rank?: Rank | null,
     _suit?: Suit | null,
     joker: boolean = false,
-    letterOption: LetterOptions = 'any',
     faceUp: boolean = true
   ) {
     const rank = joker ? Rank.setJoker() : (_rank ?? Rank.getRandom());
     const suit = joker ? Suit.setJoker() : (_suit ?? Suit.getRandom());
     super(rank, suit);
-    this.letter = joker ? '*' : this.getRandomLetter(letterOption)!;
     this.faceUp = faceUp;
   }
 
@@ -63,10 +52,6 @@ export class ABCard extends Card {
 
   getDiscard(): boolean {
     return this.discard;
-  }
-
-  getLetter(): Letter {
-    return this.letter;
   }
 
   getRank(): Rank {
@@ -84,34 +69,11 @@ export class ABCard extends Card {
   setDiscard(value: boolean) {
     this.discard = value;
   }
-
-  getRandomLetter(letterOption: LetterOptions = 'any'): Letter {
-    let letterList;
-
-    switch (letterOption) {
-      case 'vowel':
-        letterList = vowels;
-        break;
-      case 'consonant':
-        letterList = consonants;
-        break;
-      case 'any':
-        letterList = alphabet;
-        break;
-      default:
-        throw new Error(`Invalid option: ${letterOption}`);
-    }
-
-    const randomIndex = getRandomIndex(letterList);
-
-    return letterList[randomIndex];
-  }
 }
 
 export class ABCardPlus extends ABCard {
   declare public rank: Rank;
   declare public suit: Suit;
-  declare public letter: Letter;
 
   constructor() {
     super();
@@ -131,14 +93,6 @@ export class ABCardPlus extends ABCard {
 
   setSuit(value: Suit) {
     this.suit = value;
-  }
-
-  getLetter(): Letter {
-    return this.letter;
-  }
-
-  setLetter(value: Letter) {
-    this.letter = value;
   }
 }
 

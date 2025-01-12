@@ -1,7 +1,6 @@
 'use client';
 
-// import { useEffect, useRef } from 'react';
-import { useRef } from 'react';
+// import { useEffect } from 'react';
 // import { ABCard, ABCardPlus, ABCards } from '@annabelle/shared/core/card';
 import { ABCardPlus } from '@annabelle/shared/core/card';
 import { Rank, RankId } from '@annabelle/shared/core/rank';
@@ -16,7 +15,6 @@ import Placeholder from '@/components/placeholder';
 import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
@@ -61,10 +59,6 @@ export default function Settings() {
   const previewCard = new ABCardPlus();
   previewCard.setRank(previewRank);
   previewCard.setSuit(previewSuit);
-  previewCard.setLetter(settings.previewCard.letter);
-
-  const currentLetter = form.watch('previewCard.letter');
-  const lastValidValueRef = useRef(settings.previewCard.letter);
 
   function onSubmit(data: FormData) {
     updateSettings(data);
@@ -87,41 +81,6 @@ export default function Settings() {
       action: <ToastAction altText="Clear">Clear</ToastAction>,
       className: cn('top-right-toaster'),
     });
-  }
-
-  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value.toUpperCase();
-
-    if (/^[A-Z]$/.test(value) || value === '') {
-      form.setValue('previewCard.letter', value);
-
-      if (value === '') {
-        lastValidValueRef.current = lastValidValueRef.current;
-      } else {
-        lastValidValueRef.current = value;
-
-        updateSettings({
-          ...settings,
-          previewCard: {
-            ...settings.previewCard,
-            letter: value,
-          },
-        });
-      }
-    }
-  }
-
-  function onBlur() {
-    if (currentLetter === '') {
-      form.setValue('previewCard.letter', lastValidValueRef.current);
-      updateSettings({
-        ...settings,
-        previewCard: {
-          ...settings.previewCard,
-          letter: lastValidValueRef.current,
-        },
-      });
-    }
   }
 
   // useEffect(() => {
@@ -260,84 +219,44 @@ export default function Settings() {
               </div>
             </div>
 
-            <div className="flex flex-col items-center justify-center gap-4 backdrop-blur-sm bg-white/10 border-white/20 p-4 rounded-xl">
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <div className="flex flex-col items-center justify-center gap-4">
-                  <div className="w-full">
-                    <FormField
-                      control={form.control}
-                      name="previewCard.rank"
-                      render={({ field }) => (
-                        <FormItem className="space-y-4 flex">
-                          <Command className="bg-black/50 border-white/20">
-                            <CommandList className="w-full mt-2">
-                              <CommandGroup>
-                                {Rank.getAllValues()
-                                  .filter(
-                                    (item) =>
-                                      item.id === 'ace' ||
-                                      item.id === 'queen' ||
-                                      item.id === 'ten' ||
-                                      item.id === 'two'
-                                  )
-                                  .map((item, index) => {
-                                    return (
-                                      <CommandItem
-                                        className="flex items-center justify-between text-white aria-selected:text-black text-md"
-                                        key={item.id + '-' + index}
-                                        value={item.id}
-                                        onSelect={() => {
-                                          form.setValue('previewCard.rank', item.id);
-                                          updateSettings({
-                                            ...settings,
-                                            previewCard: {
-                                              ...settings.previewCard,
-                                              rank: item.id,
-                                            },
-                                          });
-                                        }}
-                                      >
-                                        <span>{item.label}</span>
-                                        <Check
-                                          className={cn(
-                                            'mr-2 h-4 w-4',
-                                            field.value && item.id === field.value
-                                              ? 'opacity-100'
-                                              : 'opacity-0'
-                                          )}
-                                        />
-                                      </CommandItem>
-                                    );
-                                  })}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </FormItem>
-                      )}
-                    />
+            <div className="flex flex-col flex-1 items-center justify-center backdrop-blur-sm bg-white/10 border-white/20 p-4 rounded-xl">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <div className="flex items-center justify-between text-white aria-selected:text-black text-md">
+                    <CardFrontPreview card={previewCard} valueNotLabel={!settings.labelNotValue} />
                   </div>
-                  <div className="w-full">
-                    <FormField
-                      control={form.control}
-                      name="previewCard.suit"
-                      render={({ field }) => (
-                        <FormItem className="space-y-4">
-                          <Command className="bg-black/50 border-white/20">
-                            <CommandList className="w-full mt-2 h-auto">
-                              <CommandGroup>
-                                {Suit.getAllValues().map((item, index) => {
+                </div>
+
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="previewCard.rank"
+                    render={({ field }) => (
+                      <FormItem className="flex">
+                        <Command className="bg-black/50 border-white/20">
+                          <CommandList className="w-full mt-2">
+                            <CommandGroup>
+                              {Rank.getAllValues()
+                                .filter(
+                                  (item) =>
+                                    item.id === 'ace' ||
+                                    item.id === 'queen' ||
+                                    item.id === 'ten' ||
+                                    item.id === 'two'
+                                )
+                                .map((item, index) => {
                                   return (
                                     <CommandItem
                                       className="flex items-center justify-between text-white aria-selected:text-black text-md"
                                       key={item.id + '-' + index}
                                       value={item.id}
                                       onSelect={() => {
-                                        form.setValue('previewCard.suit', item.id);
+                                        form.setValue('previewCard.rank', item.id);
                                         updateSettings({
                                           ...settings,
                                           previewCard: {
                                             ...settings.previewCard,
-                                            suit: item.id,
+                                            rank: item.id,
                                           },
                                         });
                                       }}
@@ -354,71 +273,58 @@ export default function Settings() {
                                     </CommandItem>
                                   );
                                 })}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </FormItem>
+                    )}
+                  />
                 </div>
-                <div className="flex flex-col items-center justify-center gap-4">
-                  <div className="flex flex-row items-center justify-center gap-4 p-4 rounded-xl bg-black/50 border-white/20 w-full">
-                    <FormLabel className="flex flex-col gap-1">
-                      <span className="bg-white/90 text-md text-black p-1 rounded-sm text-md">
-                        Rank
-                      </span>
-                      <span className="text-xs">Letter</span>
-                    </FormLabel>
-                    <FormField
-                      control={form.control}
-                      name="rankSwitchLetter"
-                      render={({ field }) => (
-                        <FormItem className="flex items-center">
-                          <FormControl>
-                            <Switch
-                              className="data-[state=checked]:bg-cyan-700 data-[state=unchecked]:bg-rose-600 items-center rounded-full transition-colors"
-                              checked={field.value}
-                              onCheckedChange={(checked) => {
-                                field.onChange(checked);
-                                updateSettings({
-                                  ...settings,
-                                  rankSwitchLetter: checked,
-                                });
-                              }}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormLabel className="flex flex-col gap-1">
-                      <span className="bg-white/90 text-md text-black p-1 rounded-sm text-md">
-                        Letter
-                      </span>
-                      <span className="text-xs">Rank</span>
-                    </FormLabel>
-                  </div>
-                  <CardFrontPreview card={previewCard} valueNotLabel={!settings.labelNotValue} />
-                  <div className="">
-                    <FormField
-                      control={form.control}
-                      name="previewCard.letter"
-                      render={({ field }) => (
-                        <FormItem className="space-y-4">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              maxLength={1}
-                              type="text"
-                              className="text-center bg-black/50 border-white/20 uppercase"
-                              onChange={(e) => onChange(e)}
-                              onBlur={() => onBlur()}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="previewCard.suit"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Command className="bg-black/50 border-white/20">
+                          <CommandList className="w-full mt-2 h-auto">
+                            <CommandGroup>
+                              {Suit.getAllValues().map((item, index) => {
+                                return (
+                                  <CommandItem
+                                    className="flex items-center justify-between text-white aria-selected:text-black text-md"
+                                    key={item.id + '-' + index}
+                                    value={item.id}
+                                    onSelect={() => {
+                                      form.setValue('previewCard.suit', item.id);
+                                      updateSettings({
+                                        ...settings,
+                                        previewCard: {
+                                          ...settings.previewCard,
+                                          suit: item.id,
+                                        },
+                                      });
+                                    }}
+                                  >
+                                    <span>{item.label}</span>
+                                    <Check
+                                      className={cn(
+                                        'mr-2 h-4 w-4',
+                                        field.value && item.id === field.value
+                                          ? 'opacity-100'
+                                          : 'opacity-0'
+                                      )}
+                                    />
+                                  </CommandItem>
+                                );
+                              })}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </FormItem>
+                    )}
+                  />
                 </div>
               </div>
             </div>
