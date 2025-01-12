@@ -1,10 +1,15 @@
 import json
 from itertools import permutations
 
-with open('dictionary.json', 'r') as file:
-    data = json.load(file)
+# Global variable to store dictionary - loaded once per container
+DICTIONARY = None
 
-dictionary = list(data.keys())
+def load_dictionary():
+    global DICTIONARY
+    if DICTIONARY is None:
+        with open('dictionary.json', 'r') as file:
+            data = json.load(file)
+        DICTIONARY = set(data.keys())  # Using set for O(1) lookups
 
 def ab_check(word_map):
     result = {}
@@ -24,27 +29,28 @@ def ab_check(word_map):
                 'points_final': 0
             }
 
-            if word in dictionary:
-                result[key]['valid'] = True
-                result[key]['match'] = word
-                result[key]['points_final'] = result[key]['points'] + 100
+            # Check exact match first - faster than permutations
+            if word in DICTIONARY:
+                result[key].update({
+                    'valid': True,
+                    'match': word,
+                    'points_final': result[key]['points'] + 100
+                })
+                found_valid_count += 1
                 continue
 
-            word_perms = permutations(word)
-            found_valid = False
-            found_match = ''
+            # Only generate permutations if needed
+            found_perm = next((perm_word for perm_word in
+                             (''.join(p) for p in permutations(word))
+                             if perm_word in DICTIONARY), '')
 
-            for perm in word_perms:
-                perm_word = ''.join(perm)
-                if perm_word in dictionary:
-                    found_valid = True
-                    found_match = perm_word
-                    found_valid_count += 1
-                    break
-
-            result[key]['valid'] = found_valid
-            result[key]['match'] = found_match
-            result[key]['points_final'] = result[key]['points'] + 100 if found_valid else 0
+            if found_perm:
+                found_valid_count += 1
+                result[key].update({
+                    'valid': True,
+                    'match': found_perm,
+                    'points_final': result[key]['points'] + 100
+                })
 
         except Exception as e:
             result[key] = {
@@ -54,42 +60,39 @@ def ab_check(word_map):
                 'points_final': 0
             }
 
-    result['special']['points_final'] *= 2 if found_valid_count >= 3 else 0
+    if 'special' in result:
+        result['special']['points_final'] *= 2 if found_valid_count >= 3 else 0
 
     return result
 
-
 def handler(event, context):
     try:
-        # Check if the event comes from API Gateway (will have 'body' field)
-        if isinstance(event, dict) and 'body' in event:
-            # If body is a string, parse it
-            if isinstance(event['body'], str):
-                payload = json.loads(event['body'])
-            else:
-                payload = event['body']
-        else:
-            # Direct Lambda invocation
-            payload = event
+        # Load dictionary if not already loaded
+        if DICTIONARY is None:
+            load_dictionary()
 
-        # Create word map from the payload
+        # Parse payload
+        payload = (json.loads(event['body'])
+                  if isinstance(event.get('body'), str)
+                  else event.get('body', event))
+
+        # Simplified word map creation
         word_map = {
-            str(key): {
-                'word': str(value.get('word', '')),
-                'points': value.get('points', 0),
-                'label': value.get('label', '')
+            str(k): {
+                'word': str(v.get('word', '')),
+                'points': v.get('points', 0),
+                'label': v.get('label', '')
             }
-            for key, value in payload.items()
+            for k, v in payload.items()
         }
 
         result = ab_check(word_map)
 
-        # Return formatted response for API Gateway
         return {
             'statusCode': 200,
             'headers': {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'  # For CORS support
+                'Access-Control-Allow-Origin': '*'
             },
             'body': json.dumps(result)
         }
@@ -101,7 +104,4 @@ def handler(event, context):
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
             },
-            'body': json.dumps({
-                'error': str(e)
-            })
-        }
+            'body': json.dumps({'error': str(e)})
