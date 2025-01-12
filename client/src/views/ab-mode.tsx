@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { ABCards } from '@annabelle/shared/core/card';
 import {
   evaluateColumnHand,
@@ -19,10 +19,12 @@ import socketInit from '@/utils/socket-init';
 
 type Props = {
   modeSlug: string;
+  howToPlayText: ReactNode;
+  gridClass: string;
 };
 
-export default function ABMode2(props: Props) {
-  const { modeSlug } = props;
+export default function ABMode(props: Props) {
+  const { modeSlug, howToPlayText, gridClass } = props;
   const socket = socketInit();
   const [abCards, setABCards] = useState<ABCards>([]);
   const [abGameOver, setABGameOver] = useState<boolean>(false);
@@ -33,25 +35,6 @@ export default function ABMode2(props: Props) {
       points_final: number;
     };
   } | null>(null);
-  const howToPlayText = () => {
-    return (
-      <ul className="list-disc list-inside space-y-5 text-white text-sm text-start">
-        <li>6 cards are dealt at the start of the game</li>
-        <li>Drag any 5 cards from your hand to an available cell in the grid</li>
-        <li>Make a poker hand on any row and column in the grid</li>
-        <li>Click 'Confirm'</li>
-        <li>The remaining card is discarded, and a new set of 6 cards is dealt</li>
-        <li>Rinse and repeat until the grid is filled</li>
-        <li>
-          For an extra challenge, try to make a poker hand using the center and corners of the grid!
-        </li>
-        <li>
-          <span className="font-bold uppercase">Tip 1:</span> Aces have a value of 1
-        </li>
-      </ul>
-    );
-  };
-  const gridClass = cn('grid grid-cols-5 gap-2 md:gap-4 bg-amber-950/30 rounded-2xl p-2 md:p-4');
   const playerHandClass = cn('grid grid-rows-1 sm:grid-cols-1 gap-2 md:gap-4 justify-items-center');
 
   const wsConnect = () => {

@@ -36,7 +36,7 @@ type Props = {
   abCards: ABCards;
   gridClass: string;
   playerHandClass: string;
-  howToPlayText: () => ReactNode;
+  howToPlayText: ReactNode;
   handleNextRound: (arg0: { [key: string]: unknown }) => void;
   evaluateColumn: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
   evaluateRow: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
@@ -421,7 +421,7 @@ export default function PlayingField(props: Props) {
               <div className="flex items-center justify-center gap-2 mb-4">
                 <h1 className="text-lg text-center font-bold">How to Play</h1>
               </div>
-              <div className="space-y-4">{howToPlayText()}</div>
+              <div className="space-y-4">{howToPlayText}</div>
             </div>
           </div>
 
