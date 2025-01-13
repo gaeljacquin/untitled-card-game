@@ -17,31 +17,6 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import socketInit from '@/utils/socket-init';
 
-// const statsData = [
-//   { icon: Trophy, label: 'Achievement Unlocked', value: 'Perfect 10', delay: 0 },
-//   { icon: Target, label: 'Accuracy', value: '100%', delay: 0.2 },
-//   { icon: Clock, label: 'Time Taken', value: '1m 23s', delay: 0.4 },
-//   { icon: Zap, label: 'Speed Rating', value: 'Lightning Fast', delay: 0.6 },
-//   { icon: Star, label: 'Final Score', value: '2,450', delay: 0.8 },
-// ];
-
-// const StatItem = ({ icon: Icon, label, value, delay }) => (
-//   <motion.div
-//     initial={{ opacity: 0, y: 20 }}
-//     animate={{ opacity: 1, y: 0 }}
-//     transition={{ duration: 0.5, delay }}
-//     className="flex items-center gap-4 bg-card p-4 rounded-lg shadow-sm"
-//   >
-//     <div className="p-2 bg-primary/10 rounded-full">
-//       <Icon className="h-6 w-6 text-primary" />
-//     </div>
-//     <div className="flex-1">
-//       <p className="text-sm text-muted-foreground">{label}</p>
-//       <p className="font-semibold">{value}</p>
-//     </div>
-//   </motion.div>
-// );
-
 type Props = {
   modeSlug: string;
   gridClass: string;
@@ -128,9 +103,11 @@ export default function ABMode(props: Props) {
         />
 
         <div className="flex flex-col items-center justify-center gap-4 footer-spacing-uwu">
-          <Button variant="destructive" onClick={() => setABGameOver(true)}>
-            Simulate Game Over
-          </Button>
+          {process.env.NODE_ENV === 'development' && (
+            <Button variant="destructive" onClick={() => setABGameOver(true)}>
+              Simulate Game Over
+            </Button>
+          )}
 
           <Footer />
         </div>

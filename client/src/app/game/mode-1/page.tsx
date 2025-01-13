@@ -7,8 +7,8 @@ export default function Page() {
   const modeSlug = 'mode-1';
   const gridClass = cn(
     'grid gap-2 md:gap-3',
-    'grid-cols-[30px_repeat(4,_minmax(0,_1fr))]',
-    'grid-rows-[40px_repeat(4,_minmax(0,_1fr))]',
+    'grid-cols-4 sm:grid-cols-[30px_repeat(4,_minmax(0,_1fr))]',
+    'grid-rows-4 sm:grid-rows-[40px_repeat(4,_minmax(0,_1fr))]',
     'w-full max-w-full',
     '[&>*]:w-full [&>*]:aspect-[3/4]',
     'md:[&>.cell]:w-[100px] md:[&>.cell]:h-[133px]',

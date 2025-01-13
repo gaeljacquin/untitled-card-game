@@ -1,4 +1,4 @@
-import { ABCard } from '../core/card';
+import { ABCards } from '../core/card';
 import { IGridCell } from '../core/grid-cell';
 
 class PokerHand {
@@ -6,11 +6,11 @@ class PokerHand {
     public readonly name: string,
     public readonly points: number,
     public readonly rank: number,
-    public readonly cards: ABCard[]
+    public readonly cards: ABCards
   ) {}
 }
 
-export function evaluatePokerHands(cards: ABCard[]): PokerHand {
+export function evaluatePokerHands(cards: ABCards): PokerHand {
   if (cards.length === 0) {
     return new PokerHand('Empty Hand', 0, 0, []);
   }

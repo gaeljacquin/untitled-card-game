@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { ABCard, ABCards, ABJoker } from '@annabelle/shared/core/card';
 import { IGridCell } from '@annabelle/shared/core/grid-cell';
 import { ABMode } from '@annabelle/shared/core/mode';
@@ -27,9 +27,9 @@ import Placeholder from '@/components/placeholder';
 import SortableItem from '@/components/sortable-item';
 import { Button } from '@/components/ui/button';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
 import { GameState } from '@/types/game-state';
@@ -63,7 +63,7 @@ const labelClass = cn(
   'font-medium',
   '[&]:!w-auto [&]:!h-auto [&]:!aspect-none'
 );
-const cornerCellClass = cn('aspect-none', 'w-auto h-auto');
+const cornerCellClass = cn('aspect-none', 'w-auto h-auto', 'hidden sm:flex');
 
 export default function PlayingField(props: Props) {
   const {
@@ -95,34 +95,12 @@ export default function PlayingField(props: Props) {
   const [gameState, setGameState] = useState<GameState>(defaultGameState);
   const [lockedCells, setLockedCells] = useState<Set<string>>(new Set());
   const [isDealing, setIsDealing] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [progress, setProgress] = useState(0);
   const mouseSensor = useSensor(MouseSensor);
   const touchSensor = useSensor(TouchSensor);
   const sensors = useSensors(mouseSensor, touchSensor);
-
-  const animateProgress = () => {
-    setProgress(0);
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-
-          return 100;
-        }
-
-        return prev + 2;
-      });
-    }, 20);
-  };
-
-  useEffect(() => {
-    initializeGame();
-  }, []);
-
-  useEffect(() => {
-    setGameState(getGameState(grid));
-  }, [grid]);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = useState('grid');
 
   const initializeGame = () => {
     setTimeout(() => {
@@ -159,6 +137,27 @@ export default function PlayingField(props: Props) {
       totalScore: 0,
       bonusPoints: 0,
     });
+  };
+
+  const animateProgress = () => {
+    setProgress(0);
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+
+          return 100;
+        }
+
+        return prev + 2;
+      });
+    }, 20);
+  };
+
+  const switchToScoreTab = () => {
+    console.log('now');
+    setActiveTab('score');
+    tabsRef.current?.setAttribute('data-state', 'score');
   };
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -313,6 +312,14 @@ export default function PlayingField(props: Props) {
   };
 
   useEffect(() => {
+    initializeGame();
+  }, []);
+
+  useEffect(() => {
+    setGameState(getGameState(grid));
+  }, [grid]);
+
+  useEffect(() => {
     if (abCards && abCards.length > 0) {
       setIsDealing(true);
       setPlayerHand(abCards);
@@ -345,7 +352,8 @@ export default function PlayingField(props: Props) {
         ...prev,
         totalScore: totalScore,
       }));
-      setShowModal(true);
+      console.log('there');
+      switchToScoreTab();
       animateProgress();
     }
   }, [gameOver]);
@@ -382,76 +390,240 @@ export default function PlayingField(props: Props) {
           </div>
 
           <div className="sm:col-span-8">
-            {gameOver && (
-              <div
-                className={cn(
-                  'flex items-center justify-center',
-                  'text-md bg-white/70 text-rose-800 p-2'
-                )}
-              >
-                Please reload the page to play a new round.
-              </div>
-            )}
-
-            {!abCards || abCards.length === 0 ? (
-              <Placeholder />
-            ) : (
-              <>
-                <div className={gridClass}>
-                  <div className={cornerCellClass} />
-
-                  {Array.from({ length: gridSize }, (_, colIndex) => (
-                    <div key={`col-${colIndex}`} className={labelClass}>
-                      <motion.div>
-                        <span className="text-clip">{evaluateColumn(grid, colIndex).name}:</span>
-                        <br />
-                        <span className="text-clip">${evaluateColumn(grid, colIndex).points}</span>
-                      </motion.div>
-                    </div>
-                  ))}
-
-                  {grid.map((row, rowIndex) => (
-                    <Fragment key={`row-${rowIndex}`}>
-                      <div className={labelClass}>
-                        <motion.div>
-                          <span className="text-clip">{evaluateRow(grid, rowIndex).name}:</span>
-                          <br />
-                          <span className="text-clip">${evaluateRow(grid, rowIndex).points}</span>
-                        </motion.div>
-                      </div>
-
-                      {row.map((cell, colIndex) => (
-                        <GridCell
-                          key={cell.id}
-                          cell={cell}
-                          modeType={type}
-                          gridSize={gridSize}
-                          lockedCells={lockedCells}
-                          rowIndex={rowIndex}
-                          columnIndex={colIndex}
-                          valueNotLabel={!labelNotValue}
-                        />
-                      ))}
-                    </Fragment>
-                  ))}
-                </div>
+            <Tabs
+              defaultValue="grid"
+              value={activeTab}
+              onValueChange={setActiveTab}
+              className="w-full"
+              ref={tabsRef}
+            >
+              <TabsList className="grid w-full grid-cols-2 bg-transparent backdrop-blur-sm border-white/20 p-1 rounded-lg">
+                <TabsTrigger
+                  value="grid"
+                  className="data-[state=active]:bg-rose-700 data-[state=active]:text-white data-[state=inactive]:text-white rounded-md transition-colors"
+                >
+                  Grid
+                </TabsTrigger>
+                <TabsTrigger
+                  value="score"
+                  className="data-[state=active]:bg-rose-700 data-[state=active]:text-white data-[state=inactive]:text-white rounded-md transition-colors"
+                  disabled={!gameOver}
+                >
+                  Score
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="grid">
                 {gameOver && (
-                  <div className="flex items-center justify-center mt-8">
-                    <Button
-                      variant="secondary"
-                      size="lg"
-                      onClick={() => {
-                        // animateProgress(); // Temporary
-                        setShowModal(true);
-                      }}
-                      className="animate-fade-in"
-                    >
-                      View Results
-                    </Button>
+                  <div
+                    className={cn(
+                      'flex items-center justify-center',
+                      'text-md bg-white/70 text-rose-800 p-2'
+                    )}
+                  >
+                    Please reload the page to play a new round.
                   </div>
                 )}
-              </>
-            )}
+
+                {!abCards || abCards.length === 0 ? (
+                  <Placeholder />
+                ) : (
+                  <>
+                    <div className={gridClass}>
+                      <div className={cornerCellClass} />
+
+                      {Array.from({ length: gridSize }, (_, colIndex) => (
+                        <div key={`col-${colIndex}`} className={labelClass}>
+                          <motion.div>
+                            <span className="text-clip">
+                              {evaluateColumn(grid, colIndex).name}:
+                            </span>
+                            <br />
+                            <span className="text-clip">
+                              ${evaluateColumn(grid, colIndex).points}
+                            </span>
+                          </motion.div>
+                        </div>
+                      ))}
+
+                      {grid.map((row, rowIndex) => (
+                        <Fragment key={`row-${rowIndex}`}>
+                          <div className={labelClass}>
+                            <motion.div className="mr-4">
+                              <span className="text-clip">{evaluateRow(grid, rowIndex).name}:</span>
+                              <br />
+                              <span className="text-clip">
+                                ${evaluateRow(grid, rowIndex).points}
+                              </span>
+                            </motion.div>
+                          </div>
+
+                          {row.map((cell, colIndex) => (
+                            <GridCell
+                              key={cell.id}
+                              cell={cell}
+                              modeType={type}
+                              gridSize={gridSize}
+                              lockedCells={lockedCells}
+                              rowIndex={rowIndex}
+                              columnIndex={colIndex}
+                              valueNotLabel={!labelNotValue}
+                            />
+                          ))}
+                        </Fragment>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </TabsContent>
+              <TabsContent
+                value="score"
+                className={cn(
+                  'mx-auto justify-center items-center',
+                  'bg-amber-950/30 rounded-xl p-6 md:p-10'
+                )}
+              >
+                {!gameOver ? (
+                  <></>
+                ) : (
+                  <>
+                    <h1 className="text-center text-xl">
+                      {progress === 100 && <>Final Score 🤩</>}
+                    </h1>
+
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                      className="space-y-6 py-4"
+                    >
+                      <div className="space-y-2">
+                        {progress !== 100 ? (
+                          <>
+                            <p className="text-sm text-white text-center">
+                              Evaluating your performance...
+                            </p>
+                            <Progress value={progress} className="h-2" />
+                          </>
+                        ) : (
+                          <Separator />
+                        )}
+                      </div>
+
+                      <AnimatePresence>
+                        {progress === 100 && (
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                            className="space-y-4"
+                          >
+                            <LiveScore className="flex flex-col gap-4">
+                              <>
+                                {Array.from({ length: gridSize }, (_, index) => (
+                                  <motion.div
+                                    key={`col-${index}`}
+                                    className="text-center font-semibold"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                  >
+                                    <p className="flex items-center justify-between gap-2 text-sm">
+                                      <span>Column {index + 1}: </span>
+                                      <span>{evaluateColumn(grid, index).name}</span>
+                                      <span>${evaluateColumn(grid, index).points}</span>
+                                    </p>
+                                  </motion.div>
+                                ))}
+                              </>
+
+                              <Separator />
+
+                              <>
+                                {grid.map((_, index) => (
+                                  <motion.div
+                                    key={`row-${index}`}
+                                    className="text-center font-semibold"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                  >
+                                    <p className="flex items-center justify-between gap-2 text-sm">
+                                      <span>Row {index + 1} </span>
+                                      <span>{evaluateRow(grid, index).name}</span>
+                                      <span>${evaluateRow(grid, index).points}</span>
+                                    </p>
+                                  </motion.div>
+                                ))}
+                              </>
+
+                              <Separator />
+
+                              <>
+                                <motion.div
+                                  className="text-center font-semibold"
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                >
+                                  <p className="flex items-center justify-between gap-2 text-sm">
+                                    <span>Discard Bonus</span>
+                                    <span>{evaluateRow(grid, 0).name}</span>
+                                    <span>${evaluateRow(grid, 0).points}</span>
+                                  </p>
+                                </motion.div>
+                              </>
+
+                              <Separator />
+
+                              <>
+                                <motion.div
+                                  className="text-center font-semibold"
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                >
+                                  <p className="flex items-center justify-between gap-2 text-sm">
+                                    <span>Corner Bonus</span>
+                                    <span>{evaluateRow(grid, 0).name}</span>
+                                    <span>${evaluateRow(grid, 0).points}</span>
+                                  </p>
+                                </motion.div>
+                              </>
+
+                              <Separator />
+
+                              <>
+                                <motion.div
+                                  className="text-center font-semibold"
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                >
+                                  <p className="flex items-center justify-between gap-2 text-sm">
+                                    <span>Total</span>
+                                    <span>${gameState.totalScore}</span>
+                                  </p>
+                                </motion.div>
+                              </>
+                            </LiveScore>
+
+                            {gameOver && process.env.NODE_ENV === 'development' && (
+                              <div className="flex items-center justify-center mt-8">
+                                <Button
+                                  variant="secondary"
+                                  size="lg"
+                                  onClick={() => {
+                                    animateProgress();
+                                  }}
+                                  className="animate-fade-in"
+                                >
+                                  Reload animation
+                                </Button>
+                              </div>
+                            )}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  </>
+                )}
+              </TabsContent>
+            </Tabs>
           </div>
 
           <div className="sm:col-span-2">
@@ -510,95 +682,6 @@ export default function PlayingField(props: Props) {
           </div>
         </div>
       </div>
-
-      <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="text-center text-2xl">
-              {progress === 100 && <>Your Results 🤩</>}
-            </DialogTitle>
-          </DialogHeader>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            className="space-y-6 py-4"
-          >
-            <div className="space-y-2">
-              {progress !== 100 && (
-                <p className="text-sm text-muted-foreground text-center">
-                  Evaluating your performance...
-                </p>
-              )}
-              <Progress value={progress} className="h-2" />
-            </div>
-
-            <AnimatePresence>
-              {progress === 100 && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="space-y-4"
-                >
-                  <LiveScore className="flex flex-col gap-4" title={'Final Score'}>
-                    <>
-                      <>
-                        {Array.from({ length: gridSize }, (_, index) => (
-                          <motion.div
-                            key={`col-${index}`}
-                            className="text-center font-semibold"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                          >
-                            <p className="flex items-center justify-between gap-2 text-sm">
-                              <span>Column {index + 1}: </span>
-                              <span>{evaluateColumn(grid, index).name}</span>
-                              <span>${evaluateColumn(grid, index).points}</span>
-                            </p>
-                          </motion.div>
-                        ))}
-                      </>
-                      <Separator />
-                      <>
-                        {grid.map((_, index) => (
-                          <motion.div
-                            key={`row-${index}`}
-                            className="text-center font-semibold"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                          >
-                            <p className="flex items-center justify-between gap-2 text-sm">
-                              <span>Row {index + 1} </span>
-                              <span>{evaluateRow(grid, index).name}</span>
-                              <span>${evaluateRow(grid, index).points}</span>
-                            </p>
-                          </motion.div>
-                        ))}
-                      </>
-                      <>
-                        <Separator />
-                        <>
-                          <motion.div
-                            className="text-center font-semibold"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                          >
-                            <p className="flex items-center justify-between gap-2 text-sm">
-                              <span>Total Score</span>
-                              <span>${gameState.totalScore}</span>
-                            </p>
-                          </motion.div>
-                        </>
-                      </>
-                    </>
-                  </LiveScore>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        </DialogContent>
-      </Dialog>
 
       <DragOverlay>
         {activeDrag ? (
