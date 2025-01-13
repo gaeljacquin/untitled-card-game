@@ -80,6 +80,6 @@ export class Rank implements IRank {
   }
 
   public static setJoker(): Rank {
-    return new Rank(-1, '?', 'joker', 'Joker');
+    return new Rank(0, '?', 'joker', 'Joker');
   }
 }

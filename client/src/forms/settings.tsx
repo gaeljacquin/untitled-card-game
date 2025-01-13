@@ -11,7 +11,7 @@ import { PopoverClose } from '@radix-ui/react-popover';
 import { Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { CardBackPreview, CardFrontPreview } from '@/components/ab-card-preview';
-import { JokerCardPreview } from '@/components/joker-card-preview';
+import ABJokerPreview from '@/components/ab-joker-preview';
 import Placeholder from '@/components/placeholder';
 import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
@@ -335,7 +335,7 @@ export default function Settings() {
             <div>
               <p className="text-sm">Joker</p>
             </div>
-            <JokerCardPreview card={jokerCard} />
+            <ABJokerPreview card={jokerCard} />
           </div>
         </>
 

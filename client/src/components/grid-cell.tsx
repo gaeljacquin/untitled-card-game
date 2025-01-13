@@ -5,6 +5,7 @@ import { IABModeType } from '@annabelle/shared/core/mode';
 import { useDroppable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
 import ABCardComp from '@/components/ab-card';
+import ABJokerComp from '@/components/ab-joker';
 import { BorderBeam } from '@/components/ui/border-beam';
 import { cn } from '@/lib/utils';
 
@@ -63,12 +64,16 @@ export function GridCell(props: Props) {
           }}
           className={cn('p-0 sm:p-1', cell.card.played && 'brightness-50')}
         >
-          <ABCardComp
-            card={cell.card}
-            modeType={modeType}
-            valueNotLabel={valueNotLabel}
-            isDragging
-          />
+          {cell.card.suit.id === 'joker' ? (
+            <ABJokerComp card={cell.card} isDragging />
+          ) : (
+            <ABCardComp
+              card={cell.card}
+              modeType={modeType}
+              valueNotLabel={valueNotLabel}
+              isDragging
+            />
+          )}
         </motion.div>
       )}
       {shouldShowBorderBeam && (

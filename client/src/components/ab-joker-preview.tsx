@@ -2,6 +2,7 @@
 
 import { ABJoker } from '@annabelle/shared/core/card';
 import { IABModeType } from '@annabelle/shared/core/mode';
+import { GiDominoMask } from 'react-icons/gi';
 import { cn } from '@/lib/utils';
 import settingsStore, { cardFronts } from '@/stores/settings';
 
@@ -10,7 +11,7 @@ type CardFrontProps = {
   className?: string;
 };
 
-export function JokerCardPreview(props: CardFrontProps) {
+export default function ABJokerPreview(props: CardFrontProps) {
   const { card, className } = props;
 
   return (
@@ -36,8 +37,8 @@ type ABCardFaceUpProps = {
 
 // Code from previous ABCard component
 function ABCardFaceUp(props: ABCardFaceUpProps) {
-  const { card } = props;
-  const JokerIcon = card.getIcon();
+  // const { card } = props;
+  void props;
   const { cardFront: cardFrontIndex } = settingsStore();
   const cardFront = cardFronts[cardFrontIndex];
   const cardColor = {
@@ -99,7 +100,7 @@ function ABCardFaceUp(props: ABCardFaceUpProps) {
               )}
             >
               <span className={cn('flex items-center justify-center')}>
-                <JokerIcon />
+                <GiDominoMask />
               </span>
             </span>
           </div>

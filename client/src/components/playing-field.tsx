@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment, useEffect, useState } from 'react';
-import { ABCard, ABCards } from '@annabelle/shared/core/card';
+import { ABCard, ABCards, ABJoker } from '@annabelle/shared/core/card';
 import { IGridCell } from '@annabelle/shared/core/grid-cell';
 import { ABMode } from '@annabelle/shared/core/mode';
 import { evaluateTotalPokerScore } from '@annabelle/shared/functions/checkers';
@@ -19,6 +19,7 @@ import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import ABCardComp from '@/components/ab-card';
+import ABJokerComp from '@/components/ab-joker';
 import DiscardPile from '@/components/discard-pile';
 import { GridCell } from '@/components/grid-cell';
 import Placeholder from '@/components/placeholder';
@@ -431,15 +432,25 @@ export default function PlayingField(props: Props) {
                     >
                       {playerHand.map((item) => (
                         <SortableItem key={item.id} id={item.id}>
-                          <ABCardComp
-                            key={`card-${item.id}`}
-                            card={item}
-                            valueNotLabel={!labelNotValue}
-                            modeType={type}
-                            hover={true}
-                            isDragging
-                            inGrid={false}
-                          />
+                          {item.suit.id === 'joker' ? (
+                            <ABJokerComp
+                              key={`card-${item.id}`}
+                              card={item as ABJoker}
+                              hover={true}
+                              isDragging
+                              inGrid={false}
+                            />
+                          ) : (
+                            <ABCardComp
+                              key={`card-${item.id}`}
+                              card={item}
+                              valueNotLabel={!labelNotValue}
+                              modeType={type}
+                              hover={true}
+                              isDragging
+                              inGrid={false}
+                            />
+                          )}
                         </SortableItem>
                       ))}
                     </SortableContext>
@@ -467,7 +478,11 @@ export default function PlayingField(props: Props) {
 
       <DragOverlay>
         {activeDrag ? (
-          <ABCardComp card={activeDrag} valueNotLabel={!labelNotValue} modeType={type} />
+          activeDrag.suit.id === 'joker' ? (
+            <ABJokerComp card={activeDrag} />
+          ) : (
+            <ABCardComp card={activeDrag} valueNotLabel={!labelNotValue} modeType={type} />
+          )
         ) : null}
       </DragOverlay>
     </DndContext>

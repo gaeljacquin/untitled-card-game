@@ -1,6 +1,4 @@
-import { IconType } from 'react-icons';
 import { v4 as uuidv4 } from 'uuid';
-import { jokerIcons } from '../constants/suit-icon';
 import { Rank } from './rank';
 import { Suit } from './suit';
 
@@ -98,15 +96,8 @@ export class ABCardPreview extends ABCard {
 }
 
 export class ABJoker extends ABCard {
-  public icon: IconType;
-
   constructor() {
     super(null, null, true, true);
-    this.icon = this.getIcon();
-  }
-
-  getIcon(): IconType {
-    return jokerIcons[0];
   }
 }
 
