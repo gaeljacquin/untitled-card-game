@@ -13,7 +13,6 @@ import { GameService } from '@/game/game.service';
 import { ABMode } from '@annabelle/shared/dist/core/mode';
 import { ABDeck } from '@annabelle/shared/dist/core/deck';
 import { generateSeed } from '@annabelle/shared/dist/functions/shufflers';
-// import { ABJoker } from '@annabelle/shared/dist/core/card';
 
 @WebSocketGateway({ cors })
 export class GameGateway
@@ -58,11 +57,6 @@ export class GameGateway
     const abGame = new ABGame(mode);
     abGame.setSeededCards(seededCards);
     const abCards = abGame.dealHand(0);
-
-    //inject joker start
-    // abCards[0] = new ABJoker();
-    // console.log(abCards);
-    //inject joker end
 
     const emit = {
       abCards,

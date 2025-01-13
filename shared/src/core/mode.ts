@@ -6,7 +6,6 @@ interface IABMode {
   readonly description: string;
   readonly slug: string;
   readonly gridSize: number;
-  readonly includeJokers: boolean;
   readonly minHandsDiscard: number;
   readonly minHandsSpecial: number;
 }
@@ -17,7 +16,6 @@ export class ABMode implements IABMode {
   public readonly description: string;
   public readonly slug: string;
   public readonly gridSize: number;
-  public readonly includeJokers: boolean;
   public readonly minHandsDiscard: number;
   public readonly minHandsSpecial: number;
 
@@ -27,7 +25,6 @@ export class ABMode implements IABMode {
     description: string,
     slug: string,
     gridSize: number,
-    includeJokers: boolean,
     minHandsDiscard: number,
     minHandsSpecial: number
   ) {
@@ -36,7 +33,6 @@ export class ABMode implements IABMode {
     this.description = description;
     this.slug = slug;
     this.gridSize = gridSize;
-    this.includeJokers = includeJokers;
     this.minHandsDiscard = minHandsDiscard;
     this.minHandsSpecial = minHandsSpecial;
   }
@@ -48,7 +44,6 @@ export class ABMode implements IABMode {
       'Fill the 4 x 4 grid with the best poker hands!',
       'mode-1',
       4,
-      false,
       3,
       4
     ),
@@ -58,7 +53,6 @@ export class ABMode implements IABMode {
       'Fill the 5 x 5 grid with the best poker hands!',
       'mode-2',
       5,
-      true,
       4,
       5
     ),

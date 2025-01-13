@@ -33,14 +33,9 @@ export class ABCard extends Card {
   private discard: boolean = false;
   public faceUp: boolean;
 
-  constructor(
-    _rank?: Rank | null,
-    _suit?: Suit | null,
-    joker: boolean = false,
-    faceUp: boolean = true
-  ) {
-    const rank = joker ? Rank.setJoker() : (_rank ?? Rank.getRandom());
-    const suit = joker ? Suit.setJoker() : (_suit ?? Suit.getRandom());
+  constructor(_rank?: Rank | null, _suit?: Suit | null, faceUp: boolean = true) {
+    const rank = _rank ?? Rank.getRandom();
+    const suit = _suit ?? Suit.getRandom();
     super(rank, suit);
     this.faceUp = faceUp;
   }
@@ -95,12 +90,4 @@ export class ABCardPreview extends ABCard {
   }
 }
 
-export class ABJoker extends ABCard {
-  constructor() {
-    super(null, null, true, true);
-  }
-}
-
-export type ABCardPlus = ABCard | ABJoker;
-
-export type ABCards = ABCardPlus[];
+export type ABCards = ABCard[];

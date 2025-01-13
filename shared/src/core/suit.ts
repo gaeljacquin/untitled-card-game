@@ -1,20 +1,19 @@
 import { getRandomIndex } from '../functions/shufflers';
 
 export type SuitId = 'hearts' | 'spades' | 'diamonds' | 'clubs';
-type JokerSuit = 'joker';
 
 interface ISuit {
-  readonly id: SuitId | JokerSuit;
+  readonly id: SuitId;
   readonly label: string;
   readonly isRed: boolean;
 }
 
 export class Suit implements ISuit {
-  readonly id: SuitId | JokerSuit;
+  readonly id: SuitId;
   readonly label: string;
   readonly isRed: boolean;
 
-  private constructor(id: SuitId | JokerSuit, label: string, isRed: boolean) {
+  private constructor(id: SuitId, label: string, isRed: boolean) {
     this.id = id;
     this.label = label;
     this.isRed = isRed;
@@ -49,9 +48,5 @@ export class Suit implements ISuit {
 
   public static getAllValues() {
     return Object.values(Suit.getAll());
-  }
-
-  public static setJoker(): Suit {
-    return new Suit('joker', 'Joker', false);
   }
 }

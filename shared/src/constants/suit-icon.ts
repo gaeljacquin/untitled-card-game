@@ -1,4 +1,3 @@
-import { GiDominoMask } from 'react-icons/gi';
 import {
   RiPokerClubsFill as Clubs,
   RiPokerDiamondsFill as Diamonds,
@@ -12,5 +11,3 @@ export const suitIconMap = {
   diamonds: Diamonds,
   clubs: Clubs,
 };
-
-export const jokerIcons = [GiDominoMask];

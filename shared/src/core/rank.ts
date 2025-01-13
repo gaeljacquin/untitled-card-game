@@ -15,11 +15,9 @@ export type RankId =
   | 'queen'
   | 'king';
 
-type JokerRank = 'joker';
-
 interface IRank {
   readonly value: number;
-  readonly id: RankId | JokerRank;
+  readonly id: RankId;
   readonly label: string;
   readonly labelFull: string;
   readonly aceFace: boolean;
@@ -27,12 +25,12 @@ interface IRank {
 
 export class Rank implements IRank {
   readonly value: number;
-  readonly id: RankId | JokerRank;
+  readonly id: RankId;
   readonly label: string;
   readonly labelFull: string;
   readonly aceFace: boolean;
 
-  private constructor(value: number, label: string, id: RankId | JokerRank, labelFull: string) {
+  private constructor(value: number, label: string, id: RankId, labelFull: string) {
     this.value = value;
     this.label = label;
     this.id = id;
@@ -77,9 +75,5 @@ export class Rank implements IRank {
 
   public static getAllValues() {
     return Object.values(Rank.getAll());
-  }
-
-  public static setJoker(): Rank {
-    return new Rank(0, '?', 'joker', 'Joker');
   }
 }
