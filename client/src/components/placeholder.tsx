@@ -1,13 +1,9 @@
-import { Skeleton } from '@/components/ui/skeleton';
+import { Loader2 } from 'lucide-react';
 
 export default function Placeholder() {
   return (
-    <div className="flex flex-col space-y-3 items-center justify-center">
-      <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-      <div className="space-y-2">
-        <Skeleton className="h-4 w-[250px]" />
-        <Skeleton className="h-4 w-[200px]" />
-      </div>
+    <div className="bg-amber-950/30 rounded-xl p-6 md:p-10 flex items-center justify-center">
+      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
     </div>
   );
 }

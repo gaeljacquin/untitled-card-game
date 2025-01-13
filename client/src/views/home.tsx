@@ -15,7 +15,7 @@ export default function Home() {
         gradientBackgroundStart="rgba(4, 61, 34, 0.77)"
         gradientBackgroundEnd="rgb(13, 20, 49)"
       >
-        <div className="min-h-screen flex flex-col items-center justify-center p-4 absolute z-50 inset-0">
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 absolute z-50 inset-0 -mt-32">
           <motion.div
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}

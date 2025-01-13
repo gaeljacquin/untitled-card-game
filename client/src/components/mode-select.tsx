@@ -5,7 +5,13 @@ import Link from 'next/link';
 import { ABMode } from '@annabelle/shared/core/mode';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import miscStore from '@/stores/misc';
 
@@ -33,11 +39,14 @@ export default function ModeSelect(props: Props) {
     <Dialog open={selectMode} onOpenChange={handleClose}>
       <DialogContent className="bg-white/10 backdrop-blur-sm border-white rounded-2xl text-white max-w-xl h-auto">
         <DialogHeader>
-          <DialogTitle className={cn('text-center', anyButtonClicked && 'text-white/70')}>
+          <DialogTitle
+            className={cn('text-center text-lg sm:text-xl', anyButtonClicked && 'text-white/70')}
+          >
             Select Mode
           </DialogTitle>
+          <DialogDescription className="hidden" />
         </DialogHeader>
-        <div className="flex flex-col items-center justify-center gap-8">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
           {modes.map((item: ABMode) => (
             <Link
               key={item.slug}
@@ -47,7 +56,7 @@ export default function ModeSelect(props: Props) {
               <Button
                 type="button"
                 className={cn(
-                  'w-full h-auto px-7 py-4 text-md rounded-full',
+                  'w-full h-auto py-12 px-16 text-md sm:text-lg rounded-2xl',
                   anyButtonClicked && clickedButton === item.slug ? newGameGradient : 'bg-gray-700',
                   newGameHoverGradient
                 )}

@@ -26,7 +26,6 @@ import { Loader2 } from 'lucide-react';
 import ABCardComp from '@/components/ab-card';
 import DiscardPile from '@/components/discard-pile';
 import { GridCell } from '@/components/grid-cell';
-import LiveScore from '@/components/live-score';
 import Placeholder from '@/components/placeholder';
 import SortableItem from '@/components/sortable-item';
 import { Button } from '@/components/ui/button';
@@ -506,8 +505,8 @@ export default function PlayingField(props: Props) {
                             transition={{ duration: 0.5 }}
                             className="space-y-4"
                           >
-                            <LiveScore className="flex flex-col gap-4">
-                              <>
+                            <div className="flex flex-col gap-4">
+                              <AnimatePresence>
                                 {Array.from({ length: gridSize }, (_, index) => (
                                   <motion.div
                                     key={`col-${index}`}
@@ -522,7 +521,7 @@ export default function PlayingField(props: Props) {
                                     </p>
                                   </motion.div>
                                 ))}
-                              </>
+                              </AnimatePresence>
 
                               <Separator />
 
@@ -609,7 +608,7 @@ export default function PlayingField(props: Props) {
                                   </p>
                                 </motion.div>
                               </>
-                            </LiveScore>
+                            </div>
 
                             {gameOver && process.env.NODE_ENV === 'development' && (
                               <div className="flex items-center justify-center mt-8">
@@ -670,12 +669,12 @@ export default function PlayingField(props: Props) {
                     Play Again
                   </Button>
                 ) : (
-                  <>
+                  <div className="flex flex-col w-full">
                     <Separator className="my-4" />
                     <Button onClick={handleDiscard} disabled={playerHand.length !== 1 || isDealing}>
                       Discard
                     </Button>
-                  </>
+                  </div>
                 )}
               </div>
             </div>

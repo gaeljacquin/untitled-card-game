@@ -2,7 +2,13 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import miscStore from '@/stores/misc';
 
@@ -33,6 +39,7 @@ export default function AskRtfm(props: Props) {
       <DialogContent className="bg-white/10 backdrop-blur-sm border-white rounded-2xl text-white max-w-xl h-1/6">
         <DialogHeader>
           <DialogTitle>Not so fast</DialogTitle>
+          <DialogDescription className="hidden" />
         </DialogHeader>
         <p className="text-md">Do you want to read the friendly manual before proceeding?</p>
         <div className="flex items-center justify-center gap-4">
