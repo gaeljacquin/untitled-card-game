@@ -46,9 +46,9 @@ export default function ABMode(props: Props) {
     });
 
     socket.on('game-next-round-res', (data) => {
-      const { abCards, gameOver, abResult } = data;
+      const { abCards, gameOver } = data;
 
-      if (gameOver && abResult) {
+      if (gameOver) {
         setABGameOver(true);
         setABResult(abResult);
       } else {
@@ -64,9 +64,13 @@ export default function ABMode(props: Props) {
   };
 
   useEffect(() => {
-    socket.emit('game-init', { modeSlug });
+    initGame(modeSlug);
     wsConnect();
   }, []);
+
+  const initGame = (modeSlug: string) => {
+    socket.emit('game-init', { modeSlug });
+  };
 
   const handleNextRound = (data: { [key: string]: unknown }) => {
     socket.emit('game-next-round', data);
@@ -93,6 +97,8 @@ export default function ABMode(props: Props) {
           evaluateSpecial={evaluateSpecialHand}
           gameOver={abGameOver}
           abResult={abResult}
+          initGame={initGame}
+          setABGameOver={setABGameOver}
         />
 
         <div className="footer-spacing-uwu">

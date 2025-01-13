@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ABCards } from './card';
-import { ABDeck } from './deck';
 import { ABMode } from './mode';
 
 interface IABGame {
@@ -23,17 +22,20 @@ export class ABGame implements IABGame {
   readonly createdAt: Date;
 
   constructor(mode: ABMode) {
-    const deck = new ABDeck(mode);
     const gridSize = mode.gridSize;
     this.id = uuidv4();
     this.mode = mode;
-    this.seededCards = deck.seededCards;
+    this.seededCards = [];
     this.dealtABCardGroups = Array.from({ length: gridSize }, () => Array(gridSize).fill([null]));
     this.grid = Array.from({ length: gridSize }, () => Array(gridSize).fill([null]));
     this.discardedABCards = [];
     this.played = false;
     this.won = false;
     this.createdAt = new Date();
+  }
+
+  public setSeededCards(cards: ABCards[]) {
+    this.seededCards = cards;
   }
 
   public setPlayed() {

@@ -11,6 +11,8 @@ import cors from '@/utils/cors';
 import { ABGame } from '@annabelle/shared/dist/core/game';
 import { GameService } from '@/game/game.service';
 import { ABMode } from '@annabelle/shared/dist/core/mode';
+import { ABDeck } from '@annabelle/shared/dist/core/deck';
+import { generateSeed } from '@annabelle/shared/dist/functions/shufflers';
 
 @WebSocketGateway({ cors })
 export class GameGateway
@@ -50,7 +52,10 @@ export class GameGateway
     console.info(`Message received from client ${client.id}: ${payload}`);
     const { modeSlug } = payload;
     const mode = ABMode.getMode(modeSlug);
+    const deck = new ABDeck();
+    const seededCards = generateSeed(deck.getCards(), mode.gridSize);
     const abGame = new ABGame(mode);
+    abGame.setSeededCards(seededCards);
     const abCards = abGame.dealHand(0);
     const emit = {
       abCards,

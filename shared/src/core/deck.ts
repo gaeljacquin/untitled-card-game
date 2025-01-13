@@ -1,7 +1,5 @@
-import { shuffler } from '../functions/shufflers';
 // import { ABCard, ABCards, ABJoker } from './card';
 import { ABCard, ABCards } from './card';
-import { ABMode } from './mode';
 import { Rank } from './rank';
 import { Suit } from './suit';
 
@@ -9,8 +7,6 @@ import { Suit } from './suit';
 
 interface IABDeck {
   seededCards: ABCards[];
-  createDeck(): ABCards;
-  shuffle(): void;
   getCards(): ABCards;
 }
 
@@ -18,13 +14,11 @@ export class ABDeck implements IABDeck {
   private cards: ABCards = [];
   public readonly seededCards: ABCards[] = [];
 
-  constructor(mode: ABMode) {
-    const gridSize = mode.gridSize;
+  constructor() {
     this.cards = this.createDeck();
-    this.seededCards = this.generateSeed(gridSize);
   }
 
-  public createDeck(): ABCards {
+  private createDeck(): ABCards {
     this.cards = [];
     const ranks = Rank.getAll();
     const suits = Suit.getAll();
@@ -38,13 +32,8 @@ export class ABDeck implements IABDeck {
 
     // const jokers = Array.from({ length: NUM_JOKERS }, () => new ABJoker());
     // this.cards.push(...jokers);
-    this.shuffle();
 
     return this.cards;
-  }
-
-  public shuffle(): void {
-    this.cards = shuffler(this.cards) as ABCards;
   }
 
   public getCards(): ABCards {

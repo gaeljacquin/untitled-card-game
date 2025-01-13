@@ -36,10 +36,6 @@ type Props = {
   abCards: ABCards;
   gridClass: string;
   playerHandClass: string;
-  handleNextRound: (arg0: { [key: string]: unknown }) => void;
-  evaluateColumn: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
-  evaluateRow: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
-  evaluateSpecial: (arg0: IGridCell[][]) => { name: string; points: number };
   gameOver?: boolean;
   abResult: {
     [key: string]: {
@@ -48,6 +44,12 @@ type Props = {
       points_final: number;
     };
   } | null;
+  handleNextRound: (arg0: { [key: string]: unknown }) => void;
+  evaluateColumn: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
+  evaluateRow: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
+  evaluateSpecial: (arg0: IGridCell[][]) => { name: string; points: number };
+  initGame: (arg0: string) => void;
+  setABGameOver: (arg0: boolean) => void;
 };
 
 const labelClass = cn(
@@ -57,7 +59,6 @@ const labelClass = cn(
   'font-medium',
   '[&]:!w-auto [&]:!h-auto [&]:!aspect-none'
 );
-
 const cornerCellClass = cn('aspect-none', 'w-auto h-auto');
 
 export default function PlayingField(props: Props) {
@@ -66,12 +67,21 @@ export default function PlayingField(props: Props) {
     abCards,
     gridClass,
     playerHandClass,
+    gameOver = false,
+    abResult,
     handleNextRound,
     evaluateColumn,
     evaluateRow,
-    gameOver = false,
-    abResult,
+    initGame,
+    setABGameOver,
   } = props;
+  const defaultGameState = {
+    gameOver: false,
+    totalCards: abCards.length,
+    playedCards: 0,
+    totalScore: 0,
+    bonusPoints: 0,
+  };
   const [playerHand, setPlayerHand] = useState<ABCards>([]);
   const mode = ABMode.getMode(modeSlug)!;
   const { title, description, gridSize, type } = mode;
@@ -79,13 +89,7 @@ export default function PlayingField(props: Props) {
   const [grid, setGrid] = useState<IGridCell[][]>([]);
   const [activeDrag, setActiveDrag] = useState<ABCard | null>(null);
   const [discardPile, setDiscardPile] = useState<ABCards>([]);
-  const [gameState, setGameState] = useState<GameState>({
-    gameOver: false,
-    totalCards: abCards.length,
-    playedCards: 0,
-    totalScore: 0,
-    bonusPoints: 0,
-  });
+  const [gameState, setGameState] = useState<GameState>(defaultGameState);
   const [lockedCells, setLockedCells] = useState<Set<string>>(new Set());
   const [isDealing, setIsDealing] = useState(false);
   const mouseSensor = useSensor(MouseSensor);
@@ -268,13 +272,24 @@ export default function PlayingField(props: Props) {
     await handleNextRound({ discardedABCard: cardToDiscard, newGrid });
 
     setPlayerHand([]);
-    void gameState;
 
     const isGridFull = newGrid.every((row) => row.every((cell) => cell.card !== null));
     if (isGridFull) {
       setGameState((prev) => ({ ...prev, gameOver: true }));
       return;
     }
+  };
+
+  const playAgain = async () => {
+    // setGrid([]);
+    setActiveDrag(null);
+    // setGameState(defaultGameState);
+    setLockedCells(new Set());
+    setIsDealing(true);
+    await initGame(modeSlug);
+    setABGameOver(false);
+    initializeGame();
+    setDiscardPile([]);
   };
 
   useEffect(() => {
@@ -408,33 +423,42 @@ export default function PlayingField(props: Props) {
                 {isDealing ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <SortableContext
-                    items={playerHand.map((item) => item.id)}
-                    strategy={horizontalListSortingStrategy}
-                  >
-                    {playerHand.map((item) => (
-                      <SortableItem key={item.id} id={item.id}>
-                        <ABCardComp
-                          key={`card-${item.id}`}
-                          card={item}
-                          valueNotLabel={!labelNotValue}
-                          modeType={type}
-                          hover={true}
-                          isDragging
-                          inGrid={false}
-                        />
-                      </SortableItem>
-                    ))}
-                  </SortableContext>
+                  <>
+                    {gameOver && <p>Final score: ${gameState.totalScore}</p>}
+                    <SortableContext
+                      items={playerHand.map((item) => item.id)}
+                      strategy={horizontalListSortingStrategy}
+                    >
+                      {playerHand.map((item) => (
+                        <SortableItem key={item.id} id={item.id}>
+                          <ABCardComp
+                            key={`card-${item.id}`}
+                            card={item}
+                            valueNotLabel={!labelNotValue}
+                            modeType={type}
+                            hover={true}
+                            isDragging
+                            inGrid={false}
+                          />
+                        </SortableItem>
+                      ))}
+                    </SortableContext>
+                  </>
                 )}
               </div>
 
               <Separator className="my-4" />
 
               <div className="flex items-center justify-center">
-                <Button onClick={handleDiscard} disabled={playerHand.length !== 1 || isDealing}>
-                  Discard
-                </Button>
+                {gameOver ? (
+                  <Button onClick={playAgain} disabled>
+                    Play Again
+                  </Button>
+                ) : (
+                  <Button onClick={handleDiscard} disabled={playerHand.length !== 1 || isDealing}>
+                    Discard
+                  </Button>
+                )}
               </div>
             </div>
           </div>
