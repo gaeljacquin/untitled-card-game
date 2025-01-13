@@ -1,5 +1,7 @@
+import { emptyHand } from '@/constants/empty-hand';
 import { ABCards } from '../core/card';
 import { IGridCell } from '../core/grid-cell';
+import { ABMode } from '../core/mode';
 
 class PokerHand {
   constructor(
@@ -185,36 +187,61 @@ export const evaluateSpecialHand = (grid: IGridCell[][]) => {
   }
 
   if (cornerCards.length < 2) {
-    return {
-      name: 'Empty Hand',
-      points: 0,
-    };
+    return emptyHand;
   }
 
   const result = evaluatePokerHands(cornerCards);
 
   return {
-    name: result.name + '*',
+    name: result.name,
     points: Math.ceil(result.points * 2),
   };
 };
 
-export const evaluateTotalPokerScore = (grid: IGridCell[][]) => {
+export const evaluateDiscardPile = (discardPile: ABCards) => {
+  const result = evaluatePokerHands(discardPile);
+  const name = result.name;
+  const points = result.points;
+
+  return {
+    name,
+    points,
+  };
+};
+
+export const evaluateTotalPokerScore = (
+  grid: IGridCell[][],
+  mode: ABMode,
+  discardPile: ABCards
+) => {
   const gridSize = grid.length;
-  let totalScore = 0;
+  let score = 0;
+  let numRowHands = 0;
+  let numColHands = 0;
+  let discardBonus = emptyHand;
+  let specialBonus = emptyHand;
 
   for (let row = 0; row < gridSize; row++) {
-    const rowScore = evaluateRowHand(grid, row);
-    totalScore += rowScore.points;
+    const rowEval = evaluateRowHand(grid, row);
+    score += rowEval.points;
+    numRowHands += Math.min(Math.max(0, rowEval.points), 1);
   }
 
   for (let col = 0; col < gridSize; col++) {
-    const colScore = evaluateColumnHand(grid, col);
-    totalScore += colScore.points;
+    const colEval = evaluateColumnHand(grid, col);
+    score += colEval.points;
+    numColHands += Math.min(Math.max(0, colEval.points), 1);
   }
 
-  const specialScore = evaluateSpecialHand(grid);
-  totalScore += specialScore.points;
+  const numHands = numRowHands + numColHands;
 
-  return totalScore;
+  if (numHands >= mode.minHandsDiscard) {
+    discardBonus = evaluateDiscardPile(discardPile);
+  }
+
+  if (numHands >= mode.minHandsSpecial) {
+    specialBonus = evaluateSpecialHand(grid);
+  }
+
+  return { score, discardBonus, specialBonus, numRowHands, numColHands };
 };

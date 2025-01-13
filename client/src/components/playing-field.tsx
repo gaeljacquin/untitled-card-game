@@ -1,10 +1,15 @@
 'use client';
 
 import { Fragment, useEffect, useRef, useState } from 'react';
+import { emptyHand } from '@annabelle/shared/constants/empty-hand';
 import { ABCard, ABCards, ABJoker } from '@annabelle/shared/core/card';
 import { IGridCell } from '@annabelle/shared/core/grid-cell';
 import { ABMode } from '@annabelle/shared/core/mode';
-import { evaluateTotalPokerScore } from '@annabelle/shared/functions/checkers';
+import {
+  evaluateColumnHand,
+  evaluateRowHand,
+  evaluateTotalPokerScore,
+} from '@annabelle/shared/functions/checkers';
 import {
   DndContext,
   DragEndEvent,
@@ -49,9 +54,6 @@ type Props = {
     };
   } | null;
   handleNextRound: (arg0: { [key: string]: unknown }) => void;
-  evaluateColumn: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
-  evaluateRow: (arg0: IGridCell[][], arg1: number) => { name: string; points: number };
-  evaluateSpecial: (arg0: IGridCell[][]) => { name: string; points: number };
   initGame: (arg0: string) => void;
   setABGameOver: (arg0: boolean) => void;
 };
@@ -73,17 +75,17 @@ export default function PlayingField(props: Props) {
     playerHandClass,
     gameOver = false,
     handleNextRound,
-    evaluateColumn,
-    evaluateRow,
     initGame,
     setABGameOver,
   } = props;
+
   const defaultGameState = {
     gameOver: false,
     totalCards: abCards.length,
     playedCards: 0,
-    totalScore: 0,
-    bonusPoints: 0,
+    score: 0,
+    discardBonus: emptyHand,
+    specialBonus: emptyHand,
   };
   const [playerHand, setPlayerHand] = useState<ABCards>([]);
   const mode = ABMode.getMode(modeSlug)!;
@@ -130,13 +132,7 @@ export default function PlayingField(props: Props) {
       );
     setGrid(newGrid);
     setDiscardPile(discardPile);
-    setGameState({
-      gameOver: false,
-      totalCards: gridSize * gridSize,
-      playedCards: 0,
-      totalScore: 0,
-      bonusPoints: 0,
-    });
+    setGameState(defaultGameState);
   };
 
   const animateProgress = () => {
@@ -155,7 +151,6 @@ export default function PlayingField(props: Props) {
   };
 
   const switchToScoreTab = () => {
-    console.log('now');
     setActiveTab('score');
     tabsRef.current?.setAttribute('data-state', 'score');
   };
@@ -347,24 +342,18 @@ export default function PlayingField(props: Props) {
 
   useEffect(() => {
     if (gameOver) {
-      const totalScore = evaluateTotalPokerScore(grid);
+      const scores = evaluateTotalPokerScore(grid, mode, discardPile);
       setGameState((prev) => ({
         ...prev,
-        totalScore: totalScore,
+        score: scores.score,
+        discardBonus: scores.discardBonus,
+        specialBonus: scores.specialBonus,
       }));
-      console.log('there');
       switchToScoreTab();
       animateProgress();
+      console.log(scores);
     }
   }, [gameOver]);
-
-  useEffect(() => {
-    const totalScore = evaluateTotalPokerScore(grid);
-    setGameState((prev) => ({
-      ...prev,
-      totalScore,
-    }));
-  }, [grid]);
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
@@ -412,18 +401,17 @@ export default function PlayingField(props: Props) {
                   Score
                 </TabsTrigger>
               </TabsList>
+              {gameOver && (
+                <div
+                  className={cn(
+                    'flex items-center justify-center',
+                    'text-md bg-white/70 text-rose-800 p-2'
+                  )}
+                >
+                  Please reload the page to play a new round.
+                </div>
+              )}
               <TabsContent value="grid">
-                {gameOver && (
-                  <div
-                    className={cn(
-                      'flex items-center justify-center',
-                      'text-md bg-white/70 text-rose-800 p-2'
-                    )}
-                  >
-                    Please reload the page to play a new round.
-                  </div>
-                )}
-
                 {!abCards || abCards.length === 0 ? (
                   <Placeholder />
                 ) : (
@@ -435,11 +423,11 @@ export default function PlayingField(props: Props) {
                         <div key={`col-${colIndex}`} className={labelClass}>
                           <motion.div>
                             <span className="text-clip">
-                              {evaluateColumn(grid, colIndex).name}:
+                              {evaluateColumnHand(grid, colIndex).name}:
                             </span>
                             <br />
                             <span className="text-clip">
-                              ${evaluateColumn(grid, colIndex).points}
+                              ${evaluateColumnHand(grid, colIndex).points}
                             </span>
                           </motion.div>
                         </div>
@@ -449,10 +437,12 @@ export default function PlayingField(props: Props) {
                         <Fragment key={`row-${rowIndex}`}>
                           <div className={labelClass}>
                             <motion.div className="mr-4">
-                              <span className="text-clip">{evaluateRow(grid, rowIndex).name}:</span>
+                              <span className="text-clip">
+                                {evaluateRowHand(grid, rowIndex).name}:
+                              </span>
                               <br />
                               <span className="text-clip">
-                                ${evaluateRow(grid, rowIndex).points}
+                                ${evaluateRowHand(grid, rowIndex).points}
                               </span>
                             </motion.div>
                           </div>
@@ -487,7 +477,7 @@ export default function PlayingField(props: Props) {
                 ) : (
                   <>
                     <h1 className="text-center text-xl">
-                      {progress === 100 && <>Final Score 🤩</>}
+                      {progress === 100 && <>Your Score 🤩</>}
                     </h1>
 
                     <motion.div
@@ -528,8 +518,8 @@ export default function PlayingField(props: Props) {
                                   >
                                     <p className="flex items-center justify-between gap-2 text-sm">
                                       <span>Column {index + 1}: </span>
-                                      <span>{evaluateColumn(grid, index).name}</span>
-                                      <span>${evaluateColumn(grid, index).points}</span>
+                                      <span>{evaluateColumnHand(grid, index).name}</span>
+                                      <span>${evaluateColumnHand(grid, index).points}</span>
                                     </p>
                                   </motion.div>
                                 ))}
@@ -547,8 +537,8 @@ export default function PlayingField(props: Props) {
                                   >
                                     <p className="flex items-center justify-between gap-2 text-sm">
                                       <span>Row {index + 1} </span>
-                                      <span>{evaluateRow(grid, index).name}</span>
-                                      <span>${evaluateRow(grid, index).points}</span>
+                                      <span>{evaluateRowHand(grid, index).name}</span>
+                                      <span>${evaluateRowHand(grid, index).points}</span>
                                     </p>
                                   </motion.div>
                                 ))}
@@ -563,9 +553,24 @@ export default function PlayingField(props: Props) {
                                   animate={{ opacity: 1 }}
                                 >
                                   <p className="flex items-center justify-between gap-2 text-sm">
+                                    <span>Score</span>
+                                    <span>${gameState.score}</span>
+                                  </p>
+                                </motion.div>
+                              </>
+
+                              <Separator />
+
+                              <>
+                                <motion.div
+                                  className="text-center font-semibold"
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                >
+                                  <p className="flex items-center justify-between gap-2 text-sm">
                                     <span>Discard Bonus</span>
-                                    <span>{evaluateRow(grid, 0).name}</span>
-                                    <span>${evaluateRow(grid, 0).points}</span>
+                                    <span>{gameState.discardBonus?.name}</span>
+                                    <span>${gameState.discardBonus?.points ?? 0}</span>
                                   </p>
                                 </motion.div>
                               </>
@@ -579,9 +584,9 @@ export default function PlayingField(props: Props) {
                                   animate={{ opacity: 1 }}
                                 >
                                   <p className="flex items-center justify-between gap-2 text-sm">
-                                    <span>Corner Bonus</span>
-                                    <span>{evaluateRow(grid, 0).name}</span>
-                                    <span>${evaluateRow(grid, 0).points}</span>
+                                    <span>Special Bonus</span>
+                                    <span>{gameState.specialBonus?.name}</span>
+                                    <span>${gameState.specialBonus?.points}</span>
                                   </p>
                                 </motion.div>
                               </>
@@ -595,8 +600,13 @@ export default function PlayingField(props: Props) {
                                   animate={{ opacity: 1 }}
                                 >
                                   <p className="flex items-center justify-between gap-2 text-sm">
-                                    <span>Total</span>
-                                    <span>${gameState.totalScore}</span>
+                                    <span>Final Score</span>
+                                    <span>
+                                      $
+                                      {(gameState.score as number) +
+                                        (gameState.specialBonus?.points as number) +
+                                        (gameState.discardBonus?.points as number)}
+                                    </span>
                                   </p>
                                 </motion.div>
                               </>
@@ -665,17 +675,18 @@ export default function PlayingField(props: Props) {
                 )}
               </div>
 
-              <Separator className="my-4" />
-
               <div className="flex items-center justify-center">
                 {gameOver ? (
                   <Button onClick={playAgain} disabled>
                     Play Again
                   </Button>
                 ) : (
-                  <Button onClick={handleDiscard} disabled={playerHand.length !== 1 || isDealing}>
-                    Discard
-                  </Button>
+                  <>
+                    <Separator className="my-4" />
+                    <Button onClick={handleDiscard} disabled={playerHand.length !== 1 || isDealing}>
+                      Discard
+                    </Button>
+                  </>
                 )}
               </div>
             </div>

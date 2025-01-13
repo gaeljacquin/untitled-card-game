@@ -1,9 +1,9 @@
-// import { ABCard, ABCards, ABJoker } from './card';
-import { ABCard, ABCards } from './card';
+import { ABCard, ABCards, ABJoker } from './card';
+import { ABMode } from './mode';
 import { Rank } from './rank';
 import { Suit } from './suit';
 
-// const NUM_JOKERS = 2;
+const NUM_JOKERS = 2;
 
 interface IABDeck {
   seededCards: ABCards[];
@@ -14,11 +14,11 @@ export class ABDeck implements IABDeck {
   private cards: ABCards = [];
   public readonly seededCards: ABCards[] = [];
 
-  constructor() {
-    this.cards = this.createDeck();
+  constructor(mode: ABMode) {
+    this.cards = this.createDeck(mode);
   }
 
-  private createDeck(): ABCards {
+  private createDeck(mode: ABMode): ABCards {
     this.cards = [];
     const ranks = Rank.getAll();
     const suits = Suit.getAll();
@@ -30,8 +30,10 @@ export class ABDeck implements IABDeck {
       }
     }
 
-    // const jokers = Array.from({ length: NUM_JOKERS }, () => new ABJoker());
-    // this.cards.push(...jokers);
+    if (mode.includeJokers) {
+      const jokers = Array.from({ length: NUM_JOKERS }, () => new ABJoker());
+      this.cards.push(...jokers);
+    }
 
     return this.cards;
   }

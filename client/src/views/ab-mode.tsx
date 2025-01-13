@@ -2,13 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { ABCards } from '@annabelle/shared/core/card';
-import {
-  evaluateColumnHand,
-  evaluateRowHand,
-  evaluateSpecialHand,
-} from '@annabelle/shared/functions/checkers';
 import { motion } from 'framer-motion';
-// import { Clock, Star, Target, Trophy, Zap } from 'lucide-react';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import BackgroundLogo from '@/components/background-logo';
 import Footer from '@/components/footer';
@@ -93,9 +87,6 @@ export default function ABMode(props: Props) {
           gridClass={gridClass}
           playerHandClass={playerHandClass}
           handleNextRound={handleNextRound}
-          evaluateColumn={evaluateColumnHand}
-          evaluateRow={evaluateRowHand}
-          evaluateSpecial={evaluateSpecialHand}
           gameOver={abGameOver}
           abResult={abResult}
           initGame={initGame}

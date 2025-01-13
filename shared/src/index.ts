@@ -6,5 +6,6 @@ export * from './core/game';
 export * from './core/deck';
 
 export * from './constants/suit-icon';
+export * from './constants/empty-hand';
 
 export * from './functions/shufflers';

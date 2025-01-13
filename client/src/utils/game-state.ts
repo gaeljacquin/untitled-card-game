@@ -1,3 +1,4 @@
+import { emptyHand } from '@annabelle/shared/constants/empty-hand';
 import { ABCard } from '@annabelle/shared/core/card';
 import { IGridCell } from '@annabelle/shared/core/grid-cell';
 import { GameState } from '@/types/game-state';
@@ -10,8 +11,9 @@ export function getGameState(grid: IGridCell[][]): GameState {
     gameOver: isGridFull(grid),
     totalCards: totalCells,
     playedCards,
-    totalScore: 0,
-    bonusPoints: 0,
+    score: 0,
+    discardBonus: emptyHand,
+    specialBonus: emptyHand,
   };
 }
 
