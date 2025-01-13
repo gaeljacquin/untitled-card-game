@@ -16,16 +16,19 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import ABCardComp from '@/components/ab-card';
 import ABJokerComp from '@/components/ab-joker';
 import DiscardPile from '@/components/discard-pile';
 import { GridCell } from '@/components/grid-cell';
+import LiveScore from '@/components/live-score';
 import Placeholder from '@/components/placeholder';
 import SortableItem from '@/components/sortable-item';
 import { Button } from '@/components/ui/button';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
@@ -69,7 +72,6 @@ export default function PlayingField(props: Props) {
     gridClass,
     playerHandClass,
     gameOver = false,
-    abResult,
     handleNextRound,
     evaluateColumn,
     evaluateRow,
@@ -93,9 +95,26 @@ export default function PlayingField(props: Props) {
   const [gameState, setGameState] = useState<GameState>(defaultGameState);
   const [lockedCells, setLockedCells] = useState<Set<string>>(new Set());
   const [isDealing, setIsDealing] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [progress, setProgress] = useState(0);
   const mouseSensor = useSensor(MouseSensor);
   const touchSensor = useSensor(TouchSensor);
   const sensors = useSensors(mouseSensor, touchSensor);
+
+  const animateProgress = () => {
+    setProgress(0);
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+
+          return 100;
+        }
+
+        return prev + 2;
+      });
+    }, 20);
+  };
 
   useEffect(() => {
     initializeGame();
@@ -320,14 +339,14 @@ export default function PlayingField(props: Props) {
   }, [abCards]);
 
   useEffect(() => {
-    if (gameOver && abResult) {
+    if (gameOver) {
       const totalScore = evaluateTotalPokerScore(grid);
-      const bonusPoints = Object.values(abResult).reduce((sum, item) => sum + item.points_final, 0);
       setGameState((prev) => ({
         ...prev,
-        totalScore: totalScore + bonusPoints,
-        bonusPoints: bonusPoints,
+        totalScore: totalScore,
       }));
+      setShowModal(true);
+      animateProgress();
     }
   }, [gameOver]);
 
@@ -377,44 +396,61 @@ export default function PlayingField(props: Props) {
             {!abCards || abCards.length === 0 ? (
               <Placeholder />
             ) : (
-              <div className={gridClass}>
-                <div className={cornerCellClass} />
+              <>
+                <div className={gridClass}>
+                  <div className={cornerCellClass} />
 
-                {Array.from({ length: gridSize }, (_, colIndex) => (
-                  <div key={`col-${colIndex}`} className={labelClass}>
-                    <motion.div>
-                      <span className="text-clip">{evaluateColumn(grid, colIndex).name}:</span>
-                      <br />
-                      <span className="text-clip">${evaluateColumn(grid, colIndex).points}</span>
-                    </motion.div>
-                  </div>
-                ))}
-
-                {grid.map((row, rowIndex) => (
-                  <Fragment key={`row-${rowIndex}`}>
-                    <div className={labelClass}>
+                  {Array.from({ length: gridSize }, (_, colIndex) => (
+                    <div key={`col-${colIndex}`} className={labelClass}>
                       <motion.div>
-                        <span className="text-clip">{evaluateRow(grid, rowIndex).name}:</span>
+                        <span className="text-clip">{evaluateColumn(grid, colIndex).name}:</span>
                         <br />
-                        <span className="text-clip">${evaluateRow(grid, rowIndex).points}</span>
+                        <span className="text-clip">${evaluateColumn(grid, colIndex).points}</span>
                       </motion.div>
                     </div>
+                  ))}
 
-                    {row.map((cell, colIndex) => (
-                      <GridCell
-                        key={cell.id}
-                        cell={cell}
-                        modeType={type}
-                        gridSize={gridSize}
-                        lockedCells={lockedCells}
-                        rowIndex={rowIndex}
-                        columnIndex={colIndex}
-                        valueNotLabel={!labelNotValue}
-                      />
-                    ))}
-                  </Fragment>
-                ))}
-              </div>
+                  {grid.map((row, rowIndex) => (
+                    <Fragment key={`row-${rowIndex}`}>
+                      <div className={labelClass}>
+                        <motion.div>
+                          <span className="text-clip">{evaluateRow(grid, rowIndex).name}:</span>
+                          <br />
+                          <span className="text-clip">${evaluateRow(grid, rowIndex).points}</span>
+                        </motion.div>
+                      </div>
+
+                      {row.map((cell, colIndex) => (
+                        <GridCell
+                          key={cell.id}
+                          cell={cell}
+                          modeType={type}
+                          gridSize={gridSize}
+                          lockedCells={lockedCells}
+                          rowIndex={rowIndex}
+                          columnIndex={colIndex}
+                          valueNotLabel={!labelNotValue}
+                        />
+                      ))}
+                    </Fragment>
+                  ))}
+                </div>
+                {gameOver && (
+                  <div className="flex items-center justify-center mt-8">
+                    <Button
+                      variant="secondary"
+                      size="lg"
+                      onClick={() => {
+                        // animateProgress(); // Temporary
+                        setShowModal(true);
+                      }}
+                      className="animate-fade-in"
+                    >
+                      View Results
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
           </div>
 
@@ -425,7 +461,6 @@ export default function PlayingField(props: Props) {
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <>
-                    {gameOver && <p>Final score: ${gameState.totalScore}</p>}
                     <SortableContext
                       items={playerHand.map((item) => item.id)}
                       strategy={horizontalListSortingStrategy}
@@ -475,6 +510,95 @@ export default function PlayingField(props: Props) {
           </div>
         </div>
       </div>
+
+      <Dialog open={showModal} onOpenChange={setShowModal}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-center text-2xl">
+              {progress === 100 && <>Your Results 🤩</>}
+            </DialogTitle>
+          </DialogHeader>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-6 py-4"
+          >
+            <div className="space-y-2">
+              {progress !== 100 && (
+                <p className="text-sm text-muted-foreground text-center">
+                  Evaluating your performance...
+                </p>
+              )}
+              <Progress value={progress} className="h-2" />
+            </div>
+
+            <AnimatePresence>
+              {progress === 100 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                  className="space-y-4"
+                >
+                  <LiveScore className="flex flex-col gap-4" title={'Final Score'}>
+                    <>
+                      <>
+                        {Array.from({ length: gridSize }, (_, index) => (
+                          <motion.div
+                            key={`col-${index}`}
+                            className="text-center font-semibold"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                          >
+                            <p className="flex items-center justify-between gap-2 text-sm">
+                              <span>Column {index + 1}: </span>
+                              <span>{evaluateColumn(grid, index).name}</span>
+                              <span>${evaluateColumn(grid, index).points}</span>
+                            </p>
+                          </motion.div>
+                        ))}
+                      </>
+                      <Separator />
+                      <>
+                        {grid.map((_, index) => (
+                          <motion.div
+                            key={`row-${index}`}
+                            className="text-center font-semibold"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                          >
+                            <p className="flex items-center justify-between gap-2 text-sm">
+                              <span>Row {index + 1} </span>
+                              <span>{evaluateRow(grid, index).name}</span>
+                              <span>${evaluateRow(grid, index).points}</span>
+                            </p>
+                          </motion.div>
+                        ))}
+                      </>
+                      <>
+                        <Separator />
+                        <>
+                          <motion.div
+                            className="text-center font-semibold"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                          >
+                            <p className="flex items-center justify-between gap-2 text-sm">
+                              <span>Total Score</span>
+                              <span>${gameState.totalScore}</span>
+                            </p>
+                          </motion.div>
+                        </>
+                      </>
+                    </>
+                  </LiveScore>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </DialogContent>
+      </Dialog>
 
       <DragOverlay>
         {activeDrag ? (
