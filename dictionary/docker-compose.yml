@@ -1,0 +1,11 @@
+services:
+  dictionary:
+    image: annabelle-dictionary
+    container_name: annabelle-dictionary
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      AWS_LAMBDA_FUNCTION_NAME: "lambda_function"
+    ports:
+      - "9000:8080"
