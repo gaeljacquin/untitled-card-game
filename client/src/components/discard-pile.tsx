@@ -1,7 +1,7 @@
 'use client';
 
+import { ABCards } from '@annabelle/shared/core/card';
 import { IABModeType } from '@annabelle/shared/core/mode';
-import { ABCards } from '@annabelle/shared/core/word';
 import { AnimatePresence, motion } from 'framer-motion';
 import ABCardComp from '@/components/ab-card';
 import { cn } from '@/lib/utils';
