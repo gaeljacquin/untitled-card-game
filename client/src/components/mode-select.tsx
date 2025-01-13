@@ -5,14 +5,9 @@ import Link from 'next/link';
 import { ABMode } from '@annabelle/shared/core/mode';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
+import miscStore from '@/stores/misc';
 
 type Props = {
   selectMode: boolean;
@@ -23,6 +18,7 @@ type Props = {
 
 export default function ModeSelect(props: Props) {
   const { selectMode, openSelectMode, newGameGradient, newGameHoverGradient } = props;
+  const { askRtfm, muteAskRtfm } = miscStore();
   const [anyButtonClicked, setAnyButtonClicked] = useState(false);
   const [clickedButton, setClickedButton] = useState<string>();
   const modes = ABMode.getModes();
@@ -40,11 +36,6 @@ export default function ModeSelect(props: Props) {
           <DialogTitle className={cn('text-center', anyButtonClicked && 'text-white/70')}>
             Select Mode
           </DialogTitle>
-          <DialogDescription
-            className={cn('text-center text-white/80', anyButtonClicked && 'text-white/70')}
-          >
-            Fill a given grid with the best poker hands!
-          </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col items-center justify-center gap-8">
           {modes.map((item: ABMode) => (
@@ -61,6 +52,9 @@ export default function ModeSelect(props: Props) {
                   newGameHoverGradient
                 )}
                 onClick={() => {
+                  if (askRtfm) {
+                    muteAskRtfm();
+                  }
                   setAnyButtonClicked(true);
                   setClickedButton(item.slug);
                 }}

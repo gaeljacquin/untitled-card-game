@@ -4,10 +4,13 @@ import { devtools, persist } from 'zustand/middleware';
 type MiscStore = {
   audioPlayerVisible: boolean;
   toggleAudioPlayerVisibility: () => void;
+  askRtfm: boolean;
+  muteAskRtfm: () => void;
 };
 
 const initialState = {
   audioPlayerVisible: true,
+  askRtfm: true,
 };
 
 const miscStore = create(
@@ -17,6 +20,9 @@ const miscStore = create(
       getMisc: () => get(),
       toggleAudioPlayerVisibility: () => {
         set({ audioPlayerVisible: !get().audioPlayerVisible });
+      },
+      muteAskRtfm: () => {
+        set({ askRtfm: false });
       },
     })),
     {
