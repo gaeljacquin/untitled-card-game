@@ -6,10 +6,12 @@ const AnimatedLogo = dynamic(() => import('@/components/animated-logo'), {
   ssr: false,
 });
 
-const AnimatedLogoDynamic = ({ logo, loop, autoplay = false }: AnimatedLogoProps) => {
+const AnimatedLogoDynamic = (props: AnimatedLogoProps) => {
+  const { loop, autoplay = false } = props;
+
   return (
     <>
-      <AnimatedLogo logo={logo} loop={loop} autoplay={autoplay} />
+      <AnimatedLogo loop={loop} autoplay={autoplay} />
       <span className="sr-only">{appinfo.title}</span>
     </>
   );

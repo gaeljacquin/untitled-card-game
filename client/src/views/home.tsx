@@ -29,7 +29,7 @@ export default function Home() {
                 'bg-transparent'
               )}
             >
-              <AnimatedLogoDynamic logo={'game'} loop autoplay />
+              <AnimatedLogoDynamic loop autoplay />
             </div>
           </motion.div>
 
