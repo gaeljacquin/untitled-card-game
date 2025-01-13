@@ -4,8 +4,6 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { SettingsStore } from '@/types/settings';
 
-export const cardBacks = ['/red.webp', '/yellow.webp', '/blue.webp'];
-
 export const cardFronts = [
   { id: 'default', label: 'Default', component: null, className: '' },
   { id: 'circle', label: 'Circle', component: Circle, className: '' },
@@ -39,7 +37,6 @@ export const cardFronts = [
 });
 
 export const initialSettings = {
-  cardBack: 0,
   cardFront: 0,
   previewCard: {
     suit: 'hearts',

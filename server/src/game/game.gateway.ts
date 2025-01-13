@@ -52,7 +52,7 @@ export class GameGateway
     console.info(`Message received from client ${client.id}: ${payload}`);
     const { modeSlug } = payload;
     const mode = ABMode.getMode(modeSlug);
-    const deck = new ABDeck(mode);
+    const deck = new ABDeck();
     const seededCards = generateSeed(deck.getCards(), mode.gridSize);
     const abGame = new ABGame(mode);
     abGame.setSeededCards(seededCards);

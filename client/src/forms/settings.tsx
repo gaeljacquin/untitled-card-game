@@ -7,19 +7,18 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { PopoverClose } from '@radix-ui/react-popover';
 import { Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { CardBackPreview, CardFrontPreview } from '@/components/ab-card-preview';
+import { CardFrontPreview } from '@/components/ab-card-preview';
 import Placeholder from '@/components/placeholder';
 import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import settingsStore, { cardBacks, cardFronts, initialSettings } from '@/stores/settings';
+import settingsStore, { cardFronts, initialSettings } from '@/stores/settings';
 import { FormData, settingsSchema } from '@/types/settings';
 
 export default function Settings() {
@@ -68,183 +67,136 @@ export default function Settings() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className={cn('space-y-8')}>
-        <>
-          <FormLabel className="text-base">Card front</FormLabel>
-          <div className="flex flex-col gap-4 sm:flex-row sm:gap-7 mb-12">
-            <div className="flex flex-col flex-1 gap-4">
-              <div className="">
+        <div className="flex flex-col gap-4 sm:flex-row sm:gap-7 mb-12">
+          <div className="flex flex-col flex-1 gap-4">
+            <div className="">
+              <FormField
+                control={form.control}
+                name="cardFront"
+                render={({ field }) => (
+                  <FormItem className="space-y-4">
+                    <Command className="bg-black/50 border-white/20">
+                      <CommandList className="w-full mt-2 h-auto">
+                        <CommandGroup>
+                          {cardFronts.map((item, index) => {
+                            return (
+                              <CommandItem
+                                className="flex items-center justify-between text-white aria-selected:text-black text-md"
+                                key={item.id + '-' + index}
+                                value={item.id}
+                                onSelect={() => {
+                                  form.setValue('cardFront', index);
+                                  updateSettings({
+                                    ...settings,
+                                    cardFront: index,
+                                  });
+                                }}
+                              >
+                                <span>{item.label}</span>
+                                <Check
+                                  className={cn(
+                                    'mr-2 h-4 w-4',
+                                    field.value !== undefined &&
+                                      field.value !== null &&
+                                      index === field.value
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
+                                  )}
+                                />
+                              </CommandItem>
+                            );
+                          })}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-center">
+              <div className="flex flex-row items-center justify-center gap-4 p-4 rounded-xl bg-black/50 border-white/20 w-full">
+                <FormLabel className="text-base">
+                  <div className="flex h-5 items-center justify-between space-x-2 text-sm">
+                    <div className="text-center">1</div>
+                    <div className="text-center">11</div>
+                  </div>
+                  <Separator />
+                  <div className="flex h-5 items-center justify-between space-x-4 text-sm">
+                    <div className="text-center">12</div>
+                    <div className="text-center">13</div>
+                  </div>
+                </FormLabel>
                 <FormField
                   control={form.control}
-                  name="cardFront"
+                  name="labelNotValue"
                   render={({ field }) => (
-                    <FormItem className="space-y-4">
-                      <Command className="bg-black/50 border-white/20">
-                        <CommandList className="w-full mt-2 h-auto">
-                          <CommandGroup>
-                            {cardFronts.map((item, index) => {
+                    <FormItem className="flex items-center">
+                      <FormControl>
+                        <Switch
+                          className="data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-rose-600 items-center rounded-full transition-colors"
+                          checked={field.value}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            updateSettings({
+                              ...settings,
+                              labelNotValue: checked,
+                            });
+                          }}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormLabel className="text-base">
+                  <div className="flex h-5 items-center justify-between space-x-2 text-sm">
+                    <div className="text-center">(A)ce</div>
+                    <div className="text-center">(J)ack</div>
+                  </div>
+                  <Separator />
+                  <div className="flex h-5 items-center justify-between space-x-4 text-sm">
+                    <div className="text-center">(Q)ueen</div>
+                    <div className="text-center">(K)ing</div>
+                  </div>
+                </FormLabel>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col flex-1 items-center justify-center p-4 rounded-xl">
+            <CardFrontPreview card={previewCard} valueNotLabel={!settings.labelNotValue} />
+          </div>
+
+          <div className="flex flex-col flex-1 gap-4">
+            <div className="">
+              <FormField
+                control={form.control}
+                name="previewCard.rank"
+                render={({ field }) => (
+                  <FormItem className="flex">
+                    <Command className="bg-black/50 border-white/20">
+                      <CommandList className="w-full mt-2">
+                        <CommandGroup>
+                          {Rank.getAllValues()
+                            .filter(
+                              (item) =>
+                                item.id === 'ace' ||
+                                item.id === 'queen' ||
+                                item.id === 'ten' ||
+                                item.id === 'two'
+                            )
+                            .map((item, index) => {
                               return (
                                 <CommandItem
                                   className="flex items-center justify-between text-white aria-selected:text-black text-md"
                                   key={item.id + '-' + index}
                                   value={item.id}
                                   onSelect={() => {
-                                    form.setValue('cardFront', index);
-                                    updateSettings({
-                                      ...settings,
-                                      cardFront: index,
-                                    });
-                                  }}
-                                >
-                                  <span>{item.label}</span>
-                                  <Check
-                                    className={cn(
-                                      'mr-2 h-4 w-4',
-                                      field.value !== undefined &&
-                                        field.value !== null &&
-                                        index === field.value
-                                        ? 'opacity-100'
-                                        : 'opacity-0'
-                                    )}
-                                  />
-                                </CommandItem>
-                              );
-                            })}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-center">
-                <div className="flex flex-row items-center justify-center gap-4 p-4 rounded-xl bg-black/50 border-white/20 w-full">
-                  <FormLabel className="text-base">
-                    <div className="flex h-5 items-center justify-between space-x-2 text-sm">
-                      <div className="text-center">1</div>
-                      <div className="text-center">11</div>
-                    </div>
-                    <Separator />
-                    <div className="flex h-5 items-center justify-between space-x-4 text-sm">
-                      <div className="text-center">12</div>
-                      <div className="text-center">13</div>
-                    </div>
-                  </FormLabel>
-                  <FormField
-                    control={form.control}
-                    name="labelNotValue"
-                    render={({ field }) => (
-                      <FormItem className="flex items-center">
-                        <FormControl>
-                          <Switch
-                            className="data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-rose-600 items-center rounded-full transition-colors"
-                            checked={field.value}
-                            onCheckedChange={(checked) => {
-                              field.onChange(checked);
-                              updateSettings({
-                                ...settings,
-                                labelNotValue: checked,
-                              });
-                            }}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormLabel className="text-base">
-                    <div className="flex h-5 items-center justify-between space-x-2 text-sm">
-                      <div className="text-center">(A)ce</div>
-                      <div className="text-center">(J)ack</div>
-                    </div>
-                    <Separator />
-                    <div className="flex h-5 items-center justify-between space-x-4 text-sm">
-                      <div className="text-center">(Q)ueen</div>
-                      <div className="text-center">(K)ing</div>
-                    </div>
-                  </FormLabel>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col flex-1 items-center justify-center p-4 rounded-xl">
-              <CardFrontPreview card={previewCard} valueNotLabel={!settings.labelNotValue} />
-            </div>
-
-            <div className="flex flex-col flex-1 gap-4">
-              <div className="">
-                <FormField
-                  control={form.control}
-                  name="previewCard.rank"
-                  render={({ field }) => (
-                    <FormItem className="flex">
-                      <Command className="bg-black/50 border-white/20">
-                        <CommandList className="w-full mt-2">
-                          <CommandGroup>
-                            {Rank.getAllValues()
-                              .filter(
-                                (item) =>
-                                  item.id === 'ace' ||
-                                  item.id === 'queen' ||
-                                  item.id === 'ten' ||
-                                  item.id === 'two'
-                              )
-                              .map((item, index) => {
-                                return (
-                                  <CommandItem
-                                    className="flex items-center justify-between text-white aria-selected:text-black text-md"
-                                    key={item.id + '-' + index}
-                                    value={item.id}
-                                    onSelect={() => {
-                                      form.setValue('previewCard.rank', item.id);
-                                      updateSettings({
-                                        ...settings,
-                                        previewCard: {
-                                          ...settings.previewCard,
-                                          rank: item.id,
-                                        },
-                                      });
-                                    }}
-                                  >
-                                    <span>{item.label}</span>
-                                    <Check
-                                      className={cn(
-                                        'mr-2 h-4 w-4',
-                                        field.value && item.id === field.value
-                                          ? 'opacity-100'
-                                          : 'opacity-0'
-                                      )}
-                                    />
-                                  </CommandItem>
-                                );
-                              })}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div>
-                <FormField
-                  control={form.control}
-                  name="previewCard.suit"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Command className="bg-black/50 border-white/20">
-                        <CommandList className="w-full mt-2 h-auto">
-                          <CommandGroup>
-                            {Suit.getAllValues().map((item, index) => {
-                              return (
-                                <CommandItem
-                                  className="flex items-center justify-between text-white aria-selected:text-black text-md"
-                                  key={item.id + '-' + index}
-                                  value={item.id}
-                                  onSelect={() => {
-                                    form.setValue('previewCard.suit', item.id);
+                                    form.setValue('previewCard.rank', item.id);
                                     updateSettings({
                                       ...settings,
                                       previewCard: {
                                         ...settings.previewCard,
-                                        suit: item.id,
+                                        rank: item.id,
                                       },
                                     });
                                   }}
@@ -261,64 +213,60 @@ export default function Settings() {
                                 </CommandItem>
                               );
                             })}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </FormItem>
-                  )}
-                />
-              </div>
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div>
+              <FormField
+                control={form.control}
+                name="previewCard.suit"
+                render={({ field }) => (
+                  <FormItem>
+                    <Command className="bg-black/50 border-white/20">
+                      <CommandList className="w-full mt-2 h-auto">
+                        <CommandGroup>
+                          {Suit.getAllValues().map((item, index) => {
+                            return (
+                              <CommandItem
+                                className="flex items-center justify-between text-white aria-selected:text-black text-md"
+                                key={item.id + '-' + index}
+                                value={item.id}
+                                onSelect={() => {
+                                  form.setValue('previewCard.suit', item.id);
+                                  updateSettings({
+                                    ...settings,
+                                    previewCard: {
+                                      ...settings.previewCard,
+                                      suit: item.id,
+                                    },
+                                  });
+                                }}
+                              >
+                                <span>{item.label}</span>
+                                <Check
+                                  className={cn(
+                                    'mr-2 h-4 w-4',
+                                    field.value && item.id === field.value
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
+                                  )}
+                                />
+                              </CommandItem>
+                            );
+                          })}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
-        </>
-
-        <Separator />
-
-        <>
-          <div className="mt-7">
-            <FormLabel className="text-base">Card back</FormLabel>
-          </div>
-          <div className="flex flex-col items-center mb-16">
-            <FormField
-              control={form.control}
-              name="cardBack"
-              render={({ field }) => (
-                <FormItem className="space-y-4">
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={(value) => {
-                        field.onChange(parseInt(value));
-                        updateSettings({
-                          ...settings,
-                          cardBack: parseInt(value),
-                        });
-                      }}
-                      defaultValue={field.value.toString()}
-                      className="flex flex-col items-center sm:flex-row gap-7 mx-auto"
-                    >
-                      {cardBacks.map((item, index) => (
-                        <div key={item + '-' + index} className="relative">
-                          <RadioGroupItem
-                            value={index.toString()}
-                            className="sr-only"
-                            id={'card-back-' + (index + 1)}
-                          />
-                          <label htmlFor={'card-back-' + (index + 1)}>
-                            <CardBackPreview
-                              cardBack={item}
-                              index={index}
-                              isSelected={field.value === index}
-                            />
-                          </label>
-                        </div>
-                      ))}
-                    </RadioGroup>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-        </>
+        </div>
 
         <div className="flex items-center justify-center">
           <Popover>

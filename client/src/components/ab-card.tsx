@@ -29,7 +29,7 @@ export default function ABCardComp(props: Props) {
   const { cardFront: cardFrontIndex } = settingsStore();
   const cardFront = cardFronts[cardFrontIndex];
 
-  // (2)
+  // Part of the race condition fix
   if (!card || !card.suit) {
     return null;
   }
@@ -106,7 +106,7 @@ export default function ABCardComp(props: Props) {
                   cardColor.letter,
                   'text-xs sm:text-4xl',
                   'flex-col-1 items-center justify-center',
-                  suitIconFill && !suit.isRed && '-mt-4' // (1)
+                  suitIconFill && !suit.isRed && '-mt-4' // Letter spacing is off when suit is set to clubs or spades.
                 )}
               >
                 <span
@@ -201,7 +201,7 @@ export default function ABCardComp(props: Props) {
   //                 cardColor.letter,
   //                 'text-xs sm:text-md',
   //                 'flex-col-1 items-center justify-center',
-  //                 suitIconFill && !suit.isRed && '-mt-4' // (1)
+  //                 suitIconFill && !suit.isRed && '-mt-4' //
   //               )}
   //             >
   //               <span className={cn('flex items-center justify-center')}>
@@ -242,8 +242,3 @@ export default function ABCardComp(props: Props) {
     </motion.div>
   );
 }
-
-/* Notes
-(1) Letter spacing is off when suit is set to clubs or spades.
-(2) Fixes race condition in part
- */

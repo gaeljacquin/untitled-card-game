@@ -1,9 +1,8 @@
 import * as z from 'zod';
-import { cardBacks, cardFronts } from '@/stores/settings';
+import { cardFronts } from '@/stores/settings';
 import { Hydrate } from '@/types/hydrate';
 
 export const settingsSchema = z.object({
-  cardBack: z.number().min(0).max(cardBacks.length),
   cardFront: z.number().min(0).max(cardFronts.length),
   previewCard: z.object({
     suit: z.string(),
