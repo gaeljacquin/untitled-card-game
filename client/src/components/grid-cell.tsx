@@ -61,7 +61,7 @@ export function GridCell(props: Props) {
             stiffness: 300,
             damping: 30,
           }}
-          className={cn('p-0 sm:p-1', cell.card.played && 'brightness-50')}
+          className={cn('p-0 sm:p-1', cell.card.played && 'brightness-90 hover:brightness-95')}
         >
           <ABCardComp card={cell.card} modeType={modeType} rankLabel={rankLabel} isDragging />
         </motion.div>

@@ -381,16 +381,63 @@ export default function PlayingField(props: Props) {
               {description}
             </CardDescription>
           )}
-          <CardDescription className="text-md bg-white/70 text-rose-800 p-2">
-            The game is currently in beta. Please reload the page if you get stuck or the game
-            crashes.
-          </CardDescription>
         </CardHeader>
 
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-6">
           <div className="sm:col-span-2">
-            <div className="h-auto bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md">
-              <DiscardPile cards={discardPile} modeType={type} rankLabel={!rankLabel} />
+            <div className="h-auto border border-4 border-dashed rounded-2xl p-4">
+              <div className="flex items-center justify-center gap-2 mb-2 sm:hidden">
+                <h2 className="text-sm text-center font-bold">Cards in Hand</h2>
+              </div>
+              <div className={playerHandClass}>
+                {isDealing ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <>
+                    <div className="flex items-center justify-center gap-2 mb-2 hidden sm:block">
+                      <h2 className="text-sm text-center font-bold">Cards in Hand</h2>
+                    </div>
+                    <SortableContext
+                      items={playerHand.map((item) => item.id)}
+                      strategy={horizontalListSortingStrategy}
+                    >
+                      {playerHand.map((item) => (
+                        <SortableItem key={item.id} id={item.id}>
+                          <ABCardComp
+                            key={`card-${item.id}`}
+                            card={item}
+                            rankLabel={!rankLabel}
+                            modeType={type}
+                            hover={true}
+                            isDragging
+                            inGrid={false}
+                          />
+                        </SortableItem>
+                      ))}
+                    </SortableContext>
+                  </>
+                )}
+              </div>
+
+              <div className="flex items-center justify-center">
+                <div className="flex flex-col w-full">
+                  {gameOver ? (
+                    <Button onClick={playAgain} disabled={progress !== 100}>
+                      Play Again
+                    </Button>
+                  ) : (
+                    <>
+                      <Separator className="my-4" />
+                      <Button
+                        onClick={handleDiscard}
+                        disabled={playerHand.length !== 1 || isDealing}
+                      >
+                        {displayDiscardButtonText(playerHand[0])}
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -643,54 +690,7 @@ export default function PlayingField(props: Props) {
           </div>
 
           <div className="sm:col-span-2">
-            <div className="h-auto border border-4 border-dashed rounded-2xl p-4">
-              <div className={playerHandClass}>
-                {isDealing ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <>
-                    <SortableContext
-                      items={playerHand.map((item) => item.id)}
-                      strategy={horizontalListSortingStrategy}
-                    >
-                      {playerHand.map((item) => (
-                        <SortableItem key={item.id} id={item.id}>
-                          <ABCardComp
-                            key={`card-${item.id}`}
-                            card={item}
-                            rankLabel={!rankLabel}
-                            modeType={type}
-                            hover={true}
-                            isDragging
-                            inGrid={false}
-                          />
-                        </SortableItem>
-                      ))}
-                    </SortableContext>
-                  </>
-                )}
-              </div>
-
-              <div className="flex items-center justify-center">
-                <div className="flex flex-col w-full">
-                  {gameOver ? (
-                    <Button onClick={playAgain} disabled={progress !== 100}>
-                      Play Again
-                    </Button>
-                  ) : (
-                    <>
-                      <Separator className="my-4" />
-                      <Button
-                        onClick={handleDiscard}
-                        disabled={playerHand.length !== 1 || isDealing}
-                      >
-                        {displayDiscardButtonText(playerHand[0])}
-                      </Button>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
+            <DiscardPile cards={discardPile} modeType={type} rankLabel={!rankLabel} />
           </div>
         </div>
       </div>

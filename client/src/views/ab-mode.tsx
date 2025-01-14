@@ -28,7 +28,9 @@ export default function ABMode(props: Props) {
       points_final: number;
     };
   } | null>(null);
-  const playerHandClass = cn('grid grid-rows-1 sm:grid-cols-1 gap-2 md:gap-4 justify-items-center');
+  const playerHandClass = cn(
+    'flex flex-row flex-wrap sm:flex-col gap-2 sm:gap-4 items-center justify-center'
+  );
 
   const wsConnect = () => {
     socket.on('connect', () => {
