@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 # Function to copy environment files
 copy_env_files() {
@@ -29,7 +29,7 @@ start_services() {
     if ! command -v docker-compose &> /dev/null; then
         echo "❌ docker-compose is not installed"
         exit 1
-    }
+    fi
 
     # Start server services
     echo "Starting server containers..."
@@ -42,12 +42,10 @@ start_services() {
         echo "❌ Failed to start server containers"
         exit 1
     fi
-    cd ..
 
     # Start client services
     echo "Starting client containers..."
-    cd client
-    docker-compose up -d
+    docker-compose -f client/docker-compose.yml up -d
     if [ $? -eq 0 ]; then
         echo "✓ Client containers started successfully"
     else

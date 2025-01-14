@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 # Function to start Docker services
 start_services() {
@@ -8,7 +8,7 @@ start_services() {
     if ! command -v docker-compose &> /dev/null; then
         echo "❌ docker-compose is not installed"
         exit 1
-    }
+    fi # Fixed closing brace to fi
 
     # Start server services
     echo "Starting server containers..."

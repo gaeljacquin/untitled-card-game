@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 # Colors for output
 BLUE='\033[0;34m'
