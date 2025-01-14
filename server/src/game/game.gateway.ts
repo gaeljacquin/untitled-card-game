@@ -83,7 +83,6 @@ export class GameGateway
     if (gameOver) {
       emit = {
         gameOver,
-        abResult: null,
       };
     } else {
       const abCards = updatedABGame.dealHand(updatedABGame.abDiscards.length);

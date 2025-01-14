@@ -21,13 +21,6 @@ export default function ABMode(props: Props) {
   const socket = socketInit();
   const [abCards, setABCards] = useState<ABCards>([]);
   const [abGameOver, setABGameOver] = useState<boolean>(false);
-  const [abResult, setABResult] = useState<{
-    [key: string]: {
-      word: string;
-      match: string;
-      points_final: number;
-    };
-  } | null>(null);
   const playerHandClass = cn(
     'flex flex-row flex-wrap sm:flex-col gap-2 sm:gap-4 items-center justify-center'
   );
@@ -47,7 +40,6 @@ export default function ABMode(props: Props) {
 
       if (gameOver) {
         setABGameOver(true);
-        setABResult(abResult);
       } else {
         setABCards(abCards);
       }
@@ -90,7 +82,6 @@ export default function ABMode(props: Props) {
           playerHandClass={playerHandClass}
           handleNextRound={handleNextRound}
           gameOver={abGameOver}
-          abResult={abResult}
           initGame={initGame}
           setABGameOver={setABGameOver}
         />

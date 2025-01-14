@@ -47,13 +47,6 @@ type Props = {
   gridClass: string;
   playerHandClass: string;
   gameOver?: boolean;
-  abResult: {
-    [key: string]: {
-      word: string;
-      match: string;
-      points_final: number;
-    };
-  } | null;
   handleNextRound: (arg0: { [key: string]: unknown }) => void;
   initGame: (arg0: string) => void;
   setABGameOver: (arg0: boolean) => void;
