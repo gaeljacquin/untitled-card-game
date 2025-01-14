@@ -4,7 +4,7 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { SettingsStore } from '@/types/settings';
 
-export const cardFronts = [
+export const abDesigns = [
   { id: 'default', label: 'Default', component: null, className: '' },
   { id: 'circle', label: 'Circle', component: Circle, className: '' },
   { id: 'square', label: 'Square', component: Square, className: '' },
@@ -37,13 +37,13 @@ export const cardFronts = [
 });
 
 export const initialSettings = {
-  cardFront: 0,
+  abDesignIndex: 0,
   previewCard: {
     suit: 'hearts',
     rank: 'ace',
     letter: 'B',
   },
-  labelNotValue: true,
+  rankLabel: true,
   rankSwitchLetter: false,
   invertColors: false,
 };

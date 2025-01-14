@@ -172,11 +172,11 @@
     @apply top-0 right-0 flex fixed md:backdrop-opacity-10 md:bg-black/40 md:text-white md:max-w-[400px] md:top-4 md:right-4;
   }
 
-  .header-text-uwu {
+  .header-text-ab {
     @apply text-center mb-8;
   }
 
-  .footer-spacing-uwu {
+  .footer-spacing-ab {
     @apply mt-20;
   }
 }

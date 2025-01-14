@@ -1,5 +1,5 @@
 // Fisher-Yates shuffle
-export function shuffler(list: unknown[]) {
+export function fyshuffle(list: unknown[]) {
   const shuffled = [...list];
 
   for (let i = shuffled.length - 1; i > 0; i--) {

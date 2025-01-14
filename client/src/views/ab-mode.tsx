@@ -77,7 +77,7 @@ export default function ABMode(props: Props) {
         initial={{ scale: 0.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="header-text-uwu"
+        className="header-text-ab"
       >
         <BackgroundLogo />
 
@@ -93,7 +93,7 @@ export default function ABMode(props: Props) {
           setABGameOver={setABGameOver}
         />
 
-        <div className="flex flex-col items-center justify-center gap-4 footer-spacing-uwu">
+        <div className="flex flex-col items-center justify-center gap-4 footer-spacing-ab">
           {process.env.NODE_ENV === 'development' && (
             <Button variant="destructive" onClick={() => setABGameOver(true)}>
               Simulate Game Over

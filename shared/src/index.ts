@@ -8,4 +8,5 @@ export * from './core/deck';
 export * from './constants/suit-icon';
 export * from './constants/empty-hand';
 
-export * from './functions/shufflers';
+export * from './functions/shuffle';
+export * from './functions/evaluate';

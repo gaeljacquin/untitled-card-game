@@ -1,15 +1,15 @@
 import * as z from 'zod';
-import { cardFronts } from '@/stores/settings';
+import { abDesigns } from '@/stores/settings';
 import { Hydrate } from '@/types/hydrate';
 
 export const settingsSchema = z.object({
-  cardFront: z.number().min(0).max(cardFronts.length),
+  abDesignIndex: z.number().min(0).max(abDesigns.length),
   previewCard: z.object({
     suit: z.string(),
     rank: z.string(),
     letter: z.string().min(1).max(1),
   }),
-  labelNotValue: z.boolean(),
+  rankLabel: z.boolean(),
   invertColors: z.boolean(),
 });
 

@@ -49,24 +49,15 @@ export default function AudioControls() {
         className={cn(
           'absolute left-1/2 transform -translate-x-1/2 bg-black/30 backdrop-filter backdrop-blur-lg text-white py-1 px-9 rounded-t-md focus:outline-none',
           'transition-all duration-300 ease-in-out',
-          audioPlayerVisible ? 'translate-y-0 -top-8' : 'translate-y-full -top-0.5 sm:-top-4'
+          audioPlayerVisible ? 'translate-y-0 -top-8' : 'translate-y-full -top-0.5 sm:-top-4',
+          isHome ? 'text-white' : 'text-transparent hover:text-white'
         )}
         aria-label={audioPlayerVisible ? 'Hide audio player' : 'Show audio player'}
       >
         {audioPlayerVisible ? (
-          <ChevronDown
-            className={cn(
-              'w-6 h-6',
-              isHome ? 'text-white animate-bounce' : 'text-transparent hover:text-white'
-            )}
-          />
+          <ChevronDown className={cn('w-6 h-6', isHome && 'animate-bounce')} />
         ) : (
-          <ChevronUp
-            className={cn(
-              'w-6 h-6',
-              isHome ? 'text-white animate-pulse' : 'text-transparent hover:text-white'
-            )}
-          />
+          <ChevronUp className={cn('w-6 h-6', isHome && 'animate-pulse')} />
         )}
       </button>
       <div
@@ -77,8 +68,10 @@ export default function AudioControls() {
         )}
       >
         <div className="absolute left-0 flex-shrink-0 mr-4 hidden sm:block pointer-events-none">
-          <p className="text-md font-semibold truncate">{track.title ?? ''}</p>
-          <p className="text-sm text-white/60 truncate">{track.artist ?? ''}</p>
+          <p className="text-sm text-clip sm:text-md font-semibold truncate">{track.title ?? ''}</p>
+          <p className="text-xs text-clip sm:text-sm text-white/60 truncate">
+            {track.artist ?? ''}
+          </p>
         </div>
         <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-4">
           <Button

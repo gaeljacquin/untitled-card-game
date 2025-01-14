@@ -1,6 +1,6 @@
 'use client';
 
-import { IGridCell } from '@annabelle/shared/core/grid-cell';
+import { IABGridCell } from '@annabelle/shared/core/grid-cell';
 import { IABModeType } from '@annabelle/shared/core/mode';
 import { useDroppable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
@@ -9,17 +9,17 @@ import { BorderBeam } from '@/components/ui/border-beam';
 import { cn } from '@/lib/utils';
 
 interface Props {
-  cell: IGridCell;
+  cell: IABGridCell;
   modeType: IABModeType;
   gridSize: number;
   lockedCells: Set<string>;
   rowIndex: number;
   columnIndex: number;
-  valueNotLabel: boolean;
+  rankLabel: boolean;
 }
 
 export function GridCell(props: Props) {
-  const { cell, modeType, gridSize, lockedCells, rowIndex, columnIndex, valueNotLabel } = props;
+  const { cell, modeType, gridSize, lockedCells, rowIndex, columnIndex, rankLabel } = props;
   const droppable = {
     id: cell.id,
     data: {
@@ -63,12 +63,7 @@ export function GridCell(props: Props) {
           }}
           className={cn('p-0 sm:p-1', cell.card.played && 'brightness-50')}
         >
-          <ABCardComp
-            card={cell.card}
-            modeType={modeType}
-            valueNotLabel={valueNotLabel}
-            isDragging
-          />
+          <ABCardComp card={cell.card} modeType={modeType} rankLabel={rankLabel} isDragging />
         </motion.div>
       )}
       {shouldShowBorderBeam && (

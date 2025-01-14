@@ -12,7 +12,6 @@ import { ABGame } from '@annabelle/shared/dist/core/game';
 import { GameService } from '@/game/game.service';
 import { ABMode } from '@annabelle/shared/dist/core/mode';
 import { ABDeck } from '@annabelle/shared/dist/core/deck';
-import { ABCards } from '@annabelle/shared/dist/core/card';
 
 @WebSocketGateway({ cors })
 export class GameGateway
@@ -53,9 +52,9 @@ export class GameGateway
     const { modeSlug } = payload;
     const mode = ABMode.getMode(modeSlug);
     const deck = new ABDeck();
-    const seededCards = deck.generateSeed(mode.gridSize);
+    const abSeed = deck.generateSeed(mode.gridSize);
     const abGame = new ABGame(mode);
-    abGame.setSeededCards(seededCards);
+    abGame.setABSeed(abSeed);
     const abCards = abGame.dealHand(0);
 
     const emit = {
@@ -71,14 +70,14 @@ export class GameGateway
   @SubscribeMessage('game-next-round')
   async gameNextRound(client: Socket, payload: any): Promise<void> {
     console.info(`Message received from client ${client.id}: ${payload}`);
-    const { discardedABCard, newGrid } = payload;
+    const { abDiscard, newGrid } = payload;
     const abGame = this.abGameMap.get(client.id);
-    abGame.discardedABCards.push(discardedABCard);
+    abGame.abDiscards.push(abDiscard);
     abGame.grid = newGrid;
     this.abGameMap.set(client.id, abGame);
     const updatedABGame = this.abGameMap.get(client.id);
     const gridSize = updatedABGame.mode.gridSize;
-    const gameOver = updatedABGame.discardedABCards.length === gridSize;
+    const gameOver = updatedABGame.abDiscards.length === gridSize;
     let emit = {};
 
     if (gameOver) {
@@ -87,9 +86,7 @@ export class GameGateway
         abResult: null,
       };
     } else {
-      const abCards = updatedABGame.dealHand(
-        updatedABGame.discardedABCards.length,
-      );
+      const abCards = updatedABGame.dealHand(updatedABGame.abDiscards.length);
       emit = {
         abCards,
       };

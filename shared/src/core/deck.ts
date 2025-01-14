@@ -1,16 +1,16 @@
-import { shuffler } from '../functions/shufflers';
+import { fyshuffle } from '../functions/shuffle';
 import { ABCard, ABCards } from './card';
 import { Rank } from './rank';
 import { Suit } from './suit';
 
 interface IABDeck {
-  seededCards: ABCards[];
+  abSeed: ABCards[];
   getCards(): ABCards;
 }
 
 export class ABDeck implements IABDeck {
   private cards: ABCards = [];
-  public readonly seededCards: ABCards[] = [];
+  public readonly abSeed: ABCards[] = [];
 
   constructor() {
     this.cards = this.createDeck();
@@ -48,7 +48,7 @@ export class ABDeck implements IABDeck {
       throw new Error('Not enough cards for the requested grid size');
     }
 
-    const shuffledDeck = shuffler(cards) as ABCards;
+    const shuffledDeck = fyshuffle(cards) as ABCards;
     const cardsPerRow = gridSize + 1;
 
     // Create rows of sequential cards from the shuffled deck

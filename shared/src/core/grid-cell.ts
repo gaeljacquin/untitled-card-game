@@ -1,6 +1,6 @@
 import { ABCard } from './card';
 
-export interface IGridCell {
+export interface IABGridCell {
   id: string;
   rowIndex: number;
   columnIndex: number;

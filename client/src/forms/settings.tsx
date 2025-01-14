@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { PopoverClose } from '@radix-ui/react-popover';
 import { Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { CardFrontPreview } from '@/components/ab-card-preview';
+import ABCardPreviewComp from '@/components/ab-card-preview';
 import Placeholder from '@/components/placeholder';
 import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
@@ -18,7 +18,7 @@ import { Switch } from '@/components/ui/switch';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import settingsStore, { cardFronts, initialSettings } from '@/stores/settings';
+import settingsStore, { abDesigns, initialSettings } from '@/stores/settings';
 import { FormData, settingsSchema } from '@/types/settings';
 
 export default function Settings() {
@@ -72,23 +72,23 @@ export default function Settings() {
             <div className="">
               <FormField
                 control={form.control}
-                name="cardFront"
+                name="abDesignIndex"
                 render={({ field }) => (
                   <FormItem className="space-y-4">
                     <Command className="bg-black/50 border-white/20">
                       <CommandList className="w-full mt-2 h-auto">
                         <CommandGroup>
-                          {cardFronts.map((item, index) => {
+                          {abDesigns.map((item, index) => {
                             return (
                               <CommandItem
                                 className="flex items-center justify-between text-white aria-selected:text-black text-md"
                                 key={item.id + '-' + index}
                                 value={item.id}
                                 onSelect={() => {
-                                  form.setValue('cardFront', index);
+                                  form.setValue('abDesignIndex', index);
                                   updateSettings({
                                     ...settings,
-                                    cardFront: index,
+                                    abDesignIndex: index,
                                   });
                                 }}
                               >
@@ -128,7 +128,7 @@ export default function Settings() {
                 </FormLabel>
                 <FormField
                   control={form.control}
-                  name="labelNotValue"
+                  name="rankLabel"
                   render={({ field }) => (
                     <FormItem className="flex items-center">
                       <FormControl>
@@ -139,7 +139,7 @@ export default function Settings() {
                             field.onChange(checked);
                             updateSettings({
                               ...settings,
-                              labelNotValue: checked,
+                              rankLabel: checked,
                             });
                           }}
                         />
@@ -163,7 +163,7 @@ export default function Settings() {
           </div>
 
           <div className="flex flex-col flex-1 items-center justify-center p-4 rounded-xl">
-            <CardFrontPreview card={previewCard} valueNotLabel={!settings.labelNotValue} />
+            <ABCardPreviewComp card={previewCard} rankLabel={!settings.rankLabel} />
           </div>
 
           <div className="flex flex-col flex-1 gap-4">

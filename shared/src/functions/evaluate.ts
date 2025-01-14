@@ -1,18 +1,18 @@
 import { emptyHand } from '@/constants/empty-hand';
 import { ABCards } from '../core/card';
-import { IGridCell } from '../core/grid-cell';
+import { IABGridCell } from '../core/grid-cell';
 import { ABMode } from '../core/mode';
 
 class PokerHand {
   constructor(
     public readonly name: string,
     public readonly points: number,
-    public readonly rank: number,
+    public readonly rankValue: number,
     public readonly cards: ABCards
   ) {}
 }
 
-export function evaluatePokerHands(cards: ABCards): PokerHand {
+export function evaluateHand(cards: ABCards): PokerHand {
   if (cards.length === 0) {
     return new PokerHand('Empty Hand', 0, 0, []);
   }
@@ -137,9 +137,9 @@ export function evaluatePokerHands(cards: ABCards): PokerHand {
   return new PokerHand('High Card', 0, 1, cards);
 }
 
-export const evaluateRowHand = (grid: IGridCell[][], rowIndex: number) => {
+export const evaluateGridRow = (grid: IABGridCell[][], rowIndex: number) => {
   const rowCards = grid[rowIndex].map((cell) => cell.card).filter((card) => card !== null);
-  const result = evaluatePokerHands(rowCards);
+  const result = evaluateHand(rowCards);
   const name = result.name;
   const points = result.points;
 
@@ -149,9 +149,9 @@ export const evaluateRowHand = (grid: IGridCell[][], rowIndex: number) => {
   };
 };
 
-export const evaluateColumnHand = (grid: IGridCell[][], columnIndex: number) => {
+export const evaluateGridColumn = (grid: IABGridCell[][], columnIndex: number) => {
   const columnCards = grid.map((row) => row[columnIndex].card).filter((card) => card !== null);
-  const result = evaluatePokerHands(columnCards);
+  const result = evaluateHand(columnCards);
   const name = result.name;
   const points = result.points;
 
@@ -161,7 +161,7 @@ export const evaluateColumnHand = (grid: IGridCell[][], columnIndex: number) => 
   };
 };
 
-export const evaluateSpecialHand = (grid: IGridCell[][]) => {
+export const evaluateSpecialGridCells = (grid: IABGridCell[][]) => {
   const gridSize = grid.length;
 
   if (gridSize !== 4 && gridSize !== 5) {
@@ -190,7 +190,7 @@ export const evaluateSpecialHand = (grid: IGridCell[][]) => {
     return emptyHand;
   }
 
-  const result = evaluatePokerHands(cornerCards);
+  const result = evaluateHand(cornerCards);
 
   return {
     name: result.name,
@@ -199,7 +199,7 @@ export const evaluateSpecialHand = (grid: IGridCell[][]) => {
 };
 
 export const evaluateDiscardPile = (discardPile: ABCards) => {
-  const result = evaluatePokerHands(discardPile);
+  const result = evaluateHand(discardPile);
   const name = result.name;
   const points = result.points;
 
@@ -209,11 +209,7 @@ export const evaluateDiscardPile = (discardPile: ABCards) => {
   };
 };
 
-export const evaluateTotalPokerScore = (
-  grid: IGridCell[][],
-  mode: ABMode,
-  discardPile: ABCards
-) => {
+export const calculateScore = (grid: IABGridCell[][], mode: ABMode, discardPile: ABCards) => {
   const gridSize = grid.length;
   let score = 0;
   let numRowHands = 0;
@@ -222,13 +218,13 @@ export const evaluateTotalPokerScore = (
   let specialBonus = emptyHand;
 
   for (let row = 0; row < gridSize; row++) {
-    const rowEval = evaluateRowHand(grid, row);
+    const rowEval = evaluateGridRow(grid, row);
     score += rowEval.points;
     numRowHands += Math.min(Math.max(0, rowEval.points), 1);
   }
 
   for (let col = 0; col < gridSize; col++) {
-    const colEval = evaluateColumnHand(grid, col);
+    const colEval = evaluateGridColumn(grid, col);
     score += colEval.points;
     numColHands += Math.min(Math.max(0, colEval.points), 1);
   }
@@ -240,7 +236,7 @@ export const evaluateTotalPokerScore = (
   }
 
   if (numHands >= mode.minHandsSpecial) {
-    specialBonus = evaluateSpecialHand(grid);
+    specialBonus = evaluateSpecialGridCells(grid);
   }
 
   return { score, discardBonus, specialBonus, numRowHands, numColHands };

@@ -2,14 +2,16 @@
 
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { emptyHand } from '@annabelle/shared/constants/empty-hand';
+import { suitIconMap } from '@annabelle/shared/constants/suit-icon';
 import { ABCard, ABCards } from '@annabelle/shared/core/card';
-import { IGridCell } from '@annabelle/shared/core/grid-cell';
+import { IABGridCell } from '@annabelle/shared/core/grid-cell';
 import { ABMode } from '@annabelle/shared/core/mode';
+import { SuitId } from '@annabelle/shared/core/suit';
 import {
-  evaluateColumnHand,
-  evaluateRowHand,
-  evaluateTotalPokerScore,
-} from '@annabelle/shared/functions/checkers';
+  calculateScore,
+  evaluateGridColumn,
+  evaluateGridRow,
+} from '@annabelle/shared/functions/evaluate';
 import {
   DndContext,
   DragEndEvent,
@@ -87,8 +89,8 @@ export default function PlayingField(props: Props) {
   const [playerHand, setPlayerHand] = useState<ABCards>([]);
   const mode = ABMode.getMode(modeSlug)!;
   const { title, description, gridSize, type } = mode;
-  const { labelNotValue } = settingsStore();
-  const [grid, setGrid] = useState<IGridCell[][]>([]);
+  const { rankLabel } = settingsStore();
+  const [grid, setGrid] = useState<IABGridCell[][]>([]);
   const [activeDrag, setActiveDrag] = useState<ABCard | null>(null);
   const [discardPile, setDiscardPile] = useState<ABCards>([]);
   const [gameState, setGameState] = useState<GameState>(defaultGameState);
@@ -101,7 +103,7 @@ export default function PlayingField(props: Props) {
   const tabsRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState('grid');
 
-  const initializeGame = () => {
+  const insertCoin = () => {
     setTimeout(() => {
       abCards.forEach((card, index) => {
         setTimeout(() => {
@@ -115,7 +117,7 @@ export default function PlayingField(props: Props) {
     }, 500);
     setPlayerHand(abCards);
 
-    const newGrid: IGridCell[][] = Array(gridSize)
+    const newGrid: IABGridCell[][] = Array(gridSize)
       .fill(null)
       .map((_, rowIndex) =>
         Array(gridSize)
@@ -256,8 +258,8 @@ export default function PlayingField(props: Props) {
       return;
     }
 
-    const cardToDiscard = playerHand[0];
-    if (!cardToDiscard) {
+    const abDiscard = playerHand[0];
+    if (!abDiscard) {
       return;
     }
 
@@ -276,12 +278,12 @@ export default function PlayingField(props: Props) {
         ...cell,
         card: cell.card ? { ...cell.card, played: true } : null,
       }))
-    ) as IGridCell[][];
+    ) as IABGridCell[][];
 
     setGrid(newGrid);
-    setDiscardPile((prev) => [...prev, { ...cardToDiscard, faceUp: true }] as ABCards);
+    setDiscardPile((prev) => [...prev, { ...abDiscard, faceUp: true }] as ABCards);
 
-    await handleNextRound({ discardedABCard: cardToDiscard, newGrid });
+    await handleNextRound({ abDiscard: abDiscard, newGrid });
 
     setPlayerHand([]);
 
@@ -301,12 +303,28 @@ export default function PlayingField(props: Props) {
     setIsDealing(true);
     await initGame(modeSlug);
     setABGameOver(false);
-    initializeGame();
+    insertCoin();
     setDiscardPile([]);
   };
 
+  const displayDiscardButtonText = (lastCard: ABCard) => {
+    const rankValue = rankLabel ? lastCard?.rank.label : lastCard?.rank.value;
+    const SuitIcon = suitIconMap[lastCard?.suit.id as SuitId];
+
+    return (
+      <span className="flex w-full items-center justify-center">
+        Discard{' '}
+        {playerHand.length === 1 && (
+          <>
+            &rarr; {rankValue} <SuitIcon className={cn('ml-1 h-1 w-1 sm:h-2 sm:w-2')} />
+          </>
+        )}
+      </span>
+    );
+  };
+
   useEffect(() => {
-    initializeGame();
+    insertCoin();
   }, []);
 
   useEffect(() => {
@@ -341,7 +359,7 @@ export default function PlayingField(props: Props) {
 
   useEffect(() => {
     if (gameOver) {
-      const scores = evaluateTotalPokerScore(grid, mode, discardPile);
+      const scores = calculateScore(grid, mode, discardPile);
       setGameState((prev) => ({
         ...prev,
         score: scores.score,
@@ -372,7 +390,7 @@ export default function PlayingField(props: Props) {
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-6">
           <div className="sm:col-span-2">
             <div className="h-auto bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md">
-              <DiscardPile cards={discardPile} modeType={type} valueNotLabel={!labelNotValue} />
+              <DiscardPile cards={discardPile} modeType={type} rankLabel={!rankLabel} />
             </div>
           </div>
 
@@ -399,16 +417,6 @@ export default function PlayingField(props: Props) {
                   Score
                 </TabsTrigger>
               </TabsList>
-              {gameOver && (
-                <div
-                  className={cn(
-                    'flex items-center justify-center',
-                    'text-md bg-white/70 text-rose-800 p-2'
-                  )}
-                >
-                  Please reload the page to play a new round.
-                </div>
-              )}
               <TabsContent value="grid">
                 {!abCards || abCards.length === 0 ? (
                   <Placeholder />
@@ -421,11 +429,11 @@ export default function PlayingField(props: Props) {
                         <div key={`col-${colIndex}`} className={labelClass}>
                           <motion.div>
                             <span className="text-clip">
-                              {evaluateColumnHand(grid, colIndex).name}:
+                              {evaluateGridColumn(grid, colIndex).name}:
                             </span>
                             <br />
                             <span className="text-clip">
-                              ${evaluateColumnHand(grid, colIndex).points}
+                              ${evaluateGridColumn(grid, colIndex).points}
                             </span>
                           </motion.div>
                         </div>
@@ -436,11 +444,11 @@ export default function PlayingField(props: Props) {
                           <div className={labelClass}>
                             <motion.div className="mr-4">
                               <span className="text-clip">
-                                {evaluateRowHand(grid, rowIndex).name}:
+                                {evaluateGridRow(grid, rowIndex).name}:
                               </span>
                               <br />
                               <span className="text-clip">
-                                ${evaluateRowHand(grid, rowIndex).points}
+                                ${evaluateGridRow(grid, rowIndex).points}
                               </span>
                             </motion.div>
                           </div>
@@ -454,7 +462,7 @@ export default function PlayingField(props: Props) {
                               lockedCells={lockedCells}
                               rowIndex={rowIndex}
                               columnIndex={colIndex}
-                              valueNotLabel={!labelNotValue}
+                              rankLabel={!rankLabel}
                             />
                           ))}
                         </Fragment>
@@ -516,8 +524,8 @@ export default function PlayingField(props: Props) {
                                   >
                                     <p className="flex items-center justify-between gap-2 text-sm">
                                       <span>Column {index + 1}: </span>
-                                      <span>{evaluateColumnHand(grid, index).name}</span>
-                                      <span>${evaluateColumnHand(grid, index).points}</span>
+                                      <span>{evaluateGridColumn(grid, index).name}</span>
+                                      <span>${evaluateGridColumn(grid, index).points}</span>
                                     </p>
                                   </motion.div>
                                 ))}
@@ -535,8 +543,8 @@ export default function PlayingField(props: Props) {
                                   >
                                     <p className="flex items-center justify-between gap-2 text-sm">
                                       <span>Row {index + 1} </span>
-                                      <span>{evaluateRowHand(grid, index).name}</span>
-                                      <span>${evaluateRowHand(grid, index).points}</span>
+                                      <span>{evaluateGridRow(grid, index).name}</span>
+                                      <span>${evaluateGridRow(grid, index).points}</span>
                                     </p>
                                   </motion.div>
                                 ))}
@@ -650,7 +658,7 @@ export default function PlayingField(props: Props) {
                           <ABCardComp
                             key={`card-${item.id}`}
                             card={item}
-                            valueNotLabel={!labelNotValue}
+                            rankLabel={!rankLabel}
                             modeType={type}
                             hover={true}
                             isDragging
@@ -676,7 +684,7 @@ export default function PlayingField(props: Props) {
                         onClick={handleDiscard}
                         disabled={playerHand.length !== 1 || isDealing}
                       >
-                        Discard
+                        {displayDiscardButtonText(playerHand[0])}
                       </Button>
                     </>
                   )}
@@ -689,7 +697,7 @@ export default function PlayingField(props: Props) {
 
       <DragOverlay>
         {activeDrag ? (
-          <ABCardComp card={activeDrag} valueNotLabel={!labelNotValue} modeType={type} />
+          <ABCardComp card={activeDrag} rankLabel={!rankLabel} modeType={type} />
         ) : null}
       </DragOverlay>
     </DndContext>

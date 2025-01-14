@@ -15,27 +15,27 @@ export class ABGame implements IABGame {
   readonly mode: ABMode;
   public played: boolean;
   public won: boolean;
-  public seededCards: ABCards[];
-  public dealtABCardGroups: ABCards[];
-  public grid: Array<ABCards>;
-  public discardedABCards: ABCards;
+  public abSeed: ABCards[];
+  public abDeals: ABCards[];
+  public grid: ABCards[];
+  public abDiscards: ABCards;
   readonly createdAt: Date;
 
   constructor(mode: ABMode) {
     const gridSize = mode.gridSize;
     this.id = uuidv4();
     this.mode = mode;
-    this.seededCards = [];
-    this.dealtABCardGroups = Array.from({ length: gridSize }, () => Array(gridSize).fill([null]));
+    this.abSeed = [];
+    this.abDeals = Array.from({ length: gridSize }, () => Array(gridSize).fill([null]));
     this.grid = Array.from({ length: gridSize }, () => Array(gridSize).fill([null]));
-    this.discardedABCards = [];
+    this.abDiscards = [];
     this.played = false;
     this.won = false;
     this.createdAt = new Date();
   }
 
-  public setSeededCards(cards: ABCards[]) {
-    this.seededCards = cards;
+  public setABSeed(cards: ABCards[]) {
+    this.abSeed = cards;
   }
 
   public setPlayed() {
@@ -47,16 +47,16 @@ export class ABGame implements IABGame {
   }
 
   public dealHand(index: number) {
-    const abCardGroup = this.seededCards[index];
-    this.dealtABCardGroups[index] = abCardGroup;
+    const abCardGroup = this.abSeed[index];
+    this.abDeals[index] = abCardGroup;
 
     return abCardGroup;
   }
 
   public _toStringGrid(): string[][] {
-    const seededCards = this.seededCards;
+    const abSeed = this.abSeed;
 
-    return seededCards.map((deal) => {
+    return abSeed.map((deal) => {
       return deal.map((card) => {
         return card._toString();
       });

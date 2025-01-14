@@ -9,11 +9,11 @@ import { cn } from '@/lib/utils';
 interface Props {
   cards: ABCards;
   modeType: IABModeType;
-  valueNotLabel: boolean;
+  rankLabel: boolean;
 }
 
 export default function DiscardPile(props: Props) {
-  const { cards, modeType, valueNotLabel } = props;
+  const { cards, modeType, rankLabel } = props;
 
   return (
     <>
@@ -42,7 +42,7 @@ export default function DiscardPile(props: Props) {
                   <ABCardComp
                     card={card}
                     modeType={modeType}
-                    valueNotLabel={valueNotLabel}
+                    rankLabel={rankLabel}
                     inGrid={false}
                   />
                 </motion.div>
