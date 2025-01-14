@@ -37,9 +37,9 @@ export default function HowToPlay() {
                   the corners (and center) of the grid!
                 </li>
                 <li>
-                  Activating the bonuses require at least certain amount of poker hands. The amounts
-                  vary by game mode, and only 'One Pair' and above count. Try scoring them for an
-                  extra challenge!
+                  Activating the bonuses require scoring at least a certain amount of poker hands in
+                  the grid first ('One Pair' or better). That amount varies per bonus type and game
+                  mode. Try scoring them for an extra challenge!
                 </li>
               </ul>
             </div>

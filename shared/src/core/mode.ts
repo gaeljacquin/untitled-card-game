@@ -40,18 +40,18 @@ export class ABMode implements IABMode {
   private static readonly modes = [
     new ABMode(
       'abpoker',
-      'Poker 4',
+      'Anna',
       'Fill the 4 x 4 grid with the best poker hands!',
-      'mode-1',
+      'anna',
       4,
       3,
       4
     ),
     new ABMode(
       'abpoker',
-      'Poker 5',
+      'Belle',
       'Fill the 5 x 5 grid with the best poker hands!',
-      'mode-2',
+      'belle',
       5,
       4,
       5
