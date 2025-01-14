@@ -1,0 +1,19 @@
+{
+  "name": "@annabelle/shared",
+  "main": "dist/index.js",
+  "types": "dist/index.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prettier:write": "prettier --write \"**/*.{ts,js,mjs,cjs,json}\""
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "react-icons": "^5.4.0",
+    "uuid": "^11.0.3"
+  }
+}

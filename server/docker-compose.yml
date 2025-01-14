@@ -1,0 +1,16 @@
+services:
+  annabelle:
+    container_name: annabelle-server
+    build:
+      context: ..
+      dockerfile: server/Dockerfile
+      target: ${BUILD_TARGET:-dev}
+      args:
+        CLIENT_URL: ${CLIENT_URL}
+    volumes:
+      - /app/node_modules
+      - /app/server/node_modules
+    environment:
+      CLIENT_URL: ${CLIENT_URL}
+    ports:
+      - '8080:3000'
