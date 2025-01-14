@@ -38,6 +38,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import settingsStore from '@/stores/settings';
 import { GameState } from '@/types/game-state';
+import { confettiFireworks } from '@/utils/confetti';
 import { canMoveCard, getGameState } from '@/utils/game-state';
 
 type Props = {
@@ -134,19 +135,23 @@ export default function PlayingField(props: Props) {
     setGameState(defaultGameState);
   };
 
-  const animateProgress = () => {
-    setProgress(0);
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
+  const animateProgress = (): Promise<void> => {
+    return new Promise<void>((resolve) => {
+      let progress = 0;
 
-          return 100;
+      const animate = () => {
+        progress += 1;
+        setProgress(progress);
+
+        if (progress < 100) {
+          requestAnimationFrame(animate);
+        } else {
+          resolve();
         }
+      };
 
-        return prev + 2;
-      });
-    }, 20);
+      requestAnimationFrame(animate);
+    });
   };
 
   const switchToScoreTab = () => {
@@ -367,7 +372,9 @@ export default function PlayingField(props: Props) {
         specialBonus: scores.specialBonus,
       }));
       switchToScoreTab();
-      animateProgress();
+      animateProgress().then(() => {
+        confettiFireworks();
+      });
     }
   }, [gameOver]);
 
