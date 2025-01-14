@@ -76,7 +76,6 @@ export default function PlayingField(props: Props) {
     initGame,
     setABGameOver,
   } = props;
-
   const defaultGameState = {
     gameOver: false,
     totalCards: abCards.length,
@@ -153,6 +152,11 @@ export default function PlayingField(props: Props) {
     tabsRef.current?.setAttribute('data-state', 'score');
   };
 
+  const switchToGridTab = () => {
+    setActiveTab('grid');
+    tabsRef.current?.setAttribute('data-state', 'grid');
+  };
+
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
     const card =
@@ -186,21 +190,17 @@ export default function PlayingField(props: Props) {
       const newGrid = [...grid];
 
       if (playerHand.includes(sourceCard)) {
-        // Handle last card in hand - only allow swapping with unplayed cards
         if (playerHand.length === 1) {
           const targetCard = newGrid[rowIndex][columnIndex].card;
 
-          // If target cell is empty or card is played, return card to hand
           if (!targetCard || targetCard.played) {
             setActiveDrag(null);
             return;
           }
 
-          // Swap the cards
           newGrid[rowIndex][columnIndex].card = { ...sourceCard, faceUp: true } as ABCard;
           setPlayerHand([{ ...targetCard, faceUp: true } as ABCard]);
         } else {
-          // Handle normal card placement
           if (newGrid[rowIndex][columnIndex].card) {
             const targetCard = newGrid[rowIndex][columnIndex].card! as ABCard;
 
@@ -293,9 +293,10 @@ export default function PlayingField(props: Props) {
   };
 
   const playAgain = async () => {
-    // setGrid([]);
+    switchToGridTab();
+    setGrid([]);
     setActiveDrag(null);
-    // setGameState(defaultGameState);
+    setGameState(defaultGameState);
     setLockedCells(new Set());
     setIsDealing(true);
     await initGame(modeSlug);
@@ -349,7 +350,6 @@ export default function PlayingField(props: Props) {
       }));
       switchToScoreTab();
       animateProgress();
-      console.log(scores);
     }
   }, [gameOver]);
 
@@ -664,18 +664,23 @@ export default function PlayingField(props: Props) {
               </div>
 
               <div className="flex items-center justify-center">
-                {gameOver ? (
-                  <Button onClick={playAgain} disabled>
-                    Play Again
-                  </Button>
-                ) : (
-                  <div className="flex flex-col w-full">
-                    <Separator className="my-4" />
-                    <Button onClick={handleDiscard} disabled={playerHand.length !== 1 || isDealing}>
-                      Discard
+                <div className="flex flex-col w-full">
+                  {gameOver ? (
+                    <Button onClick={playAgain} disabled={progress !== 100}>
+                      Play Again
                     </Button>
-                  </div>
-                )}
+                  ) : (
+                    <>
+                      <Separator className="my-4" />
+                      <Button
+                        onClick={handleDiscard}
+                        disabled={playerHand.length !== 1 || isDealing}
+                      >
+                        Discard
+                      </Button>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </div>

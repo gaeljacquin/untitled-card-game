@@ -51,4 +51,12 @@ export class ABDeck implements IABDeck {
 
     return seed;
   }
+
+  public _toString(): string[] {
+    const cards = this.getCards();
+
+    return cards.map((card) => {
+      return card._toString();
+    });
+  }
 }

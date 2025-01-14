@@ -58,11 +58,6 @@ export default function ABMode(props: Props) {
     };
   };
 
-  useEffect(() => {
-    initGame(modeSlug);
-    wsConnect();
-  }, []);
-
   const initGame = (modeSlug: string) => {
     socket.emit('game-init', { modeSlug });
   };
@@ -70,6 +65,11 @@ export default function ABMode(props: Props) {
   const handleNextRound = (data: { [key: string]: unknown }) => {
     socket.emit('game-next-round', data);
   };
+
+  useEffect(() => {
+    initGame(modeSlug);
+    wsConnect();
+  }, []);
 
   return (
     <>

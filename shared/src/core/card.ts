@@ -63,6 +63,10 @@ export class ABCard extends Card {
   setDiscard(value: boolean) {
     this.discard = value;
   }
+
+  _toString() {
+    return this.rank.value + ' of ' + this.suit.label;
+  }
 }
 
 export class ABCardPreview extends ABCard {

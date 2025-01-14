@@ -78,11 +78,12 @@ export class GameGateway
     this.abGameMap.set(client.id, abGame);
     const updatedABGame = this.abGameMap.get(client.id);
     const gridSize = updatedABGame.mode.gridSize;
+    const gameOver = updatedABGame.discardedABCards.length === gridSize;
     let emit = {};
 
-    if (updatedABGame.discardedABCards.length === gridSize) {
+    if (gameOver) {
       emit = {
-        gameOver: true,
+        gameOver,
         abResult: null,
       };
     } else {

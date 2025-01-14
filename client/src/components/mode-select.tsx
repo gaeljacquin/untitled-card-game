@@ -56,7 +56,8 @@ export default function ModeSelect(props: Props) {
               <Button
                 type="button"
                 className={cn(
-                  'w-full h-auto py-12 px-16 text-md sm:text-lg rounded-2xl',
+                  'w-full h-auto py-12 text-md sm:text-lg rounded-2xl',
+                  anyButtonClicked ? 'px-8' : 'px-16',
                   anyButtonClicked && clickedButton === item.slug ? newGameGradient : 'bg-gray-700',
                   newGameHoverGradient
                 )}
@@ -72,7 +73,7 @@ export default function ModeSelect(props: Props) {
                 {anyButtonClicked && clickedButton === item.slug ? (
                   <>
                     <span>Loading {item.title}</span>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin" />
                   </>
                 ) : (
                   <span>{item.title}</span>
