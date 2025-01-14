@@ -1,6 +1,5 @@
 services:
-  client:
-    image: annabelle-client
+  annabelle:
     container_name: annabelle-client
     build:
       context: .
@@ -16,4 +15,4 @@ services:
     environment:
       SERVER_URL: ${SERVER_URL}
     ports:
-      - '3001:3000'
+      - '3000:3000'

@@ -1,13 +1,12 @@
 services:
-  server:
-    image: annabelle-server
+  annabelle:
     container_name: annabelle-server
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: server/Dockerfile
       target: ${BUILD_TARGET:-dev}
-      additional_contexts:
-        root-folder: ../
+      args:
+        CLIENT_URL: ${CLIENT_URL}
     volumes:
       - /app/node_modules
       - /app/server/node_modules
