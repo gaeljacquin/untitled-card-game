@@ -1,3 +1,4 @@
+import { shuffler } from '../functions/shufflers';
 import { ABCard, ABCards } from './card';
 import { Rank } from './rank';
 import { Suit } from './suit';
@@ -20,12 +21,13 @@ export class ABDeck implements IABDeck {
     const ranks = Rank.getAll();
     const suits = Suit.getAll();
 
-    for (let suitIndex = 0; suitIndex < suits.length; suitIndex++) {
-      for (let rankIndex = 1; rankIndex <= ranks.length; rankIndex++) {
-        const card = new ABCard(ranks[rankIndex], suits[suitIndex]);
+    suits.forEach((suit) => {
+      ranks.forEach((rank) => {
+        const card = new ABCard(rank, suit);
+
         this.cards.push(card);
-      }
-    }
+      });
+    });
 
     return this.cards;
   }
@@ -35,24 +37,27 @@ export class ABDeck implements IABDeck {
   }
 
   public generateSeed(gridSize: number): ABCards[] {
-    const cards = this.getCards();
-    const seed: ABCards[] = [];
-    const cardsPerDeal = gridSize + 1;
-
-    for (let i = 0; i < gridSize; i++) {
-      const deals: ABCards = [];
-
-      for (let j = 0; j < cardsPerDeal; j++) {
-        deals.push(cards[i * cardsPerDeal + j]);
-      }
-
-      seed.push(deals);
+    if (gridSize <= 0) {
+      throw new Error('Grid size must be positive');
     }
 
-    return seed;
+    const cards = this.getCards();
+    const cardsNeeded = gridSize * (gridSize + 1);
+
+    if (cards.length < cardsNeeded) {
+      throw new Error('Not enough cards for the requested grid size');
+    }
+
+    const shuffledDeck = shuffler(cards) as ABCards;
+    const cardsPerRow = gridSize + 1;
+
+    // Create rows of sequential cards from the shuffled deck
+    return Array.from({ length: gridSize }, (_, rowIndex) =>
+      shuffledDeck.slice(rowIndex * cardsPerRow, (rowIndex + 1) * cardsPerRow)
+    );
   }
 
-  public _toString(): string[] {
+  public _toStringArray(): string[] {
     const cards = this.getCards();
 
     return cards.map((card) => {

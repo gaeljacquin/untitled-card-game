@@ -52,4 +52,14 @@ export class ABGame implements IABGame {
 
     return abCardGroup;
   }
+
+  public _toStringGrid(): string[][] {
+    const seededCards = this.seededCards;
+
+    return seededCards.map((deal) => {
+      return deal.map((card) => {
+        return card._toString();
+      });
+    });
+  }
 }

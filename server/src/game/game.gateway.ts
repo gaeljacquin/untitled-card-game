@@ -12,7 +12,7 @@ import { ABGame } from '@annabelle/shared/dist/core/game';
 import { GameService } from '@/game/game.service';
 import { ABMode } from '@annabelle/shared/dist/core/mode';
 import { ABDeck } from '@annabelle/shared/dist/core/deck';
-import { generateSeed } from '@annabelle/shared/dist/functions/shufflers';
+import { ABCards } from '@annabelle/shared/dist/core/card';
 
 @WebSocketGateway({ cors })
 export class GameGateway
@@ -53,7 +53,7 @@ export class GameGateway
     const { modeSlug } = payload;
     const mode = ABMode.getMode(modeSlug);
     const deck = new ABDeck();
-    const seededCards = generateSeed(deck.getCards(), mode.gridSize);
+    const seededCards = deck.generateSeed(mode.gridSize);
     const abGame = new ABGame(mode);
     abGame.setSeededCards(seededCards);
     const abCards = abGame.dealHand(0);
