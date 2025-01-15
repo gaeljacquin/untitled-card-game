@@ -49,7 +49,6 @@ Visit [annabelle.gaeljacquin-aws.com](https://annabelle.gaeljacquin-aws.com) to 
 - Amazon CloudWatch
 - Amazon ECR
 - Amazon EC2
-- Amazon API Gateway
 - Elastic Load Balancing
 - AWS Certificate Manager
 - Amazon Route 53
