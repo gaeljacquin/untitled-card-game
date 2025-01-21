@@ -385,9 +385,9 @@ export default function PlayingField(props: Props) {
 
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-6">
           <div className="sm:col-span-2">
-            <div className="h-auto border border-4 border-dashed rounded-2xl p-4">
+            <div className="sm:sticky sm:top-0 h-auto border border-4 border-dashed rounded-2xl p-4">
               <div className="flex items-center justify-center gap-2 mb-2 sm:hidden">
-                <h2 className="text-sm text-center font-bold">Cards in Hand</h2>
+                <h2 className="text-sm text-center font-bold">Player Hand</h2>
               </div>
               <div className={playerHandClass}>
                 {isDealing ? (
@@ -395,7 +395,7 @@ export default function PlayingField(props: Props) {
                 ) : (
                   <>
                     <div className="flex items-center justify-center gap-2 mb-2 hidden sm:block">
-                      <h2 className="text-sm text-center font-bold">Cards in Hand</h2>
+                      <h2 className="text-sm text-center font-bold">Player Hand</h2>
                     </div>
                     <SortableContext
                       items={playerHand.map((item) => item.id)}
@@ -431,7 +431,7 @@ export default function PlayingField(props: Props) {
                     </Button>
                   ) : (
                     <>
-                      <Separator className="my-4" />
+                      <Separator className="mt-6 mb-4" />
                       <Button
                         onClick={handleDiscard}
                         disabled={playerHand.length !== 1 || isDealing}

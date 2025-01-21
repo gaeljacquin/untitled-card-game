@@ -20,15 +20,17 @@ export default function HowToPlay() {
         <BackgroundLogo />
 
         <div className="max-w-4xl mx-auto space-y-8 mt-16 mb-16 relative z-10">
-          <SectionCard title="How to Play" className="flex flex-col text-center text-white p-4">
-            <h1 className="text-xl font-bold mb-2 underline">Gameplay</h1>
-
+          <SectionCard
+            title="How to Play"
+            className="flex flex-col text-center text-white space-y-4 bg-amber-950/30 rounded-2xl p-4"
+          >
+            <h1 className="text-lg font-bold mb-4 -mt-4">Gameplay</h1>
             <ul className="list-decimal list-inside space-y-5 text-white text-sm sm:text-md text-start">
               <li>
-                <span>Build Poker Hands</span>
+                Build
                 <ul className="list-disc list-inside space-y-2 text-white text-sm sm:text-md text-start ml-7 mt-2">
                   <li>
-                    Drag cards from your hand to any empty cell in the grid.
+                    Drag cards from your hand to an available cell in the grid.
                     <ul className="list-disc list-inside space-y-2 text-white text-sm sm:text-md text-start ml-7 mt-2">
                       <li>
                         5 cards in <em>Anna</em> mode.
@@ -48,9 +50,9 @@ export default function HowToPlay() {
                 </ul>
               </li>
               <li>
-                <span className="font-semibold">Discard: </span>Once you're satisfied with your hand
-                placements, click "Discard".
+                Discard
                 <ul className="list-disc list-inside space-y-2 text-white text-sm sm:text-md text-start ml-7 mt-2">
+                  <li>Once you're satisfied with your hand placements, click "Discard".</li>
                   <li>The remaining card in your hand is moved to the discard pile.</li>
                   <li>A new set of cards is dealt to your hand.</li>
                   <li>Cards from previous deals cannot be moved.</li>
@@ -59,7 +61,7 @@ export default function HowToPlay() {
               <li>Repeat steps 1 & 2 until the entire grid is filled.</li>
             </ul>
 
-            <h2 className="text-xl font-bold mt-7 mb-2 underline">Extra</h2>
+            <h2 className="text-lg font-bold mt-7 mb-4">Extra</h2>
             <ul className="list-[square] list-inside space-y-5 text-white text-sm sm:text-md text-start">
               <li>
                 You may earn additional points by forming poker hands using:
@@ -69,6 +71,7 @@ export default function HowToPlay() {
                     Cards in the corners (and center in <em>Belle</em> mode) of the grid &rarr;
                     Special Bonus.
                   </li>
+                  <li>The aforementioned grid cells are highlighted with an animated beam.</li>
                 </ul>
               </li>
               <li>
