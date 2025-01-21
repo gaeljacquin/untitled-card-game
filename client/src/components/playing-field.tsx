@@ -422,7 +422,11 @@ export default function PlayingField(props: Props) {
               <div className="flex items-center justify-center">
                 <div className="flex flex-col w-full">
                   {gameOver ? (
-                    <Button onClick={playAgain} disabled={progress !== 100}>
+                    <Button
+                      onClick={playAgain}
+                      disabled={progress !== 100}
+                      className="text-wrap truncate"
+                    >
                       Play Again
                     </Button>
                   ) : (
@@ -431,6 +435,7 @@ export default function PlayingField(props: Props) {
                       <Button
                         onClick={handleDiscard}
                         disabled={playerHand.length !== 1 || isDealing}
+                        className="truncate"
                       >
                         {displayDiscardButtonText(playerHand[0])}
                       </Button>
