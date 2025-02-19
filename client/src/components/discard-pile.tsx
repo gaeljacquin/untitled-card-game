@@ -16,7 +16,7 @@ export default function DiscardPile(props: Props) {
   const { cards, modeType, rankLabel } = props;
 
   return (
-    <div className="h-auto bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md">
+    <div className="sm:sticky sm:top-0 h-auto bg-amber-950/30 rounded-2xl p-2 md:p-4 shadow-md">
       <div className="flex items-center justify-center gap-2 mb-2 sm:hidden">
         <h2 className="text-sm text-center font-bold">Discard Pile</h2>
       </div>
