@@ -1,5 +1,5 @@
 const appinfo = {
-  title: 'Annabelle',
+  title: 'Untitled Card Game',
   description: '',
 };
 

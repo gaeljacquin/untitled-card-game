@@ -1,7 +1,7 @@
 'use client';
 
-import { IABGridCell } from '@annabelle/shared/core/grid-cell';
-import { IABModeType } from '@annabelle/shared/core/mode';
+import { IABGridCell } from '@untitled-card-game/shared/core/grid-cell';
+import { IABModeType } from '@untitled-card-game/shared/core/mode';
 import { useDroppable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
 import ABCardComp from '@/components/ab-card';

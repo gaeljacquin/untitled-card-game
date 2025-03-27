@@ -33,7 +33,7 @@ start_services() {
 
     # Start server services
     echo "Starting server containers..."
-    # docker build --platform linux/amd64 -t annabelle-server:latest -f Dockerfile ..
+    # docker build --platform linux/amd64 -t untitled-card-game-server:latest -f Dockerfile ..
     # docker-compose up -d
     docker-compose -f server/docker-compose.yml up -d
     if [ $? -eq 0 ]; then

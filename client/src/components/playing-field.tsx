@@ -1,17 +1,17 @@
 'use client';
 
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { emptyHand } from '@annabelle/shared/constants/empty-hand';
-import { suitIconMap } from '@annabelle/shared/constants/suit-icon';
-import { ABCard, ABCards } from '@annabelle/shared/core/card';
-import { IABGridCell } from '@annabelle/shared/core/grid-cell';
-import { ABMode } from '@annabelle/shared/core/mode';
-import { SuitId } from '@annabelle/shared/core/suit';
+import { emptyHand } from '@untitled-card-game/shared/constants/empty-hand';
+import { suitIconMap } from '@untitled-card-game/shared/constants/suit-icon';
+import { ABCard, ABCards } from '@untitled-card-game/shared/core/card';
+import { IABGridCell } from '@untitled-card-game/shared/core/grid-cell';
+import { ABMode } from '@untitled-card-game/shared/core/mode';
+import { SuitId } from '@untitled-card-game/shared/core/suit';
 import {
   calculateScore,
   evaluateGridColumn,
   evaluateGridRow,
-} from '@annabelle/shared/functions/evaluate';
+} from '@untitled-card-game/shared/functions/evaluate';
 import {
   DndContext,
   DragEndEvent,

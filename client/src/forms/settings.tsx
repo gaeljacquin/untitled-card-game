@@ -1,8 +1,8 @@
 'use client';
 
-import { ABCardPreview } from '@annabelle/shared/core/card';
-import { Rank, RankId } from '@annabelle/shared/core/rank';
-import { Suit, SuitId } from '@annabelle/shared/core/suit';
+import { ABCardPreview } from '@untitled-card-game/shared/core/card';
+import { Rank, RankId } from '@untitled-card-game/shared/core/rank';
+import { Suit, SuitId } from '@untitled-card-game/shared/core/suit';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PopoverClose } from '@radix-ui/react-popover';
 import { Check } from 'lucide-react';

@@ -27,7 +27,7 @@ function Remove-DockerImages {
     Write-Host "`nRemoving client images..." -ForegroundColor Blue
     Push-Location client
     if (Test-Path "docker-compose.yml") {
-        $clientImages = (docker-compose config | Select-String "annabelle").Line
+        $clientImages = (docker-compose config | Select-String "untitled-card-game").Line
         if ($clientImages) {
             Write-Host "Found client images:" -ForegroundColor Yellow
             Write-Host $clientImages
@@ -43,7 +43,7 @@ function Remove-DockerImages {
     Write-Host "`nRemoving server images..." -ForegroundColor Blue
     Push-Location server
     if (Test-Path "docker-compose.yml") {
-        $serverImages = (docker-compose config | Select-String "annabelle").Line
+        $serverImages = (docker-compose config | Select-String "untitled-card-game").Line
         if ($serverImages) {
             Write-Host "Found server images:" -ForegroundColor Yellow
             Write-Host $serverImages

@@ -1,6 +1,6 @@
-import { emptyHand } from '@annabelle/shared/constants/empty-hand';
-import { ABCard } from '@annabelle/shared/core/card';
-import { IABGridCell } from '@annabelle/shared/core/grid-cell';
+import { emptyHand } from '@untitled-card-game/shared/constants/empty-hand';
+import { ABCard } from '@untitled-card-game/shared/core/card';
+import { IABGridCell } from '@untitled-card-game/shared/core/grid-cell';
 import { GameState } from '@/types/game-state';
 
 export function getGameState(grid: IABGridCell[][]): GameState {

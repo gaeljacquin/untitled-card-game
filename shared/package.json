@@ -1,5 +1,5 @@
 {
-  "name": "@annabelle/shared",
+  "name": "@untitled-card-game/shared",
   "main": "dist/index.js",
   "types": "dist/index.ts",
   "exports": {

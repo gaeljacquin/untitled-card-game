@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ABMode } from '@annabelle/shared/core/mode';
+import { ABMode } from '@untitled-card-game/shared/core/mode';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {

@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       '@': path.resolve(__dirname, '../shared/src'),
-      '@annabelle/shared': path.resolve(__dirname, '../shared/src'),
+      '@untitled-card-game/shared': path.resolve(__dirname, '../shared/src'),
     };
     return config;
   },
