@@ -1,6 +1,6 @@
+import { StatsStore } from 'types/stats';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { StatsStore } from 'types/stats';
 
 const initialState = {
   currentStreak: 0,

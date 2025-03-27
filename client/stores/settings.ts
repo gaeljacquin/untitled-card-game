@@ -1,8 +1,8 @@
 import { Badge, Circle, Hexagon, RectangleVertical as Rectangle, Square } from 'lucide-react';
 import { TiStarFullOutline as Star } from 'react-icons/ti';
+import { SettingsStore } from 'types/settings';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { SettingsStore } from 'types/settings';
 
 export const abDesigns = [
   { id: 'default', label: 'Default', component: null, className: '' },

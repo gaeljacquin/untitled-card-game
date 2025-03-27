@@ -29,17 +29,7 @@ export default function HowToPlay() {
               <li>
                 Build
                 <ul className="list-disc list-inside space-y-2 text-white text-sm sm:text-md text-start ml-7 mt-2">
-                  <li>
-                    Drag cards from your hand to an available cell in the grid.
-                    <ul className="list-disc list-inside space-y-2 text-white text-sm sm:text-md text-start ml-7 mt-2">
-                      <li>
-                        5 cards in <em>Anna</em> mode.
-                      </li>
-                      <li>
-                        6 cards in <em>Belle</em> mode.
-                      </li>
-                    </ul>
-                  </li>
+                  <li>Drag cards from your hand to an available cell in the grid.</li>
                   <li>
                     Arrange cards to form poker hands.
                     <ul className="list-disc list-inside space-y-2 text-white text-sm sm:text-md text-start ml-7 mt-2">
@@ -68,8 +58,8 @@ export default function HowToPlay() {
                 <ul className="list-disc list-inside space-y-2 text-white text-sm sm:text-md text-start ml-7 mt-2">
                   <li>Cards from the discard pile &rarr; Discard Bonus.</li>
                   <li>
-                    Cards in the corners (and center in <em>Belle</em> mode) of the grid &rarr;
-                    Special Bonus.
+                    Cards in the corners of the grid (plus the center of the grid in <em>5x5</em>{' '}
+                    mode) &rarr; Special Bonus.
                   </li>
                   <li>The aforementioned grid cells are highlighted with an animated beam.</li>
                 </ul>

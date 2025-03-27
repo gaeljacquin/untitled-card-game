@@ -1,11 +1,10 @@
 'use client';
 
+import { useDroppable } from '@dnd-kit/core';
 import { IABGridCell } from '@untitled-card-game/shared/core/grid-cell';
 import { IABModeType } from '@untitled-card-game/shared/core/mode';
-import { useDroppable } from '@dnd-kit/core';
-import { motion } from 'framer-motion';
 import ABCardComp from 'components/ab-card';
-import { BorderBeam } from 'components/ui/border-beam';
+import { motion } from 'framer-motion';
 import { cn } from 'lib/utils';
 
 interface Props {
@@ -42,12 +41,15 @@ export function GridCell(props: Props) {
     cell.rowIndex === Math.floor(gridSize / 2) &&
     cell.columnIndex === Math.floor(gridSize / 2);
 
-  const shouldShowBorderBeam = isCornerCell || isCenterCell;
+  const shouldGlow = isCornerCell || isCenterCell;
 
   return (
     <motion.div
       ref={setNodeRef}
-      className="aspect-3/4 bg-amber-950/30 rounded-2xl overflow-hidden border border-white transition-transform relative group"
+      className={cn(
+        'aspect-3/4 bg-amber-950/30 rounded-2xl overflow-hidden border border-white transition-transform relative group',
+        shouldGlow && 'shadow-animate-2'
+      )}
       animate={{
         borderColor: isOver ? '#3b82f6' : '#e5e7eb',
         backgroundColor: isOver ? '#eff6ff' : 'rgba(255, 255, 255, 0)',
@@ -65,15 +67,6 @@ export function GridCell(props: Props) {
         >
           <ABCardComp card={cell.card} modeType={modeType} rankLabel={rankLabel} isDragging />
         </motion.div>
-      )}
-      {shouldShowBorderBeam && (
-        <BorderBeam
-          size={125}
-          duration={7}
-          borderWidth={3}
-          colorFrom={'#67e8f9'} // cyan-300
-          colorTo={'#34d399'} // emerald-400
-        />
       )}
     </motion.div>
   );

@@ -1,12 +1,10 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { PopoverClose } from '@radix-ui/react-popover';
 import { ABCardPreview } from '@untitled-card-game/shared/core/card';
 import { Rank, RankId } from '@untitled-card-game/shared/core/rank';
 import { Suit, SuitId } from '@untitled-card-game/shared/core/suit';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { PopoverClose } from '@radix-ui/react-popover';
-import { Check } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import ABCardPreviewComp from 'components/ab-card-preview';
 import Placeholder from 'components/placeholder';
 import { Button } from 'components/ui/button';
@@ -18,6 +16,8 @@ import { Switch } from 'components/ui/switch';
 import { ToastAction } from 'components/ui/toast';
 import { useToast } from 'hooks/use-toast';
 import { cn } from 'lib/utils';
+import { Check } from 'lucide-react';
+import { useForm } from 'react-hook-form';
 import settingsStore, { abDesigns, initialSettings } from 'stores/settings';
 import { FormData, settingsSchema } from 'types/settings';
 
@@ -273,7 +273,7 @@ export default function Settings() {
             <PopoverTrigger asChild>
               <Button
                 type="button"
-                className="w-48 h-12 bg-white/20 hover:bg-white/30 border-white/20 text-md mt-8"
+                className="w-48 h-12 bg-white/20 hover:bg-white/30 border-white/20 text-md mt-8 hover:cursor-pointer"
               >
                 Reset
               </Button>

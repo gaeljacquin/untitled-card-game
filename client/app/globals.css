@@ -231,18 +231,11 @@
 }
 
 @utility shadow-animate {
-  box-shadow: 0px 0px 10px 5px #48abe0;
   animation: shadows 1.5s infinite;
 }
 
 @utility shadow-animate-2 {
-  box-shadow: 0px 0px 10px 5px #48abe0;
-  animation: shadows 1.5s forwards;
-}
-
-@utility shadow-animate-3 {
-  box-shadow: 0px 0px 10px 5px #9b128f;
-  animation: shadows 1.5 forwards;
+  animation: shadows2 1.5s infinite;
 }
 
 @utility top-right-toaster {
@@ -373,6 +366,24 @@
 
     100% {
       box-shadow: 0px 0px 10px 5px #48abe0;
+    }
+  }
+
+  @keyframes shadows2 {
+    0% {
+      box-shadow: 0px 0px 10px 5px #48abe0;
+    }
+
+    50% {
+      box-shadow: 0px 0px 10px 5px blueviolet;
+    }
+
+    75% {
+      box-shadow: 0px 0px 10px 5px #C70039;
+    }
+
+    100% {
+      box-shadow: 0px 0px 10px 5px #50C878;
     }
   }
 }

@@ -1,10 +1,10 @@
 'use client';
 
+import { useDraggable } from '@dnd-kit/core';
 import { suitIconMap } from '@untitled-card-game/shared/constants/suit-icon';
 import { ABCard } from '@untitled-card-game/shared/core/card';
 import { IABModeType } from '@untitled-card-game/shared/core/mode';
 import { SuitId } from '@untitled-card-game/shared/core/suit';
-import { useDraggable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
 import { cn } from 'lib/utils';
 import settingsStore, { abDesigns } from 'stores/settings';
@@ -58,7 +58,7 @@ export default function ABCardComp(props: Props) {
       {...attributes}
       className={cn(
         'aspect-3/4 overflow-hidden transition-transform relative group',
-        !inGrid && 'shrink-0 flex items-center justify-center w-16 sm:w-20 md:w-24',
+        !inGrid && 'shrink-0 flex items-center justify-center w-16 sm:w-20 md:max-w-24',
         hover && 'hover:scale-105',
         active && card.id === active.id && isDragging && 'shadow-animate rounded-2xl'
       )}
@@ -74,28 +74,28 @@ export default function ABCardComp(props: Props) {
             )}
           >
             <div
-              className={cn('absolute top-2 left-2 text-base sm:text-xl font-bold', cardColor.text)}
+              className={cn('absolute top-2 left-2 text-xs sm:text-md font-bold', cardColor.text)}
             >
               <span
-                className={cn('flex items-center justify-center uppercase', 'text-xs sm:text-sm')}
+                className={cn('flex items-center justify-center uppercase', 'text-xs lg:text-sm')}
               >
                 {rankDisplay}
               </span>
-              <SuitIcon className={cn('h-2 w-2 sm:h-4 sm:w-4')} />
+              <SuitIcon className={cn('size-2 sm:size-3')} />
             </div>
 
             <div
               className={cn(
-                'absolute bottom-2 right-2 text-base text-sm sm:text-xl font-bold rotate-180',
+                'absolute bottom-2 right-2 text-base text-xs sm:text-md font-bold rotate-180',
                 cardColor.text
               )}
             >
               <span
-                className={cn('flex items-center justify-center uppercase', 'text-xs sm:text-sm')}
+                className={cn('flex items-center justify-center uppercase', 'text-xs lg:text-sm')}
               >
                 {rankDisplay}
               </span>
-              <SuitIcon className={cn('h-2 w-2 sm:h-4 sm:w-4')} />
+              <SuitIcon className={cn('size-2 sm:size-3')} />
             </div>
 
             <div className="relative flex items-center justify-center h-full w-full">
@@ -103,7 +103,7 @@ export default function ABCardComp(props: Props) {
                 <ShapeIcon
                   className={cn(
                     'h-auto absolute',
-                    'w-8 sm:w-20',
+                    'w-8 sm:w-14 md:max-w-20',
                     abDesign.className,
                     cardColor.letter,
                     cardColor.fill
@@ -115,7 +115,7 @@ export default function ABCardComp(props: Props) {
                   'font-bold uppercase',
                   'absolute',
                   cardColor.letter,
-                  'text-xs sm:text-4xl',
+                  'text-xs sm:text-lg',
                   'flex-col-1 items-center justify-center',
                   suitIconFill && !suit.isRed && '-mt-4' // Letter spacing is off when suit is set to clubs or spades.
                 )}
@@ -123,7 +123,7 @@ export default function ABCardComp(props: Props) {
                 <span
                   className={cn(
                     'flex items-center justify-center',
-                    suitIconFill ? 'text-sm sm:text-xl' : 'text-md sm:text-2xl'
+                    suitIconFill ? 'text-sm sm:text-lg' : 'text-md sm:text-xl'
                   )}
                 >
                   {rankDisplay}

@@ -1,6 +1,6 @@
-import ReturnMainMenu from '@/components/return-main-menu';
-import { PageTransition } from '@/components/ui/page-transition';
-import HowToPlay from '@/views/how-to-play';
+import ReturnMainMenu from 'components/return-main-menu';
+import { PageTransition } from 'components/ui/page-transition';
+import HowToPlay from 'views/how-to-play';
 
 export default function Page() {
   return (

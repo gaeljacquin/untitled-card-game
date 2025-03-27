@@ -1,8 +1,8 @@
 'use client';
 
+import Placeholder from 'components/placeholder';
 import dynamic from 'next/dynamic';
-import Placeholder from '@/components/placeholder';
-import audioStore from '@/stores/audio';
+import audioStore from 'stores/audio';
 
 const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
 

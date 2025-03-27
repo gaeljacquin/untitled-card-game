@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import io, { Socket } from 'socket.io-client';
 
-export default function socketInit() {
+export default function SocketInit() {
   const socketRef = useRef<Socket | null>(null);
 
   if (!socketRef.current) {

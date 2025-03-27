@@ -1,17 +1,6 @@
 'use client';
 
-import { Fragment, useEffect, useRef, useState } from 'react';
-import { emptyHand } from '@untitled-card-game/shared/constants/empty-hand';
-import { suitIconMap } from '@untitled-card-game/shared/constants/suit-icon';
-import { ABCard, ABCards } from '@untitled-card-game/shared/core/card';
-import { IABGridCell } from '@untitled-card-game/shared/core/grid-cell';
-import { ABMode } from '@untitled-card-game/shared/core/mode';
-import { SuitId } from '@untitled-card-game/shared/core/suit';
-import {
-  calculateScore,
-  evaluateGridColumn,
-  evaluateGridRow,
-} from '@untitled-card-game/shared/functions/evaluate';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -23,8 +12,15 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Loader2 } from 'lucide-react';
+import { emptyHand } from '@untitled-card-game/shared/constants/empty-hand';
+import { ABCard, ABCards } from '@untitled-card-game/shared/core/card';
+import { IABGridCell } from '@untitled-card-game/shared/core/grid-cell';
+import { ABMode } from '@untitled-card-game/shared/core/mode';
+import {
+  calculateScore,
+  evaluateGridColumn,
+  evaluateGridRow,
+} from '@untitled-card-game/shared/functions/evaluate';
 import ABCardComp from 'components/ab-card';
 import DiscardPile from 'components/discard-pile';
 import { GridCell } from 'components/grid-cell';
@@ -35,7 +31,9 @@ import { CardDescription, CardHeader, CardTitle } from 'components/ui/card';
 import { Progress } from 'components/ui/progress';
 import { Separator } from 'components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'components/ui/tabs';
+import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from 'lib/utils';
+import { Loader2 } from 'lucide-react';
 import settingsStore from 'stores/settings';
 import { GameState } from 'types/game-state';
 import { confettiFireworks } from 'utils/confetti';
@@ -72,14 +70,17 @@ export default function PlayingField(props: Props) {
     initGame,
     setABGameOver,
   } = props;
-  const defaultGameState = {
-    gameOver: false,
-    totalCards: abCards.length,
-    playedCards: 0,
-    score: 0,
-    discardBonus: emptyHand,
-    specialBonus: emptyHand,
-  };
+  const defaultGameState = useMemo<GameState>(
+    () => ({
+      gameOver: false,
+      totalCards: abCards.length,
+      playedCards: 0,
+      score: 0,
+      discardBonus: emptyHand,
+      specialBonus: emptyHand,
+    }),
+    [abCards]
+  );
   const [playerHand, setPlayerHand] = useState<ABCards>([]);
   const mode = ABMode.getMode(modeSlug)!;
   const { title, description, gridSize, type } = mode;
@@ -97,7 +98,7 @@ export default function PlayingField(props: Props) {
   const tabsRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState('grid');
 
-  const insertCoin = () => {
+  const insertCoin = useCallback(() => {
     setTimeout(() => {
       abCards.forEach((card, index) => {
         setTimeout(() => {
@@ -126,7 +127,7 @@ export default function PlayingField(props: Props) {
     setGrid(newGrid);
     setDiscardPile(discardPile);
     setGameState(defaultGameState);
-  };
+  }, [abCards, defaultGameState, discardPile, gridSize]);
 
   const animateProgress = (): Promise<void> => {
     return new Promise<void>((resolve) => {
@@ -305,25 +306,13 @@ export default function PlayingField(props: Props) {
     setDiscardPile([]);
   };
 
-  const displayDiscardButtonText = (lastCard: ABCard) => {
-    const rankValue = rankLabel ? lastCard?.rank.label : lastCard?.rank.value;
-    const SuitIcon = suitIconMap[lastCard?.suit.id as SuitId];
-
-    return (
-      <span className="flex w-full items-center justify-center">
-        Discard{' '}
-        {playerHand.length === 1 && (
-          <>
-            &rarr; {rankValue} <SuitIcon className={cn('ml-1 h-1 w-1 sm:h-2 sm:w-2')} />
-          </>
-        )}
-      </span>
-    );
+  const displayDiscardButtonText = () => {
+    return <span className="flex w-full items-center justify-center">Discard</span>;
   };
 
   useEffect(() => {
     insertCoin();
-  }, []);
+  }, [insertCoin]);
 
   useEffect(() => {
     setGameState(getGameState(grid));
@@ -369,7 +358,7 @@ export default function PlayingField(props: Props) {
         confettiFireworks();
       });
     }
-  }, [gameOver]);
+  }, [discardPile, gameOver, grid, mode]);
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
@@ -391,7 +380,7 @@ export default function PlayingField(props: Props) {
               </div>
               <div className={playerHandClass}>
                 {isDealing ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="size-4 animate-spin" />
                 ) : (
                   <>
                     <div className="flex items-center justify-center gap-2 mb-2 hidden sm:block">
@@ -437,7 +426,7 @@ export default function PlayingField(props: Props) {
                         disabled={playerHand.length !== 1 || isDealing}
                         className="truncate"
                       >
-                        {displayDiscardButtonText(playerHand[0])}
+                        {displayDiscardButtonText()}
                       </Button>
                     </>
                   )}

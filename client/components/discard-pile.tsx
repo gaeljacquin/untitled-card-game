@@ -2,8 +2,8 @@
 
 import { ABCards } from '@untitled-card-game/shared/core/card';
 import { IABModeType } from '@untitled-card-game/shared/core/mode';
-import { AnimatePresence, motion } from 'framer-motion';
 import ABCardComp from 'components/ab-card';
+import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from 'lib/utils';
 
 interface Props {

@@ -4,11 +4,11 @@ import { cn } from 'lib/utils';
 import ABMode from 'views/ab-mode';
 
 export default function Page() {
-  const modeSlug = 'anna';
+  const modeSlug = 'five';
   const gridClass = cn(
     'grid gap-2 md:gap-3',
-    'grid-cols-4 sm:grid-cols-[30px_repeat(4,minmax(0,1fr))]',
-    'grid-rows-4 sm:grid-rows-[40px_repeat(4,minmax(0,1fr))]',
+    'grid-cols-5 sm:grid-cols-[30px_repeat(5,minmax(0,1fr))]',
+    'grid-rows-5 sm:grid-rows-[40px_repeat(5,minmax(0,1fr))]',
     'w-full max-w-full',
     '*:w-full *:aspect-3/4',
     'md:[&>.cell]:w-[100px] md:[&>.cell]:h-[133px]',

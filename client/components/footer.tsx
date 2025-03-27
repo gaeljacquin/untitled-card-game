@@ -1,7 +1,9 @@
-import Link from 'next/link';
 import { cn } from 'lib/utils';
+import Link from 'next/link';
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <div className="flex items-center justify-center">
       <footer
@@ -11,7 +13,7 @@ export default function Footer() {
         )}
       >
         <p className="text-white">
-          © 2024{' '}
+          &copy; 2024 - {currentYear}{' '}
           <Link
             href={process.env.linktree ?? ''}
             target="_blank"

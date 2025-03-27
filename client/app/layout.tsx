@@ -1,12 +1,11 @@
-import type { Metadata } from 'next';
-import { Saira } from 'next/font/google';
-import { Toaster } from 'components/ui/toaster';
-
 import './globals.css';
 
-import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import AudioPlayer from 'components/audio-player';
+import { Toaster } from 'components/ui/toaster';
 import { cn } from 'lib/utils';
+import type { Metadata } from 'next';
+import { Saira } from 'next/font/google';
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import appinfo from 'utils/appinfo';
 
 const sairaInit = Saira({

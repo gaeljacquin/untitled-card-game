@@ -1,6 +1,6 @@
-import * as z from 'zod';
 import { abDesigns } from 'stores/settings';
 import { Hydrate } from 'types/hydrate';
+import * as z from 'zod';
 
 export const settingsSchema = z.object({
   abDesignIndex: z.number().min(0).max(abDesigns.length),

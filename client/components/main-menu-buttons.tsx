@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
 import AskRtfm from 'components/ask-rtfm';
 import ModeSelect from 'components/mode-select';
 import InteractiveHoverButton from 'components/ui/interactive-hover-button';
+import { motion } from 'framer-motion';
 import { cn } from 'lib/utils';
+import Link from 'next/link';
 import miscStore from 'stores/misc';
 
 export default function MainMenuButtons() {

@@ -1,6 +1,6 @@
-import ReturnMainMenu from '@/components/return-main-menu';
-import { PageTransition } from '@/components/ui/page-transition';
-import Credits from '@/views/credits';
+import ReturnMainMenu from 'components/return-main-menu';
+import { PageTransition } from 'components/ui/page-transition';
+import Credits from 'views/credits';
 
 export default function Page() {
   return (

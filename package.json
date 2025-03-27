@@ -6,7 +6,7 @@
     "website": "https://gaeljacquin.com"
   },
   "website": "https://untitled-card-game.gaeljacquin-aws.com",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "license": "MIT",
   "private": true,
   "scripts": {

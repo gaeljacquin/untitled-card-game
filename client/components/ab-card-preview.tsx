@@ -3,8 +3,8 @@
 import { suitIconMap } from '@untitled-card-game/shared/constants/suit-icon';
 import { ABCard } from '@untitled-card-game/shared/core/card';
 import { SuitId } from '@untitled-card-game/shared/core/suit';
-import { cn } from '@/lib/utils';
-import settingsStore, { abDesigns } from '@/stores/settings';
+import { cn } from 'lib/utils';
+import settingsStore, { abDesigns } from 'stores/settings';
 
 type Props = {
   card: ABCard;

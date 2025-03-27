@@ -9,7 +9,7 @@ import Footer from 'components/footer';
 import PlayingField from 'components/playing-field';
 import { Button } from 'components/ui/button';
 import { cn } from 'lib/utils';
-import socketInit from 'utils/socket-init';
+import SocketInit from 'utils/socket-init';
 
 type Props = {
   modeSlug: string;
@@ -18,7 +18,7 @@ type Props = {
 
 export default function ABMode(props: Props) {
   const { modeSlug, gridClass } = props;
-  const socket = socketInit();
+  const socket = SocketInit();
   const [abCards, setABCards] = useState<ABCards>([]);
   const [abGameOver, setABGameOver] = useState<boolean>(false);
   const playerHandClass = cn(

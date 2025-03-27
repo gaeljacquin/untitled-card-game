@@ -1,9 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { ABMode } from '@untitled-card-game/shared/core/mode';
-import { Loader2 } from 'lucide-react';
 import { Button } from 'components/ui/button';
 import {
   Dialog,
@@ -13,6 +11,8 @@ import {
   DialogTitle,
 } from 'components/ui/dialog';
 import { cn } from 'lib/utils';
+import { Loader2 } from 'lucide-react';
+import Link from 'next/link';
 import miscStore from 'stores/misc';
 
 type Props = {
@@ -57,6 +57,7 @@ export default function ModeSelect(props: Props) {
                 type="button"
                 className={cn(
                   'w-full h-auto py-12 text-md sm:text-lg rounded-2xl',
+                  'hover:cursor-pointer',
                   anyButtonClicked ? 'px-8' : 'px-16',
                   anyButtonClicked && clickedButton === item.slug ? newGameGradient : 'bg-gray-700',
                   newGameHoverGradient

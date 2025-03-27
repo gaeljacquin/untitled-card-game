@@ -1,6 +1,8 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { Button } from 'components/ui/button';
+import { Slider } from 'components/ui/slider';
+import { cn } from 'lib/utils';
 import {
   ChevronDown,
   ChevronUp,
@@ -11,9 +13,7 @@ import {
   Volume2,
   VolumeX,
 } from 'lucide-react';
-import { Button } from 'components/ui/button';
-import { Slider } from 'components/ui/slider';
-import { cn } from 'lib/utils';
+import { usePathname } from 'next/navigation';
 import audioStore from 'stores/audio';
 import miscStore from 'stores/misc';
 
