@@ -1,7 +1,7 @@
 <div align="center">
-  <img src="./assets/annabelle.gif" alt="Annabelle Logo" />
+  <img src="./assets/untitled-card-game.gif" alt="Untitled Card Game Logo" />
 
-# Annabelle
+# Untitled Card Game (UCG)
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/docker-required-blue.svg)](https://www.docker.com/)
@@ -12,7 +12,7 @@ An intuitive and relaxing game where you arrange cards in a grid to create the h
 
 ## 🎮 Insert Coin
 
-Visit [annabelle.gaeljacquin-aws.com](https://annabelle.gaeljacquin-aws.com) to play now!
+Visit [untitled-card-game.gaeljacquin-aws.com](https://untitled-card-game.gaeljacquin-aws.com) to play now!
 
 ## 🛠️ Tech Stack
 

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["node", "jest", "@annabelle/shared"],
+    "types": ["node", "jest", "@untitled-card-game/shared"],
     "module": "commonJS",
     "declaration": true,
     "removeComments": true,
@@ -12,8 +12,8 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
-      "@annabelle/shared": ["./node_modules/@annabelle/shared"],
-      "@annabelle/shared/*": ["./node_modules/@annabelle/shared/*"],
+      "@untitled-card-game/shared": ["./node_modules/@untitled-card-game/shared"],
+      "@untitled-card-game/shared/*": ["./node_modules/@untitled-card-game/shared/*"],
       "@/*": ["./src/*"]
     },
     "incremental": true,

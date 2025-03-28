@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["node", "jest", "@testing-library/jest-dom", "@annabelle/shared"],
+    "types": ["node", "jest", "@testing-library/jest-dom", "@untitled-card-game/shared"],
     "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -17,12 +17,19 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@annabelle/shared": ["./node_modules/@annabelle/shared/dist"],
-      "@annabelle/shared/*": ["./node_modules/@annabelle/shared/dist/*"],
-      "@/*": ["./src/*"]
+      "@untitled-card-game/shared": ["./node_modules/@untitled-card-game/shared/dist"],
+      "@untitled-card-game/shared/*": ["./node_modules/@untitled-card-game/shared/dist/*"],
+      "@/*": ["./*"]
     },
     "plugins": [{ "name": "next" }]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "**/*.cjs",
+    "**/*.json"
+  ],
   "exclude": ["node_modules"]
 }

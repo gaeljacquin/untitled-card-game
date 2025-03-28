@@ -36,7 +36,7 @@ remove_docker_images() {
     echo -e "\n${BLUE}Removing client images...${NC}"
     pushd client > /dev/null
     if [ -f "docker-compose.yml" ]; then
-        client_images=$(docker-compose config | grep "annabelle")
+        client_images=$(docker-compose config | grep "untitled-card-game")
         if [ ! -z "$client_images" ]; then
             echo -e "${YELLOW}Found client images:${NC}"
             echo "$client_images"
@@ -52,7 +52,7 @@ remove_docker_images() {
     echo -e "\n${BLUE}Removing server images...${NC}"
     pushd server > /dev/null
     if [ -f "docker-compose.yml" ]; then
-        server_images=$(docker-compose config | grep "annabelle")
+        server_images=$(docker-compose config | grep "untitled-card-game")
         if [ ! -z "$server_images" ]; then
             echo -e "${YELLOW}Found server images:${NC}"
             echo "$server_images"

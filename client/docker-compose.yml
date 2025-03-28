@@ -1,6 +1,6 @@
 services:
-  annabelle:
-    container_name: annabelle-client
+  untitled-card-game:
+    container_name: untitled-card-game-client
     build:
       context: .
       dockerfile: Dockerfile

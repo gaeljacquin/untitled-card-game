@@ -1,4 +1,4 @@
-import { emptyHand } from '@/constants/empty-hand';
+import { emptyHand } from '../constants/empty-hand';
 import { ABCards } from '../core/card';
 import { IABGridCell } from '../core/grid-cell';
 import { ABMode } from '../core/mode';
