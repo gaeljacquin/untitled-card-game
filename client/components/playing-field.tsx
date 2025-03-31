@@ -286,7 +286,7 @@ export default function PlayingField(props: Props) {
 
     setGrid(newGrid);
     setDiscardPile((prev) => [...prev, { ...abDiscard, faceUp: true }] as ABCards);
-    await handleNextRound({ abDiscard: abDiscard, newGrid });
+    await handleNextRound({ abDiscard, newGrid });
     setPlayerHand([]);
     const isGridFull = newGrid.every((row) => row.every((cell) => cell.card !== null));
 
@@ -388,9 +388,9 @@ export default function PlayingField(props: Props) {
 
               <div className={cn(playerHandClass)}>
                 {isDealing ? (
-                  <Loader2 className="size-4 animate-spin" />
+                  <Loader2 className="size-4 animate-spin mt-8" />
                 ) : (
-                  <div className="flex flex-wrap flex-row sm:flex-col items-center justify-center gap-2">
+                  <div className="flex flex-wrap flex-row sm:flex-col items-center justify-center gap-3">
                     <div className="flex items-center justify-center mb-2 mt-4 hidden sm:block">
                       <h2 className="text-sm text-center font-bold">{playerHandText}</h2>
                     </div>
@@ -417,28 +417,28 @@ export default function PlayingField(props: Props) {
               </div>
 
               <div className="flex items-center justify-center">
-                <div className="flex flex-col w-full p-4 -mt-8">
-                  {gameOver ? (
+                {gameOver ? (
+                  <div className="flex flex-col w-full p-2 -mt-4 mb-2">
                     <Button
                       onClick={playAgain}
                       disabled={progress !== 100}
                       className="text-wrap truncate"
                     >
-                      Play Again
+                      New Game
                     </Button>
-                  ) : (
-                    <>
-                      <Separator className="mt-6 mb-4" />
-                      <Button
-                        onClick={handleDiscard}
-                        disabled={playerHand.length !== 1 || isDealing}
-                        className="truncate"
-                      >
-                        {displayDiscardButtonText()}
-                      </Button>
-                    </>
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col w-full p-4 -mt-8">
+                    <Separator className="mt-6 mb-4" />
+                    <Button
+                      onClick={handleDiscard}
+                      disabled={playerHand.length !== 1 || isDealing}
+                      className="truncate"
+                    >
+                      {displayDiscardButtonText()}
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -475,7 +475,7 @@ export default function PlayingField(props: Props) {
                       <div className={cornerCellClass} />
 
                       {Array.from({ length: gridSize }, (_, colIndex) => (
-                        <div key={`col-${colIndex}`} className={labelClass}>
+                        <div key={`col-${colIndex}`} className={cn(labelClass, '-mt-3')}>
                           <motion.div>
                             <span className="text-clip">
                               {evaluateGridColumn(grid, colIndex).name}:
@@ -490,7 +490,7 @@ export default function PlayingField(props: Props) {
 
                       {grid.map((row, rowIndex) => (
                         <Fragment key={`row-${rowIndex}`}>
-                          <div className={labelClass}>
+                          <div className={cn(labelClass, '-ml-2')}>
                             <motion.div className="mr-4">
                               <span className="text-clip">
                                 {evaluateGridRow(grid, rowIndex).name}:
@@ -624,7 +624,10 @@ export default function PlayingField(props: Props) {
                                 >
                                   <p className="flex items-center justify-between gap-2 text-sm">
                                     <span>Discard Bonus</span>
-                                    <span>{gameState.discardBonus?.name}</span>
+                                    <span>
+                                      {gameState.discardBonus?.points > 0 &&
+                                        gameState.discardBonus?.name}
+                                    </span>
                                     <span>${gameState.discardBonus?.points ?? 0}</span>
                                   </p>
                                 </motion.div>
@@ -640,7 +643,10 @@ export default function PlayingField(props: Props) {
                                 >
                                   <p className="flex items-center justify-between gap-2 text-sm">
                                     <span>Special Bonus</span>
-                                    <span>{gameState.specialBonus?.name}</span>
+                                    <span>
+                                      {gameState.specialBonus?.points > 0 &&
+                                        gameState.specialBonus?.name}
+                                    </span>
                                     <span>${gameState.specialBonus?.points}</span>
                                   </p>
                                 </motion.div>
