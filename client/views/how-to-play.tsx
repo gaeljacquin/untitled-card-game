@@ -1,10 +1,10 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import AudioControlsDynamic from 'components/audio-controls-dynamic';
 import BackgroundLogo from 'components/background-logo';
 import Footer from 'components/footer';
 import SectionCard from 'components/section-card';
+import { motion } from 'framer-motion';
 
 // import { Separator } from '@/components/ui/separator';
 
@@ -33,7 +33,7 @@ export default function HowToPlay() {
                   <li>
                     Arrange cards to form poker hands.
                     <ul className="list-disc list-inside space-y-2 text-white text-sm sm:text-md text-start ml-7 mt-2">
-                      <li>The order of cards within a hand doesn't matter.</li>
+                      <li>The order of cards within a hand doesn&apos;t matter.</li>
                       <li>Scroll down to view examples of poker hands.</li>
                     </ul>
                   </li>
@@ -42,7 +42,9 @@ export default function HowToPlay() {
               <li>
                 Discard
                 <ul className="list-disc list-inside space-y-2 text-white text-sm sm:text-md text-start ml-7 mt-2">
-                  <li>Once you're satisfied with your hand placements, click "Discard".</li>
+                  <li>
+                    Once you&apos;re satisfied with your hand placements, click &quot;Discard&quot;.
+                  </li>
                   <li>The remaining card in your hand is moved to the discard pile.</li>
                   <li>A new set of cards is dealt to your hand.</li>
                   <li>Cards from previous deals cannot be moved.</li>
@@ -65,8 +67,8 @@ export default function HowToPlay() {
                 </ul>
               </li>
               <li>
-                You must first score a certain number of poker hands ("One Pair" or better) within
-                the grid.{' '}
+                You must first score a certain number of poker hands (&quot;One Pair&quot; or
+                better) within the grid.
                 <ul className="list-disc list-inside space-y-2 text-white text-sm sm:text-md text-start ml-7 mt-2">
                   <li>
                     The required number of poker hands varies depending on the bonus type and game

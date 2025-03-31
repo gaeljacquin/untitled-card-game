@@ -249,7 +249,7 @@ export default function Settings() {
                                 <span>{item.label}</span>
                                 <Check
                                   className={cn(
-                                    'mr-2 h-4 w-4',
+                                    'mr-2 size-4',
                                     field.value && item.id === field.value
                                       ? 'opacity-100'
                                       : 'opacity-0'
