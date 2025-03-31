@@ -192,6 +192,22 @@ export const evaluateSpecialGridCells = (grid: IABGridCell[][]) => {
 
   const result = evaluateHand(cornerCards);
 
+  // Only count pairs with corner cards or the center card
+  if (result.name === 'One Pair') {
+    const [card1, card2] = cornerCards.filter((card, _, self) =>
+      self.some((otherCard) => otherCard !== card && otherCard.rank.value === card.rank.value)
+    );
+
+    const card1Row = grid.findIndex((row) => row.some((cell) => cell.card === card1));
+    const card1Col = card1Row !== -1 ? grid[card1Row].findIndex((cell) => cell.card === card1) : -1;
+    const card2Row = grid.findIndex((row) => row.some((cell) => cell.card === card2));
+    const card2Col = card2Row !== -1 ? grid[card2Row].findIndex((cell) => cell.card === card2) : -1;
+
+    if (card1Row === card2Row || card1Col === card2Col) {
+      return emptyHand;
+    }
+  }
+
   return {
     name: result.name,
     points: Math.ceil(result.points * 2),
