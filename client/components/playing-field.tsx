@@ -297,6 +297,7 @@ export default function PlayingField(props: Props) {
   };
 
   const playAgain = async () => {
+    setABGameOver(false);
     switchToGridTab();
     setGrid([]);
     setActiveDrag(null);
@@ -304,7 +305,6 @@ export default function PlayingField(props: Props) {
     setLockedCells(new Set());
     setIsDealing(true);
     await initGame(modeSlug);
-    setABGameOver(false);
     insertCoin();
     setDiscardPile([]);
   };
