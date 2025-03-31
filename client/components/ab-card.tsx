@@ -60,7 +60,8 @@ export default function ABCardComp(props: Props) {
         'aspect-3/4 overflow-hidden transition-transform relative group',
         !inGrid && 'shrink-0 flex items-center justify-center w-16 sm:w-20 md:max-w-24',
         hover && 'hover:scale-105',
-        active && card.id === active.id && isDragging && 'shadow-animate rounded-2xl'
+        active && card.id === active.id && isDragging && 'shadow-animate rounded-2xl',
+        inGrid && card.played && 'invert-30'
       )}
     >
       return (

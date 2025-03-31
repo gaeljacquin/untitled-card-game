@@ -176,6 +176,7 @@ export default function PlayingField(props: Props) {
 
     if (!over || !activeDrag) {
       setActiveDrag(null);
+
       return;
     }
 
@@ -187,6 +188,7 @@ export default function PlayingField(props: Props) {
       const cellId = `cell-${rowIndex}-${columnIndex}`;
       if (lockedCells.has(cellId)) {
         setActiveDrag(null);
+
         return;
       }
 
@@ -198,6 +200,7 @@ export default function PlayingField(props: Props) {
 
           if (!targetCard || targetCard.played) {
             setActiveDrag(null);
+
             return;
           }
 
@@ -308,10 +311,6 @@ export default function PlayingField(props: Props) {
     await initGame(modeSlug);
     insertCoin();
     setDiscardPile([]);
-  };
-
-  const displayDiscardButtonText = () => {
-    return <span className="flex w-full items-center justify-center">Discard</span>;
   };
 
   useEffect(() => {
@@ -435,7 +434,7 @@ export default function PlayingField(props: Props) {
                       disabled={playerHand.length !== 1 || isDealing}
                       className="truncate"
                     >
-                      {displayDiscardButtonText()}
+                      <span className="flex w-full items-center justify-center">Discard</span>
                     </Button>
                   </div>
                 )}
