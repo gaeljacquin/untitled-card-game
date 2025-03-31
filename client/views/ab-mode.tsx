@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ABCards } from '@untitled-card-game/shared/core/card';
-import { motion } from 'framer-motion';
 import AudioControlsDynamic from 'components/audio-controls-dynamic';
 import BackgroundLogo from 'components/background-logo';
 import Footer from 'components/footer';
 import PlayingField from 'components/playing-field';
 import { Button } from 'components/ui/button';
+import { motion } from 'framer-motion';
 import { cn } from 'lib/utils';
 import SocketInit from 'utils/socket-init';
 
@@ -25,7 +25,7 @@ export default function ABMode(props: Props) {
     'flex flex-row flex-wrap sm:flex-col gap-2 sm:gap-4 items-center justify-center'
   );
 
-  const wsConnect = () => {
+  const wsConnect = useCallback(() => {
     socket.on('connect', () => {
       console.info('Connected to server');
     });
@@ -50,11 +50,14 @@ export default function ABMode(props: Props) {
       socket.off(`game-init-res`);
       socket.off(`game-next-round-res`);
     };
-  };
+  }, [socket]);
 
-  const initGame = (modeSlug: string) => {
-    socket.emit('game-init', { modeSlug });
-  };
+  const initGame = useCallback(
+    (modeSlug: string) => {
+      socket.emit('game-init', { modeSlug });
+    },
+    [socket]
+  );
 
   const handleNextRound = (data: { [key: string]: unknown }) => {
     socket.emit('game-next-round', data);
@@ -63,7 +66,7 @@ export default function ABMode(props: Props) {
   useEffect(() => {
     initGame(modeSlug);
     wsConnect();
-  }, []);
+  }, [initGame, modeSlug, wsConnect]);
 
   return (
     <>
@@ -88,7 +91,11 @@ export default function ABMode(props: Props) {
 
         <div className="flex flex-col items-center justify-center gap-4 footer-spacing-ab">
           {process.env.NODE_ENV === 'development' && (
-            <Button variant="destructive" onClick={() => setABGameOver(true)}>
+            <Button
+              variant="destructive"
+              onClick={() => setABGameOver(true)}
+              className="hover:cursor-pointer"
+            >
               Simulate Game Over
             </Button>
           )}
