@@ -97,6 +97,7 @@ export default function PlayingField(props: Props) {
   const sensors = useSensors(mouseSensor, touchSensor);
   const tabsRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState('grid');
+  const coinInserted = useRef(false);
 
   const insertCoin = useCallback(() => {
     setTimeout(() => {
@@ -258,11 +259,13 @@ export default function PlayingField(props: Props) {
     }
 
     const abDiscard = playerHand[0];
+
     if (!abDiscard) {
       return;
     }
 
     const newLockedCells = new Set<string>();
+
     grid.forEach((row, rowIndex) => {
       row.forEach((cell, colIndex) => {
         if (cell.card) {
@@ -270,6 +273,7 @@ export default function PlayingField(props: Props) {
         }
       });
     });
+
     setLockedCells(newLockedCells);
 
     const newGrid = grid.map((row) =>
@@ -281,14 +285,13 @@ export default function PlayingField(props: Props) {
 
     setGrid(newGrid);
     setDiscardPile((prev) => [...prev, { ...abDiscard, faceUp: true }] as ABCards);
-
     await handleNextRound({ abDiscard: abDiscard, newGrid });
-
     setPlayerHand([]);
-
     const isGridFull = newGrid.every((row) => row.every((cell) => cell.card !== null));
+
     if (isGridFull) {
       setGameState((prev) => ({ ...prev, gameOver: true }));
+
       return;
     }
   };
@@ -311,7 +314,10 @@ export default function PlayingField(props: Props) {
   };
 
   useEffect(() => {
-    insertCoin();
+    if (!coinInserted.current) {
+      insertCoin();
+      coinInserted.current = true;
+    }
   }, [insertCoin]);
 
   useEffect(() => {
