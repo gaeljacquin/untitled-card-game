@@ -416,17 +416,7 @@ export default function PlayingField(props: Props) {
               </div>
 
               <div className="flex items-center justify-center">
-                {gameOver ? (
-                  <div className="flex flex-col w-full p-2 -mt-4 mb-2">
-                    <Button
-                      onClick={playAgain}
-                      disabled={progress !== 100}
-                      className="text-wrap truncate"
-                    >
-                      New Game
-                    </Button>
-                  </div>
-                ) : (
+                {!gameOver && (
                   <div className="flex flex-col w-full p-4 -mt-8">
                     <Separator className="mt-6 mb-4" />
                     <Button
@@ -531,7 +521,7 @@ export default function PlayingField(props: Props) {
                 ) : (
                   <>
                     <h1 className="text-center text-xl">
-                      {progress === 100 && <>Your Score 🤩</>}
+                      {progress === 100 && <>Final Results</>}
                     </h1>
 
                     <motion.div
@@ -571,7 +561,7 @@ export default function PlayingField(props: Props) {
                                     animate={{ opacity: 1 }}
                                   >
                                     <p className="flex items-center justify-between gap-2 text-sm">
-                                      <span>Column {index + 1}: </span>
+                                      <span>Column {index + 1} </span>
                                       <span>{evaluateGridColumn(grid, index).name}</span>
                                       <span>${evaluateGridColumn(grid, index).points}</span>
                                     </p>
@@ -607,7 +597,7 @@ export default function PlayingField(props: Props) {
                                   animate={{ opacity: 1 }}
                                 >
                                   <p className="flex items-center justify-between gap-2 text-sm">
-                                    <span>Score</span>
+                                    <span>Grid Total</span>
                                     <span>${gameState.score}</span>
                                   </p>
                                 </motion.div>
@@ -660,7 +650,7 @@ export default function PlayingField(props: Props) {
                                   animate={{ opacity: 1 }}
                                 >
                                   <p className="flex items-center justify-between gap-2 text-sm">
-                                    <span>Final Score</span>
+                                    <span>Overall Score</span>
                                     <span>
                                       $
                                       {(gameState.score as number) +
@@ -672,17 +662,26 @@ export default function PlayingField(props: Props) {
                               </>
                             </div>
 
-                            {gameOver && process.env.NODE_ENV === 'development' && (
-                              <div className="flex items-center justify-center mt-8">
+                            {gameOver && (
+                              <div className="flex flex-col items-center justify-center mt-8 gap-4">
+                                {process.env.NODE_ENV === 'development' && (
+                                  <Button
+                                    variant="secondary"
+                                    size="lg"
+                                    onClick={() => {
+                                      animateProgress();
+                                    }}
+                                    className="animate-fade-in w-full hover:cursor-pointer"
+                                  >
+                                    Reload animation
+                                  </Button>
+                                )}
                                 <Button
-                                  variant="secondary"
-                                  size="lg"
-                                  onClick={() => {
-                                    animateProgress();
-                                  }}
-                                  className="animate-fade-in"
+                                  onClick={playAgain}
+                                  disabled={progress !== 100}
+                                  className="text-wrap truncate w-full hover:cursor-pointer"
                                 >
-                                  Reload animation
+                                  New Game
                                 </Button>
                               </div>
                             )}
