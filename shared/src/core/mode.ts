@@ -1,10 +1,12 @@
 export type IABModeType = 'abpoker';
 
+export type SlugId = 'four' | 'five';
+
 interface IABMode {
   readonly type: IABModeType;
   readonly title: string;
   readonly description: string;
-  readonly slug: string;
+  readonly slug: SlugId;
   readonly gridSize: number;
   readonly minHandsDiscard: number;
   readonly minHandsSpecial: number;
@@ -14,7 +16,7 @@ export class ABMode implements IABMode {
   public readonly type: IABModeType;
   public readonly title: string;
   public readonly description: string;
-  public readonly slug: string;
+  public readonly slug: SlugId;
   public readonly gridSize: number;
   public readonly minHandsDiscard: number;
   public readonly minHandsSpecial: number;
@@ -23,7 +25,7 @@ export class ABMode implements IABMode {
     type: IABModeType,
     title: string,
     description: string,
-    slug: string,
+    slug: SlugId,
     gridSize: number,
     minHandsDiscard: number,
     minHandsSpecial: number
@@ -62,7 +64,7 @@ export class ABMode implements IABMode {
     return ABMode.modes;
   }
 
-  public static getMode(slug: string): ABMode | undefined {
+  public static getMode(slug: SlugId): ABMode | undefined {
     return ABMode.modes.find((mode) => mode.slug === slug);
   }
 }
