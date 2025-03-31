@@ -97,6 +97,8 @@ export default function PlayingField(props: Props) {
   const sensors = useSensors(mouseSensor, touchSensor);
   const tabsRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState('grid');
+  const coinInserted = useRef(false);
+  const playerHandText = 'Player Hand';
 
   const insertCoin = useCallback(() => {
     setTimeout(() => {
@@ -258,11 +260,13 @@ export default function PlayingField(props: Props) {
     }
 
     const abDiscard = playerHand[0];
+
     if (!abDiscard) {
       return;
     }
 
     const newLockedCells = new Set<string>();
+
     grid.forEach((row, rowIndex) => {
       row.forEach((cell, colIndex) => {
         if (cell.card) {
@@ -270,6 +274,7 @@ export default function PlayingField(props: Props) {
         }
       });
     });
+
     setLockedCells(newLockedCells);
 
     const newGrid = grid.map((row) =>
@@ -281,19 +286,19 @@ export default function PlayingField(props: Props) {
 
     setGrid(newGrid);
     setDiscardPile((prev) => [...prev, { ...abDiscard, faceUp: true }] as ABCards);
-
     await handleNextRound({ abDiscard: abDiscard, newGrid });
-
     setPlayerHand([]);
-
     const isGridFull = newGrid.every((row) => row.every((cell) => cell.card !== null));
+
     if (isGridFull) {
       setGameState((prev) => ({ ...prev, gameOver: true }));
+
       return;
     }
   };
 
   const playAgain = async () => {
+    setABGameOver(false);
     switchToGridTab();
     setGrid([]);
     setActiveDrag(null);
@@ -301,7 +306,6 @@ export default function PlayingField(props: Props) {
     setLockedCells(new Set());
     setIsDealing(true);
     await initGame(modeSlug);
-    setABGameOver(false);
     insertCoin();
     setDiscardPile([]);
   };
@@ -311,7 +315,10 @@ export default function PlayingField(props: Props) {
   };
 
   useEffect(() => {
-    insertCoin();
+    if (!coinInserted.current) {
+      insertCoin();
+      coinInserted.current = true;
+    }
   }, [insertCoin]);
 
   useEffect(() => {
@@ -362,7 +369,7 @@ export default function PlayingField(props: Props) {
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
-      <div className="min-h-screen backdrop-blur-xs bg-white/10 border-white/20 rounded-2xl p-4 md:p-8 ">
+      <div className="backdrop-blur-xs bg-white/10 border-white/20 rounded-2xl p-4 md:p-8">
         <CardHeader className="text-white">
           <CardTitle className={cn('text-2xl md:text-3xl', '-mt-7')}>{title}</CardTitle>
           {description && (
@@ -374,17 +381,18 @@ export default function PlayingField(props: Props) {
 
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-6">
           <div className="sm:col-span-2">
-            <div className="sm:sticky sm:top-0 h-auto border border-4 border-dashed rounded-2xl p-4">
-              <div className="flex items-center justify-center gap-2 mb-2 sm:hidden">
-                <h2 className="text-sm text-center font-bold">Player Hand</h2>
+            <div className="sm:sticky sm:top-0 h-auto border border-4 border-dashed rounded-2xl flex flex-col gap-4">
+              <div className="flex items-center justify-center gap-2 mb-2 mt-4 sm:hidden">
+                <h2 className="text-sm text-center font-bold">{playerHandText}</h2>
               </div>
-              <div className={playerHandClass}>
+
+              <div className={cn(playerHandClass)}>
                 {isDealing ? (
                   <Loader2 className="size-4 animate-spin" />
                 ) : (
-                  <>
-                    <div className="flex items-center justify-center gap-2 mb-2 hidden sm:block">
-                      <h2 className="text-sm text-center font-bold">Player Hand</h2>
+                  <div className="flex flex-wrap flex-row sm:flex-col items-center justify-center gap-2">
+                    <div className="flex items-center justify-center mb-2 mt-4 hidden sm:block">
+                      <h2 className="text-sm text-center font-bold">{playerHandText}</h2>
                     </div>
                     <SortableContext
                       items={playerHand.map((item) => item.id)}
@@ -404,12 +412,12 @@ export default function PlayingField(props: Props) {
                         </SortableItem>
                       ))}
                     </SortableContext>
-                  </>
+                  </div>
                 )}
               </div>
 
               <div className="flex items-center justify-center">
-                <div className="flex flex-col w-full">
+                <div className="flex flex-col w-full p-4 -mt-8">
                   {gameOver ? (
                     <Button
                       onClick={playAgain}
