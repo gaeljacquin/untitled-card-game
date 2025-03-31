@@ -64,72 +64,68 @@ export default function ABCardComp(props: Props) {
       )}
     >
       return (
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div
+          className={cn(
+            'absolute inset-0 w-full h-full rounded-xl p-4',
+            'backface-hidden no-select',
+            abDesign.id === 'suitIcon' ? cardColor.bg : 'bg-white'
+          )}
+        >
+          <div className={cn('absolute top-2 left-2 text-xs sm:text-md font-bold', cardColor.text)}>
+            <span
+              className={cn('flex items-center justify-center uppercase', 'text-xs lg:text-sm')}
+            >
+              {rankDisplay}
+            </span>
+            <SuitIcon className={cn('size-2 sm:size-3')} />
+          </div>
+
           <div
             className={cn(
-              'absolute inset-0 w-full h-full rounded-xl p-4',
-              'backface-hidden no-select',
-              abDesign.id === 'suitIcon' ? cardColor.bg : 'bg-white'
+              'absolute bottom-2 right-2 text-base text-xs sm:text-md font-bold rotate-180',
+              cardColor.text
             )}
           >
-            <div
-              className={cn('absolute top-2 left-2 text-xs sm:text-md font-bold', cardColor.text)}
+            <span
+              className={cn('flex items-center justify-center uppercase', 'text-xs lg:text-sm')}
             >
-              <span
-                className={cn('flex items-center justify-center uppercase', 'text-xs lg:text-sm')}
-              >
-                {rankDisplay}
-              </span>
-              <SuitIcon className={cn('size-2 sm:size-3')} />
-            </div>
+              {rankDisplay}
+            </span>
+            <SuitIcon className={cn('size-2 sm:size-3')} />
+          </div>
 
-            <div
+          <div className="relative flex items-center justify-center h-full w-full">
+            {ShapeIcon && (
+              <ShapeIcon
+                className={cn(
+                  'h-auto absolute',
+                  'w-8 sm:w-14 md:max-w-20',
+                  abDesign.className,
+                  cardColor.letter,
+                  cardColor.fill
+                )}
+              />
+            )}
+            <span
               className={cn(
-                'absolute bottom-2 right-2 text-base text-xs sm:text-md font-bold rotate-180',
-                cardColor.text
+                'font-bold uppercase',
+                'absolute',
+                cardColor.letter,
+                'text-xs sm:text-lg',
+                'flex-col-1 items-center justify-center',
+                suitIconFill && !suit.isRed && '-mt-4' // Letter spacing is off when suit is set to clubs or spades.
               )}
             >
-              <span
-                className={cn('flex items-center justify-center uppercase', 'text-xs lg:text-sm')}
-              >
-                {rankDisplay}
-              </span>
-              <SuitIcon className={cn('size-2 sm:size-3')} />
-            </div>
-
-            <div className="relative flex items-center justify-center h-full w-full">
-              {ShapeIcon && (
-                <ShapeIcon
-                  className={cn(
-                    'h-auto absolute',
-                    'w-8 sm:w-14 md:max-w-20',
-                    abDesign.className,
-                    cardColor.letter,
-                    cardColor.fill
-                  )}
-                />
-              )}
               <span
                 className={cn(
-                  'font-bold uppercase',
-                  'absolute',
-                  cardColor.letter,
-                  'text-xs sm:text-lg',
-                  'flex-col-1 items-center justify-center',
-                  suitIconFill && !suit.isRed && '-mt-4' // Letter spacing is off when suit is set to clubs or spades.
+                  'flex items-center justify-center',
+                  suitIconFill ? 'text-sm sm:text-lg' : 'text-md sm:text-xl'
                 )}
               >
-                <span
-                  className={cn(
-                    'flex items-center justify-center',
-                    suitIconFill ? 'text-sm sm:text-lg' : 'text-md sm:text-xl'
-                  )}
-                >
-                  {rankDisplay}
-                </span>
+                {rankDisplay}
               </span>
-            </div>
+            </span>
           </div>
         </div>
       </div>
