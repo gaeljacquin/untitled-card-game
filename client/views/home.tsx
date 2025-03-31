@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+
 import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
 import AudioControlsDynamic from '@/components/audio-controls-dynamic';
 import MainMenuButtons from '@/components/main-menu-buttons';
