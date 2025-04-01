@@ -1,6 +1,6 @@
 @import 'tailwindcss';
-
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark * ));
+@custom-variant hover (&:hover);
 
 @theme {
   --color-border: hsl(var(--border));
@@ -37,11 +37,11 @@
   --color-gray-100: #fbfbfb;
   --color-gray-200: #eaeaea;
   --color-gray-300: #dfdfdf;
-  --color-gray-400: #999999;
+  --color-gray-400: #999;
   --color-gray-500: #7f7f7f;
-  --color-gray-600: #666666;
+  --color-gray-600: #666;
   --color-gray-700: #4c4c4c;
-  --color-gray-800: #333333;
+  --color-gray-800: #333;
   --color-gray-900: #191919;
 
   --color-blue-100: #e6f0fd;
@@ -83,68 +83,85 @@
     from {
       height: 0;
     }
+
     to {
       height: var(--radix-accordion-content-height);
     }
   }
+
   @keyframes accordion-up {
     from {
       height: var(--radix-accordion-content-height);
     }
+
     to {
       height: 0;
     }
   }
+
   @keyframes pulse {
     0% {
       transform: scale(1);
     }
+
     50% {
       transform: scale(1.05);
     }
+
     100% {
       transform: scale(1);
     }
   }
+
   @keyframes gradient {
     to {
       background-position: var(--bg-size) 0;
     }
   }
+
   @keyframes border-beam {
     100% {
       offset-distance: 100%;
     }
   }
+
   @keyframes moveHorizontal {
     0% {
       transform: translateX(-50%) translateY(-10%);
     }
+
     50% {
       transform: translateX(50%) translateY(10%);
     }
+
     100% {
       transform: translateX(-50%) translateY(-10%);
     }
   }
+
   @keyframes moveInCircle {
     0% {
       transform: rotate(0deg);
     }
+
     50% {
       transform: rotate(180deg);
     }
+
     100% {
       transform: rotate(360deg);
     }
   }
+
   @keyframes moveVertical {
     0% {
       transform: translateY(-50%);
     }
+
     50% {
       transform: translateY(50%);
     }
+
     100% {
       transform: translateY(-50%);
     }
@@ -154,9 +171,11 @@
 @utility container {
   margin-inline: auto;
   padding-inline: 2rem;
+
   @media (width >= --theme(--breakpoint-sm)) {
     max-width: none;
   }
+
   @media (width >= 1400px) {
     max-width: 1400px;
   }

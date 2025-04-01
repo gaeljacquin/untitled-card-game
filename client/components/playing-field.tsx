@@ -15,7 +15,7 @@ import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-
 import { emptyHand } from '@untitled-card-game/shared/constants/empty-hand';
 import { ABCard, ABCards } from '@untitled-card-game/shared/core/card';
 import { IABGridCell } from '@untitled-card-game/shared/core/grid-cell';
-import { ABMode } from '@untitled-card-game/shared/core/mode';
+import { ABMode, SlugId } from '@untitled-card-game/shared/core/mode';
 import {
   calculateScore,
   evaluateGridColumn,
@@ -28,19 +28,29 @@ import Placeholder from 'components/placeholder';
 import SortableItem from 'components/sortable-item';
 import { Button } from 'components/ui/button';
 import { CardDescription, CardHeader, CardTitle } from 'components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from 'components/ui/dialog';
 import { Progress } from 'components/ui/progress';
 import { Separator } from 'components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'components/ui/tabs';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from 'lib/utils';
 import { Loader2 } from 'lucide-react';
+import highScoreStore from 'stores/high-score';
 import settingsStore from 'stores/settings';
 import { GameState } from 'types/game-state';
 import { confettiFireworks } from 'utils/confetti';
-import { canMoveCard, getGameState } from 'utils/game-state';
+import { canMoveCard, getGameState, isGridFull } from 'utils/game-state';
 
 type Props = {
-  modeSlug: string;
+  modeSlug: SlugId;
   abCards: ABCards;
   gridClass: string;
   playerHandClass: string;
@@ -85,6 +95,7 @@ export default function PlayingField(props: Props) {
   const mode = ABMode.getMode(modeSlug)!;
   const { title, description, gridSize, type } = mode;
   const { rankLabel } = settingsStore();
+  const { setHighScore, getHighScore, resetHighScore, _hasHydrated } = highScoreStore();
   const [grid, setGrid] = useState<IABGridCell[][]>([]);
   const [activeDrag, setActiveDrag] = useState<ABCard | null>(null);
   const [discardPile, setDiscardPile] = useState<ABCards>([]);
@@ -97,8 +108,29 @@ export default function PlayingField(props: Props) {
   const sensors = useSensors(mouseSensor, touchSensor);
   const tabsRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState('grid');
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const coinInserted = useRef(false);
+  const highScoreBeaten = useRef(false);
   const playerHandText = 'Player Hand';
+
+  const displayCurrentHighScore = () => {
+    const highScoreDate = new Date(getHighScore(modeSlug).date);
+    const formattedDate =
+      highScoreDate.getMonth() +
+      1 +
+      '/' +
+      highScoreDate.getDate() +
+      '/' +
+      highScoreDate.getFullYear();
+
+    return (
+      <div className="flex flex-col gap-2 my-4 p-4 bg-amber-950/60 rounded-xl">
+        <p className="text-md">High Score</p>
+        <p className="text-sm">${getHighScore(modeSlug).value}</p>
+        <p className="text-sm">{formattedDate}</p>
+      </div>
+    );
+  };
 
   const insertCoin = useCallback(() => {
     setTimeout(() => {
@@ -176,6 +208,7 @@ export default function PlayingField(props: Props) {
 
     if (!over || !activeDrag) {
       setActiveDrag(null);
+
       return;
     }
 
@@ -187,6 +220,7 @@ export default function PlayingField(props: Props) {
       const cellId = `cell-${rowIndex}-${columnIndex}`;
       if (lockedCells.has(cellId)) {
         setActiveDrag(null);
+
         return;
       }
 
@@ -198,6 +232,7 @@ export default function PlayingField(props: Props) {
 
           if (!targetCard || targetCard.played) {
             setActiveDrag(null);
+
             return;
           }
 
@@ -211,6 +246,7 @@ export default function PlayingField(props: Props) {
               newGrid[rowIndex][columnIndex].card = { ...sourceCard, faceUp: true } as ABCard;
               setPlayerHand((prev) => {
                 const updatedHand = prev.filter((c) => c.id !== sourceCard.id);
+
                 return [...updatedHand, { ...targetCard, faceUp: true } as ABCard];
               });
             }
@@ -286,7 +322,7 @@ export default function PlayingField(props: Props) {
 
     setGrid(newGrid);
     setDiscardPile((prev) => [...prev, { ...abDiscard, faceUp: true }] as ABCards);
-    await handleNextRound({ abDiscard: abDiscard, newGrid });
+    await handleNextRound({ abDiscard, newGrid });
     setPlayerHand([]);
     const isGridFull = newGrid.every((row) => row.every((cell) => cell.card !== null));
 
@@ -310,14 +346,45 @@ export default function PlayingField(props: Props) {
     setDiscardPile([]);
   };
 
-  const displayDiscardButtonText = () => {
-    return <span className="flex w-full items-center justify-center">Discard</span>;
+  const handleHighScore = useCallback(async () => {
+    animateProgress().then(() => {
+      if (getHighScore(modeSlug).value < gameState.score) {
+        setHighScore(modeSlug, {
+          value: gameState.score + gameState.specialBonus?.points + gameState.discardBonus?.points,
+          date: new Date(),
+          gameState: grid,
+        });
+        highScoreBeaten.current = true;
+        confettiFireworks();
+      }
+    });
+  }, [
+    gameState.discardBonus?.points,
+    gameState.score,
+    gameState.specialBonus?.points,
+    getHighScore,
+    grid,
+    modeSlug,
+    setHighScore,
+  ]);
+
+  const displayNewGameButton = () => {
+    return (
+      <Button
+        onClick={playAgain}
+        disabled={progress !== 100}
+        className="text-wrap truncate w-full hover:cursor-pointer"
+      >
+        New Game
+      </Button>
+    );
   };
 
   useEffect(() => {
     if (!coinInserted.current) {
       insertCoin();
       coinInserted.current = true;
+      highScoreBeaten.current = false;
     }
   }, [insertCoin]);
 
@@ -361,11 +428,10 @@ export default function PlayingField(props: Props) {
         specialBonus: scores.specialBonus,
       }));
       switchToScoreTab();
-      animateProgress().then(() => {
-        confettiFireworks();
-      });
+      handleHighScore();
+      coinInserted.current = false;
     }
-  }, [discardPile, gameOver, grid, mode]);
+  }, [discardPile, gameOver, grid, handleHighScore, mode]);
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
@@ -381,66 +447,65 @@ export default function PlayingField(props: Props) {
 
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-6">
           <div className="sm:col-span-2">
-            <div className="sm:sticky sm:top-0 h-auto border border-4 border-dashed rounded-2xl flex flex-col gap-4">
-              <div className="flex items-center justify-center gap-2 mb-2 mt-4 sm:hidden">
-                <h2 className="text-sm text-center font-bold">{playerHandText}</h2>
-              </div>
+            {activeTab === 'grid' && (
+              // Player Hand
+              <div className="sm:sticky sm:top-0 h-auto bg-amber-950/30 rounded-2xl shadow-md flex flex-col gap-4">
+                <div className="flex items-center justify-center gap-2 mb-2 mt-4 sm:hidden">
+                  <h2 className="text-sm text-center font-bold">{playerHandText}</h2>
+                </div>
 
-              <div className={cn(playerHandClass)}>
-                {isDealing ? (
-                  <Loader2 className="size-4 animate-spin" />
-                ) : (
-                  <div className="flex flex-wrap flex-row sm:flex-col items-center justify-center gap-2">
-                    <div className="flex items-center justify-center mb-2 mt-4 hidden sm:block">
-                      <h2 className="text-sm text-center font-bold">{playerHandText}</h2>
-                    </div>
-                    <SortableContext
-                      items={playerHand.map((item) => item.id)}
-                      strategy={horizontalListSortingStrategy}
-                    >
-                      {playerHand.map((item) => (
-                        <SortableItem key={item.id} id={item.id}>
-                          <ABCardComp
-                            key={`card-${item.id}`}
-                            card={item}
-                            rankLabel={!rankLabel}
-                            modeType={type}
-                            hover={true}
-                            isDragging
-                            inGrid={false}
-                          />
-                        </SortableItem>
-                      ))}
-                    </SortableContext>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex items-center justify-center">
-                <div className="flex flex-col w-full p-4 -mt-8">
-                  {gameOver ? (
-                    <Button
-                      onClick={playAgain}
-                      disabled={progress !== 100}
-                      className="text-wrap truncate"
-                    >
-                      Play Again
-                    </Button>
+                <div className={cn(playerHandClass)}>
+                  {isDealing ? (
+                    <Loader2 className="size-4 animate-spin mt-8" />
                   ) : (
-                    <>
-                      <Separator className="mt-6 mb-4" />
-                      <Button
-                        onClick={handleDiscard}
-                        disabled={playerHand.length !== 1 || isDealing}
-                        className="truncate"
+                    <div className="flex flex-wrap flex-row sm:flex-col items-center justify-center gap-4">
+                      <div className="flex items-center justify-center mb-2 mt-4 hidden sm:block">
+                        <h2 className="text-sm text-center font-bold">{playerHandText}</h2>
+                      </div>
+                      <SortableContext
+                        items={playerHand.map((item) => item.id)}
+                        strategy={horizontalListSortingStrategy}
                       >
-                        {displayDiscardButtonText()}
-                      </Button>
-                    </>
+                        {playerHand.map((item) => (
+                          <SortableItem key={item.id} id={item.id}>
+                            <ABCardComp
+                              key={`card-${item.id}`}
+                              card={item}
+                              rankLabel={!rankLabel}
+                              modeType={type}
+                              hover={true}
+                              isDragging
+                              inGrid={false}
+                            />
+                          </SortableItem>
+                        ))}
+                      </SortableContext>
+                    </div>
                   )}
                 </div>
+
+                <div className="flex items-center justify-center">
+                  <div className="flex flex-col w-full p-2 -mt-8">
+                    <Separator className="mt-6 mb-4" />
+                    <div className="mb-2">
+                      {gameOver ? (
+                        displayNewGameButton()
+                      ) : (
+                        <Button
+                          onClick={handleDiscard}
+                          disabled={playerHand.length !== 1 || isDealing}
+                          className="truncate p-4"
+                        >
+                          <span className="flex w-full items-center justify-center">
+                            {isGridFull(grid) ? 'Finish' : 'Next'}
+                          </span>
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="sm:col-span-8">
@@ -475,7 +540,7 @@ export default function PlayingField(props: Props) {
                       <div className={cornerCellClass} />
 
                       {Array.from({ length: gridSize }, (_, colIndex) => (
-                        <div key={`col-${colIndex}`} className={labelClass}>
+                        <div key={`col-${colIndex}`} className={cn(labelClass, '-mt-3')}>
                           <motion.div>
                             <span className="text-clip">
                               {evaluateGridColumn(grid, colIndex).name}:
@@ -490,7 +555,7 @@ export default function PlayingField(props: Props) {
 
                       {grid.map((row, rowIndex) => (
                         <Fragment key={`row-${rowIndex}`}>
-                          <div className={labelClass}>
+                          <div className={cn(labelClass, '-ml-2')}>
                             <motion.div className="mr-4">
                               <span className="text-clip">
                                 {evaluateGridRow(grid, rowIndex).name}:
@@ -517,6 +582,10 @@ export default function PlayingField(props: Props) {
                         </Fragment>
                       ))}
                     </div>
+
+                    {getHighScore(modeSlug).value !== 0 && activeTab === 'grid' && (
+                      <div className="hidden sm:block">{displayCurrentHighScore()}</div>
+                    )}
                   </>
                 )}
               </TabsContent>
@@ -531,9 +600,14 @@ export default function PlayingField(props: Props) {
                   <></>
                 ) : (
                   <>
-                    <h1 className="text-center text-xl">
-                      {progress === 100 && <>Your Score 🤩</>}
-                    </h1>
+                    {progress === 100 && (
+                      <div className="flex flex-col gap-2">
+                        <h1 className="text-center text-xl">Final Results</h1>
+                        {highScoreBeaten.current && (
+                          <p className="text-md">You just set a new high score! 🤩</p>
+                        )}
+                      </div>
+                    )}
 
                     <motion.div
                       initial={{ opacity: 0 }}
@@ -543,12 +617,7 @@ export default function PlayingField(props: Props) {
                     >
                       <div className="space-y-2">
                         {progress !== 100 ? (
-                          <>
-                            <p className="text-sm text-white text-center">
-                              Evaluating your performance...
-                            </p>
-                            <Progress value={progress} className="h-2" />
-                          </>
+                          <Progress value={progress} className="h-2" />
                         ) : (
                           <Separator />
                         )}
@@ -572,7 +641,7 @@ export default function PlayingField(props: Props) {
                                     animate={{ opacity: 1 }}
                                   >
                                     <p className="flex items-center justify-between gap-2 text-sm">
-                                      <span>Column {index + 1}: </span>
+                                      <span>Column {index + 1} </span>
                                       <span>{evaluateGridColumn(grid, index).name}</span>
                                       <span>${evaluateGridColumn(grid, index).points}</span>
                                     </p>
@@ -608,7 +677,7 @@ export default function PlayingField(props: Props) {
                                   animate={{ opacity: 1 }}
                                 >
                                   <p className="flex items-center justify-between gap-2 text-sm">
-                                    <span>Score</span>
+                                    <span>Grid Total</span>
                                     <span>${gameState.score}</span>
                                   </p>
                                 </motion.div>
@@ -624,7 +693,10 @@ export default function PlayingField(props: Props) {
                                 >
                                   <p className="flex items-center justify-between gap-2 text-sm">
                                     <span>Discard Bonus</span>
-                                    <span>{gameState.discardBonus?.name}</span>
+                                    <span>
+                                      {gameState.discardBonus?.points > 0 &&
+                                        gameState.discardBonus?.name}
+                                    </span>
                                     <span>${gameState.discardBonus?.points ?? 0}</span>
                                   </p>
                                 </motion.div>
@@ -640,7 +712,10 @@ export default function PlayingField(props: Props) {
                                 >
                                   <p className="flex items-center justify-between gap-2 text-sm">
                                     <span>Special Bonus</span>
-                                    <span>{gameState.specialBonus?.name}</span>
+                                    <span>
+                                      {gameState.specialBonus?.points > 0 &&
+                                        gameState.specialBonus?.name}
+                                    </span>
                                     <span>${gameState.specialBonus?.points}</span>
                                   </p>
                                 </motion.div>
@@ -655,7 +730,7 @@ export default function PlayingField(props: Props) {
                                   animate={{ opacity: 1 }}
                                 >
                                   <p className="flex items-center justify-between gap-2 text-sm">
-                                    <span>Final Score</span>
+                                    <span>Overall Score</span>
                                     <span>
                                       $
                                       {(gameState.score as number) +
@@ -667,18 +742,63 @@ export default function PlayingField(props: Props) {
                               </>
                             </div>
 
-                            {gameOver && process.env.NODE_ENV === 'development' && (
-                              <div className="flex items-center justify-center mt-8">
-                                <Button
-                                  variant="secondary"
-                                  size="lg"
-                                  onClick={() => {
-                                    animateProgress();
-                                  }}
-                                  className="animate-fade-in"
-                                >
-                                  Reload animation
-                                </Button>
+                            {gameOver && (
+                              <div className="flex flex-col items-center justify-center mt-8 gap-8">
+                                {displayNewGameButton()}
+                                {process.env.NODE_ENV === 'development' && (
+                                  <Button
+                                    variant="secondary"
+                                    size="lg"
+                                    onClick={animateProgress}
+                                    className="animate-fade-in w-full hover:cursor-pointer"
+                                  >
+                                    Reload Animation
+                                  </Button>
+                                )}
+                                {getHighScore(modeSlug).value !== 0 && (
+                                  <Dialog
+                                    open={confirmModalOpen}
+                                    onOpenChange={setConfirmModalOpen}
+                                  >
+                                    <DialogTrigger asChild>
+                                      <Button
+                                        variant="destructive"
+                                        className="text-wrap truncate w-full hover:cursor-pointer"
+                                      >
+                                        Clear High Score
+                                      </Button>
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-[425px]">
+                                      <DialogHeader>
+                                        <DialogTitle>Clear High Score</DialogTitle>
+                                        <DialogDescription>{mode.title}</DialogDescription>
+                                      </DialogHeader>
+                                      <p className="text-md text-center">Are you sure?</p>
+                                      <DialogFooter className="flex flex-col-reverse justify-center sm:justify-between sm:flex-row gap-8 sm:gap-4">
+                                        <Button
+                                          variant="destructive"
+                                          onClick={() => {
+                                            resetHighScore(modeSlug);
+                                            playAgain();
+                                          }}
+                                          className="text-wrap truncate w-full hover:cursor-pointer"
+                                          disabled={coinInserted.current}
+                                        >
+                                          Yup!
+                                        </Button>
+                                        <Button
+                                          onClick={() => {
+                                            setConfirmModalOpen(false);
+                                          }}
+                                          className="text-wrap truncate w-full hover:cursor-pointer"
+                                          disabled={coinInserted.current}
+                                        >
+                                          Nope!
+                                        </Button>
+                                      </DialogFooter>
+                                    </DialogContent>
+                                  </Dialog>
+                                )}
                               </div>
                             )}
                           </motion.div>
@@ -691,9 +811,23 @@ export default function PlayingField(props: Props) {
             </Tabs>
           </div>
 
-          <div className="sm:col-span-2">
-            <DiscardPile cards={discardPile} modeType={type} rankLabel={!rankLabel} />
-          </div>
+          {activeTab === 'grid' && (
+            <>
+              <div className="sm:col-span-2">
+                {discardPile.length > 0 && (
+                  <DiscardPile
+                    cards={discardPile}
+                    modeType={type}
+                    rankLabel={!rankLabel}
+                    gameOver={gameOver}
+                  />
+                )}
+              </div>
+              {getHighScore(modeSlug).value > 0 && _hasHydrated && (
+                <div className="block sm:hidden">{displayCurrentHighScore()}</div>
+              )}
+            </>
+          )}
         </div>
       </div>
 
