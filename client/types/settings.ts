@@ -1,5 +1,4 @@
 import { abDesigns } from 'stores/settings';
-import { Hydrate } from 'types/hydrate';
 import * as z from 'zod';
 
 export const settingsSchema = z.object({
@@ -15,9 +14,8 @@ export const settingsSchema = z.object({
 
 export type FormData = z.infer<typeof settingsSchema>;
 
-export type SettingsStore = FormData &
-  Hydrate & {
-    updateSettings: (arg0: Partial<FormData>) => void;
-    resetSettings: () => void;
-    getSettings: () => FormData;
-  };
+export type SettingsStore = FormData & {
+  updateSettings: (arg0: Partial<FormData>) => void;
+  resetSettings: () => void;
+  getSettings: () => FormData;
+};

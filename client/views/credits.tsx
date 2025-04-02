@@ -1,12 +1,12 @@
 'use client';
 
-import Link from 'next/link';
-import { motion } from 'framer-motion';
 import AudioControlsDynamic from 'components/audio-controls-dynamic';
 import BackgroundLogo from 'components/background-logo';
 import Footer from 'components/footer';
 import SectionCard from 'components/section-card';
 import { Avatar, AvatarFallback, AvatarImage } from 'components/ui/avatar';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 export default function Credits() {
   return (

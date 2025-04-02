@@ -52,29 +52,16 @@ const settingsStore = create(
   persist(
     devtools<SettingsStore>((set, get) => ({
       ...initialSettings,
-      _hasHydrated: false,
-      setHasHydrated: (_hasHydrated) => {
-        set({ _hasHydrated });
-      },
       updateSettings: (settings) => {
-        set({ ...settings, _hasHydrated: true });
+        set({ ...settings });
       },
       resetSettings: () => {
-        set({ ...initialSettings, _hasHydrated: true });
+        set({ ...initialSettings });
       },
       getSettings: () => get(),
     })),
     {
-      onRehydrateStorage: (state) => {
-        return () => state.setHasHydrated(true);
-      },
       name: 'settings',
-      partialize: (state) => {
-        const { _hasHydrated, ...rest } = state;
-        void _hasHydrated;
-
-        return { ...rest };
-      },
     }
   )
 );

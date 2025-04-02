@@ -22,7 +22,7 @@ import settingsStore, { abDesigns, initialSettings } from 'stores/settings';
 import { FormData, settingsSchema } from 'types/settings';
 
 export default function Settings() {
-  const { _hasHydrated, getSettings, updateSettings, resetSettings } = settingsStore();
+  const { getSettings, updateSettings, resetSettings } = settingsStore();
   const settings = getSettings();
   const { toast } = useToast();
 
@@ -60,7 +60,7 @@ export default function Settings() {
     });
   }
 
-  if (!(_hasHydrated && previewCard)) {
+  if (!previewCard) {
     return <Placeholder />;
   }
 

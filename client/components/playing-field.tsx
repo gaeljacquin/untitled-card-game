@@ -501,7 +501,7 @@ export default function PlayingField(props: Props) {
 
   // Stores
   const { rankLabel } = settingsStore();
-  const { setHighScore, getHighScore, resetHighScore, _hasHydrated } = highScoreStore();
+  const { setHighScore, getHighScore, resetHighScore } = highScoreStore();
 
   // State
   const defaultGameState = useMemo<GameState>(
@@ -960,7 +960,7 @@ export default function PlayingField(props: Props) {
                   />
                 )}
               </div>
-              {getHighScore(modeSlug).value > 0 && _hasHydrated && (
+              {getHighScore(modeSlug).value > 0 && (
                 <div className="block sm:hidden">
                   <HighScoreDisplay modeSlug={modeSlug} />
                 </div>

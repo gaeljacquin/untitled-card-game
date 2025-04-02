@@ -1,6 +1,5 @@
 import { IABGridCell } from '@untitled-card-game/shared/core/grid-cell';
 import { SlugId } from '@untitled-card-game/shared/core/mode';
-import { Hydrate } from 'types/hydrate';
 
 type HighScoreObject = {
   value: number;
@@ -8,7 +7,7 @@ type HighScoreObject = {
   gameState: IABGridCell[][];
 };
 
-type HighScoreMap = Hydrate & {
+type HighScoreMap = {
   [key in SlugId]: HighScoreObject;
 };
 

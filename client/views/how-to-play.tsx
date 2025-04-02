@@ -84,6 +84,7 @@ export default function HowToPlay() {
         </div>
         <Footer />
       </motion.div>
+
       <AudioControlsDynamic />
     </>
   );

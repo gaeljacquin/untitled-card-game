@@ -15,7 +15,6 @@ const audioStore = create(
       muted: false,
       currentTrackIndex: getRandomIndex(tracks),
       tracks,
-      _hasHydrated: false,
       setPlaying: (playing) => set({ playing }),
       setVolume: (volume) => set({ volume }),
       setMuted: (muted) => set({ muted }),
@@ -29,21 +28,9 @@ const audioStore = create(
             state.currentTrackIndex === 0 ? state.tracks.length - 1 : state.currentTrackIndex - 1,
         })),
       getCurrentTrack: () => get().tracks[get().currentTrackIndex],
-      setHasHydrated: (_hasHydrated) => {
-        set({ _hasHydrated });
-      },
     })),
     {
-      onRehydrateStorage: (state) => {
-        return () => state.setHasHydrated(true);
-      },
       name: 'audio',
-      partialize: (state) => {
-        const { _hasHydrated, ...rest } = state;
-        void _hasHydrated;
-
-        return { ...rest };
-      },
     }
   )
 );
