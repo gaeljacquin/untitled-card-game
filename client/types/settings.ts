@@ -1,4 +1,4 @@
-import { abDesigns } from 'stores/settings';
+import { abDesigns } from 'utils/ab-designs';
 import * as z from 'zod';
 
 export const settingsSchema = z.object({

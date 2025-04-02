@@ -1,9 +1,8 @@
 import { getRandomIndex } from '@untitled-card-game/shared/functions/shuffle';
+import playlist from 'assets/playlist.json';
 import { AudioStore, Tracks } from 'types/audio';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-
-import playlist from '@/assets/playlist.json';
 
 const tracks: Tracks = playlist ?? [];
 

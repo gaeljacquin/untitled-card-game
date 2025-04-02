@@ -6,7 +6,7 @@ import Footer from 'components/footer';
 import SectionCard from 'components/section-card';
 import { motion } from 'framer-motion';
 
-// import { Separator } from '@/components/ui/separator';
+// import { Separator } from 'components/ui/separator';
 
 export default function HowToPlay() {
   return (

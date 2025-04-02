@@ -7,7 +7,8 @@ import { IABModeType } from '@untitled-card-game/shared/core/mode';
 import { SuitId } from '@untitled-card-game/shared/core/suit';
 import { motion } from 'framer-motion';
 import { cn } from 'lib/utils';
-import settingsStore, { abDesigns } from 'stores/settings';
+import settingsStore from 'stores/settings';
+import { abDesigns } from 'utils/ab-designs';
 
 type Props = {
   card: ABCard;

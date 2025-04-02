@@ -2,12 +2,12 @@
 
 import { motion } from 'framer-motion';
 
-import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
-import AudioControlsDynamic from '@/components/audio-controls-dynamic';
-import MainMenuButtons from '@/components/main-menu-buttons';
-import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
-import { PageTransition } from '@/components/ui/page-transition';
-import { cn } from '@/lib/utils';
+import AnimatedLogoDynamic from 'components/animated-logo-dynamic';
+import AudioControlsDynamic from 'components/audio-controls-dynamic';
+import MainMenuButtons from 'components/main-menu-buttons';
+import { BackgroundGradientAnimation } from 'components/ui/background-gradient-animation';
+import { PageTransition } from 'components/ui/page-transition';
+import { cn } from 'lib/utils';
 
 export default function Home() {
   return (
