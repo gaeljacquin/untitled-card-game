@@ -4,17 +4,19 @@ import { ReactNode } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'components/ui/card';
 import { cn } from 'lib/utils';
 
-type Props = {
+export default function SectionCard({
+  title,
+  description,
+  children,
+  className,
+  classNameTitle,
+}: {
   title: string;
   description?: string;
   children: ReactNode;
   className?: string;
   classNameTitle?: string;
-};
-
-export default function SectionCard(props: Props) {
-  const { title, description, children, className, classNameTitle } = props;
-
+}) {
   return (
     <Card className={cn('backdrop-blur-xs bg-white/10 border-white/20', className)}>
       <CardHeader className="text-white">

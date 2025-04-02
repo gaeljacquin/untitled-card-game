@@ -12,13 +12,7 @@ import { motion } from 'framer-motion';
 import { cn } from 'lib/utils';
 import SocketInit from 'utils/socket-init';
 
-type Props = {
-  modeSlug: SlugId;
-  gridClass: string;
-};
-
-export default function ABMode(props: Props) {
-  const { modeSlug, gridClass } = props;
+export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; gridClass: string }) {
   const socket = SocketInit();
   const [abCards, setABCards] = useState<ABCards>([]);
   const [abGameOver, setABGameOver] = useState<boolean>(false);

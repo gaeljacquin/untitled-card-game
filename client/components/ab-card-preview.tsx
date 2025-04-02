@@ -7,14 +7,15 @@ import { cn } from 'lib/utils';
 import settingsStore from 'stores/settings';
 import { abDesigns } from 'utils/ab-designs';
 
-type Props = {
+export default function ABCardPreviewComp({
+  card,
+  className,
+  rankLabel,
+}: {
   card: ABCard;
   className?: string;
   rankLabel?: boolean;
-};
-
-export default function ABCardPreviewComp(props: Props) {
-  const { card, className, rankLabel } = props;
+}) {
   const rank = card.rank;
   const suit = card.suit;
   const { abDesignIndex } = settingsStore();

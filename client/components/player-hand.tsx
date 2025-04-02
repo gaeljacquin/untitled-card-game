@@ -7,15 +7,6 @@ import SortableItem from 'components/sortable-item';
 import { cn } from 'lib/utils';
 import { Loader2 } from 'lucide-react';
 
-type PlayerHandProps = {
-  playerHand: ABCards;
-  isDealing: boolean;
-  rankLabel: boolean;
-  modeType: 'abpoker';
-  playerHandClass: string;
-  playerHandText: string;
-};
-
 const PlayerHand = ({
   playerHand,
   isDealing,
@@ -23,7 +14,14 @@ const PlayerHand = ({
   modeType,
   playerHandClass,
   playerHandText,
-}: PlayerHandProps) => {
+}: {
+  playerHand: ABCards;
+  isDealing: boolean;
+  rankLabel: boolean;
+  modeType: 'abpoker';
+  playerHandClass: string;
+  playerHandText: string;
+}) => {
   return (
     <div className={cn(playerHandClass)}>
       <div className="flex flex-wrap flex-row sm:flex-col items-center justify-center gap-4">

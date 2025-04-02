@@ -20,22 +20,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import highScoreStore from 'stores/high-score';
 import { GameState } from 'types/game-state';
 
-type ScoreDisplayProps = {
-  gameState: GameState;
-  grid: IABGridCell[][];
-  gridSize: number;
-  progress: number;
-  gameOver: boolean;
-  playAgain: () => void;
-  modeSlug: SlugId;
-  mode: ABMode;
-  coinInserted: React.MutableRefObject<boolean>;
-  resetHighScore: (slug: SlugId) => void;
-  confirmModalOpen: boolean;
-  setConfirmModalOpen: (open: boolean) => void;
-  animateProgress: () => Promise<void>;
-};
-
 const ScoreDisplay = ({
   gameState,
   grid,
@@ -50,7 +34,21 @@ const ScoreDisplay = ({
   confirmModalOpen,
   setConfirmModalOpen,
   animateProgress,
-}: ScoreDisplayProps) => {
+}: {
+  gameState: GameState;
+  grid: IABGridCell[][];
+  gridSize: number;
+  progress: number;
+  gameOver: boolean;
+  playAgain: () => void;
+  modeSlug: SlugId;
+  mode: ABMode;
+  coinInserted: React.MutableRefObject<boolean>;
+  resetHighScore: (slug: SlugId) => void;
+  confirmModalOpen: boolean;
+  setConfirmModalOpen: (open: boolean) => void;
+  animateProgress: () => Promise<void>;
+}) => {
   const highScoreBeaten = useRef(false);
   const { getHighScore } = highScoreStore();
 

@@ -3,16 +3,6 @@
 import { ABCards } from '@untitled-card-game/shared/core/card';
 import { Button } from 'components/ui/button';
 
-type ActionButtonProps = {
-  gameOver: boolean;
-  isGridFull: boolean;
-  playerHand: ABCards;
-  isDealing: boolean;
-  handleDiscard: () => void;
-  playAgain: () => void;
-  progress: number;
-};
-
 const ActionButton = ({
   gameOver,
   isGridFull,
@@ -21,7 +11,15 @@ const ActionButton = ({
   handleDiscard,
   playAgain,
   progress,
-}: ActionButtonProps) => {
+}: {
+  gameOver: boolean;
+  isGridFull: boolean;
+  playerHand: ABCards;
+  isDealing: boolean;
+  handleDiscard: () => void;
+  playAgain: () => void;
+  progress: number;
+}) => {
   if (gameOver) {
     return (
       <Button

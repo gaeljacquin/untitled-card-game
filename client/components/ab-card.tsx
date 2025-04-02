@@ -10,7 +10,13 @@ import { cn } from 'lib/utils';
 import settingsStore from 'stores/settings';
 import { abDesigns } from 'utils/ab-designs';
 
-type Props = {
+export default function ABCardComp({
+  card,
+  rankLabel,
+  isDragging,
+  hover = false,
+  inGrid = true,
+}: {
   card: ABCard;
   rankLabel?: boolean;
   isDragging?: boolean;
@@ -18,10 +24,7 @@ type Props = {
   className?: string;
   hover?: boolean;
   inGrid?: boolean;
-};
-
-export default function ABCardComp(props: Props) {
-  const { card, rankLabel, isDragging, hover = false, inGrid = true } = props;
+}) {
   const { attributes, listeners, setNodeRef, active } = useDraggable({
     id: card.id,
   });

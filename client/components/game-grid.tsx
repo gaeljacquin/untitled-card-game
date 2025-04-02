@@ -7,15 +7,6 @@ import { GridCell } from 'components/grid-cell';
 import { motion } from 'framer-motion';
 import { cn } from 'lib/utils';
 
-type GameGridProps = {
-  grid: IABGridCell[][];
-  lockedCells: Set<string>;
-  gridClass: string;
-  gridSize: number;
-  type: 'abpoker';
-  rankLabel: boolean;
-};
-
 const labelClass = cn(
   'hidden sm:flex',
   'items-center justify-center',
@@ -25,7 +16,21 @@ const labelClass = cn(
 );
 const cornerCellClass = cn('aspect-none', 'w-auto h-auto', 'hidden sm:flex');
 
-const GameGrid = ({ grid, lockedCells, gridClass, gridSize, type, rankLabel }: GameGridProps) => {
+const GameGrid = ({
+  grid,
+  lockedCells,
+  gridClass,
+  gridSize,
+  type,
+  rankLabel,
+}: {
+  grid: IABGridCell[][];
+  lockedCells: Set<string>;
+  gridClass: string;
+  gridSize: number;
+  type: 'abpoker';
+  rankLabel: boolean;
+}) => {
   return (
     <div className={gridClass}>
       <div className={cornerCellClass} />

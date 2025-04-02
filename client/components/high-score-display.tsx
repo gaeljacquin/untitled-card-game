@@ -3,13 +3,8 @@
 import { SlugId } from '@untitled-card-game/shared';
 import highScoreStore from 'stores/high-score';
 
-type HighScoreDisplayProps = {
-  modeSlug: SlugId;
-};
-
-const HighScoreDisplay = ({ modeSlug }: HighScoreDisplayProps) => {
+const HighScoreDisplay = ({ modeSlug }: { modeSlug: SlugId }) => {
   const { getHighScore } = highScoreStore();
-
   const highScoreDate = new Date(getHighScore(modeSlug).date);
   const formattedDate =
     highScoreDate.getMonth() +

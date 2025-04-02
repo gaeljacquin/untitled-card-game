@@ -6,15 +6,17 @@ import ABCardComp from 'components/ab-card';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from 'lib/utils';
 
-interface Props {
+export default function DiscardPile({
+  cards,
+  modeType,
+  rankLabel,
+  gameOver,
+}: {
   cards: ABCards;
   modeType: IABModeType;
   rankLabel: boolean;
   gameOver: boolean;
-}
-
-export default function DiscardPile(props: Props) {
-  const { cards, modeType, rankLabel, gameOver } = props;
+}) {
   const discardPileText = 'Discard Pile';
 
   return (

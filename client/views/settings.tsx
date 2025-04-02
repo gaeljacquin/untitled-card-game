@@ -1,12 +1,11 @@
 'use client';
 
-import { motion } from 'framer-motion';
-
 import AudioControlsDynamic from 'components/audio-controls-dynamic';
 import BackgroundLogo from 'components/background-logo';
 import Footer from 'components/footer';
 import SectionCard from 'components/section-card';
 import SettingsForm from 'forms/settings';
+import { motion } from 'framer-motion';
 
 export default function Settings() {
   return (

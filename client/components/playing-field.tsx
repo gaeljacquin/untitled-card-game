@@ -35,7 +35,16 @@ import { GameState } from 'types/game-state';
 import { confettiFireworks } from 'utils/confetti';
 import { canMoveCard, getGameState, isGridFull } from 'utils/game-state';
 
-type Props = {
+export default function PlayingField({
+  modeSlug,
+  abCards,
+  gridClass,
+  playerHandClass,
+  gameOver = false,
+  handleNextRound,
+  initGame,
+  setABGameOver,
+}: {
   modeSlug: SlugId;
   abCards: ABCards;
   gridClass: string;
@@ -44,19 +53,7 @@ type Props = {
   handleNextRound: (arg0: { [key: string]: unknown }) => void;
   initGame: (arg0: string) => void;
   setABGameOver: (arg0: boolean) => void;
-};
-
-export default function PlayingField(props: Props) {
-  const {
-    modeSlug,
-    abCards,
-    gridClass,
-    playerHandClass,
-    gameOver = false,
-    handleNextRound,
-    initGame,
-    setABGameOver,
-  } = props;
+}) {
   const playerHandText = 'Player Hand';
 
   // Stores

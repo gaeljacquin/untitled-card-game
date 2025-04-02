@@ -7,7 +7,15 @@ import ABCardComp from 'components/ab-card';
 import { motion } from 'framer-motion';
 import { cn } from 'lib/utils';
 
-interface Props {
+export function GridCell({
+  cell,
+  modeType,
+  gridSize,
+  lockedCells,
+  rowIndex,
+  columnIndex,
+  rankLabel,
+}: {
   cell: IABGridCell;
   modeType: IABModeType;
   gridSize: number;
@@ -15,10 +23,7 @@ interface Props {
   rowIndex: number;
   columnIndex: number;
   rankLabel: boolean;
-}
-
-export function GridCell(props: Props) {
-  const { cell, modeType, gridSize, lockedCells, rowIndex, columnIndex, rankLabel } = props;
+}) {
   const droppable = {
     id: cell.id,
     data: {
