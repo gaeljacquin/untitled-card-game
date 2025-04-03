@@ -3,11 +3,12 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { PropsWithChildren } from 'react';
 
-interface Props {
+export default function SortableItem({
+  children,
+  ...props
+}: PropsWithChildren<{
   id: UniqueIdentifier;
-}
-
-export default function SortableItem({ children, ...props }: PropsWithChildren<Props>) {
+}>) {
   const { id } = props;
   const { attributes, listeners, setNodeRef, transform, transition, active } = useSortable({
     id,

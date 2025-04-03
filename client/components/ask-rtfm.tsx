@@ -12,22 +12,21 @@ import { cn } from 'lib/utils';
 import Link from 'next/link';
 import miscStore from 'stores/misc';
 
-type Props = {
+export default function AskRtfm({
+  askRtfmOpen,
+  menuButtonClicked,
+  setAskRtfmOpen,
+  setMenuButtonClicked,
+  openModeSelection,
+}: {
   askRtfmOpen: boolean;
   setAskRtfmOpen: (isOpen: boolean) => void;
   menuButtonClicked: boolean;
   setMenuButtonClicked: (clicked: boolean) => void;
   openModeSelection: (arg0: boolean) => void;
-};
-export default function AskRtfm(props: Props) {
-  const {
-    askRtfmOpen,
-    menuButtonClicked,
-    setAskRtfmOpen,
-    setMenuButtonClicked,
-    openModeSelection,
-  } = props;
+}) {
   const { muteAskRtfm } = miscStore();
+
   const handleClose = () => {
     if (!menuButtonClicked) {
       setAskRtfmOpen(false);

@@ -1,11 +1,10 @@
 'use client';
 
 import { useRef } from 'react';
+import gameLogo from 'assets/game-logo.json';
 import type { LottieRefCurrentProps } from 'lottie-react';
 import Lottie from 'lottie-react';
 import { AnimatedLogoProps } from 'types/animated-logo';
-
-import gameLogo from '@/assets/game-logo.json';
 
 export default function AnimatedLogo(props: AnimatedLogoProps) {
   const { loop, autoplay } = props;

@@ -6,8 +6,6 @@ import Footer from 'components/footer';
 import SectionCard from 'components/section-card';
 import { motion } from 'framer-motion';
 
-// import { Separator } from '@/components/ui/separator';
-
 export default function HowToPlay() {
   return (
     <>
@@ -78,12 +76,11 @@ export default function HowToPlay() {
               </li>
               <li>Try to get both bonuses in one game for an even greater challenge!</li>
             </ul>
-
-            {/* <Separator className="mt-12" /> */}
           </SectionCard>
         </div>
         <Footer />
       </motion.div>
+
       <AudioControlsDynamic />
     </>
   );

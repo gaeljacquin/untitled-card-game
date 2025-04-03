@@ -20,10 +20,6 @@ const highScoreStore = create(
   persist(
     devtools<HighScoreStore>((set, get) => ({
       ...initialHighScores,
-      _hasHydrated: false,
-      setHasHydrated: (_hasHydrated) => {
-        set({ _hasHydrated });
-      },
       setHighScore: (slugId, highScore) => {
         set({ [slugId]: highScore });
       },
@@ -37,16 +33,7 @@ const highScoreStore = create(
       },
     })),
     {
-      onRehydrateStorage: (state) => {
-        return () => state.setHasHydrated(true);
-      },
       name: 'high-scores',
-      partialize: (state) => {
-        const { _hasHydrated, ...rest } = state;
-        void _hasHydrated;
-
-        return { ...rest };
-      },
     }
   )
 );

@@ -1,9 +1,8 @@
 import { getRandomIndex } from '@untitled-card-game/shared/functions/shuffle';
+import playlist from 'assets/playlist.json';
 import { AudioStore, Tracks } from 'types/audio';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-
-import playlist from '@/assets/playlist.json';
 
 const tracks: Tracks = playlist ?? [];
 
@@ -15,7 +14,6 @@ const audioStore = create(
       muted: false,
       currentTrackIndex: getRandomIndex(tracks),
       tracks,
-      _hasHydrated: false,
       setPlaying: (playing) => set({ playing }),
       setVolume: (volume) => set({ volume }),
       setMuted: (muted) => set({ muted }),
@@ -29,21 +27,9 @@ const audioStore = create(
             state.currentTrackIndex === 0 ? state.tracks.length - 1 : state.currentTrackIndex - 1,
         })),
       getCurrentTrack: () => get().tracks[get().currentTrackIndex],
-      setHasHydrated: (_hasHydrated) => {
-        set({ _hasHydrated });
-      },
     })),
     {
-      onRehydrateStorage: (state) => {
-        return () => state.setHasHydrated(true);
-      },
       name: 'audio',
-      partialize: (state) => {
-        const { _hasHydrated, ...rest } = state;
-        void _hasHydrated;
-
-        return { ...rest };
-      },
     }
   )
 );

@@ -18,11 +18,12 @@ import { useToast } from 'hooks/use-toast';
 import { cn } from 'lib/utils';
 import { Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import settingsStore, { abDesigns, initialSettings } from 'stores/settings';
+import settingsStore, { initialSettings } from 'stores/settings';
 import { FormData, settingsSchema } from 'types/settings';
+import { abDesigns } from 'utils/ab-designs';
 
 export default function Settings() {
-  const { _hasHydrated, getSettings, updateSettings, resetSettings } = settingsStore();
+  const { getSettings, updateSettings, resetSettings } = settingsStore();
   const settings = getSettings();
   const { toast } = useToast();
 
@@ -60,7 +61,7 @@ export default function Settings() {
     });
   }
 
-  if (!(_hasHydrated && previewCard)) {
+  if (!previewCard) {
     return <Placeholder />;
   }
 
