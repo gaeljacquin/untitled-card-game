@@ -8,10 +8,8 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import cors from '@/utils/cors';
-import { ABGame } from '@untitled-card-game/shared/dist/core/game';
 import { GameService } from '@/game/game.service';
-import { ABMode } from '@untitled-card-game/shared/dist/core/mode';
-import { ABDeck } from '@untitled-card-game/shared/dist/core/deck';
+import { ABDeck, ABGame, ABMode } from '@gaeljacquin/ucg-shared';
 
 @WebSocketGateway({ cors })
 export class GameGateway

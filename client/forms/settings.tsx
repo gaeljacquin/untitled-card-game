@@ -1,10 +1,8 @@
 'use client';
 
+import { ABCardPreview, Rank, RankId, Suit, SuitId } from '@gaeljacquin/ucg-shared';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PopoverClose } from '@radix-ui/react-popover';
-import { ABCardPreview } from '@untitled-card-game/shared/core/card';
-import { Rank, RankId } from '@untitled-card-game/shared/core/rank';
-import { Suit, SuitId } from '@untitled-card-game/shared/core/suit';
 import ABCardPreviewComp from 'components/ab-card-preview';
 import Placeholder from 'components/placeholder';
 import { Button } from 'components/ui/button';

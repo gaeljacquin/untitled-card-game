@@ -1,6 +1,4 @@
-import { emptyHand } from '@untitled-card-game/shared/constants/empty-hand';
-import { ABCard } from '@untitled-card-game/shared/core/card';
-import { IABGridCell } from '@untitled-card-game/shared/core/grid-cell';
+import { ABCard, emptyHand, IABGridCell } from '@gaeljacquin/ucg-shared';
 import { GameState } from 'types/game-state';
 
 export function getGameState(grid: IABGridCell[][]): GameState {

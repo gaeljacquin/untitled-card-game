@@ -1,8 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { SlugId } from '@untitled-card-game/shared';
-import { ABCards } from '@untitled-card-game/shared/core/card';
+import { ABCards, SlugId } from '@gaeljacquin/ucg-shared';
 import AudioControlsDynamic from 'components/audio-controls-dynamic';
 import BackgroundLogo from 'components/background-logo';
 import Footer from 'components/footer';

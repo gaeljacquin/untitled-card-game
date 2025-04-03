@@ -1,9 +1,13 @@
 'use client';
 
 import { useRef } from 'react';
-import { IABGridCell } from '@untitled-card-game/shared/core/grid-cell';
-import { ABMode, SlugId } from '@untitled-card-game/shared/core/mode';
-import { evaluateGridColumn, evaluateGridRow } from '@untitled-card-game/shared/functions/evaluate';
+import {
+  ABMode,
+  evaluateGridColumn,
+  evaluateGridRow,
+  IABGridCell,
+  SlugId,
+} from '@gaeljacquin/ucg-shared';
 import { Button } from 'components/ui/button';
 import {
   Dialog,
