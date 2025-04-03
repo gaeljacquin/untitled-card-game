@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ABMode } from '@untitled-card-game/shared/core/mode';
+import { ABMode } from '@gaeljacquin/ucg-shared';
 import { Button } from 'components/ui/button';
 import {
   Dialog,

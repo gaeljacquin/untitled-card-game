@@ -1,36 +1,24 @@
-FROM node:latest AS shared-build
-WORKDIR /shared
-COPY --from=root-folder /shared ./
-RUN npm install -g pnpm && pnpm install
-RUN pnpm build
-
-FROM node:latest AS base
+# Development stage
+FROM node:latest AS dev
+RUN npm uninstall --global pnpm
+RUN npm install --global corepack
+RUN corepack enable pnpm
 WORKDIR /app
-COPY --from=root-folder pnpm-workspace.yaml pnpm-lock.yaml package.json ./
-COPY --from=shared-build /shared ./shared
-COPY package.json pnpm-lock.yaml ./client/
-RUN npm install -g pnpm && pnpm install
+ENV PNPM_STORE_PATH=/app/.pnpm-store/v10
+COPY package.json pnpm-lock.yaml* ./
+RUN pnpm config set store-dir $PNPM_STORE_PATH --global
+RUN pnpm install
+COPY . ./
+CMD ["pnpm", "dev"]
 
-FROM base AS dev
-COPY . ./client
-WORKDIR /app/client
-CMD ["pnpm", "dev-docker"]
-
-FROM base AS build
-ARG SERVER_URL
-ENV SERVER_URL=$SERVER_URL
-WORKDIR /app
-COPY . ./client
-WORKDIR /app/client
-RUN pnpm build
-
+# Production stage
 FROM node:current-alpine AS prod
+RUN npm uninstall --global pnpm
+RUN npm install --global corepack
+RUN corepack enable pnpm
 WORKDIR /app
-COPY --from=root-folder pnpm-workspace.yaml pnpm-lock.yaml package.json ./
-COPY --from=shared-build /shared ./shared
-COPY package.json pnpm-lock.yaml ./client/
-COPY --from=build /app/client/.next ./client/.next
-COPY public ./client/public
-RUN npm install -g pnpm && pnpm install --filter ./client --prod
-WORKDIR /app/client
+COPY package.json pnpm-lock.yaml* ./
+RUN pnpm install
+COPY . ./
+RUN pnpm build
 CMD ["pnpm", "start"]

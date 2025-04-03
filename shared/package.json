@@ -1,19 +1,36 @@
 {
-  "name": "@untitled-card-game/shared",
-  "main": "dist/index.js",
-  "types": "dist/index.ts",
-  "exports": {
-    ".": "./dist/index.js"
+  "name": "@gaeljacquin/ucg-shared",
+  "version": "1.1.2",
+  "description": "Shared code",
+  "homepage": "https://github.com/gaeljacquin/untitled-card-game#readme",
+  "bugs": {
+    "url": "https://github.com/gaeljacquin/untitled-card-game/issues"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/gaeljacquin/untitled-card-game.git"
+  },
+  "license": "MIT",
+  "author": "Gaël Jacquin",
+  "type": "commonjs",
+  "exports": {
+    ".": "./dist/index.js",
+    "./core/*": "./dist/core/*.js",
+    "./constants/*": "./dist/constants/*.js",
+    "./functions/*": "./dist/functions/*.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
   "scripts": {
     "build": "tsc",
-    "prettier:write": "prettier --write \"**/*.{ts,js,mjs,cjs,json}\""
-  },
-  "devDependencies": {
-    "typescript": "^5.8.2"
+    "prettier:write": "prettier --write \"**/*.{ts,js,json}\""
   },
   "dependencies": {
     "react-icons": "^5.5.0",
     "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
   }
 }

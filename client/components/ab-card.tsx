@@ -1,10 +1,7 @@
 'use client';
 
 import { useDraggable } from '@dnd-kit/core';
-import { suitIconMap } from '@untitled-card-game/shared/constants/suit-icon';
-import { ABCard } from '@untitled-card-game/shared/core/card';
-import { IABModeType } from '@untitled-card-game/shared/core/mode';
-import { SuitId } from '@untitled-card-game/shared/core/suit';
+import { ABCard, IABModeType, suitIconMap, SuitId } from '@gaeljacquin/ucg-shared';
 import { motion } from 'framer-motion';
 import { cn } from 'lib/utils';
 import settingsStore from 'stores/settings';

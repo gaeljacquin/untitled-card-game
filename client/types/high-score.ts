@@ -1,5 +1,4 @@
-import { IABGridCell } from '@untitled-card-game/shared/core/grid-cell';
-import { SlugId } from '@untitled-card-game/shared/core/mode';
+import { IABGridCell, SlugId } from '@gaeljacquin/ucg-shared';
 
 type HighScoreObject = {
   value: number;

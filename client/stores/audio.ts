@@ -1,4 +1,4 @@
-import { getRandomIndex } from '@untitled-card-game/shared/functions/shuffle';
+import { getRandomIndex } from '@gaeljacquin/ucg-shared';
 import playlist from 'assets/playlist.json';
 import { AudioStore, Tracks } from 'types/audio';
 import { create } from 'zustand';

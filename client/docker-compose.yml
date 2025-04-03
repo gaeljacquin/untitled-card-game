@@ -1,18 +1,28 @@
 services:
   untitled-card-game:
-    container_name: untitled-card-game-client
     build:
       context: .
       dockerfile: Dockerfile
-      target: ${BUILD_TARGET:-dev}
-      additional_contexts:
-        root-folder: ../
+      target: ${BUILD_TARGET:-prod}
       args:
         SERVER_URL: ${SERVER_URL}
+    container_name: untitled-card-game-client
     volumes:
-      - /app/node_modules
-      - /app/client/node_modules
+      - .:/app
+      - node-modules:/app/node_modules
+      - pnpm-store:/app/.pnpm-store/v3
     environment:
       SERVER_URL: ${SERVER_URL}
+      PORT: ${PORT:-3000}
     ports:
-      - '3000:3000'
+      - '${PORT:-3000}:${PORT:-3000}'
+    networks:
+      - ucg_network
+
+networks:
+  ucg_network:
+    external: true
+
+volumes:
+  node-modules:
+  pnpm-store:

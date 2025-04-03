@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -12,11 +12,15 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
-import { emptyHand } from '@untitled-card-game/shared/constants/empty-hand';
-import { ABCard, ABCards } from '@untitled-card-game/shared/core/card';
-import { IABGridCell } from '@untitled-card-game/shared/core/grid-cell';
-import { ABMode, SlugId } from '@untitled-card-game/shared/core/mode';
-import { calculateScore } from '@untitled-card-game/shared/functions/evaluate';
+import {
+  ABCard,
+  ABCards,
+  ABMode,
+  calculateScore,
+  emptyHand,
+  IABGridCell,
+  SlugId,
+} from '@gaeljacquin/ucg-shared';
 import ABCardComp from 'components/ab-card';
 import ActionButton from 'components/action-button';
 import DiscardPile from 'components/discard-pile';

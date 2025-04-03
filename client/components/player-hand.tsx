@@ -1,7 +1,7 @@
 'use client';
 
 import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
-import { ABCards } from '@untitled-card-game/shared/core/card';
+import { ABCards } from '@gaeljacquin/ucg-shared';
 import ABCardComp from 'components/ab-card';
 import SortableItem from 'components/sortable-item';
 import { cn } from 'lib/utils';
