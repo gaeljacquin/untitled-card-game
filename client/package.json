@@ -2,8 +2,7 @@
   "name": "@untitled-card-game/client",
   "type": "module",
   "scripts": {
-    "dev": "npx env-cmd -f \".env.local\" next dev --turbopack",
-    "dev-docker": "next dev",
+    "dev": "npx env-cmd -f \".env\" next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",

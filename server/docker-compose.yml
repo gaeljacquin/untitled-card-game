@@ -1,16 +1,29 @@
 services:
   untitled-card-game:
-    container_name: untitled-card-game-server
     build:
-      context: ..
-      dockerfile: server/Dockerfile
-      target: ${BUILD_TARGET:-dev}
+      context: .
+      dockerfile: Dockerfile
+      target: ${BUILD_TARGET:-prod}
       args:
         CLIENT_URL: ${CLIENT_URL}
+    container_name: untitled-card-game-server
     volumes:
-      - /app/node_modules
-      - /app/server/node_modules
+      - .:/app
+      - node-modules:/app/node_modules
+      - pnpm-store:/app/.pnpm-store/v3
     environment:
       CLIENT_URL: ${CLIENT_URL}
+      PORT: ${PORT:-8080}
     ports:
-      - '8080:3000'
+      - '${PORT:-8080}:${PORT:-3000}'
+    networks:
+      - ucg_network
+
+networks:
+  ucg_network:
+    name: ucg_network
+    driver: bridge
+
+volumes:
+  node-modules:
+  pnpm-store:

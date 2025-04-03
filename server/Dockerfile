@@ -1,33 +1,22 @@
-FROM node:latest AS shared-build
-WORKDIR /shared
-COPY ./shared ./
-RUN npm install -g pnpm && pnpm install
-RUN pnpm build
-
-FROM node:latest AS base
+# Development stage
+FROM node:latest AS dev
+RUN npm uninstall --global pnpm
+RUN npm install --global corepack
+RUN corepack enable pnpm
 WORKDIR /app
-COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
-COPY --from=shared-build /shared ./shared
-COPY server/package.json ./server/
-RUN npm install -g pnpm && pnpm install
-
-FROM base AS dev
-COPY server ./server
-WORKDIR /app/server
+COPY package.json pnpm-lock.yaml* ./
+RUN pnpm install
+COPY . ./
 CMD ["pnpm", "start:dev"]
 
-FROM base AS build
-WORKDIR /app
-COPY server ./server
-WORKDIR /app/server
-RUN pnpm build
-
+# Production stage
 FROM node:current-alpine AS prod
+RUN npm uninstall --global pnpm
+RUN npm install --global corepack
+RUN corepack enable pnpm
 WORKDIR /app
-COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
-COPY --from=shared-build /shared ./shared
-COPY server/package.json ./server/
-COPY --from=build /app/server/dist ./server/dist
-RUN npm install -g pnpm && pnpm install --filter ./server --prod
-WORKDIR /app/server
+COPY package.json pnpm-lock.yaml* ./
+RUN pnpm install
+COPY . ./
+RUN pnpm build
 CMD ["pnpm", "start:prod"]
