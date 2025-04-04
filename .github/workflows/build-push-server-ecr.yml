@@ -5,6 +5,7 @@ on:
     paths:
       - 'server/**'
       - 'shared/**'
+      - '.github/workflows/build-push-server-ecr.yml'
     branches:
       - main
   pull_request:
@@ -12,9 +13,13 @@ on:
     paths:
       - 'server/**'
       - 'shared/**'
+      - '.github/workflows/build-push-server-ecr.yml'
     branches:
       - main
 
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   build:
