@@ -132,3 +132,5 @@ dist
 *.code-workspace
 
 */.vscode
+
+.secrets
