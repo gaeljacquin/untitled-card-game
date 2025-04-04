@@ -6,9 +6,18 @@ on:
       - 'server/**'
     branches:
       - main
+  pull_request:
+    types: [closed]
+    paths:
+      - 'server/**'
+    branches:
+      - main
+
 
 jobs:
   build:
+    # comment the line below to run the workflow locally with 'act'
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
 
     env:
