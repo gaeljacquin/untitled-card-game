@@ -13,7 +13,7 @@ import {
 import { cn } from 'lib/utils';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import miscStore from 'stores/misc';
+import { useUcgStore } from 'stores/main-store';
 
 type Props = {
   selectMode: boolean;
@@ -24,7 +24,7 @@ type Props = {
 
 export default function ModeSelect(props: Props) {
   const { selectMode, openSelectMode, newGameGradient, newGameHoverGradient } = props;
-  const { askRtfm, muteAskRtfm } = miscStore();
+  const { askRtfm, muteAskRtfm } = useUcgStore();
   const [anyButtonClicked, setAnyButtonClicked] = useState(false);
   const [clickedButton, setClickedButton] = useState<string>();
   const modes = ABMode.getModes();

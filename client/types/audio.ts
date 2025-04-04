@@ -6,7 +6,7 @@ export type Track = {
 
 export type Tracks = Track[];
 
-export type AudioStore = {
+export type AudioState = {
   playing: boolean;
   volume: number;
   muted: boolean;

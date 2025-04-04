@@ -10,7 +10,7 @@ type HighScoreMap = {
   [key in SlugId]: HighScoreObject;
 };
 
-export interface HighScoreStore extends HighScoreMap {
+export interface HighScoreState extends HighScoreMap {
   setHighScore: (arg0: SlugId, arg1: HighScoreObject) => void;
   resetHighScore: (arg0: SlugId) => void;
   getHighScore: (arg0: SlugId) => HighScoreObject;

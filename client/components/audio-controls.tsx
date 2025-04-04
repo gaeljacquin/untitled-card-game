@@ -14,8 +14,7 @@ import {
   VolumeX,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import audioStore from 'stores/audio';
-import miscStore from 'stores/misc';
+import { useUcgStore } from 'stores/main-store';
 
 export default function AudioControls() {
   const {
@@ -28,8 +27,9 @@ export default function AudioControls() {
     nextTrack,
     previousTrack,
     getCurrentTrack,
-  } = audioStore();
-  const { audioPlayerVisible, toggleAudioPlayerVisibility } = miscStore();
+    audioPlayerVisible,
+    toggleAudioPlayerVisibility,
+  } = useUcgStore();
   const track = getCurrentTrack() ?? '';
   const pathname = usePathname();
   const isHome = pathname === '/';

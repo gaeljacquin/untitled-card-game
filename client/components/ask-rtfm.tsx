@@ -10,7 +10,7 @@ import {
 } from 'components/ui/dialog';
 import { cn } from 'lib/utils';
 import Link from 'next/link';
-import miscStore from 'stores/misc';
+import { useUcgStore } from 'stores/main-store';
 
 export default function AskRtfm({
   askRtfmOpen,
@@ -25,7 +25,7 @@ export default function AskRtfm({
   setMenuButtonClicked: (clicked: boolean) => void;
   openModeSelection: (arg0: boolean) => void;
 }) {
-  const { muteAskRtfm } = miscStore();
+  const { muteAskRtfm } = useUcgStore();
 
   const handleClose = () => {
     if (!menuButtonClicked) {

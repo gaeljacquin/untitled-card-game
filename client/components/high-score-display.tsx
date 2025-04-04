@@ -1,10 +1,10 @@
 'use client';
 
 import { SlugId } from '@gaeljacquin/ucg-shared';
-import highScoreStore from 'stores/high-score';
+import { useUcgStore } from 'stores/main-store';
 
 const HighScoreDisplay = ({ modeSlug }: { modeSlug: SlugId }) => {
-  const { getHighScore } = highScoreStore();
+  const { getHighScore } = useUcgStore();
   const highScoreDate = new Date(getHighScore(modeSlug).date);
   const formattedDate =
     highScoreDate.getMonth() +
