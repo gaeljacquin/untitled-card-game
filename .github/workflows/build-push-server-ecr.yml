@@ -4,12 +4,14 @@ on:
   push:
     paths:
       - 'server/**'
+      - 'shared/**'
     branches:
       - main
   pull_request:
     types: [closed]
     paths:
       - 'server/**'
+      - 'shared/**'
     branches:
       - main
 

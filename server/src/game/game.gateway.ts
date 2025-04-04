@@ -54,7 +54,6 @@ export class GameGateway
     const abGame = new ABGame(mode);
     abGame.setABSeed(abSeed);
     const abCards = abGame.dealHand(0);
-
     const emit = {
       abCards,
     };
