@@ -21,7 +21,9 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "prettier:write": "prettier --write \"**/*.{ts,js,json}\""
@@ -31,6 +33,6 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   }
 }
