@@ -16,25 +16,25 @@ import { useToast } from 'hooks/use-toast';
 import { cn } from 'lib/utils';
 import { Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import settingsStore, { initialSettings } from 'stores/settings';
+import { initialSettings } from 'stores/slices/settings-slice';
 import { FormData, settingsSchema } from 'types/settings';
 import { abDesigns } from 'utils/ab-designs';
 
+import { useUcgStore } from '@/stores/main-store';
+
 export default function Settings() {
-  const { getSettings, updateSettings, resetSettings } = settingsStore();
+  const { getSettings, updateSettings, resetSettings } = useUcgStore();
   const settings = getSettings();
   const { toast } = useToast();
-
-  const form = useForm<FormData>({
-    resolver: zodResolver(settingsSchema),
-    defaultValues: settings,
-  });
-
   const previewRank = Rank.getById(settings.previewCard.rank as RankId);
   const previewSuit = Suit.getById(settings.previewCard.suit as SuitId);
   const previewCard = new ABCardPreview();
   previewCard.setRank(previewRank);
   previewCard.setSuit(previewSuit);
+  const form = useForm<FormData>({
+    resolver: zodResolver(settingsSchema),
+    defaultValues: settings,
+  });
 
   function onSubmit(data: FormData) {
     updateSettings(data);

@@ -33,8 +33,7 @@ import { CardDescription, CardHeader, CardTitle } from 'components/ui/card';
 import { Separator } from 'components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'components/ui/tabs';
 import { cn } from 'lib/utils';
-import highScoreStore from 'stores/high-score';
-import settingsStore from 'stores/settings';
+import { useUcgStore } from 'stores/main-store';
 import { GameState } from 'types/game-state';
 import { confettiFireworks } from 'utils/confetti';
 import { canMoveCard, getGameState, isGridFull } from 'utils/game-state';
@@ -61,8 +60,7 @@ export default function PlayingField({
   const playerHandText = 'Player Hand';
 
   // Stores
-  const { rankLabel } = settingsStore();
-  const { setHighScore, getHighScore, resetHighScore } = highScoreStore();
+  const { rankLabel, setHighScore, getHighScore, resetHighScore } = useUcgStore();
 
   // State
   const defaultGameState = useMemo<GameState>(

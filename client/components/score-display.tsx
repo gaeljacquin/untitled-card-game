@@ -21,7 +21,7 @@ import {
 import { Progress } from 'components/ui/progress';
 import { Separator } from 'components/ui/separator';
 import { AnimatePresence, motion } from 'framer-motion';
-import highScoreStore from 'stores/high-score';
+import { useUcgStore } from 'stores/main-store';
 import { GameState } from 'types/game-state';
 
 const ScoreDisplay = ({
@@ -54,7 +54,7 @@ const ScoreDisplay = ({
   animateProgress: () => Promise<void>;
 }) => {
   const highScoreBeaten = useRef(false);
-  const { getHighScore } = highScoreStore();
+  const { getHighScore } = useUcgStore();
 
   return (
     <>

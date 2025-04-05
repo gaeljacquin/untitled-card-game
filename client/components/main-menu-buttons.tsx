@@ -7,10 +7,10 @@ import InteractiveHoverButton from 'components/ui/interactive-hover-button';
 import { motion } from 'framer-motion';
 import { cn } from 'lib/utils';
 import Link from 'next/link';
-import miscStore from 'stores/misc';
+import { useUcgStore } from 'stores/main-store';
 
 export default function MainMenuButtons() {
-  const { askRtfm, muteAskRtfm } = miscStore();
+  const { askRtfm, muteAskRtfm } = useUcgStore();
   const [modeSelection, openModeSelection] = useState(false);
   const [menuButtonClicked, setMenuButtonClicked] = useState(false);
   const [askRtfmOpen, setAskRtfmOpen] = useState(false);

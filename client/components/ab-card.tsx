@@ -4,7 +4,7 @@ import { useDraggable } from '@dnd-kit/core';
 import { ABCard, IABModeType, suitIconMap, SuitId } from '@gaeljacquin/ucg-shared';
 import { motion } from 'framer-motion';
 import { cn } from 'lib/utils';
-import settingsStore from 'stores/settings';
+import { useUcgStore } from 'stores/main-store';
 import { abDesigns } from 'utils/ab-designs';
 
 export default function ABCardComp({
@@ -27,7 +27,7 @@ export default function ABCardComp({
   });
   const rank = card.rank;
   const suit = card.suit;
-  const { abDesignIndex } = settingsStore();
+  const { abDesignIndex } = useUcgStore();
   const abDesign = abDesigns[abDesignIndex];
 
   // Part of the race condition fix

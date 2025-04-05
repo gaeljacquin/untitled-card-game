@@ -2,7 +2,7 @@
 
 import { ABCard, suitIconMap, SuitId } from '@gaeljacquin/ucg-shared';
 import { cn } from 'lib/utils';
-import settingsStore from 'stores/settings';
+import { useUcgStore } from 'stores/main-store';
 import { abDesigns } from 'utils/ab-designs';
 
 export default function ABCardPreviewComp({
@@ -16,7 +16,7 @@ export default function ABCardPreviewComp({
 }) {
   const rank = card.rank;
   const suit = card.suit;
-  const { abDesignIndex } = settingsStore();
+  const { abDesignIndex } = useUcgStore();
   const cardFront = abDesigns[abDesignIndex];
   const cardColor = suit.isRed
     ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }

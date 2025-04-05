@@ -14,7 +14,7 @@ export const settingsSchema = z.object({
 
 export type FormData = z.infer<typeof settingsSchema>;
 
-export type SettingsStore = FormData & {
+export type SettingsState = FormData & {
   updateSettings: (arg0: Partial<FormData>) => void;
   resetSettings: () => void;
   getSettings: () => FormData;
