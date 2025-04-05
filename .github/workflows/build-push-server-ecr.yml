@@ -1,13 +1,6 @@
 name: Build and Push Server Docker Image to ECR
 
 on:
-  push:
-    paths:
-      - 'server/**'
-      - 'shared/**'
-      - '.github/workflows/build-push-server-ecr.yml'
-    branches:
-      - main
   pull_request:
     types: [closed]
     paths:
@@ -24,8 +17,11 @@ permissions:
 jobs:
   build:
     # comment the line below to run the workflow locally with 'act'
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
 
     env:
       AWS_DEFAULT_REGION: 'us-east-1'
@@ -56,7 +52,6 @@ jobs:
         env:
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          cd ./server
           docker build --platform linux/amd64 -t $IMAGE_NAME:$IMAGE_TAG .
           docker tag $IMAGE_NAME:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
