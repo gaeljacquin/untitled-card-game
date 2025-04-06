@@ -1,4 +1,4 @@
-import { getRandomIndex } from '../functions/shuffle';
+import { getRandomIndex } from '@/functions/shuffle';
 
 export type SuitId = 'hearts' | 'spades' | 'diamonds' | 'clubs';
 

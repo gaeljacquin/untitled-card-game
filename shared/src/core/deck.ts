@@ -1,7 +1,7 @@
-import { fyshuffle } from '../functions/shuffle';
-import { ABCard, ABCards } from './card';
-import { Rank } from './rank';
-import { Suit } from './suit';
+import { fyshuffle } from '@/functions/shuffle';
+import { ABCard, ABCards } from '@/core/card';
+import { Rank } from '@/core/rank';
+import { Suit } from '@/core/suit';
 
 interface IABDeck {
   abSeed: ABCards[];
