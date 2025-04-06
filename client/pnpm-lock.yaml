@@ -147,6 +147,12 @@ importers:
       '@babel/core':
         specifier: ^7.26.10
         version: 7.26.10
+      '@eslint/eslintrc':
+        specifier: ^3.3.1
+        version: 3.3.1
+      '@eslint/js':
+        specifier: ^9.24.0
+        version: 9.24.0
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.4.1
         version: 4.4.1(prettier@3.5.3)
