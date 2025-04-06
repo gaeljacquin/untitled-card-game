@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-import { ABCards } from './card';
-import { ABMode } from './mode';
+import { ABCards } from '@/core/card';
+import { ABMode } from '@/core/mode';
 
 interface IABGame {
   id: string;

@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { ABGame } from './game';
+import { ABGame } from '@/core/game';
 
 interface IABPlayer {
   id: string;
