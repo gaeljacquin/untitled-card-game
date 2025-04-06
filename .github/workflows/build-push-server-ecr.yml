@@ -2,7 +2,7 @@ name: Build and Push Server Docker Image to ECR
 
 on:
   pull_request:
-    types: [closed]
+    types: [opened]
     paths:
       - 'server/**'
     branches:
