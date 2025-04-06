@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { ABGame } from '@/core/game';
 
 interface IABPlayer {
@@ -13,7 +12,7 @@ export class ABPlayer implements IABPlayer {
   games: ABGame[];
 
   constructor() {
-    this.id = uuidv4();
+    this.id = this.toString();
     this.createdAt = new Date();
     this.games = [];
   }
@@ -28,5 +27,9 @@ export class ABPlayer implements IABPlayer {
 
   public getStreak() {
     return this.games.length;
+  }
+
+  private toString(): string {
+    return 'player-' + this.createdAt.toISOString();
   }
 }
