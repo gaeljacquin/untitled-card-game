@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { Rank } from '@/core/rank';
 import { Suit } from '@/core/suit';
 
@@ -14,9 +13,9 @@ export class Card implements ICard {
   public readonly suit: Suit;
 
   constructor(rank: Rank, suit: Suit) {
-    this.id = uuidv4();
     this.rank = rank;
     this.suit = suit;
+    this.id = this.toString();
   }
 
   getRank(): Rank {
@@ -25,6 +24,10 @@ export class Card implements ICard {
 
   getSuit(): Suit {
     return this.suit;
+  }
+
+  protected toString(): string {
+    return 'card-' + this.rank.value + ' of ' + this.suit.label;
   }
 }
 
@@ -48,14 +51,6 @@ export class ABCard extends Card {
     return this.discard;
   }
 
-  getRank(): Rank {
-    return this.rank;
-  }
-
-  getSuit(): Suit {
-    return this.suit;
-  }
-
   setPlayed(value: boolean) {
     this.played = value;
   }
@@ -65,7 +60,7 @@ export class ABCard extends Card {
   }
 
   _toString() {
-    return this.rank.value + ' of ' + this.suit.label;
+    return this.toString(); // Use the inherited toString method
   }
 }
 

@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { ABCards } from '@/core/card';
 import { ABMode } from '@/core/mode';
 
@@ -23,7 +22,7 @@ export class ABGame implements IABGame {
 
   constructor(mode: ABMode) {
     const gridSize = mode.gridSize;
-    this.id = uuidv4();
+    this.id = this.toString();
     this.mode = mode;
     this.abSeed = [];
     this.abDeals = Array.from({ length: gridSize }, () => Array(gridSize).fill([null]));
@@ -61,5 +60,9 @@ export class ABGame implements IABGame {
         return card._toString();
       });
     });
+  }
+
+  private toString(): string {
+    return 'game-' + this.mode.title + '-' + this.createdAt.toISOString();
   }
 }
