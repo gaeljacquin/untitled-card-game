@@ -267,12 +267,46 @@ export default function Settings() {
           </div>
         </div>
 
+        {process.env.NODE_ENV === 'development' && (
+          <div className="flex flex-col items-center justify-center gap-4">
+            <div className="flex flex-row items-center justify-center gap-4 p-4 rounded-xl bg-black/50 border-white/20">
+              <FormLabel className="text-base">
+                <p>Jokers (5x5 Grid only)*</p>
+              </FormLabel>
+              <FormField
+                control={form.control}
+                name="jokers"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Switch
+                        className="data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-rose-600 items-center rounded-full transition-colors mt-2"
+                        checked={field.value}
+                        onCheckedChange={(checked) => {
+                          field.onChange(checked);
+                          updateSettings({
+                            ...settings,
+                            jokers: checked,
+                          });
+                        }}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <p className="text-sm text-white/50 p-4 rounded-xl bg-black/50 border-white/20">
+              * Coming soon
+            </p>
+          </div>
+        )}
+
         <div className="flex items-center justify-center">
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 type="button"
-                className="w-48 h-12 bg-white/20 hover:bg-white/30 border-white/20 text-md mt-8 hover:cursor-pointer"
+                className="w-48 h-12 bg-black/70 hover:bg-black/90 border-white/20 text-md mt-8 hover:cursor-pointer"
               >
                 Reset
               </Button>

@@ -11,6 +11,7 @@ export const initialSettings = {
   rankLabel: true,
   rankSwitchLetter: false,
   invertColors: false,
+  jokers: false,
 };
 
 export const createSettingsSlice: StateCreator<SettingsState> = (set, get) => ({
