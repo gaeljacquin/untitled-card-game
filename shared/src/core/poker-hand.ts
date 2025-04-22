@@ -1,4 +1,4 @@
-import { ABCards } from '@/core/card';
+import { ABCards } from './card';
 
 export class PokerHand {
   constructor(

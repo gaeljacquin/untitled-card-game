@@ -1,5 +1,5 @@
-import { ABCards } from '@/core/card';
-import { ABMode } from '@/core/mode';
+import { ABCards } from './card';
+import { ABMode } from './mode';
 
 interface IABGame {
   id: string;

@@ -1,5 +1,5 @@
-import { Rank } from '@/core/rank';
-import { Suit } from '@/core/suit';
+import { Rank } from './rank';
+import { Suit } from './suit';
 
 interface ICard {
   id: string;

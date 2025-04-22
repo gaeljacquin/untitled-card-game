@@ -1,4 +1,4 @@
-import { ABCard } from '@/core/card';
+import { ABCard } from './card';
 
 export interface IABGridCell {
   id: string;

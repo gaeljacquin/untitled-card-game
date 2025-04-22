@@ -1,4 +1,4 @@
-import { ABGame } from '@/core/game';
+import { ABGame } from './game';
 
 interface IABPlayer {
   id: string;
