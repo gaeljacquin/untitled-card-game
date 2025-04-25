@@ -49,7 +49,7 @@ export default function AskRtfm({
             <Button
               type="button"
               variant="outline"
-              className={cn('w-full px-7', 'text-black')}
+              className={cn('w-full px-7 text-black cursor-pointer')}
               onClick={() => {
                 setMenuButtonClicked(true);
                 muteAskRtfm();
@@ -62,7 +62,7 @@ export default function AskRtfm({
           <Button
             type="button"
             variant="destructive"
-            className={cn('w-full px-7')}
+            className={cn('w-full px-7 cursor-pointer')}
             onClick={() => {
               openModeSelection(true);
               handleClose();

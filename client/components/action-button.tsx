@@ -36,7 +36,7 @@ const ActionButton = ({
     <Button
       onClick={handleDiscard}
       disabled={playerHand.length !== 1 || isDealing}
-      className="truncate p-4"
+      className="truncate p-4 cursor-pointer"
     >
       <span className="flex w-full items-center justify-center">
         {isGridFull ? 'Finish' : 'Next'}

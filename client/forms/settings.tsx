@@ -323,7 +323,7 @@ export default function Settings() {
                     <Button
                       type="button"
                       variant="secondary"
-                      className="w-full text-md"
+                      className="w-full text-md cursor-pointer"
                       onClick={() => {
                         confirmResetSettings();
                       }}

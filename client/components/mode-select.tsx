@@ -57,7 +57,7 @@ export default function ModeSelect(props: Props) {
                 type="button"
                 className={cn(
                   'w-full h-auto py-12 text-md sm:text-lg rounded-2xl',
-                  'hover:cursor-pointer',
+                  'cursor-pointer',
                   anyButtonClicked ? 'px-8' : 'px-16',
                   anyButtonClicked && clickedButton === item.slug ? newGameGradient : 'bg-gray-700',
                   newGameHoverGradient

@@ -1,7 +1,6 @@
 'use client';
 
 import AnimatedLogoDynamic from 'components/animated-logo-dynamic';
-import AudioControlsDynamic from 'components/audio-controls-dynamic';
 import MainMenuButtons from 'components/main-menu-buttons';
 import { BackgroundGradientAnimation } from 'components/ui/background-gradient-animation';
 import { PageTransition } from 'components/ui/page-transition';
@@ -35,10 +34,6 @@ export default function Home() {
 
           <div className="flex container items-center justify-center mx-auto -mt-7">
             <MainMenuButtons />
-          </div>
-
-          <div className="container max-w-4xl mx-auto -mt-16">
-            <AudioControlsDynamic />
           </div>
         </div>
       </BackgroundGradientAnimation>
