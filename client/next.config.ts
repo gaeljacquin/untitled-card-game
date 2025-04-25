@@ -8,15 +8,6 @@ const nextConfig: NextConfig = {
     profilePic: '/gael-himself.webp',
     serverUrl: `${process.env.SERVER_URL}`,
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'ahacverhpougzlzojfyo.supabase.co',
-        pathname: '**',
-      },
-    ],
-  },
 };
 
 export default nextConfig;
