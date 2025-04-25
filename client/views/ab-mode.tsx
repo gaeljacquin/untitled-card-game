@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { ABCards, SlugId } from '@gaeljacquin/ucg-shared';
-import AudioControlsDynamic from 'components/audio-controls-dynamic';
 import BackgroundLogo from 'components/background-logo';
 import Footer from 'components/footer';
 import PlayingField from 'components/playing-field';
@@ -63,42 +62,38 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
   }, [initGame, modeSlug, wsConnect]);
 
   return (
-    <>
-      <motion.div
-        initial={{ scale: 0.5, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="header-text-ab"
-      >
-        <BackgroundLogo />
+    <motion.div
+      initial={{ scale: 0.5, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="header-text-ab"
+    >
+      <BackgroundLogo />
 
-        <PlayingField
-          modeSlug={modeSlug}
-          abCards={abCards}
-          gridClass={gridClass}
-          playerHandClass={playerHandClass}
-          handleNextRound={handleNextRound}
-          gameOver={abGameOver}
-          initGame={initGame}
-          setABGameOver={setABGameOver}
-        />
+      <PlayingField
+        modeSlug={modeSlug}
+        abCards={abCards}
+        gridClass={gridClass}
+        playerHandClass={playerHandClass}
+        handleNextRound={handleNextRound}
+        gameOver={abGameOver}
+        initGame={initGame}
+        setABGameOver={setABGameOver}
+      />
 
-        <div className="flex flex-col items-center justify-center gap-4 footer-spacing-ab">
-          {process.env.NODE_ENV === 'development' && (
-            <Button
-              variant="destructive"
-              onClick={() => setABGameOver(true)}
-              className="hover:cursor-pointer"
-            >
-              Simulate Game Over
-            </Button>
-          )}
+      <div className="flex flex-col items-center justify-center gap-4 footer-spacing-ab">
+        {process.env.NODE_ENV === 'development' && (
+          <Button
+            variant="destructive"
+            onClick={() => setABGameOver(true)}
+            className="hover:cursor-pointer"
+          >
+            Simulate Game Over
+          </Button>
+        )}
 
-          <Footer />
-        </div>
-      </motion.div>
-
-      <AudioControlsDynamic />
-    </>
+        <Footer />
+      </div>
+    </motion.div>
   );
 }
