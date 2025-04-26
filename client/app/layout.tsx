@@ -7,6 +7,9 @@ import { Saira } from 'next/font/google';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import appinfo from 'utils/appinfo';
 
+import MaintenanceModeBanner from '@/components/maintenance-mode-banner';
+import { isMaintenanceMode } from '@/utils/maintenance-mode';
+
 const sairaInit = Saira({
   subsets: ['latin'],
   display: 'swap',
@@ -31,7 +34,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex flex-col min-h-screen">{children}</div>
+          <div className="flex flex-col min-h-screen">
+            {isMaintenanceMode && <MaintenanceModeBanner />}
+            {children}
+          </div>
           <Toaster />
         </NextThemesProvider>
       </body>
