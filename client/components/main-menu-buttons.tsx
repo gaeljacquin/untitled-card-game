@@ -9,6 +9,8 @@ import { cn } from 'lib/utils';
 import Link from 'next/link';
 import { useUcgStore } from 'stores/main-store';
 
+import { isMaintenanceMode } from '@/utils/maintenance-mode';
+
 export default function MainMenuButtons() {
   const { askRtfm, muteAskRtfm } = useUcgStore();
   const [modeSelection, openModeSelection] = useState(false);
@@ -22,21 +24,25 @@ export default function MainMenuButtons() {
       label: 'New Game',
       slug: 'game',
       gradient: newGameGradient,
+      disabled: isMaintenanceMode,
     },
     {
       label: 'How to Play',
       slug: 'how-to-play',
       gradient: 'bg-linear-to-r from-red-800 via-rose-500 to-slate-700',
+      disabled: false,
     },
     {
       label: 'Settings',
       slug: 'settings',
       gradient: 'bg-linear-to-r from-purple-800 to-pink-700',
+      disabled: false,
     },
     {
       label: 'Credits',
       slug: 'credits',
       gradient: 'bg-linear-to-r from-fuchsia-800 to-sky-700',
+      disabled: false,
     },
   ];
 
@@ -78,10 +84,11 @@ export default function MainMenuButtons() {
               text={item.label}
               className={cn(
                 'w-full h-16 xs:text-sm sm:text-md md:text-lg border-0 opacity-75 hover:opacity-100',
-                menuButtonClicked && 'pointer-events-none'
+                (menuButtonClicked || item.disabled) && 'pointer-events-none'
               )}
               gradient={item.gradient}
               onClick={(e) => handleClick(e, item.slug)}
+              disabled={item.disabled}
             />
           </Link>
         </motion.div>

@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     linktree: 'https://linktr.ee/gaeljacquin',
     profilePic: '/gael-himself.webp',
     serverUrl: `${process.env.SERVER_URL}`,
+    maintenanceMode: process.env.MAINTENANCE_MODE ?? '',
   },
 };
 
