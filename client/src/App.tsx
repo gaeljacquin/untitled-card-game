@@ -1,0 +1,46 @@
+import { Routes, Route } from 'react-router-dom'
+import { ThemeProvider as NextThemesProvider } from 'next-themes'
+import { Toaster } from '@/components/ui/toaster'
+import { cn } from '@/lib/utils'
+import MaintenanceModeBanner from '@/components/maintenance-mode-banner'
+import { isMaintenanceMode } from '@/utils/maintenance-mode'
+
+// Pages
+import Home from '@/views/home'
+import ABMode from '@/views/ab-mode'
+import HowToPlay from '@/views/how-to-play'
+import Settings from '@/views/settings'
+import Credits from '@/views/credits'
+import NotFound from '@/views/not-found'
+
+// Load Google Fonts
+import '@fontsource/saira/400.css'
+
+function App() {
+  return (
+    <div className={cn('font-saira antialiased')}>
+      <NextThemesProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <div className="flex flex-col min-h-screen">
+          {isMaintenanceMode && <MaintenanceModeBanner />}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/game/four" element={<ABMode modeSlug="four" gridClass="grid grid-cols-6 gap-2 sm:gap-4 p-2 sm:p-4" />} />
+            <Route path="/game/five" element={<ABMode modeSlug="five" gridClass="grid grid-cols-7 gap-2 sm:gap-4 p-2 sm:p-4" />} />
+            <Route path="/how-to-play" element={<HowToPlay />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/credits" element={<Credits />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+        <Toaster />
+      </NextThemesProvider>
+    </div>
+  )
+}
+
+export default App

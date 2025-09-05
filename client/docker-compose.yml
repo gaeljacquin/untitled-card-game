@@ -13,9 +13,9 @@ services:
       - pnpm-store:/app/.pnpm-store/v3
     environment:
       SERVER_URL: ${SERVER_URL}
-      PORT: ${PORT:-3000}
+      PORT: ${PORT:-5173}
     ports:
-      - '${PORT:-3000}:${PORT:-3000}'
+      - '${PORT:-5173}:${PORT:-5173}'
     networks:
       - ucg_network
 
