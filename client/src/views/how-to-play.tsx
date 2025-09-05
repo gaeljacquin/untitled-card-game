@@ -5,7 +5,7 @@ import Footer from '@/components/footer';
 import ReturnMainMenu from '@/components/return-main-menu';
 import SectionCard from '@/components/section-card';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 export default function HowToPlay() {
   return (

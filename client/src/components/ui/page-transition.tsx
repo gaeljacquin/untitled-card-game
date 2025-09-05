@@ -1,7 +1,7 @@
 'use client';
 
 import { useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -21,5 +21,3 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
     </AnimatePresence>
   );
 }
-
-

@@ -8,7 +8,7 @@ import PlayingField from '@/components/playing-field';
 import ReturnMainMenu from '@/components/return-main-menu';
 import { Button } from '@/components/ui/button';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import SocketInit from '@/utils/socket-init';
 
@@ -98,7 +98,7 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
               Simulate Game Over
             </Button>
           )}
-          
+
           <div className="flex justify-center my-8">
             <ReturnMainMenu />
           </div>

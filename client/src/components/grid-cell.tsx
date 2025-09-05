@@ -3,7 +3,7 @@
 import { useDroppable } from '@dnd-kit/core';
 import { IABGridCell, IABModeType } from '@gaeljacquin/ucg-shared';
 import ABCardComp from '@/components/ab-card';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 
 export function GridCell({

@@ -6,7 +6,7 @@ import ReturnMainMenu from '@/components/return-main-menu';
 import SectionCard from '@/components/section-card';
 import SettingsForm from '@/forms/settings';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 export default function Settings() {
   return (
@@ -28,7 +28,7 @@ export default function Settings() {
             <SettingsForm />
           </SectionCard>
         </div>
-        
+
         <div className="flex justify-center my-8">
           <ReturnMainMenu />
         </div>

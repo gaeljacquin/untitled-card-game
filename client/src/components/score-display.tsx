@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/dialog';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { useUcgStore } from '@/stores/main-store';
 import { GameState } from '@/types/game-state';
 

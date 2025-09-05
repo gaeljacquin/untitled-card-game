@@ -4,7 +4,7 @@ import { useState } from 'react';
 import AskRtfm from '@/components/ask-rtfm';
 import ModeSelect from '@/components/mode-select';
 import InteractiveHoverButton from '@/components/ui/interactive-hover-button';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { useUcgStore } from '@/stores/main-store';

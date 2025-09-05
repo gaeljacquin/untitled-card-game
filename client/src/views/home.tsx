@@ -4,7 +4,7 @@ import AnimatedLogoDynamic from '@/components/animated-logo-dynamic';
 import MainMenuButtons from '@/components/main-menu-buttons';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
 import { PageTransition } from '@/components/ui/page-transition';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 
 export default function Home() {

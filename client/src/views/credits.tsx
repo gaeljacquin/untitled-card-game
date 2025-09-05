@@ -6,7 +6,7 @@ import ReturnMainMenu from '@/components/return-main-menu';
 import SectionCard from '@/components/section-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 export default function Credits() {
   return (

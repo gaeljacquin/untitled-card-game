@@ -3,7 +3,7 @@
 import { Fragment } from 'react';
 import { evaluateGridColumn, evaluateGridRow, IABGridCell } from '@gaeljacquin/ucg-shared';
 import { GridCell } from '@/components/grid-cell';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 
 const labelClass = cn(

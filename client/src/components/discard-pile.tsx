@@ -2,7 +2,7 @@
 
 import { ABCards, IABModeType } from '@gaeljacquin/ucg-shared';
 import ABCardComp from '@/components/ab-card';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 
 export default function DiscardPile({
