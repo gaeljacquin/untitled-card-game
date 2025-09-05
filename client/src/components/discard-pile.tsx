@@ -21,11 +21,11 @@ export default function DiscardPile({
   return (
     <div className="sm:sticky sm:top-0 h-auto bg-amber-950/30 rounded-2xl shadow-md p-2">
       <div className="flex items-center justify-center gap-2 mb-2 sm:hidden">
-        <h2 className="text-sm text-center font-bold">{discardPileText}</h2>
+        <h2 className="text-sm text-center font-bold text-white">{discardPileText}</h2>
       </div>
       <div className="flex flex-row flex-wrap sm:flex-col gap-3 justify-center">
-        <div className="flex items-center justify-center hidden sm:block mt-4 mb-2">
-          <h2 className="text-sm text-center font-bold">{discardPileText}</h2>
+        <div className="flex items-center justify-center sm:block mt-4 mb-2">
+          <h2 className="text-sm text-center font-bold text-white">{discardPileText}</h2>
         </div>
         <AnimatePresence>
           <div className={cn('flex items-center justify-center mb-4')}>

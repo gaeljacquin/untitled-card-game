@@ -1,1 +1,1 @@
-export const isMaintenanceMode = import.meta.env.VITE_MAINTENANCE_MODE !== '';
+export const isMaintenanceMode = import.meta.env.VITE_MAINTENANCE_MODE === '1';

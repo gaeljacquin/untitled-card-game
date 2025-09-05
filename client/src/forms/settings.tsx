@@ -267,7 +267,7 @@ export default function Settings() {
           </div>
         </div>
 
-        {process.env.NODE_ENV === 'development' && (
+        {import.meta.env.DEV && (
           <div className="flex flex-col items-center justify-center gap-4">
             <div className="flex flex-row items-center justify-center gap-4 p-4 rounded-xl bg-black/50 border-white/20">
               <FormLabel className="text-base">

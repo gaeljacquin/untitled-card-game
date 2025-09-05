@@ -5,7 +5,9 @@ import { ABCards, SlugId } from '@gaeljacquin/ucg-shared';
 import BackgroundLogo from '@/components/background-logo';
 import Footer from '@/components/footer';
 import PlayingField from '@/components/playing-field';
+import ReturnMainMenu from '@/components/return-main-menu';
 import { Button } from '@/components/ui/button';
+import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import SocketInit from '@/utils/socket-init';
@@ -62,38 +64,49 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
   }, [initGame, modeSlug, wsConnect]);
 
   return (
-    <motion.div
-      initial={{ scale: 0.5, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="header-text-ab"
+    <BackgroundGradientAnimation
+      gradientBackgroundStart="rgba(61, 34, 4, 0.77)"
+      gradientBackgroundEnd="rgb(49, 13, 20)"
     >
-      <BackgroundLogo />
+      <div className="absolute z-50 inset-0 flex flex-col">
+        <motion.div
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="header-text-ab flex-1 overflow-auto p-4"
+        >
+        <BackgroundLogo />
 
-      <PlayingField
-        modeSlug={modeSlug}
-        abCards={abCards}
-        gridClass={gridClass}
-        playerHandClass={playerHandClass}
-        handleNextRound={handleNextRound}
-        gameOver={abGameOver}
-        initGame={initGame}
-        setABGameOver={setABGameOver}
-      />
+        <PlayingField
+          modeSlug={modeSlug}
+          abCards={abCards}
+          gridClass={gridClass}
+          playerHandClass={playerHandClass}
+          handleNextRound={handleNextRound}
+          gameOver={abGameOver}
+          initGame={initGame}
+          setABGameOver={setABGameOver}
+        />
 
-      <div className="flex flex-col items-center justify-center gap-4 footer-spacing-ab">
-        {process.env.NODE_ENV === 'development' && (
-          <Button
-            variant="destructive"
-            onClick={() => setABGameOver(true)}
-            className="hover:cursor-pointer"
-          >
-            Simulate Game Over
-          </Button>
-        )}
+        <div className="flex flex-col items-center justify-center gap-4 footer-spacing-ab">
+          {import.meta.env.DEV && (
+            <Button
+              variant="destructive"
+              onClick={() => setABGameOver(true)}
+              className="hover:cursor-pointer"
+            >
+              Simulate Game Over
+            </Button>
+          )}
+          
+          <div className="flex justify-center my-8">
+            <ReturnMainMenu />
+          </div>
 
-        <Footer />
+          <Footer />
+        </div>
+        </motion.div>
       </div>
-    </motion.div>
+    </BackgroundGradientAnimation>
   );
 }

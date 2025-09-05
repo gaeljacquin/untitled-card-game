@@ -9,7 +9,7 @@ export default function NotFound() {
   return (
     <PageTransition>
       <div className="min-h-screen bg-linear-to-br from-cyan-900 via-cyan-700 to-emerald-800">
-        <div className="min-h-screen relative container flex flex-col items-center justify-center p-4 absolute z-50 inset-0">
+        <div className="min-h-screen relative container flex flex-col items-center justify-center p-4 z-50 inset-0">
           <SectionCard
             title="Nothing to see here..."
             className="text-center text-white p-8 text-3xl"

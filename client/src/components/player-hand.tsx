@@ -26,7 +26,7 @@ const PlayerHand = ({
     <div className={cn(playerHandClass)}>
       <div className="flex flex-wrap flex-row sm:flex-col items-center justify-center gap-4">
         <div className="flex items-center justify-center mt-5 hidden sm:block">
-          <h2 className="text-sm text-center font-bold">{playerHandText}</h2>
+          <h2 className="text-sm text-center font-bold text-white">{playerHandText}</h2>
         </div>
         {isDealing ? (
           <Loader2 className="size-4 animate-spin my-2" />

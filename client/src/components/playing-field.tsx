@@ -132,7 +132,7 @@ export default function PlayingField({
   // Game logic
   const insertCoin = useCallback(() => {
     setTimeout(() => {
-      abCards.forEach((card, index) => {
+      abCards.forEach((_, index) => {
         setTimeout(() => {
           setPlayerHand((prev) => [
             ...prev.slice(0, index),

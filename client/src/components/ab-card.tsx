@@ -85,7 +85,7 @@ export default function ABCardComp({
 
           <div
             className={cn(
-              'absolute bottom-2 right-2 text-base text-xs sm:text-md font-bold rotate-180',
+              'absolute bottom-2 right-2 text-xs sm:text-md font-bold rotate-180',
               cardColor.text
             )}
           >

@@ -29,8 +29,8 @@ function App() {
           {isMaintenanceMode && <MaintenanceModeBanner />}
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/game/four" element={<ABMode modeSlug="four" gridClass="grid grid-cols-6 gap-2 sm:gap-4 p-2 sm:p-4" />} />
-            <Route path="/game/five" element={<ABMode modeSlug="five" gridClass="grid grid-cols-7 gap-2 sm:gap-4 p-2 sm:p-4" />} />
+            <Route path="/game/four" element={<ABMode modeSlug="four" gridClass="grid grid-cols-5 gap-2 sm:gap-4 p-2 sm:p-4" />} />
+            <Route path="/game/five" element={<ABMode modeSlug="five" gridClass="grid grid-cols-6 gap-2 sm:gap-4 p-2 sm:p-4" />} />
             <Route path="/how-to-play" element={<HowToPlay />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/credits" element={<Credits />} />
