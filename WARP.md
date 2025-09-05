@@ -141,3 +141,80 @@ Repository conventions and rules
 - No special AI rules (Claude/Cursor/Copilot) found in this repo at the time of writing
 - Follow ESLint/Prettier configs present in each app when editing code
 
+Socket.IO event flows
+- Connection
+  - Namespace: default '/'
+  - CORS: server only accepts origin matching CLIENT_URL from server/.env
+  - On connection, server logs client.id; on disconnect, server deletes per-client game state from its internal Map
+
+- hello-ws
+  - Client -> Server: 'hello-ws' with payload like { name: string }
+  - Server -> Client: 'hello-ws-res' with { message: string }
+  - Purpose: connectivity sanity check
+
+- game-init
+  - Client -> Server: 'game-init' with { modeSlug: string }
+  - Server:
+    - Resolves mode via ABMode.getMode(modeSlug)
+    - Creates new ABDeck and generates a seed deck.generateSeed(mode.gridSize)
+    - Creates ABGame(mode), sets seed, deals first hand abGame.dealHand(0)
+    - Stores ABGame in a Map keyed by client.id
+  - Server -> Client: 'game-init-res' with { abCards }
+    - abCards are produced by ABGame.dealHand(0) for the initial round
+
+- game-next-round
+  - Client -> Server: 'game-next-round' with { abDiscard, newGrid }
+    - abDiscard: discard data for the round (pushed to abGame.abDiscards)
+    - newGrid: the updated grid layout for the board
+  - Server:
+    - Updates the existing ABGame from the Map for client.id
+    - Sets abGame.grid = newGrid; pushes abDiscard
+    - Computes gridSize = abGame.mode.gridSize
+    - gameOver = abGame.abDiscards.length === gridSize
+    - If gameOver: prepares { gameOver: true }
+    - Else: deals next hand with abGame.dealHand(currentRoundIndex) and prepares { abCards }
+  - Server -> Client: 'game-next-round-res' with either { gameOver: true } or { abCards }
+
+- Per-connection state
+  - Server keeps a Map<string, ABGame> where the key is the socket.id
+  - On disconnect, the entry is removed; the client should re-send 'game-init' on reconnect
+
+Client usage example (browser/Next.js)
+- The client uses socket.io-client and should connect to the URL from SERVER_URL in client/.env, which is surfaced to the app via next.config.ts env.serverUrl
+- Minimal example:
+
+```ts path=null start=null
+import { io } from 'socket.io-client';
+
+const socket = io(process.env.NEXT_PUBLIC_SERVER_URL || process.env.serverUrl || 'http://localhost:8080');
+
+// hello-ws
+socket.emit('hello-ws', { name: 'Player1' });
+socket.on('hello-ws-res', (data) => {
+  console.log('hello-ws-res:', data);
+});
+
+// game-init
+socket.emit('game-init', { modeSlug: 'classic' });
+socket.on('game-init-res', ({ abCards }) => {
+  // render initial hand
+});
+
+// next round
+function submitRound({ abDiscard, newGrid }) {
+  socket.emit('game-next-round', { abDiscard, newGrid });
+}
+
+socket.on('game-next-round-res', (res) => {
+  if (res.gameOver) {
+    // handle end of game
+  } else if (res.abCards) {
+    // render next hand
+  }
+});
+```
+
+Notes
+- Ensure the client origin (http://localhost:3000 by default) matches server/.env CLIENT_URL; otherwise CORS will block the WebSocket upgrade
+- Ensure SERVER_URL in client/.env points to the externally reachable server URL/port (http://localhost:8080 by default when using the provided compose files)
+
