@@ -21,8 +21,8 @@ importers:
         specifier: ^5.1.1
         version: 5.2.8
       '@gaeljacquin/ucg-shared':
-        specifier: ^1.2.1
-        version: 1.2.1(react@19.1.0)
+        specifier: 1.3.0-beta.1
+        version: 1.3.0-beta.1(react@19.1.0)
       '@hookform/resolvers':
         specifier: ^5.0.1
         version: 5.0.1(react-hook-form@7.56.1(react@19.1.0))
@@ -786,8 +786,8 @@ packages:
   '@fontsource/saira@5.2.8':
     resolution: {integrity: sha512-iBtgjwjexzdQM1BgCc86Pl+EwCjF1mUv3gekOlUd8FbE0wVlDa17Lb4X8tjWabvECuU4pHX/aNHVOTilghhHjQ==}
 
-  '@gaeljacquin/ucg-shared@1.2.1':
-    resolution: {integrity: sha512-Jq8NEzdLX2hz3gFlLvI4laa9104HEzMWuPosRSOpVLDlkGVhqCIMqKqUObwsP9hp1OhRGq+jYk49hU63rR0XEQ==}
+  '@gaeljacquin/ucg-shared@1.3.0-beta.1':
+    resolution: {integrity: sha512-7UzrMyr8TQgMXnloZmYaevNmS9ewizJ1C3tPp99OejnjM4BwBI2r3uHUUhQKF1g1PQkC5qYalCKIYUhmxnkZNw==}
 
   '@hookform/resolvers@5.0.1':
     resolution: {integrity: sha512-u/+Jp83luQNx9AdyW2fIPGY6Y7NG68eN2ZW8FOJYL+M0i4s49+refdJdOp/A9n9HFQtQs3HIDHQvX3ZET2o7YA==}
@@ -5099,7 +5099,7 @@ snapshots:
 
   '@fontsource/saira@5.2.8': {}
 
-  '@gaeljacquin/ucg-shared@1.2.1(react@19.1.0)':
+  '@gaeljacquin/ucg-shared@1.3.0-beta.1(react@19.1.0)':
     dependencies:
       react-icons: 5.5.0(react@19.1.0)
     transitivePeerDependencies:
@@ -5328,8 +5328,8 @@ snapshots:
 
   '@jridgewell/source-map@0.3.6':
     dependencies:
-      '@jridgewell/gen-mapping': 0.3.8
-      '@jridgewell/trace-mapping': 0.3.25
+      '@jridgewell/gen-mapping': 0.3.13
+      '@jridgewell/trace-mapping': 0.3.30
 
   '@jridgewell/sourcemap-codec@1.5.0': {}
 
@@ -6085,11 +6085,11 @@ snapshots:
   '@types/eslint-scope@3.7.7':
     dependencies:
       '@types/eslint': 9.6.1
-      '@types/estree': 1.0.7
+      '@types/estree': 1.0.8
 
   '@types/eslint@9.6.1':
     dependencies:
-      '@types/estree': 1.0.7
+      '@types/estree': 1.0.8
       '@types/json-schema': 7.0.15
 
   '@types/estree@1.0.7': {}
@@ -9100,7 +9100,7 @@ snapshots:
 
   terser-webpack-plugin@5.3.14(webpack@5.98.0):
     dependencies:
-      '@jridgewell/trace-mapping': 0.3.25
+      '@jridgewell/trace-mapping': 0.3.30
       jest-worker: 27.5.1
       schema-utils: 4.3.2
       serialize-javascript: 6.0.2
@@ -9316,7 +9316,7 @@ snapshots:
   webpack@5.98.0:
     dependencies:
       '@types/eslint-scope': 3.7.7
-      '@types/estree': 1.0.7
+      '@types/estree': 1.0.8
       '@webassemblyjs/ast': 1.14.1
       '@webassemblyjs/wasm-edit': 1.14.1
       '@webassemblyjs/wasm-parser': 1.14.1
