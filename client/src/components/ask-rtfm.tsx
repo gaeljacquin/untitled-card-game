@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
-import { useUcgStore } from '@/stores/main-store';
+import { useUcgStore } from '@/stores/ucg-store';
 
 export default function AskRtfm({
   askRtfmOpen,

@@ -2,7 +2,7 @@
 
 import { ABCard, suitIconMap, SuitId } from '@gaeljacquin/ucg-shared';
 import { cn } from '@/lib/utils';
-import { useUcgStore } from '@/stores/main-store';
+import { useUcgStore } from '@/stores/ucg-store';
 import { abDesigns } from '@/utils/ab-designs';
 
 export default function ABCardPreviewComp({

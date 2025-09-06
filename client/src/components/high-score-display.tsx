@@ -1,7 +1,7 @@
 'use client';
 
 import { SlugId } from '@gaeljacquin/ucg-shared';
-import { useUcgStore } from '@/stores/main-store';
+import { useUcgStore } from '@/stores/ucg-store';
 
 const HighScoreDisplay = ({ modeSlug }: { modeSlug: SlugId }) => {
   const { getHighScore } = useUcgStore();

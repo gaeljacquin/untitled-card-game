@@ -33,7 +33,7 @@ import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
-import { useUcgStore } from '@/stores/main-store';
+import { useUcgStore } from '@/stores/ucg-store';
 import { GameState } from '@/types/game-state';
 import { confettiFireworks } from '@/utils/confetti';
 import { canMoveCard, getGameState, isGridFull } from '@/utils/game-state';

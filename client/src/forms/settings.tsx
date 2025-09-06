@@ -20,7 +20,7 @@ import { initialSettings } from '@/stores/slices/settings-slice';
 import { FormData, settingsSchema } from '@/types/settings';
 import { abDesigns } from '@/utils/ab-designs';
 
-import { useUcgStore } from '@/stores/main-store';
+import { useUcgStore } from '@/stores/ucg-store';
 
 export default function Settings() {
   const { getSettings, updateSettings, resetSettings } = useUcgStore();

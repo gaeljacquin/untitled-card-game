@@ -13,7 +13,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useUcgStore } from '@/stores/main-store';
+import { useUcgStore } from '@/stores/ucg-store';
 
 type Props = {
   selectMode: boolean;

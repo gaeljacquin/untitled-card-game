@@ -4,7 +4,7 @@ import { useDraggable } from '@dnd-kit/core';
 import { ABCard, IABModeType, suitIconMap, SuitId } from '@gaeljacquin/ucg-shared';
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
-import { useUcgStore } from '@/stores/main-store';
+import { useUcgStore } from '@/stores/ucg-store';
 import { abDesigns } from '@/utils/ab-designs';
 
 export default function ABCardComp({

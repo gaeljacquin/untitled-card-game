@@ -7,7 +7,7 @@ import InteractiveHoverButton from '@/components/ui/interactive-hover-button';
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
-import { useUcgStore } from '@/stores/main-store';
+import { useUcgStore } from '@/stores/ucg-store';
 
 import { isMaintenanceMode } from '@/utils/maintenance-mode';
 

@@ -9,6 +9,7 @@ export const settingsSchema = z.object({
     letter: z.string().min(1).max(1),
   }),
   rankLabel: z.boolean(),
+  rankSwitchLetter: z.boolean(),
   invertColors: z.boolean(),
   jokers: z.boolean(),
 });
