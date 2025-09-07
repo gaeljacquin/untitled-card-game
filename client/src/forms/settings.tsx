@@ -12,6 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { ToastAction } from '@/components/ui/toast';
+import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
@@ -267,36 +268,141 @@ export default function Settings() {
           </div>
         </div>
 
+        <div className="flex flex-col items-center justify-center gap-4">
+          <div className="flex flex-row items-center justify-center gap-4 p-4 rounded-xl bg-black/50 border-white/20">
+            <FormLabel className="text-base">
+              <p>Jokers (5x5 Grid only)</p>
+            </FormLabel>
+            <FormField
+              control={form.control}
+              name="jokers"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Switch
+                      className="data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-rose-600 items-center rounded-full transition-colors mt-2"
+                      checked={field.value}
+                      onCheckedChange={(checked) => {
+                        field.onChange(checked);
+                        updateSettings({
+                          ...settings,
+                          jokers: checked,
+                        });
+                      }}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+          <p className="text-sm text-white/50 p-4 rounded-xl bg-black/50 border-white/20">
+            This setting only affects 5x5 mode games. When enabled, two joker cards will be added to the deck.
+          </p>
+        </div>
+
         {import.meta.env.DEV && (
           <div className="flex flex-col items-center justify-center gap-4">
-            <div className="flex flex-row items-center justify-center gap-4 p-4 rounded-xl bg-black/50 border-white/20">
-              <FormLabel className="text-base">
-                <p>Jokers (5x5 Grid only)*</p>
-              </FormLabel>
-              <FormField
-                control={form.control}
-                name="jokers"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Switch
-                        className="data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-rose-600 items-center rounded-full transition-colors mt-2"
-                        checked={field.value}
-                        onCheckedChange={(checked) => {
-                          field.onChange(checked);
-                          updateSettings({
-                            ...settings,
-                            jokers: checked,
-                          });
-                        }}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+            <div className="flex flex-col gap-4 p-4 rounded-xl bg-black/50 border-white/20 w-full max-w-md">
+              <div className="flex flex-row items-center justify-between">
+                <FormLabel className="text-base">
+                  <p>Force Joker Positions (Dev)</p>
+                </FormLabel>
+                <FormField
+                  control={form.control}
+                  name="devJokerOverride"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Switch
+                          className="data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-rose-600 items-center rounded-full transition-colors"
+                          checked={field.value}
+                          disabled={!settings.jokers}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            updateSettings({
+                              ...settings,
+                              devJokerOverride: checked,
+                            });
+                          }}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              <div className={cn(
+                "grid grid-cols-2 gap-4",
+                (!settings.jokers || !settings.devJokerOverride) && "opacity-50 pointer-events-none"
+              )}>
+                <div className="space-y-2">
+                  <FormLabel className="text-sm">Joker 1 Hand (1-5)</FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="devJoker1Hand"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min="1"
+                            max="5"
+                            className="bg-black/30 border-white/20 text-white"
+                            disabled={!settings.jokers || !settings.devJokerOverride}
+                            {...field}
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value, 10);
+                              if (value >= 1 && value <= 5) {
+                                field.onChange(value);
+                                updateSettings({
+                                  ...settings,
+                                  devJoker1Hand: value,
+                                });
+                              }
+                            }}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <FormLabel className="text-sm">Joker 2 Hand (1-5)</FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="devJoker2Hand"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min="1"
+                            max="5"
+                            className="bg-black/30 border-white/20 text-white"
+                            disabled={!settings.jokers || !settings.devJokerOverride}
+                            {...field}
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value, 10);
+                              if (value >= 1 && value <= 5) {
+                                field.onChange(value);
+                                updateSettings({
+                                  ...settings,
+                                  devJoker2Hand: value,
+                                });
+                              }
+                            }}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
             </div>
-            <p className="text-sm text-white/50 p-4 rounded-xl bg-black/50 border-white/20">
-              * Coming soon
+            
+            <p className="text-xs text-white/40 p-3 rounded-xl bg-black/50 border-white/20 text-center max-w-md">
+              Development only: Force jokers to appear in specific hands (1-5) during 5x5 games.
             </p>
           </div>
         )}

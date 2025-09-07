@@ -47,10 +47,21 @@ export class GameGateway
   @SubscribeMessage('game-init')
   async gameInit(client: Socket, payload: any): Promise<void> {
     console.info(`Message received from client ${client.id}: ${payload}`);
-    const { modeSlug } = payload;
+    const { modeSlug, includeJokers = false, devJokerOverride = null } = payload;
     const mode = ABMode.getMode(modeSlug);
-    const deck = new ABDeck();
-    const abSeed = deck.generateSeed(mode.gridSize);
+    const deck = new ABDeck(includeJokers, mode.gridSize);
+    
+    // Dev mode check: only allow joker override in development environment
+    const isDevelopment = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === undefined;
+    const shouldUseJokerOverride = isDevelopment && 
+                                  devJokerOverride && 
+                                  devJokerOverride.enabled && 
+                                  includeJokers;
+    
+    const abSeed = shouldUseJokerOverride 
+      ? deck.generateSeed(mode.gridSize, devJokerOverride)
+      : deck.generateSeed(mode.gridSize);
+    
     const abGame = new ABGame(mode);
     abGame.setABSeed(abSeed);
     const abCards = abGame.dealHand(0);

@@ -11,9 +11,11 @@ import { BackgroundGradientAnimation } from '@/components/ui/background-gradient
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import SocketInit from '@/utils/socket-init';
+import { useUcgStore } from '@/stores/ucg-store';
 
 export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; gridClass: string }) {
   const socket = SocketInit();
+  const { getSettings } = useUcgStore();
   const [abCards, setABCards] = useState<ABCards>([]);
   const [abGameOver, setABGameOver] = useState<boolean>(false);
   const playerHandClass = cn(
@@ -49,9 +51,16 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
 
   const initGame = useCallback(
     (modeSlug: string) => {
-      socket.emit('game-init', { modeSlug });
+      const settings = getSettings();
+      const includeJokers = settings.jokers;
+      const devJokerOverride = import.meta.env.DEV ? {
+        enabled: settings.devJokerOverride,
+        joker1Hand: settings.devJoker1Hand,
+        joker2Hand: settings.devJoker2Hand,
+      } : null;
+      socket.emit('game-init', { modeSlug, includeJokers, devJokerOverride });
     },
-    [socket]
+    [socket, getSettings]
   );
 
   const handleNextRound = (data: { [key: string]: unknown }) => {

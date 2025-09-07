@@ -12,6 +12,10 @@ export const settingsSchema = z.object({
   rankSwitchLetter: z.boolean(),
   invertColors: z.boolean(),
   jokers: z.boolean(),
+  // Dev mode joker override settings
+  devJokerOverride: z.boolean(),
+  devJoker1Hand: z.number().min(1).max(5),
+  devJoker2Hand: z.number().min(1).max(5),
 });
 
 export type FormData = z.infer<typeof settingsSchema>;

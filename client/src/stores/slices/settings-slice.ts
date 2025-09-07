@@ -19,6 +19,10 @@ export const initialSettings = {
   rankSwitchLetter: false,
   invertColors: false,
   jokers: false,
+  // Dev mode joker override settings
+  devJokerOverride: false,
+  devJoker1Hand: 1,
+  devJoker2Hand: 2,
 };
 
 export const createSettingsSlice: StateCreator<
