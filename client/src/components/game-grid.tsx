@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment } from 'react';
-import { evaluateGridColumn, evaluateGridRow, IABGridCell } from '@gaeljacquin/ucg-shared';
+import { evaluateGridColumn, evaluateGridRow, IABGridCell } from '@untitled-card-game/shared';
 import { GridCell } from '@/components/grid-cell';
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';

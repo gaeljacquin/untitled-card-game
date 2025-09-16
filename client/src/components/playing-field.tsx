@@ -20,7 +20,7 @@ import {
   emptyHand,
   IABGridCell,
   SlugId,
-} from '@gaeljacquin/ucg-shared';
+} from '@untitled-card-game/shared';
 import ABCardComp from '@/components/ab-card';
 import ActionButton from '@/components/action-button';
 import DiscardPile from '@/components/discard-pile';

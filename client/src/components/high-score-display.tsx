@@ -1,6 +1,6 @@
 'use client';
 
-import { SlugId } from '@gaeljacquin/ucg-shared';
+import { SlugId } from '@untitled-card-game/shared';
 import { useUcgStore } from '@/stores/ucg-store';
 
 const HighScoreDisplay = ({ modeSlug }: { modeSlug: SlugId }) => {

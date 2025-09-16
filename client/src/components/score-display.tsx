@@ -7,7 +7,7 @@ import {
   evaluateGridRow,
   IABGridCell,
   SlugId,
-} from '@gaeljacquin/ucg-shared';
+} from '@untitled-card-game/shared';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,

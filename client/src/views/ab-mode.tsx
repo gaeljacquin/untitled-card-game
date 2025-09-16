@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { ABCards, SlugId } from '@gaeljacquin/ucg-shared';
+import { ABCards, SlugId } from '@untitled-card-game/shared';
 import BackgroundLogo from '@/components/background-logo';
 import Footer from '@/components/footer';
 import PlayingField from '@/components/playing-field';

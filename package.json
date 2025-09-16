@@ -1,5 +1,24 @@
 {
-	"devDependencies": {
-		"@types/node": "^24.3.1"
-	}
+  "name": "untitled-card-game",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.15.0",
+  "scripts": {
+    "build": "nx run-many -t build",
+    "test": "nx run-many -t test",
+    "lint": "nx run-many -t lint",
+    "dev:client": "nx serve client",
+    "dev:server": "nx serve server",
+    "build:shared": "nx build shared",
+    "build:client": "nx build client",
+    "build:server": "nx build server"
+  },
+  "devDependencies": {
+    "@nx/js": "^21.5.2",
+    "@nx/nest": "^21.5.2",
+    "@nx/node": "^21.5.2",
+    "@nx/vite": "^21.5.2",
+    "@types/node": "^24.3.1",
+    "nx": "^21.5.2"
+  }
 }
