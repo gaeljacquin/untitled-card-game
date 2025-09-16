@@ -2,16 +2,22 @@
   "name": "untitled-card-game",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "packageManager": "pnpm@10.15.0",
+  "workspaces": [
+    "apps/*",
+    "shared"
+  ],
   "scripts": {
+    "dev": "nx run-many -t dev",
     "build": "nx run-many -t build",
     "test": "nx run-many -t test",
     "lint": "nx run-many -t lint",
-    "dev:client": "nx serve client",
-    "dev:server": "nx serve server",
+    "dev:web": "nx dev web",
+    "dev:api": "nx dev api",
     "build:shared": "nx build shared",
-    "build:client": "nx build client",
-    "build:server": "nx build server"
+    "build:web": "nx build web",
+    "build:api": "nx build api"
   },
   "devDependencies": {
     "@nx/js": "^21.5.2",

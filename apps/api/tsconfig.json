@@ -13,8 +13,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@untitled-card-game/shared": ["../shared/src"],
-      "@untitled-card-game/shared/*": ["../shared/src/*"]
+      "@untitled-card-game/shared": ["../../shared/src"],
+      "@untitled-card-game/shared/*": ["../../shared/src/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
@@ -26,7 +26,7 @@
   },
   "references": [
     {
-      "path": "../shared"
+      "path": "../../shared"
     }
   ]
 }

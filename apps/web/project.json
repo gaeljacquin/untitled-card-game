@@ -1,16 +1,19 @@
 {
-  "name": "client",
-  "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "client/src",
+  "name": "web",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/web/src",
   "projectType": "application",
-  "tags": [],
+  "tags": ["type:app", "scope:web"],
   "targets": {
+    "dev": {
+      "command": "pnpm --cwd=apps/web run dev"
+    },
     "build": {
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/client"
+        "outputPath": "dist/apps/web"
       },
       "configurations": {
         "development": {
@@ -25,15 +28,15 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "client:build"
+        "buildTarget": "web:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "client:build:development",
+          "buildTarget": "web:build:development",
           "hmr": true
         },
         "production": {
-          "buildTarget": "client:build:production",
+          "buildTarget": "web:build:production",
           "hmr": false
         }
       }
@@ -42,14 +45,14 @@
       "executor": "@nx/vite:preview-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "client:build"
+        "buildTarget": "web:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "client:build:development"
+          "buildTarget": "web:build:development"
         },
         "production": {
-          "buildTarget": "client:build:production"
+          "buildTarget": "web:build:production"
         }
       }
     },
@@ -57,14 +60,14 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "client/jest.config.ts"
+        "jestConfig": "apps/web/jest.config.ts"
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["client/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["apps/web/**/*.{ts,tsx,js,jsx}"]
       }
     }
   },

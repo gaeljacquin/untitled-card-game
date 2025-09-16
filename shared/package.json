@@ -1,0 +1,14 @@
+{
+  "name": "@untitled-card-game/shared",
+  "version": "0.0.1",
+  "description": "Shared utilities and types for untitled-card-game",
+  "main": "./src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.lib.json",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {}
+}
