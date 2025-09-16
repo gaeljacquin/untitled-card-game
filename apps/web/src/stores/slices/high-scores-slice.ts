@@ -1,6 +1,7 @@
 import { StateCreator } from 'zustand';
+import { SlugId } from '@untitled-card-game/shared';
 
-import { HighScoreState } from '@/types/high-score';
+import { HighScoreState, HighScoreData, HighScoreObject } from '@/types/high-score';
 import { SettingsState } from '@/types/settings';
 
 import { MiscState } from './misc-slice';
@@ -8,7 +9,7 @@ import { MiscState } from './misc-slice';
 // Combined store state type
 type StoreState = HighScoreState & MiscState & SettingsState;
 
-export const initialHighScores = {
+export const initialHighScores: HighScoreData = {
   four: {
     value: 0,
     date: new Date(),
@@ -29,13 +30,17 @@ export const createHighScoreSlice: StateCreator<
   HighScoreState
 > = (set, get) => ({
   ...initialHighScores,
-  setHighScore: (slugId, highScore) => {
-    set({ [slugId]: highScore });
+  setHighScore: (slugId: SlugId, highScore: HighScoreObject) => {
+    set({ [slugId]: highScore } as Partial<StoreState>);
   },
-  resetHighScore: (slugId) => {
-    set({ [slugId]: initialHighScores[slugId] });
+  resetHighScore: (slugId: SlugId) => {
+    const defaultScore = initialHighScores[slugId as keyof HighScoreData];
+    if (defaultScore) {
+      set({ [slugId]: defaultScore } as Partial<StoreState>);
+    }
   },
-  getHighScore: (slugId) => {
-    return get()[slugId];
+  getHighScore: (slugId: SlugId) => {
+    const state = get();
+    return (state as any)[slugId] || initialHighScores[slugId as keyof HighScoreData] || initialHighScores.four;
   },
 });

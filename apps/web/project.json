@@ -6,23 +6,11 @@
   "tags": ["type:app", "scope:web"],
   "targets": {
     "dev": {
-      "command": "pnpm --cwd=apps/web run dev"
+      "command": "cd apps/web && pnpm run dev"
     },
     "build": {
-      "executor": "@nx/vite:build",
-      "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
-      "options": {
-        "outputPath": "dist/apps/web"
-      },
-      "configurations": {
-        "development": {
-          "mode": "development"
-        },
-        "production": {
-          "mode": "production"
-        }
-      }
+      "command": "cd apps/web && pnpm run build",
+      "outputs": ["{projectRoot}/dist"]
     },
     "serve": {
       "executor": "@nx/vite:dev-server",

@@ -1,17 +1,21 @@
 import { IABGridCell, SlugId } from '@untitled-card-game/shared';
 
-type HighScoreObject = {
+export type HighScoreObject = {
   value: number;
   date: Date;
   gameState: IABGridCell[][];
 };
 
-type HighScoreMap = {
-  [key in SlugId]: HighScoreObject;
-};
-
-export interface HighScoreState extends HighScoreMap {
-  setHighScore: (arg0: SlugId, arg1: HighScoreObject) => void;
-  resetHighScore: (arg0: SlugId) => void;
-  getHighScore: (arg0: SlugId) => HighScoreObject;
+export interface HighScoreData {
+  four: HighScoreObject;
+  five: HighScoreObject;
+  classic?: HighScoreObject;
 }
+
+export interface HighScoreActions {
+  setHighScore: (slugId: SlugId, highScore: HighScoreObject) => void;
+  resetHighScore: (slugId: SlugId) => void;
+  getHighScore: (slugId: SlugId) => HighScoreObject;
+}
+
+export type HighScoreState = HighScoreData & HighScoreActions;

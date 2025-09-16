@@ -21,14 +21,13 @@ export default function ABCardPreviewComp({
   const cardColor = suit.isRed
     ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
     : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' };
-  const SuitIcon = suitIconMap[suit.id as SuitId];
+  const suitIcon = suitIconMap[suit.id as SuitId];
   let ShapeIcon = null;
   const rankDisplay = rankLabel ? rank.value : rank.label;
   const suitIconFill = cardFront.id === 'suitIcon';
   const main = rankDisplay;
 
   if (suitIconFill) {
-    ShapeIcon = suitIconMap[suit.id as SuitId];
     cardColor.text = 'text-white';
     cardColor.fill = 'fill-white';
   } else if (cardFront.id !== 'default') {
@@ -65,7 +64,9 @@ export default function ABCardPreviewComp({
               <span className={cn('flex items-center justify-center uppercase', 'text-sm')}>
                 {main}
               </span>
-              <SuitIcon className={cn('h-4 w-4')} />
+              <span className={cn('h-4 w-4 flex items-center justify-center')}>
+                {suitIcon}
+              </span>
             </div>
 
             <div
@@ -77,7 +78,9 @@ export default function ABCardPreviewComp({
               <span className={cn('flex items-center justify-center uppercase', 'text-sm')}>
                 {main}
               </span>
-              <SuitIcon className={cn('h-4 w-4')} />
+              <span className={cn('h-4 w-4 flex items-center justify-center')}>
+                {suitIcon}
+              </span>
             </div>
 
             <div className="relative flex items-center justify-center h-full w-full">

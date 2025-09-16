@@ -1,11 +1,11 @@
 // Game evaluation functions
 
-import type { IABGridCell, ABCard } from './types';
+import type { IABGridCell, EvaluationResult, ScoreResult, BonusResult, ABCards, IABModeType } from './types';
 
-export function evaluateGridRow(grid: IABGridCell[][], rowIndex: number): number {
+export function evaluateGridRow(grid: IABGridCell[][], rowIndex: number): EvaluationResult {
   // TODO: Implement actual row evaluation logic
   const row = grid[rowIndex];
-  if (!row) return 0;
+  if (!row) return { name: 'Empty Row', points: 0 };
   
   let score = 0;
   for (const cell of row) {
@@ -13,10 +13,10 @@ export function evaluateGridRow(grid: IABGridCell[][], rowIndex: number): number
       score += cell.card.value;
     }
   }
-  return score;
+  return { name: `Row ${rowIndex + 1}`, points: score };
 }
 
-export function evaluateGridColumn(grid: IABGridCell[][], columnIndex: number): number {
+export function evaluateGridColumn(grid: IABGridCell[][], columnIndex: number): EvaluationResult {
   // TODO: Implement actual column evaluation logic
   let score = 0;
   for (const row of grid) {
@@ -24,19 +24,37 @@ export function evaluateGridColumn(grid: IABGridCell[][], columnIndex: number): 
       score += row[columnIndex].card.value;
     }
   }
-  return score;
+  return { name: `Column ${columnIndex + 1}`, points: score };
 }
 
-export function calculateScore(grid: IABGridCell[][]): number {
+export function calculateScore(grid: IABGridCell[][], mode?: IABModeType, discardPile?: ABCards): ScoreResult {
   // TODO: Implement actual score calculation
   let totalScore = 0;
   
   // Calculate row scores
   for (let i = 0; i < grid.length; i++) {
-    totalScore += evaluateGridRow(grid, i);
+    totalScore += evaluateGridRow(grid, i).points;
   }
   
   // Calculate column scores (avoid double counting)
-  // This is a placeholder implementation
-  return totalScore;
+  for (let i = 0; i < (grid[0]?.length || 0); i++) {
+    totalScore += evaluateGridColumn(grid, i).points;
+  }
+  
+  // Calculate bonuses
+  const discardBonus: BonusResult = {
+    name: 'Discard Bonus',
+    points: discardPile?.length ? discardPile.length * 5 : 0
+  };
+  
+  const specialBonus: BonusResult = {
+    name: 'Special Bonus',
+    points: mode?.gridSize === 25 ? 100 : 50 // Example bonus logic
+  };
+  
+  return {
+    score: totalScore,
+    discardBonus,
+    specialBonus
+  };
 }

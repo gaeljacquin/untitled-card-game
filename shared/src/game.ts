@@ -9,7 +9,6 @@ export class ABGame {
   public mode: IABModeType;
   public grid: any;
   public abDiscards: ABCard[] = [];
-  private seed: any;
 
   constructor(mode: IABModeType) {
     this.mode = mode;
@@ -21,9 +20,8 @@ export class ABGame {
     return [];
   }
 
-  setSeed(seed: any): void {
+  setSeed(_seed: any): void {
     // TODO: Implement seed setting
-    this.seed = seed;
   }
 
   setABSeed(seed: any): void {
@@ -40,11 +38,19 @@ export class ABDeck {
 }
 
 export class ABMode implements IABModeType {
+  public description?: string;
+  public type?: string;
+
   constructor(
     public slug: SlugId,
     public title: string,
-    public gridSize: number
-  ) {}
+    public gridSize: number,
+    description?: string,
+    type?: string
+  ) {
+    this.description = description;
+    this.type = type;
+  }
 
   static getMode(modeSlug: string): ABMode {
     // TODO: Implement mode resolution with actual data
@@ -54,9 +60,8 @@ export class ABMode implements IABModeType {
 
   static getModes(): ABMode[] {
     return [
-      new ABMode('classic', 'Classic', 9),
-      new ABMode('four', 'Four by Four', 16),
-      new ABMode('five', 'Five by Five', 25)
+      new ABMode('four', 'Four by Four', 16, '4x4 grid challenge', 'four'),
+      new ABMode('five', 'Five by Five', 25, '5x5 grid master mode', 'five')
     ];
   }
 }

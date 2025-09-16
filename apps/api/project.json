@@ -6,7 +6,7 @@
   "tags": ["type:app", "scope:api"],
   "targets": {
     "dev": {
-      "command": "pnpm --cwd=apps/api run start:dev"
+      "command": "cd apps/api && pnpm run start:dev"
     },
     "build": {
       "executor": "@nx/js:tsc",

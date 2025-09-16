@@ -1,4 +1,4 @@
-import { ABCard, emptyHand, IABGridCell } from '@untitled-card-game/shared';
+import { ABCard, emptyBonus, IABGridCell } from '@untitled-card-game/shared';
 import { GameState } from '@/types/game-state';
 
 export function getGameState(grid: IABGridCell[][]): GameState {
@@ -10,8 +10,8 @@ export function getGameState(grid: IABGridCell[][]): GameState {
     totalCards: totalCells,
     playedCards,
     score: 0,
-    discardBonus: emptyHand,
-    specialBonus: emptyHand,
+    discardBonus: emptyBonus,
+    specialBonus: emptyBonus,
   };
 }
 

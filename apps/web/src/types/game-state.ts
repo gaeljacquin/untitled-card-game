@@ -1,10 +1,10 @@
-import { emptyHand } from '@untitled-card-game/shared';
+import { BonusResult } from '@untitled-card-game/shared';
 
 export type GameState = {
   gameOver: boolean;
   totalCards: number;
   playedCards: number;
   score: number;
-  discardBonus: typeof emptyHand;
-  specialBonus: typeof emptyHand;
+  discardBonus?: BonusResult;
+  specialBonus?: BonusResult;
 };

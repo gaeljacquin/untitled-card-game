@@ -38,13 +38,12 @@ export default function ABCardComp({
   const cardColor = suit.isRed
     ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
     : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' };
-  const SuitIcon = suitIconMap[suit.id as SuitId];
+  const suitIcon = suitIconMap[suit.id as SuitId];
   let ShapeIcon = null;
   const rankDisplay = rankLabel ? rank.value : rank.label;
   const suitIconFill = abDesign.id === 'suitIcon';
 
   if (suitIconFill) {
-    ShapeIcon = suitIconMap[suit.id as SuitId];
     cardColor.text = 'text-white';
     cardColor.fill = 'fill-white';
   } else if (abDesign.id !== 'default') {
@@ -65,7 +64,6 @@ export default function ABCardComp({
         inGrid && card.played && 'invert-30'
       )}
     >
-      return (
       <div className="absolute inset-0 flex items-center justify-center">
         <div
           className={cn(
@@ -80,7 +78,9 @@ export default function ABCardComp({
             >
               {rankDisplay}
             </span>
-            <SuitIcon className={cn('size-2 sm:size-3')} />
+            <span className={cn('size-2 sm:size-3 flex items-center justify-center')}>
+              {suitIcon}
+            </span>
           </div>
 
           <div
@@ -94,7 +94,9 @@ export default function ABCardComp({
             >
               {rankDisplay}
             </span>
-            <SuitIcon className={cn('size-2 sm:size-3')} />
+            <span className={cn('size-2 sm:size-3 flex items-center justify-center')}>
+              {suitIcon}
+            </span>
           </div>
 
           <div className="relative flex items-center justify-center h-full w-full">
@@ -131,7 +133,6 @@ export default function ABCardComp({
           </div>
         </div>
       </div>
-      );
     </motion.div>
   );
 }

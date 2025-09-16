@@ -12,11 +12,33 @@ export interface GameState {
   isGameOver: boolean;
 }
 
+// Suit and Rank types (defined early for ABCard)
+export type SuitId = 'hearts' | 'diamonds' | 'clubs' | 'spades';
+
+export interface SuitType {
+  id: SuitId;
+  name: string;
+  symbol: string;
+  color: string;
+  isRed: boolean;
+  label: string;
+}
+
+export type RankId = 'ace' | 'two' | 'three' | 'four' | 'five' | 'six' | 'seven' | 'eight' | 'nine' | 'ten' | 'jack' | 'queen' | 'king';
+
+export interface RankType {
+  id: RankId;
+  name: string;
+  value: number;
+  symbol: string;
+  label: string;
+}
+
 // Card-related types
 export interface ABCard {
   id: string;
-  rank: string;
-  suit: string;
+  rank: RankType;
+  suit: SuitType;
   value: number;
   faceUp: boolean;
   played: boolean;
@@ -24,12 +46,6 @@ export interface ABCard {
 }
 
 export type ABCards = ABCard[];
-
-export interface ABCardPreview {
-  rank: string;
-  suit: string;
-  letter: string;
-}
 
 // Grid types
 export interface IABGridCell {
@@ -40,32 +56,16 @@ export interface IABGridCell {
 }
 
 // Mode types
-export type SlugId = 'classic' | 'four' | 'five' | string;
+export type SlugId = 'four' | 'five';
 
 export interface IABModeType {
   slug: SlugId;
   title: string;
   gridSize: number;
+  description?: string;
+  type?: string;
 }
 
-// Suit and Rank types
-export type SuitId = 'hearts' | 'diamonds' | 'clubs' | 'spades';
-
-export interface SuitType {
-  id: SuitId;
-  name: string;
-  symbol: string;
-  color: string;
-}
-
-export type RankId = 'ace' | 'two' | 'three' | 'four' | 'five' | 'six' | 'seven' | 'eight' | 'nine' | 'ten' | 'jack' | 'queen' | 'king';
-
-export interface RankType {
-  id: RankId;
-  name: string;
-  value: number;
-  symbol: string;
-}
 
 // Socket.IO event types
 export interface GameInitPayload {
@@ -94,5 +94,36 @@ export const suitIconMap: Record<SuitId, string> = {
   spades: '♠'
 };
 
+// Evaluation result types
+export interface EvaluationResult {
+  name: string;
+  points: number;
+}
+
+export interface ScoreResult {
+  score: number;
+  discardBonus: BonusResult;
+  specialBonus: BonusResult;
+}
+
+export interface BonusResult {
+  name: string;
+  points: number;
+}
+
+// Game state types
+export interface GameStateType {
+  gameOver: boolean;
+  score: number;
+  discardBonus?: BonusResult;
+  specialBonus?: BonusResult;
+}
+
 // Empty hand constant
 export const emptyHand: ABCards = [];
+
+// Default bonus results
+export const emptyBonus: BonusResult = {
+  name: 'No Bonus',
+  points: 0
+};

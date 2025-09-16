@@ -33,7 +33,7 @@
     },
 
     /* Test types */
-    "types": ["node", "jest", "@testing-library/jest-dom"]
+    "types": ["node"]
   },
   "include": [
     "src",
@@ -46,9 +46,4 @@
     "dist",
     "build"
   ],
-  "references": [
-    {
-      "path": "../../shared"
-    }
-  ]
 }

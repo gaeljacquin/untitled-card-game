@@ -195,7 +195,7 @@ socket.on('hello-ws-res', (data) => {
 });
 
 // game-init
-socket.emit('game-init', { modeSlug: 'classic' });
+socket.emit('game-init', { modeSlug: 'four' });
 socket.on('game-init-res', ({ abCards }) => {
   // render initial hand
 });
@@ -217,4 +217,3 @@ socket.on('game-next-round-res', (res) => {
 Notes
 - Ensure the client origin (http://localhost:3000 by default) matches server/.env CLIENT_URL; otherwise CORS will block the WebSocket upgrade
 - Ensure SERVER_URL in client/.env points to the externally reachable server URL/port (http://localhost:8080 by default when using the provided compose files)
-

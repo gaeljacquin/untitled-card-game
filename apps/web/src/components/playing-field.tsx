@@ -17,7 +17,7 @@ import {
   ABCards,
   ABMode,
   calculateScore,
-  emptyHand,
+  emptyBonus,
   IABGridCell,
   SlugId,
 } from '@untitled-card-game/shared';
@@ -69,8 +69,8 @@ export default function PlayingField({
       totalCards: abCards.length,
       playedCards: 0,
       score: 0,
-      discardBonus: emptyHand,
-      specialBonus: emptyHand,
+      discardBonus: emptyBonus,
+      specialBonus: emptyBonus,
     }),
     [abCards]
   );
@@ -92,7 +92,7 @@ export default function PlayingField({
 
   // Mode information
   const mode = ABMode.getMode(modeSlug)!;
-  const { title, description, gridSize, type } = mode;
+  const { title, description, gridSize } = mode;
 
   // DnD setup
   const mouseSensor = useSensor(MouseSensor);
@@ -313,7 +313,7 @@ export default function PlayingField({
     animateProgress().then(() => {
       if (getHighScore(modeSlug).value < gameState.score) {
         setHighScore(modeSlug, {
-          value: gameState.score + gameState.specialBonus?.points + gameState.discardBonus?.points,
+          value: gameState.score + (gameState.specialBonus?.points || 0) + (gameState.discardBonus?.points || 0),
           date: new Date(),
           gameState: grid,
         });
@@ -409,7 +409,7 @@ export default function PlayingField({
                   playerHand={playerHand}
                   isDealing={isDealing}
                   rankLabel={rankLabel}
-                  modeType={type}
+                  modeType={mode}
                   playerHandClass={playerHandClass}
                   playerHandText={playerHandText}
                 />
@@ -470,7 +470,6 @@ export default function PlayingField({
                       lockedCells={lockedCells}
                       gridClass={gridClass}
                       gridSize={gridSize}
-                      type={type}
                       rankLabel={rankLabel}
                     />
 
@@ -514,7 +513,7 @@ export default function PlayingField({
                 {discardPile.length > 0 && (
                   <DiscardPile
                     cards={discardPile}
-                    modeType={type}
+                    modeType={mode}
                     rankLabel={!rankLabel}
                     gameOver={gameOver}
                   />
@@ -532,7 +531,7 @@ export default function PlayingField({
 
       <DragOverlay>
         {activeDrag ? (
-          <ABCardComp card={activeDrag} rankLabel={!rankLabel} modeType={type} />
+          <ABCardComp card={activeDrag} rankLabel={!rankLabel} modeType={mode} />
         ) : null}
       </DragOverlay>
     </DndContext>

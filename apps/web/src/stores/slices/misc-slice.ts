@@ -26,9 +26,9 @@ export const createMiscSlice: StateCreator<
 > = (set, get) => ({
   ...initialState,
   toggleAudioPlayerVisibility: () => {
-    set({ audioPlayerVisible: !get().audioPlayerVisible });
+    set({ audioPlayerVisible: !get().audioPlayerVisible } as Partial<StoreState>);
   },
   muteAskRtfm: () => {
-    set({ askRtfm: false });
+    set({ askRtfm: false } as Partial<StoreState>);
   },
 });

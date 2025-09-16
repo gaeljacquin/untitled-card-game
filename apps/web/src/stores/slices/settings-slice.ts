@@ -29,10 +29,10 @@ export const createSettingsSlice: StateCreator<
 > = (set, get) => ({
   ...initialSettings,
   updateSettings: (settings: Partial<SettingsState>) => {
-    set({ ...settings });
+    set({ ...settings } as Partial<StoreState>);
   },
   resetSettings: () => {
-    set({ ...initialSettings });
+    set({ ...initialSettings } as Partial<StoreState>);
   },
   getSettings: () => get(),
 });

@@ -152,7 +152,7 @@ const ScoreDisplay = ({
                         <p className="flex items-center justify-between gap-2 text-sm">
                           <span>Discard Bonus</span>
                           <span>
-                            {gameState.discardBonus?.points > 0 && gameState.discardBonus?.name}
+                            {(gameState.discardBonus?.points || 0) > 0 && gameState.discardBonus?.name}
                           </span>
                           <span>${gameState.discardBonus?.points ?? 0}</span>
                         </p>
@@ -170,7 +170,7 @@ const ScoreDisplay = ({
                         <p className="flex items-center justify-between gap-2 text-sm">
                           <span>Special Bonus</span>
                           <span>
-                            {gameState.specialBonus?.points > 0 && gameState.specialBonus?.name}
+                            {(gameState.specialBonus?.points || 0) > 0 && gameState.specialBonus?.name}
                           </span>
                           <span>${gameState.specialBonus?.points}</span>
                         </p>
@@ -190,8 +190,8 @@ const ScoreDisplay = ({
                           <span>
                             $
                             {(gameState.score as number) +
-                              (gameState.specialBonus?.points as number) +
-                              (gameState.discardBonus?.points as number)}
+                              (gameState.specialBonus?.points || 0) +
+                              (gameState.discardBonus?.points || 0)}
                           </span>
                         </p>
                       </motion.div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { ABCardPreview, Rank, RankId, Suit, SuitId } from '@untitled-card-game/shared';
+import { ABCard, Rank, RankId, Suit, SuitId } from '@untitled-card-game/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PopoverClose } from '@radix-ui/react-popover';
 import ABCardPreviewComp from '@/components/ab-card-preview';
@@ -28,9 +28,16 @@ export default function Settings() {
   const { toast } = useToast();
   const previewRank = Rank.getById(settings.previewCard.rank as RankId);
   const previewSuit = Suit.getById(settings.previewCard.suit as SuitId);
-  const previewCard = new ABCardPreview();
-  previewCard.setRank(previewRank);
-  previewCard.setSuit(previewSuit);
+  
+  const previewCard: ABCard = {
+    id: 'preview-card',
+    rank: previewRank!,
+    suit: previewSuit!,
+    value: previewRank?.value || 1,
+    faceUp: true,
+    played: false,
+    letter: settings.previewCard.letter
+  };
   const form = useForm<FormData>({
     resolver: zodResolver(settingsSchema),
     defaultValues: settings,

@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment } from 'react';
-import { evaluateGridColumn, evaluateGridRow, IABGridCell } from '@untitled-card-game/shared';
+import { evaluateGridColumn, evaluateGridRow, IABGridCell, IABModeType } from '@untitled-card-game/shared';
 import { GridCell } from '@/components/grid-cell';
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
@@ -20,14 +20,12 @@ const GameGrid = ({
   lockedCells,
   gridClass,
   gridSize,
-  type,
   rankLabel,
 }: {
   grid: IABGridCell[][];
   lockedCells: Set<string>;
   gridClass: string;
   gridSize: number;
-  type: 'abpoker';
   rankLabel: boolean;
 }) => {
   return (
@@ -58,7 +56,7 @@ const GameGrid = ({
             <GridCell
               key={cell.id}
               cell={cell}
-              modeType={type}
+              modeType={{} as IABModeType}
               gridSize={gridSize}
               lockedCells={lockedCells}
               rowIndex={rowIndex}
