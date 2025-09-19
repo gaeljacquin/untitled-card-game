@@ -24,9 +24,4 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
   },
-  "references": [
-    {
-      "path": "../../shared"
-    }
-  ]
 }
