@@ -3,9 +3,9 @@
 This file provides guidance to WARP (warp.dev) when working with code in this repository.
 
 Project overview
-- Monorepo-style layout with two independent Node.js apps:
-  - client: Next.js 15 + React 19 UI, Tailwind, shadcn, socket.io-client
-  - server: NestJS 11 + socket.io WebSocket gateway for game state
+- Nx monorepo layout with two independent Node.js apps:
+  - apps/web: Vite + React 19 UI, Tailwind, shadcn, socket.io-client
+  - apps/api: NestJS 11 + socket.io WebSocket gateway for game state
 - Local development is container-friendly via docker-compose; direct pnpm workflows are also available per app directory.
 
 Prerequisites
@@ -28,21 +28,21 @@ Quick start (containers)
   - macOS/Linux/WSL: ./cleanup.sh
 
 Environment and ports
-- client/.env.example
-  - PORT=3000
+- apps/web/.env.example
+  - PORT=5173 (Vite default)
   - SERVER_URL=http://localhost:8080
   - BUILD_TARGET=dev
   - MAINTENANCE_MODE=1
-- server/.env.example
+- apps/api/.env.example
   - PORT=8080
-  - CLIENT_URL=http://localhost:3000
+  - CLIENT_URL=http://localhost:5173
   - BUILD_TARGET=dev
 - When running via docker-compose:
   - Client binds ${PORT:-3000}
   - Server binds host ${PORT:-8080} to container 3000; the server listens on process.env.PORT || 3000 in code, but the compose file maps host 8080 to container 3000 by default
 
-Client (Next.js)
-- Path: client/
+Web App (Vite + React)
+- Path: apps/web/
 - Package manager: pnpm (Corepack recommended)
 - Scripts
   - pnpm dev            # Next dev with Turbopack (reads .env)
@@ -66,11 +66,11 @@ Client (Next.js)
   - Prettier integrated via plugin:prettier/recommended
   - Stylelint checks for *.css
 - Config highlights
-  - next.config.ts sets public env: serverUrl, port, maintenanceMode, etc. Ensure SERVER_URL is set in client/.env
+  - vite.config.ts sets environment variables for runtime. Ensure SERVER_URL is set in apps/web/.env
   - tsconfig.json uses baseUrl . and paths @/* -> ./*; module set to commonJS; strict true
 
-Server (NestJS)
-- Path: server/
+API Server (NestJS)
+- Path: apps/api/
 - Package manager: pnpm
 - Scripts
   - pnpm build            # nest build (uses tsconfig.build.json)
@@ -99,8 +99,8 @@ Server (NestJS)
   - Jest in package.json: testRegex ".*\.spec\.ts$", rootDir src, ts-jest transform
 
 High-level architecture
-- Frontend (client):
-  - Next.js app talks to the backend via socket.io-client, using SERVER_URL from client/.env and surfaced through next.config.ts env
+- Frontend (apps/web):
+  - Vite + React app talks to the backend via socket.io-client, using SERVER_URL from apps/web/.env and surfaced through vite.config.ts env
   - UI stack includes Tailwind v4, shadcn/ui, Magic UI, dnd-kit for drag-and-drop
 - Backend (server):
   - NestJS application exposes a Socket.IO gateway
@@ -119,23 +119,27 @@ High-level architecture
 
 CI/CD
 - .github/workflows/build-push-server-ecr.yml
-  - On PR opened to main, for paths under server/ and shared/
-  - Builds server Docker image for linux/amd64 and pushes to Amazon ECR using OIDC auth
-  - Working directory set to ./server
+  - On PR opened to main, for paths under apps/api/ and shared/
+  - Builds API server Docker image for linux/amd64 and pushes to Amazon ECR using OIDC auth
+  - Working directory set to ./apps/api
 
 Common development flows
-- Local (no Docker)
-  - Client: pushd client; pnpm install; pnpm dev; open http://localhost:3000; popd
-  - Server: pushd server; pnpm install; pnpm start:dev; server listens on PORT from .env (default 8080 via compose) but code listens on 3000 if PORT not set; ensure CLIENT_URL in .env matches client URL; popd
+- Local development with Nx
+  - Both apps: pnpm dev (runs nx serve for all apps)
+  - Web only: nx serve web (or cd apps/web && pnpm dev)
+  - API only: nx serve api (or cd apps/api && pnpm start:dev)
+  - Build all: pnpm build
+  - Test all: pnpm test
+  - Lint all: pnpm lint
 - Local (Docker)
   - Use setup/start scripts as listed above; ensure a docker network named ucg_network exists or is created by docker-compose
 
 Troubleshooting notes
-- If client cannot reach server:
-  - Verify client .env SERVER_URL matches server’s externally reachable URL and port
-  - Ensure server CORS CLIENT_URL matches the actual client origin (including protocol and port)
-- If Jest single-test runs are needed in client:
-  - Use npx jest path/to/test -t "pattern" since there’s no jest script alias in client/package.json
+- If web app cannot reach API server:
+  - Verify apps/web/.env SERVER_URL matches server's externally reachable URL and port
+  - Ensure API server CORS CLIENT_URL matches the actual web app origin (including protocol and port)
+- If Jest single-test runs are needed in web app:
+  - Use npx jest path/to/test -t "pattern" or pnpm test in apps/web directory
 
 Repository conventions and rules
 - No special AI rules (Claude/Cursor/Copilot) found in this repo at the time of writing
@@ -144,7 +148,7 @@ Repository conventions and rules
 Socket.IO event flows
 - Connection
   - Namespace: default '/'
-  - CORS: server only accepts origin matching CLIENT_URL from server/.env
+  - CORS: server only accepts origin matching CLIENT_URL from apps/api/.env
   - On connection, server logs client.id; on disconnect, server deletes per-client game state from its internal Map
 
 - hello-ws
@@ -179,8 +183,8 @@ Socket.IO event flows
   - Server keeps a Map<string, ABGame> where the key is the socket.id
   - On disconnect, the entry is removed; the client should re-send 'game-init' on reconnect
 
-Client usage example (browser/Next.js)
-- The client uses socket.io-client and should connect to the URL from SERVER_URL in client/.env, which is surfaced to the app via next.config.ts env.serverUrl
+Web App usage example (browser/Vite + React)
+- The web app uses socket.io-client and should connect to the URL from SERVER_URL in apps/web/.env, which is surfaced to the app via vite.config.ts env variables
 - Minimal example:
 
 ```ts path=null start=null
@@ -215,6 +219,6 @@ socket.on('game-next-round-res', (res) => {
 ```
 
 Notes
-- Ensure the client origin (http://localhost:3000 by default) matches server/.env CLIENT_URL; otherwise CORS will block the WebSocket upgrade
-- Ensure SERVER_URL in client/.env points to the externally reachable server URL/port (http://localhost:8080 by default when using the provided compose files)
+- Ensure the web app origin (http://localhost:5173 by default with Vite) matches apps/api/.env CLIENT_URL; otherwise CORS will block the WebSocket upgrade
+- Ensure SERVER_URL in apps/web/.env points to the externally reachable server URL/port (http://localhost:8080 by default when using the provided compose files)
 

@@ -1,0 +1,95 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "api",
+  "sourceRoot": "apps/api/src",
+  "projectType": "application",
+  "tags": ["scope:api", "type:app"],
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm start:dev",
+        "cwd": "apps/api"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "command": "pnpm build",
+        "cwd": "apps/api"
+      }
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm start:prod",
+        "cwd": "apps/api"
+      },
+      "dependsOn": ["build"]
+    },
+    "start-debug": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm start:debug",
+        "cwd": "apps/api"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm test",
+        "cwd": "apps/api"
+      }
+    },
+    "test-watch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm test:watch",
+        "cwd": "apps/api"
+      }
+    },
+    "test-cov": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm test:cov",
+        "cwd": "apps/api"
+      }
+    },
+    "test-e2e": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm test:e2e",
+        "cwd": "apps/api"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm lint",
+        "cwd": "apps/api"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm format",
+        "cwd": "apps/api"
+      }
+    },
+    "prettier-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm prettier:check",
+        "cwd": "apps/api"
+      }
+    },
+    "prettier-write": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm prettier:write",
+        "cwd": "apps/api"
+      }
+    }
+  }
+}

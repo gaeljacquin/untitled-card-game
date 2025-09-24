@@ -1,5 +1,5 @@
 {
-  "name": "@untitled-card-game/client",
+  "name": "@untitled-card-game/web",
   "type": "module",
   "scripts": {
     "dev": "vite",

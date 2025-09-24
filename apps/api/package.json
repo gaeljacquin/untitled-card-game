@@ -1,5 +1,5 @@
 {
-  "name": "@untitled-card-game/server",
+  "name": "@untitled-card-game/api",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

@@ -134,3 +134,6 @@ dist
 */.vscode
 
 .secrets
+
+# Nx
+.nx
