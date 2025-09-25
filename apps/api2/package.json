@@ -3,13 +3,21 @@
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js"
   },
   "dependencies": {
-    "elysia": "latest"
+    "@elysiajs/node": "^1.0.12",
+    "@elysiajs/cors": "^1.1.1",
+    "@untitled-card-game/shared": "workspace:*",
+    "dotenv": "^17.2.2",
+    "elysia": "latest",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
   },
   "module": "src/index.js"
 }
