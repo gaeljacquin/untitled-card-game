@@ -1,7 +1,7 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "name": "api2",
-  "sourceRoot": "apps/api2/src",
+  "name": "api",
+  "sourceRoot": "apps/api/src",
   "projectType": "application",
   "tags": ["scope:api", "type:app"],
   "targets": {
@@ -9,14 +9,14 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "pnpm dev",
-        "cwd": "apps/api2"
+        "cwd": "apps/api"
       }
     },
     "build": {
       "executor": "nx:run-commands",
       "options": {
         "command": "tsc -p tsconfig.json",
-        "cwd": "apps/api2"
+        "cwd": "apps/api"
       },
       "outputs": ["{projectRoot}/dist"]
     },
@@ -24,7 +24,7 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "node dist/index.js",
-        "cwd": "apps/api2"
+        "cwd": "apps/api"
       },
       "dependsOn": ["build"]
     }
