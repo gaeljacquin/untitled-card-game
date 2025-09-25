@@ -1,6 +1,6 @@
 'use client';
 
-import { ABCards, IABModeType } from '@gaeljacquin/ucg-shared';
+import { ABCards, IABModeType } from '@untitled-card-game/shared';
 import ABCardComp from '@/components/ab-card';
 import { AnimatePresence, motion } from 'motion/react';
 import { cn } from '@/lib/utils';

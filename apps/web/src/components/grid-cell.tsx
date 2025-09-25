@@ -1,7 +1,7 @@
 'use client';
 
 import { useDroppable } from '@dnd-kit/core';
-import { IABGridCell, IABModeType } from '@gaeljacquin/ucg-shared';
+import { IABGridCell, IABModeType } from '@untitled-card-game/shared';
 import ABCardComp from '@/components/ab-card';
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';

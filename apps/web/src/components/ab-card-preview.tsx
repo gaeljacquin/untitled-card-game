@@ -1,6 +1,6 @@
 'use client';
 
-import { ABCard, suitIconMap, SuitId } from '@gaeljacquin/ucg-shared';
+import { ABCard, suitIconMap, SuitId } from '@untitled-card-game/shared';
 import { cn } from '@/lib/utils';
 import { useUcgStore } from '@/stores/ucg-store';
 import { abDesigns } from '@/utils/ab-designs';

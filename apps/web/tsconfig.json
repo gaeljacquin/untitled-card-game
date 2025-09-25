@@ -27,7 +27,8 @@
     /* Path mapping */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@untitled-card-game/shared": ["../../libs/shared/src/index.ts"]
     },
 
     /* Test types */

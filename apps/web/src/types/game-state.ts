@@ -1,4 +1,4 @@
-import { emptyHand } from '@gaeljacquin/ucg-shared';
+import { emptyHand } from '@untitled-card-game/shared';
 
 export type GameState = {
   gameOver: boolean;

@@ -1,6 +1,6 @@
 'use client';
 
-import { ABCards } from '@gaeljacquin/ucg-shared';
+import { ABCards } from '@untitled-card-game/shared';
 import { Button } from '@/components/ui/button';
 
 const ActionButton = ({

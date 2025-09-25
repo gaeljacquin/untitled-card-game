@@ -9,7 +9,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import cors from '@/utils/cors';
 import { GameService } from '@/game/game.service';
-import { ABDeck, ABGame, ABMode } from '@gaeljacquin/ucg-shared';
+import { ABDeck, ABGame, ABMode } from '@untitled-card-game/shared';
 
 @WebSocketGateway({ cors })
 export class GameGateway

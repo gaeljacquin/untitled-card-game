@@ -12,7 +12,8 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@untitled-card-game/shared": ["../../libs/shared/src/index.ts"]
     },
     "incremental": true,
     "skipLibCheck": true,
