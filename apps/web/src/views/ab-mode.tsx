@@ -2,13 +2,14 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { ABCards, SlugId } from '@untitled-card-game/shared';
+import { motion } from 'motion/react';
+
 import BackgroundLogo from '@/components/background-logo';
 import Footer from '@/components/footer';
 import PlayingField from '@/components/playing-field';
 import ReturnMainMenu from '@/components/return-main-menu';
-import { Button } from '@/components/ui/button';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
-import { motion } from 'motion/react';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import SocketInit from '@/utils/socket-init';
 
@@ -70,41 +71,41 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
     >
       <div className="absolute z-50 inset-0 flex flex-col">
         <motion.div
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
           className="header-text-ab flex-1 overflow-auto p-4"
         >
-        <BackgroundLogo />
+          <BackgroundLogo />
 
-        <PlayingField
-          modeSlug={modeSlug}
-          abCards={abCards}
-          gridClass={gridClass}
-          playerHandClass={playerHandClass}
-          handleNextRound={handleNextRound}
-          gameOver={abGameOver}
-          initGame={initGame}
-          setABGameOver={setABGameOver}
-        />
+          <PlayingField
+            modeSlug={modeSlug}
+            abCards={abCards}
+            gridClass={gridClass}
+            playerHandClass={playerHandClass}
+            handleNextRound={handleNextRound}
+            gameOver={abGameOver}
+            initGame={initGame}
+            setABGameOver={setABGameOver}
+          />
 
-        <div className="flex flex-col items-center justify-center gap-4 footer-spacing-ab">
-          {import.meta.env.DEV && (
-            <Button
-              variant="destructive"
-              onClick={() => setABGameOver(true)}
-              className="hover:cursor-pointer"
-            >
-              Simulate Game Over
-            </Button>
-          )}
+          <div className="flex flex-col items-center justify-center gap-4 footer-spacing-ab">
+            {import.meta.env.DEV && (
+              <Button
+                variant="destructive"
+                onClick={() => setABGameOver(true)}
+                className="hover:cursor-pointer"
+              >
+                Simulate Game Over
+              </Button>
+            )}
 
-          <div className="flex justify-center my-8">
-            <ReturnMainMenu />
+            <div className="flex justify-center my-8">
+              <ReturnMainMenu />
+            </div>
+
+            <Footer />
           </div>
-
-          <Footer />
-        </div>
         </motion.div>
       </div>
     </BackgroundGradientAnimation>
