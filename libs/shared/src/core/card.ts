@@ -45,26 +45,6 @@ export class Card implements ICard {
   }
 }
 
-// Functional factory for creating ABCard objects
-const createABCard = (
-  rank: Rank | null | undefined,
-  suit: Suit | null | undefined,
-  faceUp: boolean = true,
-  played: boolean = false,
-  discard: boolean = false
-) => {
-  const actualRank = rank ?? Rank.getRandom();
-  const actualSuit = suit ?? Suit.getRandom();
-  const card = createCard(actualRank, actualSuit);
-
-  return {
-    ...card,
-    played,
-    discard,
-    faceUp,
-    _toString: () => 'card-' + actualRank.value + ' of ' + actualSuit.label,
-  };
-};
 
 export class ABCard extends Card {
   public played: boolean = false;
@@ -99,13 +79,6 @@ export class ABCard extends Card {
   }
 }
 
-// Functional factory for ABCardPreview
-const createABCardPreview = (rank?: Rank, suit?: Suit) => {
-  const actualRank = rank ?? Rank.getRandom();
-  const actualSuit = suit ?? Suit.getRandom();
-
-  return createABCard(actualRank, actualSuit, true, false, false);
-};
 
 export class ABCardPreview extends ABCard {
   declare public rank: Rank;

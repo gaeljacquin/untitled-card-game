@@ -139,8 +139,4 @@ export class ABGame implements IABGame {
     return toStringGridPure(this.abSeed);
   }
 
-  private toString(): string {
-    return createGameId(this.mode, this.createdAt);
-  }
 }
-

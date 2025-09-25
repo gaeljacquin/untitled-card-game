@@ -8,6 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@untitled-card-game/shared': path.resolve(__dirname, '../../libs/shared/src/index.ts'),
     },
   },
   define: {

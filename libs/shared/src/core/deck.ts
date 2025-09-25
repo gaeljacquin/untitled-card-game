@@ -58,9 +58,6 @@ export class ABDeck implements IABDeck {
     this.cards = createDeckCards(); // Use pure function
   }
 
-  private createDeck(): ABCards {
-    return createDeckCards(); // Use pure function
-  }
 
   public getCards(): ABCards {
     return [...this.cards]; // Return copy to maintain immutability
@@ -74,4 +71,3 @@ export class ABDeck implements IABDeck {
     return cardsToStringArray(this.cards); // Use pure function
   }
 }
-
