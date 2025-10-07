@@ -31,9 +31,18 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
 
     socket.on('game-init-res', (data) => {
       const { abCards } = data;
-      // Reconstruct cards from plain objects to ABCard instances
-      const reconstructedCards = reconstructCards(abCards || []);
-      setABCards(reconstructedCards);
+
+      if (!abCards || !Array.isArray(abCards)) {
+        return;
+      }
+
+      try {
+        // Reconstruct cards from plain objects to ABCard instances
+        const reconstructedCards = reconstructCards(abCards);
+        setABCards(reconstructedCards);
+      } catch (error) {
+        console.error('Error reconstructing cards:', error);
+      }
     });
 
     socket.on('game-next-round-res', (data) => {
@@ -42,9 +51,17 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
       if (gameOver) {
         setABGameOver(true);
       } else {
-        // Reconstruct cards from plain objects to ABCard instances
-        const reconstructedCards = reconstructCards(abCards || []);
-        setABCards(reconstructedCards);
+        if (!abCards || !Array.isArray(abCards)) {
+          return;
+        }
+
+        try {
+          // Reconstruct cards from plain objects to ABCard instances
+          const reconstructedCards = reconstructCards(abCards);
+          setABCards(reconstructedCards);
+        } catch (error) {
+          console.error('Error reconstructing cards:', error);
+        }
       }
     });
 

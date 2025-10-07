@@ -53,9 +53,26 @@ export function getCardBaseSuit(card: ABCard | any): any {
  * Reconstructs an ABCard instance from a plain object.
  */
 export function reconstructCard(plainCard: any): ABCard {
-  const rank = Rank.getById(plainCard.rank.id);
-  const suit = Suit.getById(plainCard.suit.id);
-  const card = new ABCard(rank, suit, plainCard.faceUp);
+  if (!plainCard) {
+    throw new Error('Cannot reconstruct null or undefined card');
+  }
+
+  // Socket.IO serializes class instances with their private properties
+  // The actual rank/suit data is in _currentRank/_currentSuit or _rank/_suit
+  const rankData = plainCard._currentRank || plainCard._rank || plainCard.rank;
+  const suitData = plainCard._currentSuit || plainCard._suit || plainCard.suit;
+
+  if (!rankData || !rankData.id) {
+    throw new Error('Card is missing rank information');
+  }
+
+  if (!suitData || !suitData.id) {
+    throw new Error('Card is missing suit information');
+  }
+
+  const rank = Rank.getById(rankData.id);
+  const suit = Suit.getById(suitData.id);
+  const card = new ABCard(rank, suit, plainCard.faceUp ?? true);
 
   // Restore played and discard states
   if (plainCard.played) {
@@ -65,6 +82,13 @@ export function reconstructCard(plainCard: any): ABCard {
     card.setDiscard(true);
   }
 
+  // If this was a joker with a different value, restore it
+  const baseRankData = plainCard._baseRank;
+  if (baseRankData && baseRankData.isJoker && (rankData.id !== baseRankData.id)) {
+    // The joker was assigned a specific value, restore it
+    card.setJokerValue(rank, suit);
+  }
+
   return card;
 }
 
@@ -72,5 +96,9 @@ export function reconstructCard(plainCard: any): ABCard {
  * Reconstructs an array of ABCard instances from plain objects.
  */
 export function reconstructCards(plainCards: any[]): ABCard[] {
-  return plainCards.map(reconstructCard);
+  if (!plainCards || !Array.isArray(plainCards)) {
+    return [];
+  }
+
+  return plainCards.filter(card => card != null).map(reconstructCard);
 }

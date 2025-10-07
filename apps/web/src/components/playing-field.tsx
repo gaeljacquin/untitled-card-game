@@ -99,6 +99,7 @@ export default function PlayingField({
   const tabsRef = useRef<HTMLDivElement>(null);
   const coinInserted = useRef(false);
   const highScoreBeaten = useRef(false);
+  const gameOverProcessed = useRef(false);
 
   // Mode information
   const mode = ABMode.getMode(modeSlug)!;
@@ -345,6 +346,7 @@ export default function PlayingField({
     setLockedCells(new Set());
     setIsDealing(true);
     clearAllJokerValues();
+    gameOverProcessed.current = false;
     await initGame(modeSlug);
     insertCoin();
     setDiscardPile([]);
@@ -416,7 +418,8 @@ export default function PlayingField({
   }, [abCards]);
 
   useEffect(() => {
-    if (gameOver) {
+    if (gameOver && !gameOverProcessed.current) {
+      gameOverProcessed.current = true;
       const scores = calculateScore(grid, mode, discardPile);
       setGameState((prev) => ({
         ...prev,

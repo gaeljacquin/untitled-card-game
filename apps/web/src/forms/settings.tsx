@@ -181,9 +181,7 @@ export default function Settings() {
                                 item.id === 'ace' ||
                                 item.id === 'queen' ||
                                 item.id === 'ten' ||
-                                item.id === 'two' ||
-                                item.id === 'joker-red' ||
-                                item.id === 'joker-black'
+                                item.id === 'two'
                             )
                             .map((item, index) => {
                               return (
@@ -273,7 +271,7 @@ export default function Settings() {
           <div className="flex flex-col items-center justify-center gap-4">
             <div className="flex flex-row items-center justify-center gap-4 p-4 rounded-xl bg-black/50 border-white/20">
               <FormLabel className="text-base">
-                <p>Jokers (5x5 Grid only)*</p>
+                <p>Jokers (5x5 Grid only)</p>
               </FormLabel>
               <FormField
                 control={form.control}
@@ -297,9 +295,6 @@ export default function Settings() {
                 )}
               />
             </div>
-            <p className="text-sm text-white/50 p-4 rounded-xl bg-black/50 border-white/20">
-              * Coming soon
-            </p>
           </div>
         )}
 
