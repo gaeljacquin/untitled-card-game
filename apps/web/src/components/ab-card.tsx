@@ -8,6 +8,7 @@ import { GiJesterHat } from 'react-icons/gi';
 import { cn } from '@/lib/utils';
 import { useUcgStore } from '@/stores/ucg-store';
 import { abDesigns } from '@/utils/ab-designs';
+import { getCardBaseRank, isJokerCard } from '@/utils/card-helpers';
 
 export default function ABCardComp({
   card,
@@ -31,8 +32,8 @@ export default function ABCardComp({
   const suit = card.suit;
   const { abDesignIndex } = useUcgStore();
   const abDesign = abDesigns[abDesignIndex];
-  const isJoker = card.isJoker();
-  const baseRank = isJoker ? card.getBaseRank() : rank;
+  const isJoker = isJokerCard(card);
+  const baseRank = isJoker ? getCardBaseRank(card) : rank;
 
   // Part of the race condition fix
   if (!card || !card.suit) {

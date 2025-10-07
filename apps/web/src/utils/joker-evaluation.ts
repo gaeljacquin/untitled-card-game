@@ -7,6 +7,8 @@ import {
   Suit,
 } from '@untitled-card-game/shared';
 
+import { isJokerCard } from './card-helpers';
+
 export type JokerEvaluation = {
   cardId: string;
   rank: Rank;
@@ -24,7 +26,7 @@ export function evaluateJokerAtPosition(
   columnIndex: number,
   jokerCard: ABCard
 ): JokerEvaluation | null {
-  if (!jokerCard.isJoker()) {
+  if (!isJokerCard(jokerCard)) {
     return null;
   }
 
@@ -49,7 +51,8 @@ export function evaluateJokerAtPosition(
   // Choose the better hand
   if (!rowEval && !colEval) {
     // Default to Ace of the joker's base suit if no evaluation available
-    const baseSuit = jokerCard.getBaseSuit();
+    const baseSuit =
+      typeof jokerCard.getBaseSuit === 'function' ? jokerCard.getBaseSuit() : jokerCard.suit;
     return {
       cardId: jokerCard.id,
       rank: Rank.getById('ace'),
@@ -104,7 +107,7 @@ export function evaluateAllJokersInGrid(grid: IABGridCell[][]): JokerEvaluation[
 
   grid.forEach((row, rowIndex) => {
     row.forEach((cell, columnIndex) => {
-      if (cell.card && cell.card.isJoker()) {
+      if (cell.card && isJokerCard(cell.card)) {
         const evaluation = evaluateJokerAtPosition(grid, rowIndex, columnIndex, cell.card);
         if (evaluation) {
           jokerEvaluations.push(evaluation);
@@ -128,15 +131,11 @@ export function applyJokerValuesToGrid(
 
   return grid.map((row) =>
     row.map((cell) => {
-      if (cell.card && cell.card.isJoker()) {
+      if (cell.card && isJokerCard(cell.card)) {
         const evaluation = jokerMap.get(cell.card.id);
-        if (evaluation) {
-          const updatedCard = { ...cell.card };
-          updatedCard.setJokerValue(evaluation.rank, evaluation.suit);
-          return {
-            ...cell,
-            card: updatedCard,
-          };
+        if (evaluation && typeof cell.card.setJokerValue === 'function') {
+          // Directly mutate the card object to set joker value
+          cell.card.setJokerValue(evaluation.rank, evaluation.suit);
         }
       }
       return cell;

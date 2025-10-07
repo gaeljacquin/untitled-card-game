@@ -39,6 +39,7 @@ import { GameState } from '@/types/game-state';
 import { confettiFireworks } from '@/utils/confetti';
 import { canMoveCard, getGameState, isGridFull } from '@/utils/game-state';
 import { applyJokerValuesToGrid, evaluateAllJokersInGrid } from '@/utils/joker-evaluation';
+import { reconstructCards } from '@/utils/card-helpers';
 
 export default function PlayingField({
   modeSlug,
@@ -62,7 +63,14 @@ export default function PlayingField({
   const playerHandText = 'Player Hand';
 
   // Stores
-  const { rankLabel, setHighScore, getHighScore, resetHighScore, setJokerValue, clearAllJokerValues } = useUcgStore();
+  const {
+    rankLabel,
+    setHighScore,
+    getHighScore,
+    resetHighScore,
+    setJokerValue,
+    clearAllJokerValues,
+  } = useUcgStore();
 
   // State
   const defaultGameState = useMemo<GameState>(
@@ -136,11 +144,15 @@ export default function PlayingField({
     setTimeout(() => {
       abCards.forEach((_, index) => {
         setTimeout(() => {
-          setPlayerHand((prev) => [
-            ...prev.slice(0, index),
-            { ...abCards[index], faceUp: true } as ABCard,
-            ...prev.slice(index + 1),
-          ]);
+          setPlayerHand((prev) => {
+            const card = abCards[index];
+            card.faceUp = true;
+            return [
+              ...prev.slice(0, index),
+              card,
+              ...prev.slice(index + 1),
+            ];
+          });
         }, index * 200);
       });
     }, 500);
@@ -168,7 +180,7 @@ export default function PlayingField({
     const jokerEvaluations = evaluateAllJokersInGrid(gridToEvaluate);
 
     // Store joker values in zustand
-    jokerEvaluations.forEach(evaluation => {
+    jokerEvaluations.forEach((evaluation) => {
       setJokerValue(evaluation.cardId, evaluation.rank, evaluation.suit);
     });
 
@@ -217,21 +229,26 @@ export default function PlayingField({
             return;
           }
 
-          newGrid[rowIndex][columnIndex].card = { ...sourceCard, faceUp: true } as ABCard;
-          setPlayerHand([{ ...targetCard, faceUp: true } as ABCard]);
+          sourceCard.faceUp = true;
+          targetCard.faceUp = true;
+          newGrid[rowIndex][columnIndex].card = sourceCard;
+          setPlayerHand([targetCard]);
         } else {
           if (newGrid[rowIndex][columnIndex].card) {
             const targetCard = newGrid[rowIndex][columnIndex].card! as ABCard;
 
             if (!targetCard.played) {
-              newGrid[rowIndex][columnIndex].card = { ...sourceCard, faceUp: true } as ABCard;
+              sourceCard.faceUp = true;
+              targetCard.faceUp = true;
+              newGrid[rowIndex][columnIndex].card = sourceCard;
               setPlayerHand((prev) => {
                 const updatedHand = prev.filter((c) => c.id !== sourceCard.id);
-                return [...updatedHand, { ...targetCard, faceUp: true } as ABCard];
+                return [...updatedHand, targetCard];
               });
             }
           } else {
-            newGrid[rowIndex][columnIndex].card = { ...sourceCard, faceUp: true } as ABCard;
+            sourceCard.faceUp = true;
+            newGrid[rowIndex][columnIndex].card = sourceCard;
             setPlayerHand((prev) => prev.filter((c) => c.id !== sourceCard.id));
           }
         }
@@ -298,19 +315,22 @@ export default function PlayingField({
     // Final joker evaluation before locking the round
     const finalGrid = evaluateAndApplyJokers(grid);
 
-    const newGrid = finalGrid.map((row) =>
-      row.map((cell) => ({
-        ...cell,
-        card: cell.card ? { ...cell.card, played: true } : null,
-      }))
-    ) as IABGridCell[][];
+    // Mark all cards in the grid as played
+    finalGrid.forEach((row) => {
+      row.forEach((cell) => {
+        if (cell.card) {
+          cell.card.setPlayed(true);
+        }
+      });
+    });
 
-    setGrid(newGrid);
-    setDiscardPile((prev) => [...prev, { ...abDiscard, faceUp: true }] as ABCards);
-    await handleNextRound({ abDiscard, newGrid });
+    setGrid(finalGrid);
+    abDiscard.faceUp = true;
+    setDiscardPile((prev) => [...prev, abDiscard] as ABCards);
+    await handleNextRound({ abDiscard, newGrid: finalGrid });
     setPlayerHand([]);
 
-    if (isGridFull(newGrid)) {
+    if (isGridFull(finalGrid)) {
       setGameState((prev) => ({ ...prev, gameOver: true }));
       return;
     }
@@ -373,11 +393,15 @@ export default function PlayingField({
       const promises = abCards.map((_, index) => {
         return new Promise<void>((resolve) => {
           setTimeout(() => {
-            setPlayerHand((prev) => [
-              ...prev.slice(0, index),
-              { ...prev[index], faceUp: true } as ABCard,
-              ...prev.slice(index + 1),
-            ]);
+            setPlayerHand((prev) => {
+              const card = prev[index];
+              card.faceUp = true;
+              return [
+                ...prev.slice(0, index),
+                card,
+                ...prev.slice(index + 1),
+              ];
+            });
             resolve();
           }, index * 200);
         });

@@ -6,6 +6,7 @@ import { GiJesterHat } from 'react-icons/gi';
 import { cn } from '@/lib/utils';
 import { useUcgStore } from '@/stores/ucg-store';
 import { abDesigns } from '@/utils/ab-designs';
+import { getCardBaseRank, isJokerCard } from '@/utils/card-helpers';
 
 export default function ABCardPreviewComp({
   card,
@@ -20,8 +21,8 @@ export default function ABCardPreviewComp({
   const suit = card.suit;
   const { abDesignIndex } = useUcgStore();
   const cardFront = abDesigns[abDesignIndex];
-  const isJoker = card.isJoker();
-  const baseRank = isJoker ? card.getBaseRank() : rank;
+  const isJoker = isJokerCard(card);
+  const baseRank = isJoker ? getCardBaseRank(card) : rank;
 
   // Determine joker color based on base rank
   const isRedJoker = isJoker && baseRank.id === 'joker-red';
@@ -31,8 +32,8 @@ export default function ABCardPreviewComp({
       ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
       : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' }
     : suit.isRed
-    ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
-    : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' };
+      ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
+      : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' };
 
   const SuitIcon = suitIconMap[suit.id as SuitId];
   let ShapeIcon = null;
@@ -86,9 +87,7 @@ export default function ABCardPreviewComp({
                   <SuitIcon className={cn('h-4 w-4')} />
                 </>
               )}
-              {isJoker && (
-                <GiJesterHat className={cn('h-6 w-6', cardColor.text)} />
-              )}
+              {isJoker && <GiJesterHat className={cn('h-6 w-6', cardColor.text)} />}
             </div>
 
             <div
@@ -105,9 +104,7 @@ export default function ABCardPreviewComp({
                   <SuitIcon className={cn('h-4 w-4')} />
                 </>
               )}
-              {isJoker && (
-                <GiJesterHat className={cn('h-6 w-6', cardColor.text)} />
-              )}
+              {isJoker && <GiJesterHat className={cn('h-6 w-6', cardColor.text)} />}
             </div>
 
             <div className="relative flex items-center justify-center h-full w-full">

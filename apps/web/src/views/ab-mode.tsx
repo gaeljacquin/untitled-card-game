@@ -12,6 +12,7 @@ import { BackgroundGradientAnimation } from '@/components/ui/background-gradient
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useUcgStore } from '@/stores/ucg-store';
+import { reconstructCards } from '@/utils/card-helpers';
 import SocketInit from '@/utils/socket-init';
 
 export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; gridClass: string }) {
@@ -30,7 +31,9 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
 
     socket.on('game-init-res', (data) => {
       const { abCards } = data;
-      setABCards(abCards);
+      // Reconstruct cards from plain objects to ABCard instances
+      const reconstructedCards = reconstructCards(abCards || []);
+      setABCards(reconstructedCards);
     });
 
     socket.on('game-next-round-res', (data) => {
@@ -39,7 +42,9 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
       if (gameOver) {
         setABGameOver(true);
       } else {
-        setABCards(abCards);
+        // Reconstruct cards from plain objects to ABCard instances
+        const reconstructedCards = reconstructCards(abCards || []);
+        setABCards(reconstructedCards);
       }
     });
 

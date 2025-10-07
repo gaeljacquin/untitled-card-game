@@ -262,15 +262,22 @@ export const calculateScore = (grid: IABGridCell[][], mode: ABMode, discardPile:
   return { score, discardBonus, specialBonus, numRowHands, numColHands };
 };
 
+// Helper function to check if a card is a joker (works with both instances and plain objects)
+function isJokerCard(card: ABCard | any): boolean {
+  if (typeof card.isJoker === 'function') {
+    return card.isJoker();
+  }
+  return card.rank?.isJoker === true || card.rank?.id === 'joker-red' || card.rank?.id === 'joker-black';
+}
+
 // Joker evaluation functions
 export function findBestJokerValue(cards: ABCards): { rank: Rank; suit: Suit; hand: PokerHand } | null {
-  const jokerIndex = cards.findIndex(card => card.isJoker());
+  const jokerIndex = cards.findIndex(card => isJokerCard(card));
 
   if (jokerIndex === -1) {
     return null;
   }
 
-  const joker = cards[jokerIndex];
   const otherCards = cards.filter((_, i) => i !== jokerIndex);
 
   let bestHand: PokerHand | null = null;
