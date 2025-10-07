@@ -1,42 +1,56 @@
 'use client';
 
+import { ArrowUp } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 
-import BackgroundLogo from '@/components/background-logo';
 import Footer from '@/components/footer';
-import ReturnMainMenu from '@/components/return-main-menu';
-import SectionCard from '@/components/section-card';
-import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
+import { Button } from '@/components/ui/button';
+import { PageTransition } from '@/components/ui/page-transition';
 import SettingsForm from '@/forms/settings';
 
 export default function Settings() {
+  const navigate = useNavigate();
+
   return (
-    <BackgroundGradientAnimation
-      gradientBackgroundStart="rgba(4, 34, 61, 0.77)"
-      gradientBackgroundEnd="rgb(13, 49, 20)"
-    >
-      <div className="absolute z-50 inset-0 flex flex-col">
+    <PageTransition>
+      <div className="min-h-screen flex flex-col bg-background p-8">
         <motion.div
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-8 flex-1 overflow-auto p-4"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4 }}
         >
-          <BackgroundLogo />
-
-          <div className="max-w-4xl mx-auto space-y-8 mt-16 mb-16">
-            <SectionCard title="Settings" className="flex flex-col text-center text-white p-4">
-              <SettingsForm />
-            </SectionCard>
-          </div>
-
-          <div className="flex justify-center my-8">
-            <ReturnMainMenu />
-          </div>
-
-          <Footer />
+          <Button
+            variant="ghost"
+            size="lg"
+            onClick={() => navigate('/')}
+            className="self-start p-0 hover:bg-transparent"
+          >
+            <ArrowUp className="w-16 h-16 text-foreground" />
+          </Button>
         </motion.div>
+
+        <div className="flex-1 flex items-center justify-center overflow-auto">
+          <motion.div
+            className="max-w-4xl mx-auto space-y-8 py-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <h1 className="text-4xl md:text-6xl font-black text-foreground text-center mb-12">
+              Settings
+            </h1>
+
+            <div className="text-foreground">
+              <SettingsForm />
+            </div>
+
+            <div className="flex justify-center pt-8">
+              <Footer />
+            </div>
+          </motion.div>
+        </div>
       </div>
-    </BackgroundGradientAnimation>
+    </PageTransition>
   );
 }
