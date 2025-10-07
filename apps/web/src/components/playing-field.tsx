@@ -39,7 +39,6 @@ import { GameState } from '@/types/game-state';
 import { confettiFireworks } from '@/utils/confetti';
 import { canMoveCard, getGameState, isGridFull } from '@/utils/game-state';
 import { applyJokerValuesToGrid, evaluateAllJokersInGrid } from '@/utils/joker-evaluation';
-import { reconstructCards } from '@/utils/card-helpers';
 
 export default function PlayingField({
   modeSlug,
@@ -148,11 +147,7 @@ export default function PlayingField({
           setPlayerHand((prev) => {
             const card = abCards[index];
             card.faceUp = true;
-            return [
-              ...prev.slice(0, index),
-              card,
-              ...prev.slice(index + 1),
-            ];
+            return [...prev.slice(0, index), card, ...prev.slice(index + 1)];
           });
         }, index * 200);
       });
@@ -398,11 +393,7 @@ export default function PlayingField({
             setPlayerHand((prev) => {
               const card = prev[index];
               card.faceUp = true;
-              return [
-                ...prev.slice(0, index),
-                card,
-                ...prev.slice(index + 1),
-              ];
+              return [...prev.slice(0, index), card, ...prev.slice(index + 1)];
             });
             resolve();
           }, index * 200);

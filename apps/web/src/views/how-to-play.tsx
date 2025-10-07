@@ -23,15 +23,16 @@ export default function HowToPlay() {
             variant="ghost"
             size="lg"
             onClick={() => navigate('/')}
-            className="self-start p-0 hover:bg-transparent"
+            className="self-start p-0 hover:bg-transparent cursor-pointer"
           >
-            <ArrowUp className="w-16 h-16 text-foreground" />
+            <ArrowUp className="size-20 text-foreground text-red" />
+            <p>Return to Main Menu</p>
           </Button>
         </motion.div>
 
         <div className="flex-1 flex items-center justify-center overflow-auto">
           <motion.div
-            className="max-w-4xl mx-auto space-y-8 py-8"
+            className="max-w-4xl mx-auto space-y-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -90,8 +91,8 @@ export default function HowToPlay() {
                     </ul>
                   </li>
                   <li>
-                    To unlock bonuses, you must first complete a minimum number of valid poker
-                    hands (One Pair or better) in your grid.
+                    To unlock bonuses, you must first complete a minimum number of valid poker hands
+                    (One Pair or better) in your grid.
                     <ul className="list-disc list-inside space-y-2 ml-7 mt-2">
                       <li>
                         The required threshold changes based on the bonus type and which mode

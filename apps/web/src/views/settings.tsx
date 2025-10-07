@@ -24,9 +24,10 @@ export default function Settings() {
             variant="ghost"
             size="lg"
             onClick={() => navigate('/')}
-            className="self-start p-0 hover:bg-transparent"
+            className="self-start p-0 hover:bg-transparent cursor-pointer"
           >
-            <ArrowUp className="w-16 h-16 text-foreground" />
+            <ArrowUp className="size-20 text-foreground text-red" />
+            <p>Return to Main Menu</p>
           </Button>
         </motion.div>
 

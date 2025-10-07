@@ -94,7 +94,7 @@ export default function Settings() {
                                 <span>{item.label}</span>
                                 <Check
                                   className={cn(
-                                    'mr-2 h-4 w-4',
+                                    'mr-2 size-4',
                                     field.value !== undefined &&
                                       field.value !== null &&
                                       index === field.value
@@ -114,7 +114,7 @@ export default function Settings() {
             </div>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-center">
               <div className="flex flex-row items-center justify-center gap-4 p-4 rounded-xl bg-black/50 border-white/20 w-full">
-                <FormLabel className="text-base">
+                <FormLabel className="text-white">
                   <div className="flex h-5 items-center justify-between space-x-2 text-sm">
                     <div className="text-center">1</div>
                     <div className="text-center">11</div>
@@ -146,7 +146,7 @@ export default function Settings() {
                     </FormItem>
                   )}
                 />
-                <FormLabel className="text-base">
+                <FormLabel className="text-white">
                   <div className="flex h-5 items-center justify-between space-x-2 text-sm">
                     <div className="text-center">(A)ce</div>
                     <div className="text-center">(J)ack</div>
@@ -203,7 +203,7 @@ export default function Settings() {
                                   <span>{item.label}</span>
                                   <Check
                                     className={cn(
-                                      'mr-2 h-4 w-4',
+                                      'mr-2 size-4',
                                       field.value && item.id === field.value
                                         ? 'opacity-100'
                                         : 'opacity-0'

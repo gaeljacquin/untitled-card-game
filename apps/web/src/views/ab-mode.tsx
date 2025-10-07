@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { ABCards, SlugId } from '@untitled-card-game/shared';
-import { ArrowUp } from 'lucide-react';
+import { ArrowLeft, ArrowUp } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 
@@ -92,21 +92,38 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
   return (
     <PageTransition>
       <div className="min-h-screen flex flex-col bg-background p-4">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4 }}
-          className="absolute top-4 left-4 z-10"
-        >
-          <Button
-            variant="ghost"
-            size="lg"
-            onClick={() => navigate('/game')}
-            className="p-0 hover:bg-transparent"
+        <div className="flex flex-col gap-4 mt-4 pl-4">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4 }}
           >
-            <ArrowUp className="w-12 h-12 md:w-16 md:h-16 text-foreground" />
-          </Button>
-        </motion.div>
+            <Button
+              variant="ghost"
+              size="lg"
+              onClick={() => navigate('/')}
+              className="self-start p-0 hover:bg-transparent cursor-pointer"
+            >
+              <ArrowUp className="size-20 text-foreground text-red" />
+              <p>Exit to Main Menu</p>
+            </Button>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <Button
+              variant="ghost"
+              size="lg"
+              onClick={() => navigate('/game')}
+              className="self-start p-0 hover:bg-transparent cursor-pointer"
+            >
+              <ArrowLeft className="size-20 text-foreground text-red" />
+              <p>Return to Mode Selection</p>
+            </Button>
+          </motion.div>
+        </div>
 
         <div className="flex-1 flex flex-col items-center justify-center overflow-auto pt-16 md:pt-20">
           <PlayingField

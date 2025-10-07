@@ -85,7 +85,7 @@ export default function ABCardComp({
       <div className="absolute inset-0 flex items-center justify-center">
         <div
           className={cn(
-            'absolute inset-0 w-full h-full rounded-xl p-4',
+            'absolute inset-0 size-full rounded-xl p-4',
             'backface-hidden no-select',
             abDesign.id === 'suitIcon' ? cardColor.bg : 'bg-white'
           )}
@@ -123,7 +123,7 @@ export default function ABCardComp({
             {isJoker && <GiJesterHat className={cn('size-4 sm:size-5', cardColor.text)} />}
           </div>
 
-          <div className="relative flex items-center justify-center h-full w-full">
+          <div className="relative flex items-center justify-center size-full">
             {ShapeIcon && (
               <ShapeIcon
                 className={cn(

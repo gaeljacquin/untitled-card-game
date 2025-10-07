@@ -24,9 +24,10 @@ export default function Credits() {
             variant="ghost"
             size="lg"
             onClick={() => navigate('/')}
-            className="self-start p-0 hover:bg-transparent"
+            className="self-start p-0 hover:bg-transparent cursor-pointer"
           >
-            <ArrowUp className="w-16 h-16 text-foreground" />
+            <ArrowUp className="size-20 text-foreground text-red" />
+            <p>Return to Main Menu</p>
           </Button>
         </motion.div>
 
@@ -44,7 +45,7 @@ export default function Credits() {
             <div className="text-foreground space-y-12">
               <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-16">
                 <div className="flex flex-col items-center space-y-4">
-                  <Avatar className="h-20 w-20">
+                  <Avatar className="size-20">
                     <AvatarImage src={import.meta.env.VITE_PROFILE_PIC ?? ''} />
                     <AvatarFallback>GJ</AvatarFallback>
                   </Avatar>
@@ -57,7 +58,7 @@ export default function Credits() {
                 </div>
 
                 <div className="flex flex-col items-center space-y-4">
-                  <Avatar className="h-20 w-20">
+                  <Avatar className="size-20">
                     <AvatarImage src="/fireworks.jpg" />
                     <AvatarFallback>Fireworks</AvatarFallback>
                   </Avatar>

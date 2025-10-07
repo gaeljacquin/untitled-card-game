@@ -1,12 +1,10 @@
 'use client';
 
 import { ABCard, suitIconMap, SuitId } from '@untitled-card-game/shared';
-import { GiJesterHat } from 'react-icons/gi';
 
 import { cn } from '@/lib/utils';
 import { useUcgStore } from '@/stores/ucg-store';
 import { abDesigns } from '@/utils/ab-designs';
-import { getCardBaseRank, isJokerCard } from '@/utils/card-helpers';
 
 export default function ABCardPreviewComp({
   card,
@@ -21,30 +19,16 @@ export default function ABCardPreviewComp({
   const suit = card.suit;
   const { abDesignIndex } = useUcgStore();
   const cardFront = abDesigns[abDesignIndex];
-  const isJoker = isJokerCard(card);
-  const baseRank = isJoker ? getCardBaseRank(card) : rank;
-
-  // Determine joker color based on base rank
-  const isRedJoker = isJoker && baseRank.id === 'joker-red';
-
-  const cardColor = isJoker
-    ? isRedJoker
-      ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
-      : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' }
-    : suit.isRed
-      ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
-      : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' };
-
+  const cardColor = suit.isRed
+    ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
+    : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' };
   const SuitIcon = suitIconMap[suit.id as SuitId];
   let ShapeIcon = null;
   const rankDisplay = rankLabel ? rank.value : rank.label;
   const suitIconFill = cardFront.id === 'suitIcon';
   const main = rankDisplay;
 
-  if (isJoker) {
-    ShapeIcon = GiJesterHat;
-    cardColor.letter = cardColor.text;
-  } else if (suitIconFill) {
+  if (suitIconFill) {
     ShapeIcon = suitIconMap[suit.id as SuitId];
     cardColor.text = 'text-white';
     cardColor.fill = 'fill-white';
@@ -71,7 +55,7 @@ export default function ABCardPreviewComp({
         <div className="absolute inset-0 w-full h-full">
           <div
             className={cn(
-              'absolute inset-0 w-full h-full rounded-xl p-4',
+              'absolute inset-0 size-full rounded-xl p-4 border-2 border-gray-800',
               'backface-hidden no-select',
               cardFront.id === 'suitIcon' ? cardColor.bg : 'bg-white'
             )}
@@ -79,15 +63,10 @@ export default function ABCardPreviewComp({
             <div
               className={cn('absolute top-2 left-2 text-base sm:text-xl font-bold', cardColor.text)}
             >
-              {!isJoker && (
-                <>
-                  <span className={cn('flex items-center justify-center uppercase', 'text-sm')}>
-                    {main}
-                  </span>
-                  <SuitIcon className={cn('h-4 w-4')} />
-                </>
-              )}
-              {isJoker && <GiJesterHat className={cn('h-6 w-6', cardColor.text)} />}
+              <span className={cn('flex items-center justify-center uppercase', 'text-sm')}>
+                {main}
+              </span>
+              <SuitIcon className={cn('h-4 w-4')} />
             </div>
 
             <div
@@ -96,15 +75,10 @@ export default function ABCardPreviewComp({
                 cardColor.text
               )}
             >
-              {!isJoker && (
-                <>
-                  <span className={cn('flex items-center justify-center uppercase', 'text-sm')}>
-                    {main}
-                  </span>
-                  <SuitIcon className={cn('h-4 w-4')} />
-                </>
-              )}
-              {isJoker && <GiJesterHat className={cn('h-6 w-6', cardColor.text)} />}
+              <span className={cn('flex items-center justify-center uppercase', 'text-sm')}>
+                {main}
+              </span>
+              <SuitIcon className={cn('h-4 w-4')} />
             </div>
 
             <div className="relative flex items-center justify-center h-full w-full">
@@ -112,33 +86,31 @@ export default function ABCardPreviewComp({
                 <ShapeIcon
                   className={cn(
                     'h-auto absolute',
-                    isJoker ? 'w-24' : 'w-20',
+                    'w-20',
                     cardFront.className,
                     cardColor.letter,
                     cardColor.fill
                   )}
                 />
               )}
-              {!isJoker && (
+              <span
+                className={cn(
+                  'font-bold uppercase',
+                  'absolute',
+                  cardColor.letter,
+                  'text-2xl sm:text-4xl',
+                  'flex-col-1 items-center justify-center'
+                )}
+              >
                 <span
                   className={cn(
-                    'font-bold uppercase',
-                    'absolute',
-                    cardColor.letter,
-                    'text-2xl sm:text-4xl',
-                    'flex-col-1 items-center justify-center'
+                    'flex items-center justify-center',
+                    suitIconFill ? 'text-xl' : 'text-2xl'
                   )}
                 >
-                  <span
-                    className={cn(
-                      'flex items-center justify-center',
-                      suitIconFill ? 'text-xl' : 'text-2xl'
-                    )}
-                  >
-                    {main}
-                  </span>
+                  {main}
                 </span>
-              )}
+              </span>
             </div>
           </div>
         </div>
