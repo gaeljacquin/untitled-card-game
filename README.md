@@ -27,7 +27,7 @@ Visit [untitled-card-game.gaeljacquin-aws.com](https://untitled-card-game.gaelja
 
 ### Backend
 
-- [NestJS](https://nestjs.com/)
+- [Elysia](https://elysiajs.com)
 
 ### Development Tools
 
