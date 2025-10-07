@@ -6,9 +6,15 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
 import { PageTransition } from '@/components/ui/page-transition';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
+import { useUcgStore } from '@/stores/ucg-store';
 
 export default function GameModeSelect() {
   const navigate = useNavigate();
+  const { getSettings, updateSettings } = useUcgStore();
+  const settings = getSettings();
+  const jokersEnabled = settings.jokers;
 
   const buttonVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -20,6 +26,13 @@ export default function GameModeSelect() {
         duration: 0.4,
       },
     }),
+  };
+
+  const toggleJokers = () => {
+    updateSettings({
+      ...settings,
+      jokers: !jokersEnabled,
+    });
   };
 
   return (
@@ -71,8 +84,33 @@ export default function GameModeSelect() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.9, duration: 0.5 }}
             >
-              Select mode
+              <Separator />
             </motion.p>
+
+            <motion.div
+              className="mt-6"
+              custom={2}
+              initial="hidden"
+              animate="visible"
+              variants={buttonVariants}
+            >
+              <Button
+                onClick={toggleJokers}
+                className={`w-3/4 text-3xl font-black px-12 py-6 h-auto text-white cursor-pointer ${
+                  jokersEnabled ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'
+                }`}
+              >
+                {jokersEnabled ? 'Jokers ON*' : 'Jokers OFF'}
+              </Button>
+              <p
+                className={cn(
+                  'text-sm font-bold text-foreground mt-1',
+                  !jokersEnabled && 'invisible'
+                )}
+              >
+                *5x5 grid only
+              </p>
+            </motion.div>
           </div>
         </div>
       </div>

@@ -109,36 +109,24 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
           </motion.div>
         )}
         <div className="flex flex-col gap-4 mt-4 pl-4">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4 }}
+          <Button
+            variant="ghost"
+            size="lg"
+            onClick={() => navigate('/')}
+            className="self-start p-0 hover:bg-transparent cursor-pointer"
           >
-            <Button
-              variant="ghost"
-              size="lg"
-              onClick={() => navigate('/')}
-              className="self-start p-0 hover:bg-transparent cursor-pointer"
-            >
-              <ArrowUp className="size-20 text-foreground text-red" />
-              <p>Exit to Main Menu</p>
-            </Button>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4 }}
+            <ArrowUp className="size-20 text-foreground text-red" />
+            <p>Exit to Main Menu</p>
+          </Button>
+          <Button
+            variant="ghost"
+            size="lg"
+            onClick={() => navigate('/game')}
+            className="self-start p-0 hover:bg-transparent cursor-pointer"
           >
-            <Button
-              variant="ghost"
-              size="lg"
-              onClick={() => navigate('/game')}
-              className="self-start p-0 hover:bg-transparent cursor-pointer"
-            >
-              <ArrowLeft className="size-20 text-foreground text-red" />
-              <p>Return to Mode Selection</p>
-            </Button>
-          </motion.div>
+            <ArrowLeft className="size-20 text-foreground text-red" />
+            <p>Return to Mode Selection</p>
+          </Button>
         </div>
 
         <div className="flex-1 flex flex-col items-center justify-center overflow-auto">

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ArrowDown, ArrowDownRight, ArrowRight, ArrowUpRight } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, useAnimation } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
@@ -13,8 +13,20 @@ import { isMaintenanceMode } from '@/utils/maintenance-mode';
 export default function Home() {
   const navigate = useNavigate();
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
+  const logoControls = useAnimation();
+  const [isDragging, setIsDragging] = useState(false);
 
-  const bounceAnimation = {
+  const rightBounceAnimation = {
+    x: [0, 10, 0],
+    transition: {
+      duration: 0.6,
+      repeat: Infinity,
+      ease: 'easeInOut',
+    },
+  };
+
+  const upRightBounceAnimation = {
+    x: [0, 10, 0],
     y: [0, -10, 0],
     transition: {
       duration: 0.6,
@@ -23,9 +35,43 @@ export default function Home() {
     },
   };
 
+  const downRightBounceAnimation = {
+    x: [0, 10, 0],
+    y: [0, 10, 0],
+    transition: {
+      duration: 0.6,
+      repeat: Infinity,
+      ease: 'easeInOut',
+    },
+  };
+
+  const downBounceAnimation = {
+    y: [0, 10, 0],
+    transition: {
+      duration: 0.6,
+      repeat: Infinity,
+      ease: 'easeInOut',
+    },
+  };
+
+  const handleLogoClick = async () => {
+    // Only trigger spin if not dragging
+    if (!isDragging) {
+      await logoControls.start({
+        rotate: 360 * 5, // 5 full rotations
+        transition: {
+          duration: 2.5,
+          ease: [0.22, 1, 0.36, 1], // Custom ease-out curve for gradual deceleration
+        },
+      });
+      // Reset rotation to 0 for next click
+      logoControls.set({ rotate: 0 });
+    }
+  };
+
   return (
     <PageTransition>
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen flex items-center justify-center bg-background overflow-hidden">
         <div className="space-y-8">
           <motion.div
             className="flex items-center justify-center"
@@ -33,7 +79,25 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <img src="/logo.png" alt={appinfo.title} width={400} height={400} className="mx-auto" />
+            <motion.img
+              src="/logo.png"
+              alt={appinfo.title}
+              width={400}
+              height={400}
+              className="mx-auto cursor-grab active:cursor-grabbing"
+              animate={logoControls}
+              drag
+              dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
+              dragElastic={1}
+              dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+              onDragStart={() => setIsDragging(true)}
+              onDragEnd={() => {
+                setIsDragging(false);
+              }}
+              onClick={handleLogoClick}
+              whileTap={{ scale: 1.05 }}
+              style={{ transformOrigin: 'center' }}
+            />
           </motion.div>
 
           <motion.div
@@ -44,7 +108,7 @@ export default function Home() {
             onMouseEnter={() => setHoveredButton('new-game')}
             onMouseLeave={() => setHoveredButton(null)}
           >
-            <motion.div animate={hoveredButton === 'new-game' ? bounceAnimation : {}}>
+            <motion.div animate={hoveredButton === 'new-game' ? rightBounceAnimation : {}}>
               <ArrowRight className="size-12 text-foreground" />
             </motion.div>
             <Button
@@ -65,8 +129,8 @@ export default function Home() {
             onMouseEnter={() => setHoveredButton('how-to-play')}
             onMouseLeave={() => setHoveredButton(null)}
           >
-            <motion.div animate={hoveredButton === 'how-to-play' ? bounceAnimation : {}}>
-              <ArrowUpRight className="size-12 text-foreground" />
+            <motion.div animate={hoveredButton === 'how-to-play' ? downRightBounceAnimation : {}}>
+              <ArrowDownRight className="size-12 text-foreground" />
             </motion.div>
             <Button
               size="lg"
@@ -85,8 +149,8 @@ export default function Home() {
             onMouseEnter={() => setHoveredButton('settings')}
             onMouseLeave={() => setHoveredButton(null)}
           >
-            <motion.div animate={hoveredButton === 'settings' ? bounceAnimation : {}}>
-              <ArrowDownRight className="size-12 text-foreground" />
+            <motion.div animate={hoveredButton === 'settings' ? upRightBounceAnimation : {}}>
+              <ArrowUpRight className="size-12 text-foreground" />
             </motion.div>
             <Button
               size="lg"
@@ -105,7 +169,7 @@ export default function Home() {
             onMouseEnter={() => setHoveredButton('credits')}
             onMouseLeave={() => setHoveredButton(null)}
           >
-            <motion.div animate={hoveredButton === 'credits' ? bounceAnimation : {}}>
+            <motion.div animate={hoveredButton === 'credits' ? downBounceAnimation : {}}>
               <ArrowDown className="size-12 text-foreground" />
             </motion.div>
             <Button
