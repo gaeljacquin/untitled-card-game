@@ -1,4 +1,5 @@
 import { ABCard, emptyHand, IABGridCell } from '@untitled-card-game/shared';
+
 import { GameState } from '@/types/game-state';
 
 export function getGameState(grid: IABGridCell[][]): GameState {

@@ -8,6 +8,8 @@ import {
   IABGridCell,
   SlugId,
 } from '@untitled-card-game/shared';
+import { AnimatePresence, motion } from 'motion/react';
+
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -20,7 +22,6 @@ import {
 } from '@/components/ui/dialog';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
-import { AnimatePresence, motion } from 'motion/react';
 import { useUcgStore } from '@/stores/ucg-store';
 import { GameState } from '@/types/game-state';
 

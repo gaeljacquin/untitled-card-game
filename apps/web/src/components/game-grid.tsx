@@ -2,10 +2,11 @@
 
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { evaluateGridColumn, evaluateGridRow, IABGridCell } from '@untitled-card-game/shared';
-import { GridCell } from '@/components/grid-cell';
 import { motion } from 'motion/react';
-import { cn } from '@/lib/utils';
+
+import { GridCell } from '@/components/grid-cell';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 const labelClass = cn(
   'hidden sm:flex',

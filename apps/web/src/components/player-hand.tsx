@@ -2,10 +2,11 @@
 
 import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 import { ABCards } from '@untitled-card-game/shared';
+import { Loader2 } from 'lucide-react';
+
 import ABCardComp from '@/components/ab-card';
 import SortableItem from '@/components/sortable-item';
 import { cn } from '@/lib/utils';
-import { Loader2 } from 'lucide-react';
 
 const PlayerHand = ({
   playerHand,

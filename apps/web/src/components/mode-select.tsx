@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import { ABMode } from '@untitled-card-game/shared';
+import { Loader2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -11,8 +14,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import { Loader2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { useUcgStore } from '@/stores/ucg-store';
 
 type Props = {

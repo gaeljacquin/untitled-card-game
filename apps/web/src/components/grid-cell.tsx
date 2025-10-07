@@ -2,8 +2,9 @@
 
 import { useDroppable } from '@dnd-kit/core';
 import { IABGridCell, IABModeType } from '@untitled-card-game/shared';
-import ABCardComp from '@/components/ab-card';
 import { motion } from 'motion/react';
+
+import ABCardComp from '@/components/ab-card';
 import { cn } from '@/lib/utils';
 
 export function GridCell({

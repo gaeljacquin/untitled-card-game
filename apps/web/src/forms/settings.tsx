@@ -1,8 +1,11 @@
 'use client';
 
-import { ABCardPreview, Rank, RankId, Suit, SuitId } from '@untitled-card-game/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PopoverClose } from '@radix-ui/react-popover';
+import { ABCardPreview, Rank, RankId, Suit, SuitId } from '@untitled-card-game/shared';
+import { Check } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+
 import ABCardPreviewComp from '@/components/ab-card-preview';
 import Placeholder from '@/components/placeholder';
 import { Button } from '@/components/ui/button';
@@ -14,13 +17,10 @@ import { Switch } from '@/components/ui/switch';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { Check } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { initialSettings } from '@/stores/slices/settings-slice';
+import { useUcgStore } from '@/stores/ucg-store';
 import { FormData, settingsSchema } from '@/types/settings';
 import { abDesigns } from '@/utils/ab-designs';
-
-import { useUcgStore } from '@/stores/ucg-store';
 
 export default function Settings() {
   const { getSettings, updateSettings, resetSettings } = useUcgStore();

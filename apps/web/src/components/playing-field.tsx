@@ -21,6 +21,7 @@ import {
   IABGridCell,
   SlugId,
 } from '@untitled-card-game/shared';
+
 import ABCardComp from '@/components/ab-card';
 import ActionButton from '@/components/action-button';
 import DiscardPile from '@/components/discard-pile';
@@ -557,7 +558,7 @@ export default function PlayingField({
                   <h2 className="text-sm text-center font-bold text-white">Discard Pile</h2>
                 </div>
                 <div className="flex flex-row flex-wrap gap-2 justify-center">
-                  {discardPile.map((card, index) => (
+                  {discardPile.map((card) => (
                     <div
                       key={card.id}
                       className="overflow-hidden relative group brightness-50 pointer-events-none"

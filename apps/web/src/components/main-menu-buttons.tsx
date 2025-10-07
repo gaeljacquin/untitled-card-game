@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'motion/react';
+import { Link } from 'react-router-dom';
+
 import AskRtfm from '@/components/ask-rtfm';
 import ModeSelect from '@/components/mode-select';
 import InteractiveHoverButton from '@/components/ui/interactive-hover-button';
-import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
-import { Link } from 'react-router-dom';
 import { useUcgStore } from '@/stores/ucg-store';
-
 import { isMaintenanceMode } from '@/utils/maintenance-mode';
 
 export default function MainMenuButtons() {

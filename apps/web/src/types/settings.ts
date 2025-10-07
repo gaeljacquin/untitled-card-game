@@ -1,5 +1,6 @@
-import { abDesigns } from '@/utils/ab-designs';
 import * as z from 'zod';
+
+import { abDesigns } from '@/utils/ab-designs';
 
 export const settingsSchema = z.object({
   abDesignIndex: z.number().min(0).max(abDesigns.length),

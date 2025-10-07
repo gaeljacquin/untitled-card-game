@@ -1,8 +1,9 @@
 'use client';
 
 import { ABCards, IABModeType } from '@untitled-card-game/shared';
-import ABCardComp from '@/components/ab-card';
 import { AnimatePresence, motion } from 'motion/react';
+
+import ABCardComp from '@/components/ab-card';
 import { cn } from '@/lib/utils';
 
 export default function DiscardPile({

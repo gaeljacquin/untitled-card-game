@@ -1,12 +1,13 @@
 'use client';
 
+import { motion } from 'motion/react';
+
 import BackgroundLogo from '@/components/background-logo';
 import Footer from '@/components/footer';
 import ReturnMainMenu from '@/components/return-main-menu';
 import SectionCard from '@/components/section-card';
-import SettingsForm from '@/forms/settings';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
-import { motion } from 'motion/react';
+import SettingsForm from '@/forms/settings';
 
 export default function Settings() {
   return (
@@ -21,19 +22,19 @@ export default function Settings() {
           transition={{ duration: 0.5 }}
           className="text-center mb-8 flex-1 overflow-auto p-4"
         >
-        <BackgroundLogo />
+          <BackgroundLogo />
 
-        <div className="max-w-4xl mx-auto space-y-8 mt-16 mb-16">
-          <SectionCard title="Settings" className="flex flex-col text-center text-white p-4">
-            <SettingsForm />
-          </SectionCard>
-        </div>
+          <div className="max-w-4xl mx-auto space-y-8 mt-16 mb-16">
+            <SectionCard title="Settings" className="flex flex-col text-center text-white p-4">
+              <SettingsForm />
+            </SectionCard>
+          </div>
 
-        <div className="flex justify-center my-8">
-          <ReturnMainMenu />
-        </div>
+          <div className="flex justify-center my-8">
+            <ReturnMainMenu />
+          </div>
 
-        <Footer />
+          <Footer />
         </motion.div>
       </div>
     </BackgroundGradientAnimation>
