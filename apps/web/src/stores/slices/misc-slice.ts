@@ -13,8 +13,6 @@ export type JokerValue = {
 export type MiscState = {
   audioPlayerVisible: boolean;
   toggleAudioPlayerVisibility: () => void;
-  askRtfm: boolean;
-  muteAskRtfm: () => void;
   jokerValues: Record<string, JokerValue>;
   setJokerValue: (cardId: string, rank: Rank, suit: Suit) => void;
   clearJokerValue: (cardId: string) => void;
@@ -26,7 +24,6 @@ type StoreState = HighScoreState & MiscState & SettingsState;
 
 const initialState = {
   audioPlayerVisible: true,
-  askRtfm: true,
   jokerValues: {} as Record<string, JokerValue>,
 };
 
@@ -39,9 +36,6 @@ export const createMiscSlice: StateCreator<
   ...initialState,
   toggleAudioPlayerVisibility: () => {
     set({ audioPlayerVisible: !get().audioPlayerVisible });
-  },
-  muteAskRtfm: () => {
-    set({ askRtfm: false });
   },
   setJokerValue: (cardId: string, rank: Rank, suit: Suit) => {
     set({

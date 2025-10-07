@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import { isMaintenanceMode } from '@/utils/maintenance-mode';
 import ABMode from '@/views/ab-mode';
 import Credits from '@/views/credits';
+import GameModeSelect from '@/views/game-mode-select';
 // Pages
 import Home from '@/views/home';
 import HowToPlay from '@/views/how-to-play';
@@ -33,6 +34,7 @@ function App() {
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Home />} />
+              <Route path="/game" element={<GameModeSelect />} />
               <Route
                 path="/game/four"
                 element={

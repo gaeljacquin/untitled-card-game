@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
@@ -8,34 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { PageTransition } from '@/components/ui/page-transition';
 import { isMaintenanceMode } from '@/utils/maintenance-mode';
-import { useUcgStore } from '@/stores/ucg-store';
-import AskRtfm from '@/components/ask-rtfm';
-import ModeSelect from '@/components/mode-select';
 
 export default function Home() {
   const navigate = useNavigate();
-  const { askRtfm, muteAskRtfm } = useUcgStore();
-  const [modeSelection, openModeSelection] = useState(false);
-  const [askRtfmOpen, setAskRtfmOpen] = useState(false);
-
-  const handleNewGameClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (isMaintenanceMode) return;
-
-    if (askRtfm) {
-      e.preventDefault();
-      setAskRtfmOpen(true);
-    } else {
-      e.preventDefault();
-      openModeSelection(true);
-    }
-  };
-
-  const handleHowToPlayClick = () => {
-    if (askRtfm) {
-      muteAskRtfm();
-    }
-    navigate('/how-to-play');
-  };
 
   return (
     <PageTransition>
@@ -60,7 +34,7 @@ export default function Home() {
             <Button
               variant="accent"
               size="lg"
-              onClick={handleNewGameClick}
+              onClick={() => navigate('/game')}
               disabled={isMaintenanceMode}
               className="text-5xl font-black px-12 py-8 h-auto"
             >
@@ -78,7 +52,7 @@ export default function Home() {
             <Button
               variant="muted"
               size="lg"
-              onClick={handleHowToPlayClick}
+              onClick={() => navigate('/how-to-play')}
               className="text-5xl font-black px-12 py-8 h-auto"
             >
               How to Play
@@ -120,21 +94,6 @@ export default function Home() {
           </motion.div>
         </div>
       </div>
-      <>
-        <ModeSelect
-          selectMode={modeSelection}
-          openSelectMode={openModeSelection}
-          newGameGradient="bg-linear-to-r from-lime-700 via-rose-700 to-violet-500"
-          newGameHoverGradient="hover:bg-linear-to-r hover:from-lime-700 hover:via-rose-700 hover:to-violet-500"
-        />
-        <AskRtfm
-          askRtfmOpen={askRtfmOpen}
-          setAskRtfmOpen={setAskRtfmOpen}
-          menuButtonClicked={false}
-          setMenuButtonClicked={() => {}}
-          openModeSelection={openModeSelection}
-        />
-      </>
     </PageTransition>
   );
 }
