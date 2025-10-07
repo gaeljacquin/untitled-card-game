@@ -18,7 +18,7 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
   const [abCards, setABCards] = useState<ABCards>([]);
   const [abGameOver, setABGameOver] = useState<boolean>(false);
   const playerHandClass = cn(
-    'flex flex-row flex-wrap sm:flex-col gap-2 sm:gap-4 items-center justify-center'
+    'flex flex-row flex-wrap md:flex-col gap-2 md:gap-4 items-center justify-center'
   );
 
   const wsConnect = useCallback(() => {

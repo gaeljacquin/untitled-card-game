@@ -23,14 +23,16 @@ const PlayerHand = ({
   playerHandText: string;
 }) => {
   return (
-    <div className={cn(playerHandClass)}>
-      <div className="flex flex-wrap flex-row sm:flex-col items-center justify-center gap-4">
-        <div className="flex items-center justify-center mt-5 sm:block">
-          <h2 className="text-sm text-center font-bold text-white">{playerHandText}</h2>
-        </div>
-        {isDealing ? (
+    <div className="flex flex-col gap-4">
+      <div className="hidden md:flex items-center justify-center mt-5">
+        <h2 className="text-sm text-center font-bold text-white">{playerHandText}</h2>
+      </div>
+      {isDealing ? (
+        <div className="flex items-center justify-center">
           <Loader2 className="size-4 animate-spin my-2" />
-        ) : (
+        </div>
+      ) : (
+        <div className={cn(playerHandClass)}>
           <SortableContext
             items={playerHand.map((item) => item.id)}
             strategy={horizontalListSortingStrategy}
@@ -49,8 +51,8 @@ const PlayerHand = ({
               </SortableItem>
             ))}
           </SortableContext>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -397,120 +397,146 @@ export default function PlayingField({
           )}
         </CardHeader>
 
-        <div className="grid grid-cols-1 sm:grid-cols-12 gap-6">
-          <div className="sm:col-span-2">
-            {activeTab === 'grid' && (
-              <div className="sm:sticky sm:top-0 h-auto bg-amber-950/30 rounded-2xl shadow-md flex flex-col gap-4">
-                <div className="flex items-center justify-center gap-2 mb-2 mt-4 sm:hidden">
-                  <h2 className="text-sm text-center font-bold">{playerHandText}</h2>
+        <div className="flex flex-col gap-6">
+          {/* Player Hand - Above grid on md and below, left column on larger screens */}
+          {activeTab === 'grid' && (
+            <div className="md:hidden">
+              <div className="bg-amber-950/30 rounded-2xl shadow-md p-4 flex flex-col gap-4">
+                <div className="flex items-center justify-center">
+                  <h2 className="text-sm text-center font-bold text-white">{playerHandText}</h2>
                 </div>
-
                 <PlayerHand
                   playerHand={playerHand}
                   isDealing={isDealing}
                   rankLabel={rankLabel}
                   modeType={type}
-                  playerHandClass={playerHandClass}
+                  playerHandClass="flex flex-row flex-wrap gap-2 items-center justify-center"
                   playerHandText={playerHandText}
                 />
+                <Separator />
+                <ActionButton
+                  gameOver={gameOver}
+                  isGridFull={isGridFull(grid)}
+                  playerHand={playerHand}
+                  isDealing={isDealing}
+                  handleDiscard={handleDiscard}
+                  playAgain={playAgain}
+                  progress={progress}
+                />
+              </div>
+            </div>
+          )}
 
-                <div className="flex items-center justify-center mt-1">
-                  <div className="flex flex-col w-full p-2 -mt-8">
-                    <div className="px-4">
-                      <Separator className="mt-6 mb-4" />
-                    </div>
+          {/* Main grid layout for md and above */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <div className="hidden md:block md:col-span-2">
+              {activeTab === 'grid' && (
+                <div className="md:sticky md:top-0 h-auto bg-amber-950/30 rounded-2xl shadow-md flex flex-col gap-4">
+                  <PlayerHand
+                    playerHand={playerHand}
+                    isDealing={isDealing}
+                    rankLabel={rankLabel}
+                    modeType={type}
+                    playerHandClass={playerHandClass}
+                    playerHandText={playerHandText}
+                  />
 
-                    <div className="mb-2">
-                      <ActionButton
-                        gameOver={gameOver}
-                        isGridFull={isGridFull(grid)}
-                        playerHand={playerHand}
-                        isDealing={isDealing}
-                        handleDiscard={handleDiscard}
-                        playAgain={playAgain}
-                        progress={progress}
-                      />
+                  <div className="flex items-center justify-center mt-1">
+                    <div className="flex flex-col w-full p-2 -mt-8">
+                      <div className="px-4">
+                        <Separator className="mt-6 mb-4" />
+                      </div>
+
+                      <div className="mb-2">
+                        <ActionButton
+                          gameOver={gameOver}
+                          isGridFull={isGridFull(grid)}
+                          playerHand={playerHand}
+                          isDealing={isDealing}
+                          handleDiscard={handleDiscard}
+                          playAgain={playAgain}
+                          progress={progress}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
 
-          <div className="sm:col-span-8">
-            <Tabs
-              defaultValue="grid"
-              value={activeTab}
-              onValueChange={setActiveTab}
-              className="w-full"
-              ref={tabsRef}
-            >
-              <TabsList className="grid w-full grid-cols-2 bg-transparent backdrop-blur-xs border-white/20 p-1 rounded-lg">
-                <TabsTrigger
-                  value="grid"
-                  className="data-[state=active]:bg-rose-700 data-[state=active]:text-white data-[state=inactive]:text-white rounded-md transition-colors"
-                >
-                  Grid
-                </TabsTrigger>
-                <TabsTrigger
-                  value="score"
-                  className="data-[state=active]:bg-rose-700 data-[state=active]:text-white data-[state=inactive]:text-white rounded-md transition-colors"
-                  disabled={!gameOver}
-                >
-                  Score
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="grid">
-                {!abCards || abCards.length === 0 ? (
-                  <Placeholder />
-                ) : (
-                  <>
-                    <GameGrid
-                      grid={grid}
-                      lockedCells={lockedCells}
-                      gridClass={gridClass}
-                      gridSize={gridSize}
-                      type={type}
-                      rankLabel={rankLabel}
-                    />
-
-                    {getHighScore(modeSlug).value !== 0 && activeTab === 'grid' && (
-                      <div className="hidden sm:block">
-                        <HighScoreDisplay modeSlug={modeSlug} />
-                      </div>
-                    )}
-                  </>
-                )}
-              </TabsContent>
-              <TabsContent
-                value="score"
-                className={cn(
-                  'mx-auto justify-center items-center',
-                  'bg-amber-950/30 rounded-xl p-6 md:p-10'
-                )}
+            <div className="md:col-span-8">
+              <Tabs
+                defaultValue="grid"
+                value={activeTab}
+                onValueChange={setActiveTab}
+                className="w-full"
+                ref={tabsRef}
               >
-                <ScoreDisplay
-                  gameState={gameState}
-                  grid={grid}
-                  gridSize={gridSize}
-                  progress={progress}
-                  gameOver={gameOver}
-                  playAgain={playAgain}
-                  modeSlug={modeSlug}
-                  mode={mode}
-                  coinInserted={coinInserted}
-                  resetHighScore={resetHighScore}
-                  confirmModalOpen={confirmModalOpen}
-                  setConfirmModalOpen={setConfirmModalOpen}
-                  animateProgress={animateProgress}
-                />
-              </TabsContent>
-            </Tabs>
-          </div>
+                <TabsList className="grid w-full grid-cols-2 bg-transparent backdrop-blur-xs border-white/20 p-1 rounded-lg">
+                  <TabsTrigger
+                    value="grid"
+                    className="data-[state=active]:bg-rose-700 data-[state=active]:text-white data-[state=inactive]:text-white rounded-md transition-colors"
+                  >
+                    Grid
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="score"
+                    className="data-[state=active]:bg-rose-700 data-[state=active]:text-white data-[state=inactive]:text-white rounded-md transition-colors"
+                    disabled={!gameOver}
+                  >
+                    Score
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="grid">
+                  {!abCards || abCards.length === 0 ? (
+                    <Placeholder />
+                  ) : (
+                    <>
+                      <GameGrid
+                        grid={grid}
+                        lockedCells={lockedCells}
+                        gridClass={gridClass}
+                        gridSize={gridSize}
+                        type={type}
+                        rankLabel={rankLabel}
+                      />
 
-          {activeTab === 'grid' && (
-            <>
-              <div className="sm:col-span-2">
+                      {getHighScore(modeSlug).value !== 0 && activeTab === 'grid' && (
+                        <div className="hidden md:block mt-4">
+                          <HighScoreDisplay modeSlug={modeSlug} />
+                        </div>
+                      )}
+                    </>
+                  )}
+                </TabsContent>
+                <TabsContent
+                  value="score"
+                  className={cn(
+                    'mx-auto justify-center items-center',
+                    'bg-amber-950/30 rounded-xl p-6 md:p-10'
+                  )}
+                >
+                  <ScoreDisplay
+                    gameState={gameState}
+                    grid={grid}
+                    gridSize={gridSize}
+                    progress={progress}
+                    gameOver={gameOver}
+                    playAgain={playAgain}
+                    modeSlug={modeSlug}
+                    mode={mode}
+                    coinInserted={coinInserted}
+                    resetHighScore={resetHighScore}
+                    confirmModalOpen={confirmModalOpen}
+                    setConfirmModalOpen={setConfirmModalOpen}
+                    animateProgress={animateProgress}
+                  />
+                </TabsContent>
+              </Tabs>
+            </div>
+
+            {activeTab === 'grid' && (
+              <div className="hidden md:block md:col-span-2">
                 {discardPile.length > 0 && (
                   <DiscardPile
                     cards={discardPile}
@@ -520,12 +546,40 @@ export default function PlayingField({
                   />
                 )}
               </div>
-              {getHighScore(modeSlug).value > 0 && (
-                <div className="block sm:hidden">
-                  <HighScoreDisplay modeSlug={modeSlug} />
+            )}
+          </div>
+
+          {/* Discard Pile - Below grid on md and below */}
+          {activeTab === 'grid' && discardPile.length > 0 && (
+            <div className="md:hidden">
+              <div className="bg-amber-950/30 rounded-2xl shadow-md p-4">
+                <div className="flex items-center justify-center gap-2 mb-4">
+                  <h2 className="text-sm text-center font-bold text-white">Discard Pile</h2>
                 </div>
-              )}
-            </>
+                <div className="flex flex-row flex-wrap gap-2 justify-center">
+                  {discardPile.map((card, index) => (
+                    <div
+                      key={card.id}
+                      className="overflow-hidden relative group brightness-50 pointer-events-none"
+                    >
+                      <ABCardComp
+                        card={card}
+                        modeType={type}
+                        rankLabel={!rankLabel}
+                        inGrid={false}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* High Score Display on mobile */}
+          {getHighScore(modeSlug).value > 0 && activeTab === 'grid' && (
+            <div className="block md:hidden">
+              <HighScoreDisplay modeSlug={modeSlug} />
+            </div>
           )}
         </div>
       </div>
