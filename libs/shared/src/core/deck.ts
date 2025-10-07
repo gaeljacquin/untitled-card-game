@@ -9,13 +9,26 @@ interface IABDeck {
 }
 
 // Pure function to create a deck of cards
-const createDeckCards = (): ABCards => {
-  const ranks = Rank.getAll();
+const createDeckCards = (includeJokers: boolean = false): ABCards => {
+  const allRanks = Rank.getAll();
+  const ranks = includeJokers ? allRanks : allRanks.filter(r => !r.isJoker);
   const suits = Suit.getAll();
   const cards: ABCards = [];
 
+  if (includeJokers) {
+    // Add joker-red with a red suit (hearts)
+    const jokerRed = Rank.getById('joker-red');
+    const redSuit = Suit.getById('hearts');
+    cards.push(new ABCard(jokerRed, redSuit));
+
+    // Add joker-black with a black suit (spades)
+    const jokerBlack = Rank.getById('joker-black');
+    const blackSuit = Suit.getById('spades');
+    cards.push(new ABCard(jokerBlack, blackSuit));
+  }
+
   suits.forEach((suit) => {
-    ranks.forEach((rank) => {
+    ranks.filter(r => !r.isJoker).forEach((rank) => {
       const card = new ABCard(rank, suit);
       cards.push(card);
     });
@@ -54,8 +67,8 @@ export class ABDeck implements IABDeck {
   private cards: ABCards = [];
   public readonly abSeed: ABCards[] = [];
 
-  constructor() {
-    this.cards = createDeckCards(); // Use pure function
+  constructor(includeJokers: boolean = false) {
+    this.cards = createDeckCards(includeJokers); // Use pure function
   }
 
 

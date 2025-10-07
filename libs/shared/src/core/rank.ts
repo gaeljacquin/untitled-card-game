@@ -13,7 +13,9 @@ export type RankId =
   | 'ten'
   | 'jack'
   | 'queen'
-  | 'king';
+  | 'king'
+  | 'joker-red'
+  | 'joker-black';
 
 interface IRank {
   readonly value: number;
@@ -21,6 +23,7 @@ interface IRank {
   readonly label: string;
   readonly labelFull: string;
   readonly aceFace: boolean;
+  readonly isJoker: boolean;
 }
 
 export class Rank implements IRank {
@@ -29,6 +32,7 @@ export class Rank implements IRank {
   readonly label: string;
   readonly labelFull: string;
   readonly aceFace: boolean;
+  readonly isJoker: boolean;
 
   private constructor(value: number, label: string, id: RankId, labelFull: string) {
     this.value = value;
@@ -36,6 +40,7 @@ export class Rank implements IRank {
     this.id = id;
     this.labelFull = labelFull;
     this.aceFace = ['ace', 'jack', 'queen', 'king'].includes(id);
+    this.isJoker = id === 'joker-red' || id === 'joker-black';
   }
 
   private static readonly ranks: Rank[] = [
@@ -52,6 +57,8 @@ export class Rank implements IRank {
     new Rank(11, 'J', 'jack', 'Jack'),
     new Rank(12, 'Q', 'queen', 'Queen'),
     new Rank(13, 'K', 'king', 'King'),
+    new Rank(0, 'JKR', 'joker-red', 'Joker'),
+    new Rank(0, 'JKR', 'joker-black', 'Joker'),
   ];
 
   public static getById(id: RankId): Rank {

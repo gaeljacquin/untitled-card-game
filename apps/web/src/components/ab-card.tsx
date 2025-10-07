@@ -3,6 +3,7 @@
 import { useDraggable } from '@dnd-kit/core';
 import { ABCard, IABModeType, suitIconMap, SuitId } from '@untitled-card-game/shared';
 import { motion } from 'motion/react';
+import { GiJesterHat } from 'react-icons/gi';
 
 import { cn } from '@/lib/utils';
 import { useUcgStore } from '@/stores/ucg-store';
@@ -30,21 +31,34 @@ export default function ABCardComp({
   const suit = card.suit;
   const { abDesignIndex } = useUcgStore();
   const abDesign = abDesigns[abDesignIndex];
+  const isJoker = card.isJoker();
+  const baseRank = isJoker ? card.getBaseRank() : rank;
 
   // Part of the race condition fix
   if (!card || !card.suit) {
     return null;
   }
 
-  const cardColor = suit.isRed
-    ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
-    : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' };
+  // Determine joker color based on base rank
+  const isRedJoker = isJoker && baseRank.id === 'joker-red';
+
+  const cardColor = isJoker
+    ? isRedJoker
+      ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
+      : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' }
+    : suit.isRed
+      ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
+      : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' };
+
   const SuitIcon = suitIconMap[suit.id as SuitId];
   let ShapeIcon = null;
   const rankDisplay = rankLabel ? rank.value : rank.label;
   const suitIconFill = abDesign.id === 'suitIcon';
 
-  if (suitIconFill) {
+  if (isJoker) {
+    ShapeIcon = GiJesterHat;
+    cardColor.letter = cardColor.text;
+  } else if (suitIconFill) {
     ShapeIcon = suitIconMap[suit.id as SuitId];
     cardColor.text = 'text-white';
     cardColor.fill = 'fill-white';
@@ -76,12 +90,17 @@ export default function ABCardComp({
           )}
         >
           <div className={cn('absolute top-2 left-2 text-xs sm:text-md font-bold', cardColor.text)}>
-            <span
-              className={cn('flex items-center justify-center uppercase', 'text-xs lg:text-sm')}
-            >
-              {rankDisplay}
-            </span>
-            <SuitIcon className={cn('size-2 sm:size-3')} />
+            {!isJoker && (
+              <>
+                <span
+                  className={cn('flex items-center justify-center uppercase', 'text-xs lg:text-sm')}
+                >
+                  {rankDisplay}
+                </span>
+                <SuitIcon className={cn('size-2 sm:size-3')} />
+              </>
+            )}
+            {isJoker && <GiJesterHat className={cn('size-4 sm:size-5', cardColor.text)} />}
           </div>
 
           <div
@@ -90,12 +109,17 @@ export default function ABCardComp({
               cardColor.text
             )}
           >
-            <span
-              className={cn('flex items-center justify-center uppercase', 'text-xs lg:text-sm')}
-            >
-              {rankDisplay}
-            </span>
-            <SuitIcon className={cn('size-2 sm:size-3')} />
+            {!isJoker && (
+              <>
+                <span
+                  className={cn('flex items-center justify-center uppercase', 'text-xs lg:text-sm')}
+                >
+                  {rankDisplay}
+                </span>
+                <SuitIcon className={cn('size-2 sm:size-3')} />
+              </>
+            )}
+            {isJoker && <GiJesterHat className={cn('size-4 sm:size-5', cardColor.text)} />}
           </div>
 
           <div className="relative flex items-center justify-center h-full w-full">
@@ -103,32 +127,34 @@ export default function ABCardComp({
               <ShapeIcon
                 className={cn(
                   'h-auto absolute',
-                  'w-8 sm:w-14 md:max-w-20',
+                  isJoker ? 'w-12 sm:w-20 md:max-w-24' : 'w-8 sm:w-14 md:max-w-20',
                   abDesign.className,
                   cardColor.letter,
                   cardColor.fill
                 )}
               />
             )}
-            <span
-              className={cn(
-                'font-bold uppercase',
-                'absolute',
-                cardColor.letter,
-                'text-xs sm:text-lg',
-                'flex-col-1 items-center justify-center',
-                suitIconFill && !suit.isRed && '-mt-4' // Letter spacing is off when suit is set to clubs or spades.
-              )}
-            >
+            {!isJoker && (
               <span
                 className={cn(
-                  'flex items-center justify-center',
-                  suitIconFill ? 'text-sm sm:text-lg' : 'text-md sm:text-xl'
+                  'font-bold uppercase',
+                  'absolute',
+                  cardColor.letter,
+                  'text-xs sm:text-lg',
+                  'flex-col-1 items-center justify-center',
+                  suitIconFill && !suit.isRed && '-mt-4' // Letter spacing is off when suit is set to clubs or spades.
                 )}
               >
-                {rankDisplay}
+                <span
+                  className={cn(
+                    'flex items-center justify-center',
+                    suitIconFill ? 'text-sm sm:text-lg' : 'text-md sm:text-xl'
+                  )}
+                >
+                  {rankDisplay}
+                </span>
               </span>
-            </span>
+            )}
           </div>
         </div>
       </div>

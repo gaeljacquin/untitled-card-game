@@ -38,6 +38,7 @@ import { useUcgStore } from '@/stores/ucg-store';
 import { GameState } from '@/types/game-state';
 import { confettiFireworks } from '@/utils/confetti';
 import { canMoveCard, getGameState, isGridFull } from '@/utils/game-state';
+import { applyJokerValuesToGrid, evaluateAllJokersInGrid } from '@/utils/joker-evaluation';
 
 export default function PlayingField({
   modeSlug,
@@ -61,7 +62,7 @@ export default function PlayingField({
   const playerHandText = 'Player Hand';
 
   // Stores
-  const { rankLabel, setHighScore, getHighScore, resetHighScore } = useUcgStore();
+  const { rankLabel, setHighScore, getHighScore, resetHighScore, setJokerValue, clearAllJokerValues } = useUcgStore();
 
   // State
   const defaultGameState = useMemo<GameState>(
@@ -162,6 +163,19 @@ export default function PlayingField({
     setGameState(defaultGameState);
   }, [abCards, defaultGameState, discardPile, gridSize]);
 
+  const evaluateAndApplyJokers = (gridToEvaluate: IABGridCell[][]) => {
+    // Evaluate all jokers in the grid
+    const jokerEvaluations = evaluateAllJokersInGrid(gridToEvaluate);
+
+    // Store joker values in zustand
+    jokerEvaluations.forEach(evaluation => {
+      setJokerValue(evaluation.cardId, evaluation.rank, evaluation.suit);
+    });
+
+    // Apply joker values to the grid
+    return applyJokerValuesToGrid(gridToEvaluate, jokerEvaluations);
+  };
+
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
     const card =
@@ -234,7 +248,9 @@ export default function PlayingField({
         }
       }
 
-      setGrid(newGrid);
+      // Evaluate and apply joker values after placing a card
+      const gridWithJokers = evaluateAndApplyJokers(newGrid);
+      setGrid(gridWithJokers);
     } else if (over.data.current?.type === 'hand' && !sourceCard.played) {
       const sourceCell = grid.flat().find((cell) => cell.card?.id === active.id);
       const oldIdx = playerHand.findIndex((card) => card.id === event.active.id);
@@ -279,7 +295,10 @@ export default function PlayingField({
 
     setLockedCells(newLockedCells);
 
-    const newGrid = grid.map((row) =>
+    // Final joker evaluation before locking the round
+    const finalGrid = evaluateAndApplyJokers(grid);
+
+    const newGrid = finalGrid.map((row) =>
       row.map((cell) => ({
         ...cell,
         card: cell.card ? { ...cell.card, played: true } : null,
@@ -305,6 +324,7 @@ export default function PlayingField({
     setGameState(defaultGameState);
     setLockedCells(new Set());
     setIsDealing(true);
+    clearAllJokerValues();
     await initGame(modeSlug);
     insertCoin();
     setDiscardPile([]);

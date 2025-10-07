@@ -181,7 +181,9 @@ export default function Settings() {
                                 item.id === 'ace' ||
                                 item.id === 'queen' ||
                                 item.id === 'ten' ||
-                                item.id === 'two'
+                                item.id === 'two' ||
+                                item.id === 'joker-red' ||
+                                item.id === 'joker-black'
                             )
                             .map((item, index) => {
                               return (

@@ -67,8 +67,8 @@ export default function HowToPlay() {
                       <strong>Discard Bonus:</strong> Use cards from your discard pile.
                     </li>
                     <li>
-                      <strong>Special Bonus:</strong> Use the four corner cards (plus the center card
-                      in <em>5x5</em> mode).
+                      <strong>Special Bonus:</strong> Use the four corner cards (plus the center
+                      card in <em>5x5</em> mode).
                     </li>
                     <li>These special cells are marked with an animated beam effect.</li>
                   </ul>

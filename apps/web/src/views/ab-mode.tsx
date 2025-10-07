@@ -11,10 +11,12 @@ import ReturnMainMenu from '@/components/return-main-menu';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useUcgStore } from '@/stores/ucg-store';
 import SocketInit from '@/utils/socket-init';
 
 export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; gridClass: string }) {
   const socket = SocketInit();
+  const { jokers } = useUcgStore();
   const [abCards, setABCards] = useState<ABCards>([]);
   const [abGameOver, setABGameOver] = useState<boolean>(false);
   const playerHandClass = cn(
@@ -50,9 +52,9 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
 
   const initGame = useCallback(
     (modeSlug: string) => {
-      socket.emit('game-init', { modeSlug });
+      socket.emit('game-init', { modeSlug, jokers });
     },
-    [socket]
+    [socket, jokers]
   );
 
   const handleNextRound = (data: { [key: string]: unknown }) => {

@@ -1,14 +1,18 @@
 import { emptyHand } from '../constants/empty-hand';
-import { ABCards } from '../core/card';
+import { ABCard, ABCards } from '../core/card';
 import { IABGridCell } from '../core/grid-cell';
 import { ABMode } from '../core/mode';
+import { Rank } from '../core/rank';
+import { Suit } from '../core/suit';
 
 class PokerHand {
   constructor(
     public readonly name: string,
     public readonly points: number,
     public readonly rankValue: number,
-    public readonly cards: ABCards
+    public readonly cards: ABCards,
+    public readonly jokerRank?: Rank,
+    public readonly jokerSuit?: Suit
   ) {}
 }
 
@@ -257,4 +261,60 @@ export const calculateScore = (grid: IABGridCell[][], mode: ABMode, discardPile:
 
   return { score, discardBonus, specialBonus, numRowHands, numColHands };
 };
+
+// Joker evaluation functions
+export function findBestJokerValue(cards: ABCards): { rank: Rank; suit: Suit; hand: PokerHand } | null {
+  const jokerIndex = cards.findIndex(card => card.isJoker());
+
+  if (jokerIndex === -1) {
+    return null;
+  }
+
+  const joker = cards[jokerIndex];
+  const otherCards = cards.filter((_, i) => i !== jokerIndex);
+
+  let bestHand: PokerHand | null = null;
+  let bestRank: Rank | null = null;
+  let bestSuit: Suit | null = null;
+
+  const allRanks = Rank.getAll().filter(r => !r.isJoker);
+  const allSuits = Suit.getAll();
+
+  // Try all possible rank and suit combinations
+  for (const rank of allRanks) {
+    for (const suit of allSuits) {
+      // Create a temporary card with the test rank and suit
+      const testCard = new ABCard(rank, suit);
+      const testHand = [...otherCards, testCard];
+      const result = evaluateHand(testHand);
+
+      if (!bestHand || result.points > bestHand.points ||
+          (result.points === bestHand.points && result.rankValue > bestHand.rankValue)) {
+        bestHand = result;
+        bestRank = rank;
+        bestSuit = suit;
+      }
+    }
+  }
+
+  if (bestRank && bestSuit && bestHand) {
+    return {
+      rank: bestRank,
+      suit: bestSuit,
+      hand: new PokerHand(bestHand.name, bestHand.points, bestHand.rankValue, cards, bestRank, bestSuit)
+    };
+  }
+
+  return null;
+}
+
+export function evaluateHandWithJoker(cards: ABCards): PokerHand {
+  const jokerValue = findBestJokerValue(cards);
+
+  if (jokerValue) {
+    return jokerValue.hand;
+  }
+
+  return evaluateHand(cards);
+}
 

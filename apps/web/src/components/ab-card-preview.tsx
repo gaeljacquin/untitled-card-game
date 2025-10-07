@@ -1,6 +1,7 @@
 'use client';
 
 import { ABCard, suitIconMap, SuitId } from '@untitled-card-game/shared';
+import { GiJesterHat } from 'react-icons/gi';
 
 import { cn } from '@/lib/utils';
 import { useUcgStore } from '@/stores/ucg-store';
@@ -19,16 +20,30 @@ export default function ABCardPreviewComp({
   const suit = card.suit;
   const { abDesignIndex } = useUcgStore();
   const cardFront = abDesigns[abDesignIndex];
-  const cardColor = suit.isRed
+  const isJoker = card.isJoker();
+  const baseRank = isJoker ? card.getBaseRank() : rank;
+
+  // Determine joker color based on base rank
+  const isRedJoker = isJoker && baseRank.id === 'joker-red';
+
+  const cardColor = isJoker
+    ? isRedJoker
+      ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
+      : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' }
+    : suit.isRed
     ? { text: 'text-red-500', letter: 'text-red-500', fill: 'fill-red-500', bg: 'bg-red-500' }
     : { text: 'text-black', letter: 'text-black', fill: 'fill-black', bg: 'bg-black' };
+
   const SuitIcon = suitIconMap[suit.id as SuitId];
   let ShapeIcon = null;
   const rankDisplay = rankLabel ? rank.value : rank.label;
   const suitIconFill = cardFront.id === 'suitIcon';
   const main = rankDisplay;
 
-  if (suitIconFill) {
+  if (isJoker) {
+    ShapeIcon = GiJesterHat;
+    cardColor.letter = cardColor.text;
+  } else if (suitIconFill) {
     ShapeIcon = suitIconMap[suit.id as SuitId];
     cardColor.text = 'text-white';
     cardColor.fill = 'fill-white';
@@ -63,10 +78,17 @@ export default function ABCardPreviewComp({
             <div
               className={cn('absolute top-2 left-2 text-base sm:text-xl font-bold', cardColor.text)}
             >
-              <span className={cn('flex items-center justify-center uppercase', 'text-sm')}>
-                {main}
-              </span>
-              <SuitIcon className={cn('h-4 w-4')} />
+              {!isJoker && (
+                <>
+                  <span className={cn('flex items-center justify-center uppercase', 'text-sm')}>
+                    {main}
+                  </span>
+                  <SuitIcon className={cn('h-4 w-4')} />
+                </>
+              )}
+              {isJoker && (
+                <GiJesterHat className={cn('h-6 w-6', cardColor.text)} />
+              )}
             </div>
 
             <div
@@ -75,10 +97,17 @@ export default function ABCardPreviewComp({
                 cardColor.text
               )}
             >
-              <span className={cn('flex items-center justify-center uppercase', 'text-sm')}>
-                {main}
-              </span>
-              <SuitIcon className={cn('h-4 w-4')} />
+              {!isJoker && (
+                <>
+                  <span className={cn('flex items-center justify-center uppercase', 'text-sm')}>
+                    {main}
+                  </span>
+                  <SuitIcon className={cn('h-4 w-4')} />
+                </>
+              )}
+              {isJoker && (
+                <GiJesterHat className={cn('h-6 w-6', cardColor.text)} />
+              )}
             </div>
 
             <div className="relative flex items-center justify-center h-full w-full">
@@ -86,31 +115,33 @@ export default function ABCardPreviewComp({
                 <ShapeIcon
                   className={cn(
                     'h-auto absolute',
-                    'w-20',
+                    isJoker ? 'w-24' : 'w-20',
                     cardFront.className,
                     cardColor.letter,
                     cardColor.fill
                   )}
                 />
               )}
-              <span
-                className={cn(
-                  'font-bold uppercase',
-                  'absolute',
-                  cardColor.letter,
-                  'text-2xl sm:text-4xl',
-                  'flex-col-1 items-center justify-center'
-                )}
-              >
+              {!isJoker && (
                 <span
                   className={cn(
-                    'flex items-center justify-center',
-                    suitIconFill ? 'text-xl' : 'text-2xl'
+                    'font-bold uppercase',
+                    'absolute',
+                    cardColor.letter,
+                    'text-2xl sm:text-4xl',
+                    'flex-col-1 items-center justify-center'
                   )}
                 >
-                  {main}
+                  <span
+                    className={cn(
+                      'flex items-center justify-center',
+                      suitIconFill ? 'text-xl' : 'text-2xl'
+                    )}
+                  >
+                    {main}
+                  </span>
                 </span>
-              </span>
+              )}
             </div>
           </div>
         </div>

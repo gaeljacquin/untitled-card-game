@@ -20,16 +20,24 @@ const createCard = (rank: Rank, suit: Suit): ICard => {
 
 export class Card implements ICard {
   public readonly id: string;
-  public readonly rank: Rank;
-  public readonly suit: Suit;
+  protected _rank: Rank;
+  protected _suit: Suit;
 
   constructor(rank: Rank, suit: Suit) {
     // Use functional factory internally
     const card = createCard(rank, suit);
 
-    this.rank = card.rank;
-    this.suit = card.suit;
+    this._rank = card.rank;
+    this._suit = card.suit;
     this.id = card.id;
+  }
+
+  get rank(): Rank {
+    return this._rank;
+  }
+
+  get suit(): Suit {
+    return this._suit;
   }
 
   getRank(): Rank {
@@ -50,12 +58,30 @@ export class ABCard extends Card {
   public played: boolean = false;
   private discard: boolean = false;
   public faceUp: boolean;
+  private _isJoker: boolean;
+  private _baseRank: Rank;
+  private _baseSuit: Suit;
+  protected _currentRank: Rank;
+  protected _currentSuit: Suit;
 
   constructor(_rank?: Rank | null, _suit?: Suit | null, faceUp: boolean = true) {
     const rank = _rank ?? Rank.getRandom();
     const suit = _suit ?? Suit.getRandom();
     super(rank, suit);
     this.faceUp = faceUp;
+    this._isJoker = rank.isJoker;
+    this._baseRank = rank;
+    this._baseSuit = suit;
+    this._currentRank = rank;
+    this._currentSuit = suit;
+  }
+
+  override get rank(): Rank {
+    return this._currentRank;
+  }
+
+  override get suit(): Suit {
+    return this._currentSuit;
   }
 
   getPlayed(): boolean {
@@ -74,6 +100,34 @@ export class ABCard extends Card {
     this.discard = value;
   }
 
+  isJoker(): boolean {
+    return this._isJoker;
+  }
+
+  getBaseRank(): Rank {
+    return this._baseRank;
+  }
+
+  getBaseSuit(): Suit {
+    return this._baseSuit;
+  }
+
+  setJokerValue(rank: Rank, suit: Suit) {
+    if (!this._isJoker) {
+      throw new Error('Cannot set joker value on non-joker card');
+    }
+    this._currentRank = rank;
+    this._currentSuit = suit;
+  }
+
+  resetJokerValue() {
+    if (!this._isJoker) {
+      throw new Error('Cannot reset joker value on non-joker card');
+    }
+    this._currentRank = this._baseRank;
+    this._currentSuit = this._baseSuit;
+  }
+
   _toString() {
     return this.toString(); // Use the inherited toString method
   }
@@ -81,11 +135,21 @@ export class ABCard extends Card {
 
 
 export class ABCardPreview extends ABCard {
-  declare public rank: Rank;
-  declare public suit: Suit;
+  private _previewRank: Rank;
+  private _previewSuit: Suit;
 
   constructor() {
     super();
+    this._previewRank = this._currentRank;
+    this._previewSuit = this._currentSuit;
+  }
+
+  override get rank(): Rank {
+    return this._previewRank;
+  }
+
+  override get suit(): Suit {
+    return this._previewSuit;
   }
 
   override getRank(): Rank {
@@ -93,7 +157,7 @@ export class ABCardPreview extends ABCard {
   }
 
   setRank(value: Rank) {
-    this.rank = value;
+    this._previewRank = value;
   }
 
   override getSuit(): Suit {
@@ -101,7 +165,7 @@ export class ABCardPreview extends ABCard {
   }
 
   setSuit(value: Suit) {
-    this.suit = value;
+    this._previewSuit = value;
   }
 }
 

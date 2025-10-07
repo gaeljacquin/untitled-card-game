@@ -101,13 +101,15 @@ io.on("connection", (socket) => {
     });
     socket.on("game-init", (payload) => {
         console.info(`Message received from client ${socket.id}:`, payload);
-        const { modeSlug } = payload ?? {};
+        const { modeSlug, jokers } = payload ?? {};
         const mode = ABMode.getMode(modeSlug);
         if (!mode) {
             socket.emit("game-init-res", { error: "Invalid mode" });
             return;
         }
-        const deck = new ABDeck();
+        // Only include jokers for 5x5 mode when enabled
+        const includeJokers = mode.gridSize === 5 && jokers === true;
+        const deck = new ABDeck(includeJokers);
         const abSeed = deck.generateSeed(mode.gridSize);
         const abGame = new ABGame(mode);
         abGame.setABSeed(abSeed);
