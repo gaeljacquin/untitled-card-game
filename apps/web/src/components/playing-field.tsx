@@ -426,8 +426,8 @@ export default function PlayingField({
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
-      <div className="backdrop-blur-xs bg-white/10 border-white/20 rounded-2xl p-4 md:p-8">
-        <CardHeader className="text-white">
+      <div className="backdrop-blur-xs bg-black/80 border-white/20 rounded-2xl p-4 md:p-8">
+        <CardHeader className="text-white text-center">
           <CardTitle className={cn('text-2xl md:text-3xl', '-mt-7')}>{title}</CardTitle>
           {description && (
             <CardDescription className="text-white/80 text-md md:text-lg">
@@ -440,7 +440,7 @@ export default function PlayingField({
           {/* Player Hand - Above grid on md and below, left column on larger screens */}
           {activeTab === 'grid' && (
             <div className="md:hidden">
-              <div className="bg-amber-950/30 rounded-2xl shadow-md p-4 flex flex-col gap-4">
+              <div className="bg-emerald-600/30 rounded-2xl shadow-md p-4 flex flex-col gap-4">
                 <div className="flex items-center justify-center">
                   <h2 className="text-sm text-center font-bold text-white">{playerHandText}</h2>
                 </div>
@@ -453,15 +453,17 @@ export default function PlayingField({
                   playerHandText={playerHandText}
                 />
                 <Separator />
-                <ActionButton
-                  gameOver={gameOver}
-                  isGridFull={isGridFull(grid)}
-                  playerHand={playerHand}
-                  isDealing={isDealing}
-                  handleDiscard={handleDiscard}
-                  playAgain={playAgain}
-                  progress={progress}
-                />
+                <div className="flex items-center justify-center">
+                  <ActionButton
+                    gameOver={gameOver}
+                    isGridFull={isGridFull(grid)}
+                    playerHand={playerHand}
+                    isDealing={isDealing}
+                    handleDiscard={handleDiscard}
+                    playAgain={playAgain}
+                    progress={progress}
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -470,7 +472,7 @@ export default function PlayingField({
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             <div className="hidden md:block md:col-span-2">
               {activeTab === 'grid' && (
-                <div className="md:sticky md:top-0 h-auto bg-amber-950/30 rounded-2xl shadow-md flex flex-col gap-4">
+                <div className="md:sticky md:top-0 h-auto bg-emerald-600/30 rounded-2xl shadow-md flex flex-col gap-4">
                   <PlayerHand
                     playerHand={playerHand}
                     isDealing={isDealing}
@@ -486,7 +488,7 @@ export default function PlayingField({
                         <Separator className="mt-6 mb-4" />
                       </div>
 
-                      <div className="mb-2">
+                      <div className="flex items-center justify-center mb-2">
                         <ActionButton
                           gameOver={gameOver}
                           isGridFull={isGridFull(grid)}
@@ -552,7 +554,7 @@ export default function PlayingField({
                   value="score"
                   className={cn(
                     'mx-auto justify-center items-center',
-                    'bg-amber-950/30 rounded-xl p-6 md:p-10'
+                    'bg-sky-700/50 rounded-xl p-6 md:p-10'
                   )}
                 >
                   <ScoreDisplay
@@ -591,7 +593,7 @@ export default function PlayingField({
           {/* Discard Pile - Below grid on md and below */}
           {activeTab === 'grid' && discardPile.length > 0 && (
             <div className="md:hidden">
-              <div className="bg-amber-950/30 rounded-2xl shadow-md p-4">
+              <div className="bg-sky-600/30 rounded-2xl shadow-md p-4">
                 <div className="flex items-center justify-center gap-2 mb-4">
                   <h2 className="text-sm text-center font-bold text-white">Discard Pile</h2>
                 </div>

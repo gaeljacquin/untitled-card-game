@@ -81,7 +81,6 @@ export default function ABCardComp({
         inGrid && card.played && 'invert-30'
       )}
     >
-      return (
       <div className="absolute inset-0 flex items-center justify-center">
         <div
           className={cn(
@@ -159,7 +158,6 @@ export default function ABCardComp({
           </div>
         </div>
       </div>
-      );
     </motion.div>
   );
 }

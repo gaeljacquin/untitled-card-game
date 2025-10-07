@@ -91,7 +91,23 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
 
   return (
     <PageTransition>
-      <div className="min-h-screen flex flex-col bg-background p-4">
+      <div className="min-h-screen flex flex-col bg-background p-4 relative">
+        {import.meta.env.DEV && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="absolute top-4 right-4 z-50"
+          >
+            <Button
+              variant="destructive"
+              onClick={() => setABGameOver(true)}
+              className="hover:cursor-pointer"
+            >
+              Simulate Game Over
+            </Button>
+          </motion.div>
+        )}
         <div className="flex flex-col gap-4 mt-4 pl-4">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -125,7 +141,7 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
           </motion.div>
         </div>
 
-        <div className="flex-1 flex flex-col items-center justify-center overflow-auto pt-16 md:pt-20">
+        <div className="flex-1 flex flex-col items-center justify-center overflow-auto">
           <PlayingField
             modeSlug={modeSlug}
             abCards={abCards}
@@ -138,16 +154,6 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
           />
 
           <div className="flex flex-col items-center justify-center gap-4 mt-8">
-            {import.meta.env.DEV && (
-              <Button
-                variant="destructive"
-                onClick={() => setABGameOver(true)}
-                className="hover:cursor-pointer"
-              >
-                Simulate Game Over
-              </Button>
-            )}
-
             <Footer />
           </div>
         </div>

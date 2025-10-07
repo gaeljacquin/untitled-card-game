@@ -64,7 +64,7 @@ const ScoreDisplay = ({
       ) : (
         <>
           {progress === 100 && (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 text-white">
               <h1 className="text-center text-xl">Final Results</h1>
               {highScoreBeaten.current && (
                 <p className="text-md">You just set a new high score! 🤩</p>
@@ -76,7 +76,7 @@ const ScoreDisplay = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
-            className="space-y-6 py-4"
+            className="space-y-6 py-4 text-white"
           >
             <div className="space-y-2">
               {progress !== 100 ? <Progress value={progress} className="h-2" /> : <Separator />}
@@ -200,7 +200,7 @@ const ScoreDisplay = ({
                   </div>
 
                   {gameOver && (
-                    <div className="flex flex-col items-center justify-center mt-8 gap-8">
+                    <div className="flex flex-col items-center justify-center mt-8 gap-5">
                       <Button
                         onClick={playAgain}
                         disabled={progress !== 100}

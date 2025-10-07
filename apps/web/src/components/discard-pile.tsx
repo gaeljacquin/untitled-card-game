@@ -20,7 +20,7 @@ export default function DiscardPile({
   const discardPileText = 'Discard Pile';
 
   return (
-    <div className="sm:sticky sm:top-0 h-auto bg-amber-950/30 rounded-2xl shadow-md p-2">
+    <div className="sm:sticky sm:top-0 h-auto bg-amber-600/50 rounded-2xl shadow-md p-2">
       <div className="flex items-center justify-center gap-2 mb-2 sm:hidden">
         <h2 className="text-sm text-center font-bold text-white">{discardPileText}</h2>
       </div>
