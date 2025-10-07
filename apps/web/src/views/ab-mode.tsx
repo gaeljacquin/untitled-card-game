@@ -2,20 +2,21 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { ABCards, SlugId } from '@untitled-card-game/shared';
+import { ArrowUp } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 
-import BackgroundLogo from '@/components/background-logo';
 import Footer from '@/components/footer';
 import PlayingField from '@/components/playing-field';
-import ReturnMainMenu from '@/components/return-main-menu';
-import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
 import { Button } from '@/components/ui/button';
+import { PageTransition } from '@/components/ui/page-transition';
 import { cn } from '@/lib/utils';
 import { useUcgStore } from '@/stores/ucg-store';
 import { reconstructCards } from '@/utils/card-helpers';
 import SocketInit from '@/utils/socket-init';
 
 export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; gridClass: string }) {
+  const navigate = useNavigate();
   const socket = SocketInit();
   const { jokers } = useUcgStore();
   const [abCards, setABCards] = useState<ABCards>([]);
@@ -89,19 +90,25 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
   }, [initGame, modeSlug, wsConnect]);
 
   return (
-    <BackgroundGradientAnimation
-      gradientBackgroundStart="rgba(61, 34, 4, 0.77)"
-      gradientBackgroundEnd="rgb(49, 13, 20)"
-    >
-      <div className="absolute z-50 inset-0 flex flex-col">
+    <PageTransition>
+      <div className="min-h-screen flex flex-col bg-background p-4">
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="header-text-ab flex-1 overflow-auto p-4"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4 }}
+          className="absolute top-4 left-4 z-10"
         >
-          <BackgroundLogo />
+          <Button
+            variant="ghost"
+            size="lg"
+            onClick={() => navigate('/game')}
+            className="p-0 hover:bg-transparent"
+          >
+            <ArrowUp className="w-12 h-12 md:w-16 md:h-16 text-foreground" />
+          </Button>
+        </motion.div>
 
+        <div className="flex-1 flex flex-col items-center justify-center overflow-auto pt-16 md:pt-20">
           <PlayingField
             modeSlug={modeSlug}
             abCards={abCards}
@@ -113,7 +120,7 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
             setABGameOver={setABGameOver}
           />
 
-          <div className="flex flex-col items-center justify-center gap-4 footer-spacing-ab">
+          <div className="flex flex-col items-center justify-center gap-4 mt-8">
             {import.meta.env.DEV && (
               <Button
                 variant="destructive"
@@ -124,14 +131,10 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
               </Button>
             )}
 
-            <div className="flex justify-center my-8">
-              <ReturnMainMenu />
-            </div>
-
             <Footer />
           </div>
-        </motion.div>
+        </div>
       </div>
-    </BackgroundGradientAnimation>
+    </PageTransition>
   );
 }
