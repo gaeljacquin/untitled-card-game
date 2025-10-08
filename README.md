@@ -4,9 +4,8 @@
 # Untitled Card Game (UCG)
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Docker](https://img.shields.io/badge/docker-required-blue.svg)](https://www.docker.com/)
 
-An intuitive and relaxing game where you arrange cards in a grid to create the highest scoring poker hands!
+A strategic puzzle game where you arrange playing cards on a grid to score big!
 
 </div>
 
@@ -14,44 +13,26 @@ An intuitive and relaxing game where you arrange cards in a grid to create the h
 
 Visit [untitled-card-game.gaeljacquin-aws.com](https://untitled-card-game.gaeljacquin-aws.com) to play now!
 
-## 🛠️ Tech Stack
+## 🃏 About the Game
 
-### Frontend
+Untitled Card Game is a single-player card puzzle that combines the familiar scoring of poker with the strategic challenge of grid placement. Think of it as a blend of solitaire and sudoku, but with poker hands.
 
-- [Next.js](https://nextjs.org/)
-- [React](https://reactjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [shadcn/ui](https://ui.shadcn.com/)
-- [Magic UI](https://magicui.design/)
-- [dnd kit](https://dndkit.com/)
+**What makes it special:**
 
-### Backend
+- **Strategic Depth**: Every card placement matters. You're not just making one hand—you're building multiple hands simultaneously across rows and columns.
 
-- [NestJS](https://nestjs.com/)
+- **Two Game Modes**: Start with the 5×5 grid for a quick puzzle, or challenge yourself with the larger 6×6 grid for more complex decision-making.
 
-### Development Tools
+- **No Time Pressure**: Take your time planning the perfect arrangement. This is a game about thinking, not rushing.
 
-- [Amazon Q Developer](https://aws.amazon.com/q/developer/)
-- [Docker](https://www.docker.com/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [socket.io](https://socket.io/)
-- [pnpm](https://pnpm.io/)
+- **High Score Challenge**: Beat your personal best or compete with friends to see who can master the perfect grid.
 
-### Design Tools
+**Perfect for:**
+- Poker fans looking for a new twist on the classic game
+- Puzzle enthusiasts who enjoy spatial reasoning challenges
+- Anyone who wants a relaxing yet engaging game to play at their own pace
 
-- [Inkscape](https://inkscape.org/)
-- [Lottie](https://lottiefiles.com/)
-- [Canva](https://www.canva.com/)
-
-### AWS Infrastructure
-
-- AWS Amplify
-- Amazon CloudWatch
-- Amazon ECR
-- Amazon EC2
-- Elastic Load Balancing
-- AWS Certificate Manager
-- Amazon Route 53
+Whether you're a poker pro or just learning the hands, Untitled Card Game offers a fresh and satisfying puzzle experience that's easy to learn but difficult to master.
 
 ## 🚀 Getting Started
 
@@ -126,6 +107,10 @@ You may directly head to `http://localhost:3000/` in your favorite browser if yo
 > You may also try:
 >
 > `powershell -ExecutionPolicy Bypass -File .\script.ps1`
+
+## 🔧 For Developers
+
+Built with React, TypeScript, and Elysia. Check out `CLAUDE.md` for technical documentation and development guidelines.
 
 ## 📝 License
 

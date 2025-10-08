@@ -1,0 +1,26 @@
+{
+  "name": "api",
+  "version": "1.0.50",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.902.0",
+    "@aws-sdk/client-s3": "^3.901.0",
+    "@aws-sdk/lib-dynamodb": "^3.902.0",
+    "@elysiajs/cors": "^1.1.1",
+    "@elysiajs/node": "^1.0.12",
+    "@untitled-card-game/shared": "workspace:*",
+    "dotenv": "^17.2.2",
+    "elysia": "latest",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  },
+  "module": "src/index.js"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@untitled-card-game/shared",
+  "version": "0.1.0",
+  "peerDependencies": {
+    "react-icons": "^5.5.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0"
+  },
+  "types": "./src/index.d.ts",
+  "main": "./src/index.js",
+  "type": "commonjs"
+}
+
