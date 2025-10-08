@@ -21,7 +21,7 @@ export default function Home() {
     transition: {
       duration: 0.6,
       repeat: Infinity,
-      ease: 'easeInOut',
+      ease: 'easeInOut' as const,
     },
   };
 
@@ -31,7 +31,7 @@ export default function Home() {
     transition: {
       duration: 0.6,
       repeat: Infinity,
-      ease: 'easeInOut',
+      ease: 'easeInOut' as const,
     },
   };
 
@@ -41,7 +41,7 @@ export default function Home() {
     transition: {
       duration: 0.6,
       repeat: Infinity,
-      ease: 'easeInOut',
+      ease: 'easeInOut' as const,
     },
   };
 
@@ -50,7 +50,7 @@ export default function Home() {
     transition: {
       duration: 0.6,
       repeat: Infinity,
-      ease: 'easeInOut',
+      ease: 'easeInOut' as const,
     },
   };
 
@@ -108,7 +108,9 @@ export default function Home() {
             onMouseEnter={() => setHoveredButton('new-game')}
             onMouseLeave={() => setHoveredButton(null)}
           >
-            <motion.div animate={hoveredButton === 'new-game' ? rightBounceAnimation : {}}>
+            <motion.div
+              animate={hoveredButton === 'new-game' ? { ...rightBounceAnimation } : undefined}
+            >
               <ArrowRight className="size-12 text-foreground" />
             </motion.div>
             <Button
@@ -129,7 +131,11 @@ export default function Home() {
             onMouseEnter={() => setHoveredButton('how-to-play')}
             onMouseLeave={() => setHoveredButton(null)}
           >
-            <motion.div animate={hoveredButton === 'how-to-play' ? downRightBounceAnimation : {}}>
+            <motion.div
+              animate={
+                hoveredButton === 'how-to-play' ? { ...downRightBounceAnimation } : undefined
+              }
+            >
               <ArrowDownRight className="size-12 text-foreground" />
             </motion.div>
             <Button
@@ -149,7 +155,9 @@ export default function Home() {
             onMouseEnter={() => setHoveredButton('settings')}
             onMouseLeave={() => setHoveredButton(null)}
           >
-            <motion.div animate={hoveredButton === 'settings' ? upRightBounceAnimation : {}}>
+            <motion.div
+              animate={hoveredButton === 'settings' ? { ...upRightBounceAnimation } : undefined}
+            >
               <ArrowUpRight className="size-12 text-foreground" />
             </motion.div>
             <Button
@@ -169,7 +177,9 @@ export default function Home() {
             onMouseEnter={() => setHoveredButton('credits')}
             onMouseLeave={() => setHoveredButton(null)}
           >
-            <motion.div animate={hoveredButton === 'credits' ? downBounceAnimation : {}}>
+            <motion.div
+              animate={hoveredButton === 'credits' ? { ...downBounceAnimation } : undefined}
+            >
               <ArrowDown className="size-12 text-foreground" />
             </motion.div>
             <Button

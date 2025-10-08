@@ -84,7 +84,7 @@ export function reconstructCard(plainCard: any): ABCard {
 
   // If this was a joker with a different value, restore it
   const baseRankData = plainCard._baseRank;
-  if (baseRankData && baseRankData.isJoker && (rankData.id !== baseRankData.id)) {
+  if (baseRankData && baseRankData.isJoker && rankData.id !== baseRankData.id) {
     // The joker was assigned a specific value, restore it
     card.setJokerValue(rank, suit);
   }
@@ -100,5 +100,5 @@ export function reconstructCards(plainCards: any[]): ABCard[] {
     return [];
   }
 
-  return plainCards.filter(card => card != null).map(reconstructCard);
+  return plainCards.filter((card) => card != null).map(reconstructCard);
 }
