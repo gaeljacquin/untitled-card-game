@@ -5,6 +5,7 @@ import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 
 import Footer from '@/components/footer';
+import HandRankings from '@/components/hand-rankings';
 import { Button } from '@/components/ui/button';
 import { PageTransition } from '@/components/ui/page-transition';
 
@@ -61,10 +62,7 @@ export default function HowToPlay() {
                   <li>
                     <strong>Discard & Draw</strong>
                     <ul className="list-disc list-inside space-y-2 ml-7 mt-2">
-                      <li>
-                        When you&apos;re happy with your placements, click the &quot;Discard&quot;
-                        button.
-                      </li>
+                      <li>When you&apos;re happy with your placements, click &quot;Next&quot; .</li>
                       <li>Your leftover card goes to the discard pile.</li>
                       <li>You&apos;ll receive a fresh hand of cards.</li>
                       <li>Previously placed cards are locked and cannot be moved.</li>
@@ -104,6 +102,8 @@ export default function HowToPlay() {
                 </ul>
               </section>
             </div>
+
+            <HandRankings />
 
             <div className="flex justify-center pt-8">
               <Footer />

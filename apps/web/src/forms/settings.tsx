@@ -10,10 +10,8 @@ import ABCardPreviewComp from '@/components/ab-card-preview';
 import Placeholder from '@/components/placeholder';
 import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { Form, FormField, FormItem } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Separator } from '@/components/ui/separator';
-import { Switch } from '@/components/ui/switch';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -113,51 +111,32 @@ export default function Settings() {
               />
             </div>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-center">
-              <div className="flex flex-row items-center justify-center gap-4 p-4 rounded-xl bg-black/50 border-white/20 w-full">
-                <FormLabel className="text-white">
-                  <div className="flex h-5 items-center justify-between space-x-2 text-sm">
-                    <div className="text-center">1</div>
-                    <div className="text-center">11</div>
-                  </div>
-                  <Separator />
-                  <div className="flex h-5 items-center justify-between space-x-4 text-sm">
-                    <div className="text-center">12</div>
-                    <div className="text-center">13</div>
-                  </div>
-                </FormLabel>
-                <FormField
-                  control={form.control}
-                  name="rankLabel"
-                  render={({ field }) => (
-                    <FormItem className="flex items-center">
-                      <FormControl>
-                        <Switch
-                          className="data-[state=checked]:bg-emerald-700 data-[state=unchecked]:bg-rose-600 items-center rounded-full transition-colors"
-                          checked={field.value}
-                          onCheckedChange={(checked) => {
-                            field.onChange(checked);
-                            updateSettings({
-                              ...settings,
-                              rankLabel: checked,
-                            });
-                          }}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormLabel className="text-white">
-                  <div className="flex h-5 items-center justify-between space-x-2 text-sm">
-                    <div className="text-center">(A)ce</div>
-                    <div className="text-center">(J)ack</div>
-                  </div>
-                  <Separator />
-                  <div className="flex h-5 items-center justify-between space-x-4 text-sm">
-                    <div className="text-center">(Q)ueen</div>
-                    <div className="text-center">(K)ing</div>
-                  </div>
-                </FormLabel>
-              </div>
+              <FormField
+                control={form.control}
+                name="rankLabel"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        const newValue = !field.value;
+                        field.onChange(newValue);
+                        updateSettings({
+                          ...settings,
+                          rankLabel: newValue,
+                        });
+                      }}
+                      className={`w-full text-sm px-4 py-2 h-auto text-white cursor-pointer ${
+                        field.value
+                          ? 'bg-green-600 hover:bg-green-700'
+                          : 'bg-sky-600 hover:bg-sky-700'
+                      }`}
+                    >
+                      1-11-12-13 ⇄ A-J-Q-K
+                    </Button>
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
 

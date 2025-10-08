@@ -118,7 +118,7 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
           </Button>
         </motion.div>
 
-        <div className="flex-1 flex flex-col items-center justify-center overflow-auto">
+        <div className="flex flex-col items-center justify-center overflow-auto">
           <PlayingField
             modeSlug={modeSlug}
             abCards={abCards}

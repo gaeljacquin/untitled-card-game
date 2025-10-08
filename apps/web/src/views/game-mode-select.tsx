@@ -63,7 +63,7 @@ export default function GameModeSelect() {
                   onClick={() => navigate('/game/four')}
                   className="w-full text-5xl font-black px-16 py-8 h-auto bg-yellow-500 hover:bg-yellow-600 text-white cursor-pointer"
                 >
-                  Four (4×4)
+                  4 × 4
                 </Button>
               </motion.div>
 
@@ -73,7 +73,7 @@ export default function GameModeSelect() {
                   onClick={() => navigate('/game/five')}
                   className="w-full text-5xl font-black px-16 py-8 h-auto bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
                 >
-                  Five (5×5)
+                  5 × 5
                 </Button>
               </motion.div>
             </div>
@@ -96,8 +96,8 @@ export default function GameModeSelect() {
             >
               <Button
                 onClick={toggleJokers}
-                className={`w-3/4 text-3xl font-black px-12 py-6 h-auto text-white cursor-pointer ${
-                  jokersEnabled ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'
+                className={`w-3/4 text-xl font-black px-12 py-4 h-auto text-white cursor-pointer ${
+                  jokersEnabled ? 'bg-red-600 hover:bg-red-700' : 'bg-slate-600 hover:bg-slate-700'
                 }`}
               >
                 {jokersEnabled ? 'Jokers ON*' : 'Jokers OFF'}
