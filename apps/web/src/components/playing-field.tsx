@@ -21,6 +21,7 @@ import {
   IABGridCell,
   SlugId,
 } from '@untitled-card-game/shared';
+import { BsEraserFill } from 'react-icons/bs';
 
 import ABCardComp from '@/components/ab-card';
 import ActionButton from '@/components/action-button';
@@ -30,6 +31,7 @@ import HighScoreDisplay from '@/components/high-score-display';
 import Placeholder from '@/components/placeholder';
 import PlayerHand from '@/components/player-hand';
 import ScoreDisplay from '@/components/score-display';
+import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
@@ -91,6 +93,7 @@ export default function PlayingField({
   const [gameState, setGameState] = useState<GameState>(defaultGameState);
   const [lockedCells, setLockedCells] = useState<Set<string>>(new Set());
   const [isDealing, setIsDealing] = useState(false);
+  const [isReturning, setIsReturning] = useState(false);
   const [progress, setProgress] = useState(0);
   const [activeTab, setActiveTab] = useState('grid');
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
@@ -333,6 +336,72 @@ export default function PlayingField({
     }
   };
 
+  const hasMovableCardsOnGrid = () => {
+    return grid.some((row) => row.some((cell) => cell.card && !cell.card.played));
+  };
+
+  const handleReturnCards = () => {
+    // Find all movable (non-played) cards on the grid
+    const cardsToReturn: ABCard[] = [];
+    const newGrid = grid.map((row) =>
+      row.map((cell) => {
+        if (cell.card && !cell.card.played) {
+          cardsToReturn.push(cell.card);
+          return { ...cell, card: null };
+        }
+        return cell;
+      })
+    );
+
+    if (cardsToReturn.length > 0) {
+      setIsReturning(true);
+
+      // Clear grid first
+      setGrid(newGrid);
+
+      // Small delay to allow grid to clear visually
+      setTimeout(() => {
+        // Get current hand length to know where to start adding returned cards
+        const currentHandLength = playerHand.length;
+
+        // Set all cards to face down
+        cardsToReturn.forEach((card) => {
+          card.faceUp = false;
+        });
+
+        // Add cards to hand
+        setPlayerHand((prev) => [...prev, ...cardsToReturn]);
+
+        // Animate cards flipping face-up one by one
+        const promises = cardsToReturn.map((card, index) => {
+          return new Promise<void>((resolve) => {
+            setTimeout(() => {
+              card.faceUp = true;
+              setPlayerHand((prev) => {
+                const cardIndex = currentHandLength + index;
+                if (cardIndex < prev.length) {
+                  return [
+                    ...prev.slice(0, cardIndex),
+                    prev[cardIndex],
+                    ...prev.slice(cardIndex + 1),
+                  ];
+                }
+                return prev;
+              });
+              resolve();
+            }, index * 150);
+          });
+        });
+
+        Promise.all(promises).then(() => {
+          setTimeout(() => {
+            setIsReturning(false);
+          }, 200);
+        });
+      }, 100);
+    }
+  };
+
   const playAgain = async () => {
     setABGameOver(false);
     switchToGridTab();
@@ -445,16 +514,27 @@ export default function PlayingField({
                   playerHandText={playerHandText}
                 />
                 <Separator />
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center gap-2">
                   <ActionButton
                     gameOver={gameOver}
                     isGridFull={isGridFull(grid)}
                     playerHand={playerHand}
-                    isDealing={isDealing}
+                    isDealing={isDealing || isReturning}
                     handleDiscard={handleDiscard}
                     playAgain={playAgain}
                     progress={progress}
                   />
+                  {!gameOver && (
+                    <Button
+                      onClick={handleReturnCards}
+                      disabled={!hasMovableCardsOnGrid() || isDealing || isReturning}
+                      variant="secondary"
+                      className="w-1/4 cursor-pointer p-4.5"
+                      size="sm"
+                    >
+                      <BsEraserFill /> <span className="sr-only">Return cards</span>
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
@@ -480,16 +560,28 @@ export default function PlayingField({
                         <Separator className="mt-6 mb-4" />
                       </div>
 
-                      <div className="flex items-center justify-center mb-2">
+                      <div className="flex flex-col items-center justify-center mb-2 gap-4">
                         <ActionButton
                           gameOver={gameOver}
                           isGridFull={isGridFull(grid)}
                           playerHand={playerHand}
-                          isDealing={isDealing}
+                          isDealing={isDealing || isReturning}
                           handleDiscard={handleDiscard}
                           playAgain={playAgain}
                           progress={progress}
                         />
+                        {!gameOver && (
+                          <Button
+                            onClick={handleReturnCards}
+                            disabled={!hasMovableCardsOnGrid() || isDealing || isReturning}
+                            variant="secondary"
+                            className="w-1/2 cursor-pointer p-4.5"
+                            size="sm"
+                          >
+                            <BsEraserFill />
+                            <span className="sr-only">Return cards</span>
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
