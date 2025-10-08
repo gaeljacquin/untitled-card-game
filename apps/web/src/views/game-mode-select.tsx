@@ -108,7 +108,7 @@ export default function GameModeSelect() {
                   !jokersEnabled && 'invisible'
                 )}
               >
-                *5x5 grid only
+                *5x5 only
               </p>
             </motion.div>
           </div>

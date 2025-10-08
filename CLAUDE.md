@@ -152,7 +152,7 @@ Core game logic and types shared between frontend and backend:
 ### Key Game Concepts
 
 - **AB Prefix**: "Arrange Better" - represents the core game mechanic
-- **Grid modes**: "four" (5x5 grid) and "five" (6x6 grid)
+- **Grid modes**: "four" (4×4 grid) and "five" (5×5 grid)
 - **Game flow**:
   1. Client initiates game with mode selection
   2. Server generates seed and deals initial hand

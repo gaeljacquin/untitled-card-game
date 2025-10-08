@@ -4,6 +4,9 @@ import { ABCards, IABModeType } from '@untitled-card-game/shared';
 import { AnimatePresence, motion } from 'motion/react';
 
 import ABCardComp from '@/components/ab-card';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
 export default function DiscardPile({
@@ -11,11 +14,17 @@ export default function DiscardPile({
   modeType,
   rankLabel,
   gameOver,
+  showSimulateButton = false,
+  setABGameOver,
+  gridSize,
 }: {
   cards: ABCards;
   modeType: IABModeType;
   rankLabel: boolean;
   gameOver: boolean;
+  showSimulateButton?: boolean;
+  setABGameOver?: (value: boolean) => void;
+  gridSize: number;
 }) {
   const discardPileText = 'Discard Pile';
 
@@ -25,12 +34,12 @@ export default function DiscardPile({
         <h2 className="text-sm text-center font-bold text-white">{discardPileText}</h2>
       </div>
       <div className="flex flex-row flex-wrap sm:flex-col gap-3 justify-center">
-        <div className="flex items-center justify-center sm:block mt-4 mb-2">
+        <div className="flex items-center justify-center lg:block mt-4 mb-2">
           <h2 className="text-sm text-center font-bold text-white">{discardPileText}</h2>
         </div>
         <AnimatePresence>
           <div className={cn('flex items-center justify-center mb-4')}>
-            <div className="flex flex-wrap flex-row sm:flex-col items-center justify-center gap-2">
+            <div className="flex flex-wrap flex-row md:flex-col items-center justify-center gap-4">
               {cards.map((card, index) => (
                 <motion.div
                   key={card.id}
@@ -54,10 +63,29 @@ export default function DiscardPile({
                   </motion.div>
                 </motion.div>
               ))}
+              {Array.from({ length: gridSize - cards.length }, (_, index) => (
+                <Skeleton
+                  key={`skeleton-${index}`}
+                  className="w-[60px] h-[84px] sm:w-[80px] sm:h-[112px]"
+                />
+              ))}
             </div>
           </div>
         </AnimatePresence>
       </div>
+      {showSimulateButton && setABGameOver && (
+        <div className="flex flex-col items-center justify-center gap-4 p-4">
+          <Separator />
+          <Button
+            variant="outline"
+            onClick={() => setABGameOver(true)}
+            className="w-full hover:cursor-pointer"
+            size="sm"
+          >
+            End
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

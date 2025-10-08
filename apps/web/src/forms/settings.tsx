@@ -278,7 +278,7 @@ export default function Settings() {
               </Button>
             </PopoverTrigger>
 
-            <PopoverContent className="w-80 bg-transparent backdrop-blur-xs border-white/20">
+            <PopoverContent className="w-80 bg-transparent border-white/20">
               <div className="grid gap-4">
                 <div className="space-y-2">
                   <h4 className="font-medium text-white">Are you sure?</h4>

@@ -40,7 +40,7 @@ function App() {
                 element={
                   <ABMode
                     modeSlug="four"
-                    gridClass="grid grid-cols-5 gap-2 sm:gap-4 p-2 sm:p-4 max-w-[min(100%,600px)] md:max-w-[min(100%,700px)] lg:max-w-[min(100%,800px)] mx-auto"
+                    gridClass="grid grid-cols-4 sm:grid-cols-5 gap-2 sm:gap-4 p-2 sm:p-4 max-w-[min(100%,600px)] md:max-w-[min(100%,700px)] lg:max-w-[min(100%,800px)] mx-auto"
                   />
                 }
               />
@@ -49,7 +49,7 @@ function App() {
                 element={
                   <ABMode
                     modeSlug="five"
-                    gridClass="grid grid-cols-6 gap-2 sm:gap-4 p-2 sm:p-4 max-w-[min(100%,650px)] md:max-w-[min(100%,750px)] lg:max-w-[min(100%,850px)] mx-auto"
+                    gridClass="grid grid-cols-5 sm:grid-cols-6 gap-2 sm:gap-4 p-2 sm:p-4 max-w-[min(100%,650px)] md:max-w-[min(100%,750px)] lg:max-w-[min(100%,850px)] mx-auto"
                   />
                 }
               />

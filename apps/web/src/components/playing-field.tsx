@@ -30,7 +30,6 @@ import HighScoreDisplay from '@/components/high-score-display';
 import Placeholder from '@/components/placeholder';
 import PlayerHand from '@/components/player-hand';
 import ScoreDisplay from '@/components/score-display';
-import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
@@ -49,6 +48,7 @@ export default function PlayingField({
   handleNextRound,
   initGame,
   setABGameOver,
+  showSimulateButton = false,
 }: {
   modeSlug: SlugId;
   abCards: ABCards;
@@ -58,6 +58,7 @@ export default function PlayingField({
   handleNextRound: (arg0: { [key: string]: unknown }) => void;
   initGame: (arg0: string) => void;
   setABGameOver: (arg0: boolean) => void;
+  showSimulateButton?: boolean;
 }) {
   const playerHandText = 'Player Hand';
 
@@ -102,7 +103,7 @@ export default function PlayingField({
 
   // Mode information
   const mode = ABMode.getMode(modeSlug)!;
-  const { title, description, gridSize, type } = mode;
+  const { title, gridSize, type } = mode;
 
   // DnD setup
   const mouseSensor = useSensor(MouseSensor);
@@ -426,17 +427,8 @@ export default function PlayingField({
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
-      <div className="backdrop-blur-xs bg-black/80 border-white/20 rounded-2xl p-4 md:p-8">
-        <CardHeader className="text-white text-center">
-          <CardTitle className={cn('text-2xl md:text-3xl', '-mt-7')}>{title}</CardTitle>
-          {description && (
-            <CardDescription className="text-white/80 text-md md:text-lg">
-              {description}
-            </CardDescription>
-          )}
-        </CardHeader>
-
-        <div className="flex flex-col gap-6">
+      <div className="bg-black/80 rounded-2xl p-4 md:p-8 w-full">
+        <div className="flex flex-col gap-6 h-full">
           {/* Player Hand - Above grid on md and below, left column on larger screens */}
           {activeTab === 'grid' && (
             <div className="md:hidden">
@@ -505,30 +497,30 @@ export default function PlayingField({
               )}
             </div>
 
-            <div className="md:col-span-8">
+            <div className="md:col-span-8 flex flex-col">
               <Tabs
                 defaultValue="grid"
                 value={activeTab}
                 onValueChange={setActiveTab}
-                className="w-full"
+                className="w-full flex-1 flex flex-col"
                 ref={tabsRef}
               >
-                <TabsList className="grid w-full grid-cols-2 bg-transparent backdrop-blur-xs border-white/20 p-1 rounded-lg">
+                <TabsList className="grid w-full grid-cols-2 bg-transparent  border-white/20 p-1">
                   <TabsTrigger
                     value="grid"
-                    className="data-[state=active]:bg-rose-700 data-[state=active]:text-white data-[state=inactive]:text-white rounded-md transition-colors"
+                    className="data-[state=active]:bg-rose-700 data-[state=active]:text-white data-[state=inactive]:bg-slate-200 data-[state=inactive]:text-black transition-colors rounded-none rounded-l-md"
                   >
-                    Grid
+                    {title}
                   </TabsTrigger>
                   <TabsTrigger
                     value="score"
-                    className="data-[state=active]:bg-rose-700 data-[state=active]:text-white data-[state=inactive]:text-white rounded-md transition-colors"
+                    className="data-[state=active]:bg-rose-700 data-[state=active]:text-white data-[state=inactive]:bg-slate-200 data-[state=inactive]:text-black transition-colors rounded-none rounded-r-md"
                     disabled={!gameOver}
                   >
                     Score
                   </TabsTrigger>
                 </TabsList>
-                <TabsContent value="grid">
+                <TabsContent value="grid" className="flex-1 min-h-[600px]">
                   {!abCards || abCards.length === 0 ? (
                     <Placeholder />
                   ) : (
@@ -553,7 +545,8 @@ export default function PlayingField({
                 <TabsContent
                   value="score"
                   className={cn(
-                    'mx-auto justify-center items-center',
+                    'flex-1 min-h-[600px]',
+                    'flex justify-center items-start',
                     'bg-sky-700/50 rounded-xl p-6 md:p-10'
                   )}
                 >
@@ -578,41 +571,31 @@ export default function PlayingField({
 
             {activeTab === 'grid' && (
               <div className="hidden md:block md:col-span-2">
-                {discardPile.length > 0 && (
-                  <DiscardPile
-                    cards={discardPile}
-                    modeType={type}
-                    rankLabel={!rankLabel}
-                    gameOver={gameOver}
-                  />
-                )}
+                <DiscardPile
+                  cards={discardPile}
+                  modeType={type}
+                  rankLabel={!rankLabel}
+                  gameOver={gameOver}
+                  showSimulateButton={showSimulateButton}
+                  setABGameOver={setABGameOver}
+                  gridSize={gridSize}
+                />
               </div>
             )}
           </div>
 
           {/* Discard Pile - Below grid on md and below */}
-          {activeTab === 'grid' && discardPile.length > 0 && (
+          {activeTab === 'grid' && (
             <div className="md:hidden">
-              <div className="bg-sky-600/30 rounded-2xl shadow-md p-4">
-                <div className="flex items-center justify-center gap-2 mb-4">
-                  <h2 className="text-sm text-center font-bold text-white">Discard Pile</h2>
-                </div>
-                <div className="flex flex-row flex-wrap gap-2 justify-center">
-                  {discardPile.map((card) => (
-                    <div
-                      key={card.id}
-                      className="overflow-hidden relative group brightness-50 pointer-events-none"
-                    >
-                      <ABCardComp
-                        card={card}
-                        modeType={type}
-                        rankLabel={!rankLabel}
-                        inGrid={false}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <DiscardPile
+                cards={discardPile}
+                modeType={type}
+                rankLabel={!rankLabel}
+                gameOver={gameOver}
+                showSimulateButton={showSimulateButton}
+                setABGameOver={setABGameOver}
+                gridSize={gridSize}
+              />
             </div>
           )}
 

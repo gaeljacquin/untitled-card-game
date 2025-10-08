@@ -26,7 +26,7 @@ const ActionButton = ({
       <Button
         onClick={playAgain}
         disabled={progress !== 100}
-        className="text-wrap truncate w-full hover:cursor-pointer"
+        className="text-wrap truncate w-3/4 hover:cursor-pointer"
       >
         New Game
       </Button>
@@ -39,7 +39,7 @@ const ActionButton = ({
       disabled={playerHand.length !== 1 || isDealing}
       className="truncate p-4 cursor-pointer"
     >
-      <span className="flex w-full items-center justify-center">
+      <span className="flex w-3/4 items-center justify-center">
         {isGridFull ? 'Finish' : 'Next'}
       </span>
     </Button>

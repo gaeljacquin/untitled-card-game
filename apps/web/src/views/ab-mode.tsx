@@ -6,7 +6,6 @@ import { ArrowLeft, ArrowUp } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 
-import Footer from '@/components/footer';
 import PlayingField from '@/components/playing-field';
 import { Button } from '@/components/ui/button';
 import { PageTransition } from '@/components/ui/page-transition';
@@ -91,24 +90,13 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
 
   return (
     <PageTransition>
-      <div className="min-h-screen flex flex-col bg-background p-4 relative">
-        {import.meta.env.DEV && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="absolute top-4 right-4 z-50"
-          >
-            <Button
-              variant="destructive"
-              onClick={() => setABGameOver(true)}
-              className="hover:cursor-pointer"
-            >
-              Simulate Game Over
-            </Button>
-          </motion.div>
-        )}
-        <div className="flex flex-col gap-4 mt-4 pl-4">
+      <div className="min-h-screen flex flex-col p-8 relative">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex items-between justify-between"
+        >
           <Button
             variant="ghost"
             size="lg"
@@ -118,16 +106,17 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
             <ArrowUp className="size-20 text-foreground text-red" />
             <p>Exit to Main Menu</p>
           </Button>
+
           <Button
             variant="ghost"
             size="lg"
             onClick={() => navigate('/game')}
             className="self-start p-0 hover:bg-transparent cursor-pointer"
           >
-            <ArrowLeft className="size-20 text-foreground text-red" />
             <p>Return to Mode Selection</p>
+            <ArrowLeft className="size-20 text-foreground text-red" />
           </Button>
-        </div>
+        </motion.div>
 
         <div className="flex-1 flex flex-col items-center justify-center overflow-auto">
           <PlayingField
@@ -139,11 +128,8 @@ export default function ABMode({ modeSlug, gridClass }: { modeSlug: SlugId; grid
             gameOver={abGameOver}
             initGame={initGame}
             setABGameOver={setABGameOver}
+            showSimulateButton={import.meta.env.DEV}
           />
-
-          <div className="flex flex-col items-center justify-center gap-4 mt-8">
-            <Footer />
-          </div>
         </div>
       </div>
     </PageTransition>
