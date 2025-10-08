@@ -33,6 +33,13 @@ jobs:
       - name: Build API
         run: cd apps/api && pnpm build
 
+      - name: Debug - Check build output
+        run: |
+          echo "Contents of apps/api:"
+          ls -la apps/api/
+          echo "Checking for dist directory:"
+          ls -la apps/api/dist/ || echo "dist directory not found"
+
       - name: Create deployment package
         run: |
           mkdir -p deploy
