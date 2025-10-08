@@ -19,7 +19,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to EC2
+    name: Build API
     runs-on: ubuntu-latest
 
     steps:
@@ -46,15 +46,6 @@ jobs:
           ls -la apps/api/
           echo "Checking for dist directory:"
           ls -la apps/api/dist/ || echo "dist directory not found"
-
-      - name: Create deployment package
-        run: |
-          mkdir -p deploy
-          cp -r apps/api/dist deploy/
-          cp apps/api/package.json deploy/
-          cp -r libs/shared deploy/
-          cd deploy
-          tar -czf ../api-deploy.tar.gz .
 
       - name: Notify on failure
         if: failure()
