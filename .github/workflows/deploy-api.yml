@@ -1,4 +1,4 @@
-name: Deploy API to EC2
+name: Build API
 
 on:
   pull_request:
