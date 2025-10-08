@@ -65,6 +65,58 @@ pnpm dev
 
 ## Using LocalStack Services
 
+### EC2
+
+The initialization script automatically creates an EC2 instance for the API server with:
+- **Instance Type**: t2.micro
+- **Security Group**: Allows SSH (port 22) and API (port 3000)
+- **Key Pair**: Saved to `.localstack/ucg-api-key.pem`
+- **User Data**: Configures Node.js, pnpm, and application directory
+
+#### View EC2 Instances
+
+```bash
+# List all EC2 instances
+awslocal ec2 describe-instances
+
+# View UCG API server instance
+awslocal ec2 describe-instances --filters 'Name=tag:Name,Values=ucg-api-server'
+
+# Get instance IP address
+awslocal ec2 describe-instances \
+  --filters 'Name=tag:Name,Values=ucg-api-server' \
+  --query 'Reservations[0].Instances[0].PublicIpAddress' \
+  --output text
+```
+
+#### Deploy to EC2 (Simulated)
+
+```bash
+# Build and package the API for deployment
+./scripts/ec2-deploy.sh
+```
+
+**Note**: LocalStack EC2 is a mock service for testing AWS API calls. It doesn't run actual virtual machines or support SSH connections. For local development, continue running the API with `pnpm dev`. In production with real AWS, you would deploy using the commands shown in the script output.
+
+#### Manage EC2 Instances
+
+```bash
+# Stop instance
+awslocal ec2 stop-instances --instance-ids i-xxxxx
+
+# Start instance
+awslocal ec2 start-instances --instance-ids i-xxxxx
+
+# Terminate instance
+awslocal ec2 terminate-instances --instance-ids i-xxxxx
+
+# View security groups
+awslocal ec2 describe-security-groups
+
+# View key pairs
+awslocal ec2 describe-key-pairs
+```
+
 ### DynamoDB
 
 ```typescript

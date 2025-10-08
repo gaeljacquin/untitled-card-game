@@ -206,10 +206,14 @@ LocalStack provides local AWS service emulation for development:
 
 1. **Prerequisites**: LocalStack installed via Homebrew, AWS CLI (`awscli-local`)
 2. **Resources Created**:
+   - EC2 instance: `ucg-api-server` (simulated API server)
+   - Security group: `ucg-api-sg` (SSH and API port access)
+   - Key pair: `ucg-api-key` (stored in `.localstack/ucg-api-key.pem`)
    - DynamoDB table: `game-sessions` (game session persistence)
    - S3 bucket: `game-assets` (asset storage)
 3. **Configuration**: `src/config/aws.ts` handles automatic LocalStack detection
 4. **Services**: `src/services/game-session.service.ts` provides DynamoDB operations
 5. **Testing**: `test-localstack.ts` validates integration
 6. **Initialization**: `scripts/localstack-init.sh` sets up AWS resources
-7. **Documentation**: See `docs/LOCALSTACK.md` for complete setup guide
+7. **Deployment**: `scripts/ec2-deploy.sh` packages API for EC2 deployment
+8. **Documentation**: See `docs/LOCALSTACK.md` for complete setup guide
