@@ -7,12 +7,12 @@ applications:
           commands:
             # Install pnpm
             - npm install -g pnpm@10.16.1
-            # Install dependencies from monorepo root
-            - cd ../.. && pnpm install --frozen-lockfile
+            # Go to monorepo root and install dependencies
+            - cd $CODEBUILD_SRC_DIR && pnpm install --frozen-lockfile
         build:
           commands:
-            # Build web app from monorepo root
-            - cd ../.. && cd apps/web && pnpm build
+            # Build from apps/web directory (appRoot)
+            - pnpm build
       artifacts:
         # Output directory after build
         baseDirectory: dist
