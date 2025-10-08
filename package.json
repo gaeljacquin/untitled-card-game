@@ -8,7 +8,12 @@
 		"test": "nx run-many --target=test --all",
 		"lint": "nx run-many --target=lint --all",
 		"type-check": "nx run-many --target=type-check --all",
-		"prepare": "husky"
+		"prepare": "husky",
+		"localstack:start": "localstack start -d",
+		"localstack:stop": "localstack stop",
+		"localstack:status": "localstack status",
+		"localstack:init": "./scripts/localstack-init.sh",
+		"localstack:setup": "pnpm localstack:start && sleep 5 && pnpm localstack:init"
 	},
 	"keywords": [],
 	"author": "",
