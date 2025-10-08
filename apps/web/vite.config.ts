@@ -18,7 +18,7 @@ export default defineConfig({
     'import.meta.env.VITE_LINKTREE': JSON.stringify('https://linktr.ee/gaeljacquin'),
     'import.meta.env.VITE_PROFILE_PIC': JSON.stringify('/gael-himself.webp'),
     'import.meta.env.VITE_SERVER_URL': JSON.stringify(
-      process.env.SERVER_URL || 'http://localhost:8080'
+      process.env.VITE_SERVER_URL || 'http://localhost:8080'
     ),
     'import.meta.env.VITE_MAINTENANCE_MODE': JSON.stringify(process.env.MAINTENANCE_MODE || ''),
   },

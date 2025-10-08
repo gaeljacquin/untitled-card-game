@@ -1,0 +1,54 @@
+name: Build API
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'apps/api/**'
+      - 'libs/shared/**'
+  push:
+    branches:
+      - main
+      - ci/**
+    paths:
+      - 'apps/api/**'
+      - 'libs/shared/**'
+      - '.github/workflows/deploy-api.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Build API
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install pnpm
+        run: npm install -g pnpm@10.16.1
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build API
+        run: cd apps/api && pnpm build
+
+      - name: Debug - Check build output
+        run: |
+          echo "Contents of apps/api:"
+          ls -la apps/api/
+          echo "Checking for dist directory:"
+          ls -la apps/api/dist/ || echo "dist directory not found"
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "Deployment failed! Check the logs."
+          # Add Slack/Discord notification here if needed
