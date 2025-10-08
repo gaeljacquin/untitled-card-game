@@ -1,0 +1,23 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Install pnpm
+        - npm install -g pnpm@10.16.1
+        # Install dependencies (monorepo - installs all workspaces)
+        - pnpm install --frozen-lockfile
+    build:
+      commands:
+        # Build web app (includes TypeScript compilation)
+        - cd apps/web && pnpm build
+  artifacts:
+    # Output directory after build
+    baseDirectory: apps/web/dist
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - apps/web/node_modules/**/*
+      - libs/shared/node_modules/**/*
