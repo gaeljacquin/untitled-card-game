@@ -633,7 +633,12 @@ export default function PlayingField({
                 </TabsList>
                 <TabsContent value="grid" className="flex-1 min-h-[600px]">
                   {!abCards || abCards.length === 0 ? (
-                    <Placeholder />
+                    <>
+                      <Placeholder />
+                      <span className="flex items-center justify-center text-white mt-4">
+                        Stuck? Try refreshing the page 😅
+                      </span>
+                    </>
                   ) : (
                     <>
                       <GameGrid
