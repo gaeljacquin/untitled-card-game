@@ -1,11 +1,16 @@
 'use client';
 
-import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
+import {
+  horizontalListSortingStrategy,
+  SortableContext,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import { ABCards } from '@untitled-card-game/shared';
 import { Loader2 } from 'lucide-react';
 
 import ABCardComp from '@/components/ab-card';
 import SortableItem from '@/components/sortable-item';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 
 const PlayerHand = ({
@@ -23,6 +28,9 @@ const PlayerHand = ({
   playerHandClass: string;
   playerHandText: string;
 }) => {
+  const isMobile = useIsMobile();
+  const strategy = isMobile ? horizontalListSortingStrategy : verticalListSortingStrategy;
+
   return (
     <div className="flex flex-col gap-4">
       <div className="hidden md:flex items-center justify-center mt-5">
@@ -34,10 +42,7 @@ const PlayerHand = ({
         </div>
       ) : (
         <div className={cn(playerHandClass)}>
-          <SortableContext
-            items={playerHand.map((item) => item.id)}
-            strategy={horizontalListSortingStrategy}
-          >
+          <SortableContext items={playerHand.map((item) => item.id)} strategy={strategy}>
             {playerHand.map((item) => (
               <SortableItem key={item.id} id={item.id}>
                 <ABCardComp
