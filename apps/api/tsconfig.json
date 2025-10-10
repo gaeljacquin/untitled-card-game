@@ -101,5 +101,8 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "include": ["src/**/*"],
-  "exclude": ["test-localstack.ts", "node_modules", "dist"]
+  "exclude": ["test-localstack.ts", "node_modules", "dist"],
+  "paths": {
+    "@untitled-card-game/shared/*": ["../../libs/shared/src/*"]
+  }
 }

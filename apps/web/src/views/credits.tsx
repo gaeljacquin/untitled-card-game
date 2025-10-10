@@ -59,7 +59,7 @@ export default function Credits() {
 
                 <div className="flex flex-col items-center space-y-4">
                   <Avatar className="size-20">
-                    <AvatarImage src="/fireworks.jpg" />
+                    <AvatarImage src="/fireworks.webp" />
                     <AvatarFallback>Fireworks</AvatarFallback>
                   </Avatar>
                   <div className="text-center">

@@ -34,7 +34,7 @@ export default function DiscardPile({
         <h2 className="text-sm text-center font-bold text-white">{discardPileText}</h2>
       </div>
       <div className="flex flex-row flex-wrap sm:flex-col gap-3 justify-center">
-        <div className="flex items-center justify-center lg:block mt-4 mb-2">
+        <div className="hidden sm:flex items-center justify-center lg:block mt-4 mb-2">
           <h2 className="text-sm text-center font-bold text-white">{discardPileText}</h2>
         </div>
         <AnimatePresence>

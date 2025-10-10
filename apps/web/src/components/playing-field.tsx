@@ -34,6 +34,7 @@ import ScoreDisplay from '@/components/score-display';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { useUcgStore } from '@/stores/ucg-store';
 import { GameState } from '@/types/game-state';
@@ -97,6 +98,7 @@ export default function PlayingField({
   const [progress, setProgress] = useState(0);
   const [activeTab, setActiveTab] = useState('grid');
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   // Refs
   const tabsRef = useRef<HTMLDivElement>(null);
@@ -175,18 +177,21 @@ export default function PlayingField({
     setGameState(defaultGameState);
   }, [abCards, defaultGameState, discardPile, gridSize]);
 
-  const evaluateAndApplyJokers = (gridToEvaluate: IABGridCell[][]) => {
-    // Evaluate all jokers in the grid
-    const jokerEvaluations = evaluateAllJokersInGrid(gridToEvaluate);
+  const evaluateAndApplyJokers = useMemo(
+    () => (gridToEvaluate: IABGridCell[][]) => {
+      // Evaluate all jokers in the grid
+      const jokerEvaluations = evaluateAllJokersInGrid(gridToEvaluate);
 
-    // Store joker values in zustand
-    jokerEvaluations.forEach((evaluation) => {
-      setJokerValue(evaluation.cardId, evaluation.rank, evaluation.suit);
-    });
+      // Store joker values in zustand
+      jokerEvaluations.forEach((evaluation) => {
+        setJokerValue(evaluation.cardId, evaluation.rank, evaluation.suit);
+      });
 
-    // Apply joker values to the grid
-    return applyJokerValuesToGrid(gridToEvaluate, jokerEvaluations);
-  };
+      // Apply joker values to the grid
+      return applyJokerValuesToGrid(gridToEvaluate, jokerEvaluations);
+    },
+    [setJokerValue]
+  );
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
@@ -289,133 +294,145 @@ export default function PlayingField({
     setActiveDrag(null);
   };
 
-  const handleDiscard = async () => {
-    if (!playerHand || playerHand.length !== 1) {
-      return;
-    }
+  const handleDiscard = useMemo(
+    () => async () => {
+      if (!playerHand || playerHand.length !== 1) {
+        return;
+      }
 
-    const abDiscard = playerHand[0];
+      const abDiscard = playerHand[0];
 
-    if (!abDiscard) {
-      return;
-    }
+      if (!abDiscard) {
+        return;
+      }
 
-    const newLockedCells = new Set<string>();
+      const newLockedCells = new Set<string>();
 
-    grid.forEach((row, rowIndex) => {
-      row.forEach((cell, colIndex) => {
-        if (cell.card) {
-          newLockedCells.add(`cell-${rowIndex}-${colIndex}`);
-        }
-      });
-    });
-
-    setLockedCells(newLockedCells);
-
-    // Final joker evaluation before locking the round
-    const finalGrid = evaluateAndApplyJokers(grid);
-
-    // Mark all cards in the grid as played
-    finalGrid.forEach((row) => {
-      row.forEach((cell) => {
-        if (cell.card) {
-          cell.card.setPlayed(true);
-        }
-      });
-    });
-
-    setGrid(finalGrid);
-    abDiscard.faceUp = true;
-    setDiscardPile((prev) => [...prev, abDiscard] as ABCards);
-    await handleNextRound({ abDiscard, newGrid: finalGrid });
-    setPlayerHand([]);
-
-    if (isGridFull(finalGrid)) {
-      setGameState((prev) => ({ ...prev, gameOver: true }));
-      return;
-    }
-  };
-
-  const hasMovableCardsOnGrid = () => {
-    return grid.some((row) => row.some((cell) => cell.card && !cell.card.played));
-  };
-
-  const handleReturnCards = () => {
-    // Find all movable (non-played) cards on the grid
-    const cardsToReturn: ABCard[] = [];
-    const newGrid = grid.map((row) =>
-      row.map((cell) => {
-        if (cell.card && !cell.card.played) {
-          cardsToReturn.push(cell.card);
-          return { ...cell, card: null };
-        }
-        return cell;
-      })
-    );
-
-    if (cardsToReturn.length > 0) {
-      setIsReturning(true);
-
-      // Clear grid first
-      setGrid(newGrid);
-
-      // Small delay to allow grid to clear visually
-      setTimeout(() => {
-        // Get current hand length to know where to start adding returned cards
-        const currentHandLength = playerHand.length;
-
-        // Set all cards to face down
-        cardsToReturn.forEach((card) => {
-          card.faceUp = false;
+      grid.forEach((row, rowIndex) => {
+        row.forEach((cell, colIndex) => {
+          if (cell.card) {
+            newLockedCells.add(`cell-${rowIndex}-${colIndex}`);
+          }
         });
+      });
 
-        // Add cards to hand
-        setPlayerHand((prev) => [...prev, ...cardsToReturn]);
+      setLockedCells(newLockedCells);
 
-        // Animate cards flipping face-up one by one
-        const promises = cardsToReturn.map((card, index) => {
-          return new Promise<void>((resolve) => {
-            setTimeout(() => {
-              card.faceUp = true;
-              setPlayerHand((prev) => {
-                const cardIndex = currentHandLength + index;
-                if (cardIndex < prev.length) {
-                  return [
-                    ...prev.slice(0, cardIndex),
-                    prev[cardIndex],
-                    ...prev.slice(cardIndex + 1),
-                  ];
-                }
-                return prev;
-              });
-              resolve();
-            }, index * 150);
+      // Final joker evaluation before locking the round
+      const finalGrid = evaluateAndApplyJokers(grid);
+
+      // Mark all cards in the grid as played
+      finalGrid.forEach((row) => {
+        row.forEach((cell) => {
+          if (cell.card) {
+            cell.card.setPlayed(true);
+          }
+        });
+      });
+
+      setGrid(finalGrid);
+      abDiscard.faceUp = true;
+      setDiscardPile((prev) => [...prev, abDiscard] as ABCards);
+      await handleNextRound({ abDiscard, newGrid: finalGrid });
+      setPlayerHand([]);
+
+      if (isGridFull(finalGrid)) {
+        setGameState((prev) => ({ ...prev, gameOver: true }));
+        return;
+      }
+    },
+    [evaluateAndApplyJokers, grid, handleNextRound, playerHand]
+  );
+
+  const hasMovableCardsOnGrid = useMemo(
+    () => () => {
+      return grid.some((row) => row.some((cell) => cell.card && !cell.card.played));
+    },
+    [grid]
+  );
+
+  const handleReturnCards = useMemo(
+    () => () => {
+      // Find all movable (non-played) cards on the grid
+      const cardsToReturn: ABCard[] = [];
+      const newGrid = grid.map((row) =>
+        row.map((cell) => {
+          if (cell.card && !cell.card.played) {
+            cardsToReturn.push(cell.card);
+            return { ...cell, card: null };
+          }
+          return cell;
+        })
+      );
+
+      if (cardsToReturn.length > 0) {
+        setIsReturning(true);
+
+        // Clear grid first
+        setGrid(newGrid);
+
+        // Small delay to allow grid to clear visually
+        setTimeout(() => {
+          // Get current hand length to know where to start adding returned cards
+          const currentHandLength = playerHand.length;
+
+          // Set all cards to face down
+          cardsToReturn.forEach((card) => {
+            card.faceUp = false;
           });
-        });
 
-        Promise.all(promises).then(() => {
-          setTimeout(() => {
-            setIsReturning(false);
-          }, 200);
-        });
-      }, 100);
-    }
-  };
+          // Add cards to hand
+          setPlayerHand((prev) => [...prev, ...cardsToReturn]);
 
-  const playAgain = async () => {
-    setABGameOver(false);
-    switchToGridTab();
-    setGrid([]);
-    setActiveDrag(null);
-    setGameState(defaultGameState);
-    setLockedCells(new Set());
-    setIsDealing(true);
-    clearAllJokerValues();
-    gameOverProcessed.current = false;
-    await initGame(modeSlug);
-    insertCoin();
-    setDiscardPile([]);
-  };
+          // Animate cards flipping face-up one by one
+          const promises = cardsToReturn.map((card, index) => {
+            return new Promise<void>((resolve) => {
+              setTimeout(() => {
+                card.faceUp = true;
+                setPlayerHand((prev) => {
+                  const cardIndex = currentHandLength + index;
+                  if (cardIndex < prev.length) {
+                    return [
+                      ...prev.slice(0, cardIndex),
+                      prev[cardIndex],
+                      ...prev.slice(cardIndex + 1),
+                    ];
+                  }
+                  return prev;
+                });
+                resolve();
+              }, index * 150);
+            });
+          });
+
+          Promise.all(promises).then(() => {
+            setTimeout(() => {
+              setIsReturning(false);
+            }, 200);
+          });
+        }, 100);
+      }
+    },
+    [grid, playerHand]
+  );
+
+  const playAgain = useMemo(
+    () => async () => {
+      setABGameOver(false);
+      switchToGridTab();
+      setGrid([]);
+      setActiveDrag(null);
+      setGameState(defaultGameState);
+      setLockedCells(new Set());
+      setIsDealing(true);
+      clearAllJokerValues();
+      gameOverProcessed.current = false;
+      await initGame(modeSlug);
+      insertCoin();
+      setDiscardPile([]);
+    },
+    [clearAllJokerValues, defaultGameState, initGame, insertCoin, modeSlug, setABGameOver]
+  );
 
   const handleHighScore = useCallback(async () => {
     animateProgress().then(() => {
@@ -439,7 +456,6 @@ export default function PlayingField({
     setHighScore,
   ]);
 
-  // Effects
   useEffect(() => {
     if (!coinInserted.current) {
       insertCoin();
@@ -478,6 +494,47 @@ export default function PlayingField({
     }
   }, [abCards]);
 
+  // Action buttons component to avoid duplication
+  const actionButtons = useMemo(
+    () => (
+      <div className="flex items-center justify-center gap-2 md:flex-col md:gap-4">
+        <ActionButton
+          gameOver={gameOver}
+          isGridFull={isGridFull(grid)}
+          playerHand={playerHand}
+          isDealing={isDealing || isReturning}
+          handleDiscard={handleDiscard}
+          playAgain={playAgain}
+          progress={progress}
+        />
+        {!gameOver && (
+          <Button
+            onClick={handleReturnCards}
+            disabled={!hasMovableCardsOnGrid() || isDealing || isReturning}
+            variant="secondary"
+            className="w-1/4 md:w-1/2 cursor-pointer p-4.5"
+            size="sm"
+          >
+            <BsEraserFill />
+            <span className="sr-only">Return cards</span>
+          </Button>
+        )}
+      </div>
+    ),
+    [
+      gameOver,
+      grid,
+      playerHand,
+      isDealing,
+      isReturning,
+      handleDiscard,
+      playAgain,
+      progress,
+      hasMovableCardsOnGrid,
+      handleReturnCards,
+    ]
+  );
+
   useEffect(() => {
     if (gameOver && !gameOverProcessed.current) {
       gameOverProcessed.current = true;
@@ -498,9 +555,9 @@ export default function PlayingField({
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
       <div className="bg-black/80 rounded-2xl p-4 md:p-8 w-full">
         <div className="flex flex-col gap-6 h-full">
-          {/* Player Hand - Above grid on md and below, left column on larger screens */}
-          {activeTab === 'grid' && (
-            <div className="md:hidden">
+          {/* Single Player Hand - shown at top on mobile only */}
+          {activeTab === 'grid' && isMobile && (
+            <div>
               <div className="bg-emerald-600/30 rounded-2xl shadow-md p-4 flex flex-col gap-4">
                 <div className="flex items-center justify-center">
                   <h2 className="text-sm text-center font-bold text-white">{playerHandText}</h2>
@@ -510,84 +567,46 @@ export default function PlayingField({
                   isDealing={isDealing}
                   rankLabel={rankLabel}
                   modeType={type}
-                  playerHandClass="flex flex-row flex-wrap gap-2 items-center justify-center"
+                  playerHandClass={playerHandClass}
                   playerHandText={playerHandText}
                 />
                 <Separator />
-                <div className="flex items-center justify-center gap-2">
-                  <ActionButton
-                    gameOver={gameOver}
-                    isGridFull={isGridFull(grid)}
-                    playerHand={playerHand}
-                    isDealing={isDealing || isReturning}
-                    handleDiscard={handleDiscard}
-                    playAgain={playAgain}
-                    progress={progress}
-                  />
-                  {!gameOver && (
-                    <Button
-                      onClick={handleReturnCards}
-                      disabled={!hasMovableCardsOnGrid() || isDealing || isReturning}
-                      variant="secondary"
-                      className="w-1/4 cursor-pointer p-4.5"
-                      size="sm"
-                    >
-                      <BsEraserFill /> <span className="sr-only">Return cards</span>
-                    </Button>
-                  )}
-                </div>
+                {actionButtons}
               </div>
             </div>
           )}
 
           {/* Main grid layout for md and above */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-            <div className="hidden md:block md:col-span-2">
-              {activeTab === 'grid' && (
-                <div className="md:sticky md:top-0 h-auto bg-emerald-600/30 rounded-2xl shadow-md flex flex-col gap-4">
-                  <PlayerHand
-                    playerHand={playerHand}
-                    isDealing={isDealing}
-                    rankLabel={rankLabel}
-                    modeType={type}
-                    playerHandClass={playerHandClass}
-                    playerHandText={playerHandText}
-                  />
+            {/* Single Player Hand - shown on left side on desktop only */}
+            {!isMobile && (
+              <div className="md:col-span-2">
+                {activeTab === 'grid' && (
+                  <div className="md:sticky md:top-0 h-auto bg-emerald-600/30 rounded-2xl shadow-md flex flex-col gap-4">
+                    <PlayerHand
+                      playerHand={playerHand}
+                      isDealing={isDealing}
+                      rankLabel={rankLabel}
+                      modeType={type}
+                      playerHandClass={playerHandClass}
+                      playerHandText={playerHandText}
+                    />
 
-                  <div className="flex items-center justify-center mt-1">
-                    <div className="flex flex-col w-full p-2 -mt-8">
-                      <div className="px-4">
-                        <Separator className="mt-6 mb-4" />
-                      </div>
+                    <div className="flex items-center justify-center mt-1">
+                      <div className="flex flex-col w-full p-2 -mt-8">
+                        <div className="px-4">
+                          <Separator className="mt-6 mb-4" />
+                        </div>
 
-                      <div className="flex flex-col items-center justify-center mb-2 gap-4">
-                        <ActionButton
-                          gameOver={gameOver}
-                          isGridFull={isGridFull(grid)}
-                          playerHand={playerHand}
-                          isDealing={isDealing || isReturning}
-                          handleDiscard={handleDiscard}
-                          playAgain={playAgain}
-                          progress={progress}
-                        />
-                        {!gameOver && (
-                          <Button
-                            onClick={handleReturnCards}
-                            disabled={!hasMovableCardsOnGrid() || isDealing || isReturning}
-                            variant="secondary"
-                            className="w-1/2 cursor-pointer p-4.5"
-                            size="sm"
-                          >
-                            <BsEraserFill />
-                            <span className="sr-only">Return cards</span>
-                          </Button>
-                        )}
+                        <div className="flex flex-col items-center justify-center mb-2">
+                          {actionButtons}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
 
             <div className="md:col-span-8 flex flex-col">
               <Tabs
@@ -614,7 +633,12 @@ export default function PlayingField({
                 </TabsList>
                 <TabsContent value="grid" className="flex-1 min-h-[600px]">
                   {!abCards || abCards.length === 0 ? (
-                    <Placeholder />
+                    <>
+                      <Placeholder />
+                      <span className="flex items-center justify-center text-white mt-4">
+                        Stuck? Try refreshing the page 😅
+                      </span>
+                    </>
                   ) : (
                     <>
                       <GameGrid

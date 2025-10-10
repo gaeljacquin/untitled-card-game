@@ -80,7 +80,7 @@ export default function Home() {
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             <motion.img
-              src="/logo.png"
+              src="/logo.webp"
               alt={appinfo.title}
               width={400}
               height={400}

@@ -26,7 +26,7 @@ export default function SortableItem({
       style={style}
       {...attributes}
       {...listeners}
-      className={active && id === active.id ? 'shadow-animate rounded-2xl' : ''}
+      className={`${active && id === active.id ? 'shadow-animate rounded-2xl' : ''} touch-none cursor-grab active:cursor-grabbing`}
     >
       {children}
     </div>
