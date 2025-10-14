@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/untitled-card-game.gif" alt="Untitled Card Game Logo" />
+  <img src="./assets/untitled-card-game.png" alt="Untitled Card Game Logo" />
 
 # Untitled Card Game (UCG)
 
@@ -11,7 +11,7 @@ A strategic puzzle game where you arrange playing cards on a grid to score big!
 
 ## 🎮 Insert Coin
 
-Visit [untitled-card-game.gaeljacquin-aws.com](https://untitled-card-game.gaeljacquin-aws.com) to play now!
+Visit [ucg.gaeljacquin-aws.com](https://ucg.gaeljacquin-aws.com) to play now!
 
 ## 🃏 About the Game
 
