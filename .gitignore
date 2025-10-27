@@ -143,3 +143,8 @@ dist
 
 # .DS_Store
 .DS_Store
+
+# Package manager locks (we use Bun)
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
