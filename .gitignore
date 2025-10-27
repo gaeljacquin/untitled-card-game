@@ -140,3 +140,6 @@ dist
 
 # Nx
 .nx
+
+# .DS_Store
+.DS_Store
