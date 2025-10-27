@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "installation": {
-    "version": "21.5.3"
+    "version": "22.0.1"
   },
   "workspaceLayout": {
     "appsDir": "apps",
@@ -10,8 +10,13 @@
   "defaultBase": "main",
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["{projectRoot}/dist", "{projectRoot}/target"],
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "{projectRoot}/dist",
+        "{projectRoot}/target"
+      ],
       "cache": true
     },
     "test": {
@@ -25,7 +30,11 @@
     "default": {
       "runner": "nx/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build", "test", "lint"]
+        "cacheableOperations": [
+          "build",
+          "test",
+          "lint"
+        ]
       }
     }
   }

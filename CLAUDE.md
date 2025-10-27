@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Untitled Card Game (UCG) is a card-based puzzle game where players arrange cards in a grid to create high-scoring poker hands. Built as an Nx monorepo with TypeScript, featuring a React/Vite frontend, Elysia backend with Socket.IO for real-time game state, and shared game logic.
+Untitled Card Game (UCG) is a card-based puzzle game where players arrange cards in a grid to create high-scoring poker hands. Built as an Nx monorepo with TypeScript and Bun, featuring a React/Vite frontend, Elysia backend with Socket.IO for real-time game state, and shared game logic.
 
 ## Repository Structure
 
@@ -32,20 +32,20 @@ docs/
 
 ```bash
 # Run all projects in dev mode
-pnpm dev
+bun dev
 # or using Nx
 nx run-many --target=serve --all
 
 # Run individual projects
-cd apps/api && pnpm dev        # API server (tsx watch)
-cd apps/web && pnpm dev        # Web client (Vite dev server)
+cd apps/api && bun dev        # API server (bun --watch)
+cd apps/web && bun dev        # Web client (Vite dev server)
 ```
 
 ### Building
 
 ```bash
 # Build all projects
-pnpm build
+bun build
 # or
 nx run-many --target=build --all
 
@@ -58,44 +58,44 @@ nx build web    # Vite build
 
 ```bash
 # Run all tests
-pnpm test
+bun test
 nx run-many --target=test --all
 
 # Linting
-pnpm lint
+bun lint
 nx run-many --target=lint --all
 
 # Web-specific commands
 cd apps/web
-pnpm lint-fix                  # Auto-fix ESLint issues
-pnpm prettier:check            # Check formatting
-pnpm prettier:write            # Auto-format
-pnpm typecheck                 # Type checking without build
+bun lint-fix                   # Auto-fix ESLint issues
+bun prettier:check             # Check formatting
+bun prettier:write             # Auto-format
+bun typecheck                  # Type checking without build
 
 # Type checking across all projects
-pnpm type-check
+bun type-check
 ```
 
 ### LocalStack (Local AWS Development)
 
 ```bash
 # Start LocalStack
-pnpm localstack:start
+bun localstack:start
 
 # Stop LocalStack
-pnpm localstack:stop
+bun localstack:stop
 
 # Check LocalStack status
-pnpm localstack:status
+bun localstack:status
 
 # Initialize AWS resources (DynamoDB tables, S3 buckets)
-pnpm localstack:init
+bun localstack:init
 
 # Start and initialize in one command
-pnpm localstack:setup
+bun localstack:setup
 
 # Test LocalStack integration
-cd apps/api && pnpm exec tsx test-localstack.ts
+cd apps/api && bun test-localstack.ts
 ```
 
 ### Git Commits
@@ -106,7 +106,7 @@ This project uses conventional commits enforced by commitlint. Valid types: `bui
 
 ### Monorepo Setup
 
-- **Build tool**: Nx 21.5.3 with pnpm workspace
+- **Build tool**: Nx 21.5.3 with Bun workspace
 - **Path aliases**: `@untitled-card-game/shared` maps to `libs/shared/src/index.ts`
 - **Project structure**: Apps consume the shared library via workspace dependencies
 

@@ -1,35 +1,48 @@
 {
-	"name": "untitled-card-game",
-	"description": "Untitled Card Game monorepo with API and web client",
-	"private": true,
-	"scripts": {
-		"dev": "nx run-many --target=serve --all",
-		"build": "nx run-many --target=build --all",
-		"test": "nx run-many --target=test --all",
-		"lint": "nx run-many --target=lint --all",
-		"type-check": "nx run-many --target=type-check --all",
-		"prepare": "husky",
-		"localstack:start": "localstack start -d",
-		"localstack:stop": "localstack stop",
-		"localstack:status": "localstack status",
-		"localstack:init": "./scripts/localstack-init.sh",
-		"localstack:setup": "pnpm localstack:start && sleep 5 && pnpm localstack:init"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"packageManager": "pnpm@10.16.1",
-	"devDependencies": {
-		"@commitlint/cli": "^19.8.1",
-		"@commitlint/config-conventional": "^19.8.1",
-		"@nx/js": "^21.5.3",
-		"@nx/vite": "^21.5.3",
-		"@nx/workspace": "^21.5.3",
-		"@types/node": "^24.3.1",
-		"husky": "^9.1.7",
-		"nx": "^21.5.3"
-	},
-	"dependencies": {
-		"tslib": "^2.8.1"
-	}
+  "name": "untitled-card-game",
+  "description": "Untitled Card Game monorepo with API and web client",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ],
+  "packageManager": "bun@1.2.23",
+  "engines": {
+    "bun": ">=1.0.0",
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "preinstall": "node scripts/preinstall.js",
+    "dev": "nx run-many --target=serve --all",
+    "build": "nx run-many --target=build --all",
+    "test": "nx run-many --target=test --all",
+    "lint": "nx run-many --target=lint --all",
+    "type-check": "nx run-many --target=type-check --all",
+    "prepare": "husky",
+    "localstack:start": "localstack start -d",
+    "localstack:stop": "localstack stop",
+    "localstack:status": "localstack status",
+    "localstack:init": "./scripts/localstack-init.sh",
+    "localstack:setup": "bun localstack:start && sleep 5 && bun localstack:init"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@nx/js": "22.0.1",
+    "@nx/vite": "22.0.1",
+    "@nx/workspace": "22.0.1",
+    "@types/node": "^24.9.1",
+    "husky": "^9.1.7",
+    "nx": "22.0.1"
+  },
+  "dependencies": {
+    "tslib": "^2.8.1"
+  },
+  "resolutions": {
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9"
+  }
 }
