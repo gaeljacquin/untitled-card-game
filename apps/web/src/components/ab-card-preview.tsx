@@ -1,5 +1,3 @@
-'use client';
-
 import { ABCard, suitIconMap, SuitId } from '@untitled-card-game/shared';
 
 import { cn } from '@/lib/utils';

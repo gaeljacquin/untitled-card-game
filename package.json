@@ -19,12 +19,7 @@
     "lint": "nx run-many --target=lint --all",
     "type-check": "nx run-many --target=type-check --all",
     "spell-check": "cspell \"**/*.{ts,tsx,md}\"",
-    "prepare": "husky",
-    "localstack:start": "localstack start -d",
-    "localstack:stop": "localstack stop",
-    "localstack:status": "localstack status",
-    "localstack:init": "./scripts/localstack-init.sh",
-    "localstack:setup": "bun localstack:start && sleep 5 && bun localstack:init"
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",

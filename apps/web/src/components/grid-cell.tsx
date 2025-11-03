@@ -1,5 +1,3 @@
-'use client';
-
 import { useDroppable } from '@dnd-kit/core';
 import { IABGridCell, IABModeType } from '@untitled-card-game/shared';
 import { motion } from 'motion/react';

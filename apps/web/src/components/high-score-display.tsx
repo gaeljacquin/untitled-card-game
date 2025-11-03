@@ -1,5 +1,3 @@
-'use client';
-
 import { SlugId } from '@untitled-card-game/shared';
 
 import { useUcgStore } from '@/stores/ucg-store';

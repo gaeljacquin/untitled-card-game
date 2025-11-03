@@ -16,14 +16,9 @@ apps/
         aws.ts              - AWS SDK client configuration
       services/
         game-session.service.ts - DynamoDB operations
-    test-localstack.ts      - LocalStack integration test
   web/          - React frontend (Vite + React Router)
 libs/
   shared/       - Shared game logic, types, and utilities
-scripts/
-  localstack-init.sh        - LocalStack resource initialization
-docs/
-  LOCALSTACK.md             - LocalStack setup guide
 ```
 
 ## Development Commands
@@ -74,29 +69,6 @@ bun typecheck                  # Type checking without build
 
 # Type checking across all projects
 bun type-check
-```
-
-### LocalStack (Local AWS Development)
-
-```bash
-# Start LocalStack
-bun localstack:start
-
-# Stop LocalStack
-bun localstack:stop
-
-# Check LocalStack status
-bun localstack:status
-
-# Initialize AWS resources (DynamoDB tables, S3 buckets)
-bun localstack:init
-
-# Start and initialize in one command
-bun localstack:setup
-
-# Test LocalStack integration
-cd apps/api && bun test-localstack.ts
-```
 
 ### Git Commits
 
@@ -122,11 +94,6 @@ This project uses conventional commits enforced by commitlint. Valid types: `bui
   - Socket events: `game-init`, `game-next-round`, `hello-ws`
   - Environment-aware dotenv loading (`.env.{env}.local`, `.env.local`, `.env.{env}`, `.env`)
   - CORS configuration via CLIENT_URLS environment variable
-  - LocalStack support for local AWS development
-- **AWS Services**:
-  - **DynamoDB**: Game session persistence via `GameSessionService`
-  - **S3**: Asset storage (configured in `src/config/aws.ts`)
-  - Auto-detects LocalStack vs production based on `AWS_ENDPOINT` environment variable
 
 ### Web (apps/web)
 
@@ -187,33 +154,7 @@ Store is persisted to localStorage and includes devtools integration.
 
 API environment configuration (`.env.local`):
 ```bash
-# LocalStack Configuration
-AWS_ENDPOINT=http://localhost:4566  # Enables LocalStack mode
-AWS_REGION=us-east-1
-AWS_ACCESS_KEY_ID=test
-AWS_SECRET_ACCESS_KEY=test
-
 # API Configuration
 PORT=3000
 CLIENT_URLS=http://localhost:5173
 ```
-
-**Note**: When `AWS_ENDPOINT` is set, the API automatically uses LocalStack. Omit it in production to use real AWS services.
-
-### LocalStack Setup
-
-LocalStack provides local AWS service emulation for development:
-
-1. **Prerequisites**: LocalStack installed via Homebrew, AWS CLI (`awscli-local`)
-2. **Resources Created**:
-   - EC2 instance: `ucg-api-server` (simulated API server)
-   - Security group: `ucg-api-sg` (SSH and API port access)
-   - Key pair: `ucg-api-key` (stored in `.localstack/ucg-api-key.pem`)
-   - DynamoDB table: `game-sessions` (game session persistence)
-   - S3 bucket: `game-assets` (asset storage)
-3. **Configuration**: `src/config/aws.ts` handles automatic LocalStack detection
-4. **Services**: `src/services/game-session.service.ts` provides DynamoDB operations
-5. **Testing**: `test-localstack.ts` validates integration
-6. **Initialization**: `scripts/localstack-init.sh` sets up AWS resources
-7. **Deployment**: `scripts/ec2-deploy.sh` packages API for EC2 deployment
-8. **Documentation**: See `docs/LOCALSTACK.md` for complete setup guide

@@ -1,5 +1,3 @@
-'use client';
-
 import { useCallback, useEffect, useState } from 'react';
 import { ABCards, SlugId } from '@untitled-card-game/shared';
 import { ArrowLeft, ArrowUp } from 'lucide-react';

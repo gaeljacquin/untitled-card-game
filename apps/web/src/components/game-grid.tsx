@@ -1,5 +1,3 @@
-'use client';
-
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { evaluateGridColumn, evaluateGridRow, IABGridCell } from '@untitled-card-game/shared';
 import { motion } from 'motion/react';

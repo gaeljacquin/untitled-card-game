@@ -1,5 +1,3 @@
-'use client';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PopoverClose } from '@radix-ui/react-popover';
 import { ABCardPreview, Rank, RankId, Suit, SuitId } from '@untitled-card-game/shared';

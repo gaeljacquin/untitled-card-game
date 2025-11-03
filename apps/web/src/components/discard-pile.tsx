@@ -1,5 +1,3 @@
-'use client';
-
 import { ABCards, IABModeType } from '@untitled-card-game/shared';
 import { AnimatePresence, motion } from 'motion/react';
 
