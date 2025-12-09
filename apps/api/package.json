@@ -8,11 +8,11 @@
     "start": "bun dist/index.js"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.918.0",
-    "@aws-sdk/client-s3": "^3.918.0",
-    "@aws-sdk/lib-dynamodb": "^3.918.0",
+    "@aws-sdk/client-dynamodb": "^3.947.0",
+    "@aws-sdk/client-s3": "^3.947.0",
+    "@aws-sdk/lib-dynamodb": "^3.947.0",
     "@elysiajs/cors": "^1.4.0",
-    "@elysiajs/node": "^1.4.1",
+    "@elysiajs/node": "^1.4.2",
     "@untitled-card-game/shared": "workspace:*",
     "dotenv": "^17.2.3",
     "elysia": "latest",
