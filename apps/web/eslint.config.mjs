@@ -15,6 +15,9 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  {
+    ignores: ['dist/**', 'node_modules/**', 'tmp/**', '*.mjs', '*.cjs', '*.js', 'vite.config.ts', 'src/components/ui/**/*'],
+  },
   ...compat.extends(
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -65,7 +68,6 @@ const eslintConfig = [
         },
       ],
     },
-    ignores: ['*.cjs', '*.mjs', '*.js', 'components/ui/*.*'],
   },
 ];
 
