@@ -4,7 +4,9 @@ Untitled Card Game (UCG) is a single-player card puzzle game where players arran
 
 ## Essentials
 - Package manager: `bun` (see `bun.lock`)
+- Monorepo manager: `turborepo` (see `turbo.json`)
 - Primary commands: `bun dev`, `bun build`, `bun test`, `bun lint`, `bun type-check`
+
 
 ## More Details
 - Architecture overview: `docs/agents/architecture.md`
