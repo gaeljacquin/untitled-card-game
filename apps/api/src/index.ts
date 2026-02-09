@@ -3,9 +3,9 @@ import { cors } from "@elysiajs/cors";
 import { node } from "@elysiajs/node";
 import { Server } from "socket.io";
 import * as dotenv from "dotenv";
-import fs from "fs";
-import path from "path";
-import { createServer } from "http";
+import fs from "node:fs";
+import path from "node:path";
+import { createServer } from "node:http";
 import { ABDeck, ABGame, ABMode } from "@untitled-card-game/shared";
 
 const currentEnv = (process.env.APP_ENV || process.env.NODE_ENV || "development").toLowerCase();
@@ -86,7 +86,7 @@ httpServer.listen(PORT);
 
 const isDev = (process.env.APP_ENV || process.env.NODE_ENV || "development").toLowerCase() === "development";
 const clientUrlsEnv = (process.env.CLIENT_URLS || CLIENT_URL || "").split(",").map((s) => s.trim()).filter(Boolean);
-const corsOrigin: any = clientUrlsEnv.length > 0 ? clientUrlsEnv : (isDev ? true : []);
+const corsOrigin: any = (clientUrlsEnv.length > 0 || isDev) ? clientUrlsEnv : [];
 
 const io = new Server(httpServer, {
   cors: {

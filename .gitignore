@@ -113,12 +113,6 @@ dist
 # FuseBox cache
 .fusebox/
 
-# DynamoDB Local files
-.dynamodb/
-
-# LocalStack files
-.localstack/
-
 # TernJS port file
 .tern-port
 
@@ -138,8 +132,8 @@ dist
 
 .secrets
 
-# Nx
-.nx
+# Turbo
+.turbo
 
 # .DS_Store
 .DS_Store
