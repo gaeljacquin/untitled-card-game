@@ -3,7 +3,6 @@
   "language": "en",
   "words": [
     "monorepo",
-    "localstack",
     "commitlint",
     "vite",
     "stylelint",
@@ -66,7 +65,6 @@
     "stylelintignore",
     "postcss",
     "editorconfig",
-    "localstack-init",
     "ec2-deploy",
     "untitled-card-game",
     "web",

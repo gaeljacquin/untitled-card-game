@@ -15,6 +15,5 @@ Untitled Card Game (UCG) is a single-player card puzzle game where players arran
 - API details: `docs/agents/api.md`
 - Shared library details: `docs/agents/shared.md`
 - Environment variables: `docs/agents/environment.md`
-- LocalStack usage: `docs/agents/localstack.md`
 - Git conventions: `docs/agents/git.md`
 - Game concepts: `docs/agents/game.md`
